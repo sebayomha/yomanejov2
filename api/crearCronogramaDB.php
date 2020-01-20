@@ -13,6 +13,10 @@
         2. Si el dia no posee clases llenar el cronograma con todos los autos
         3. Hay 1 auto que por las mañanas no puede, ese no hay que tenerlo en cuenta.
         4. Lo mismo para el punto 3) pero si es por la tarde    
+        5. Obtener zona de la clase
+        6. Cargar la BD
+        7. Hacer el codigo principal de la llamada GET con las validaciones
+        8. Hacer logica con los horarios REALES
     */
 
     //Funcion principal que se encargara de armar el cronograma
