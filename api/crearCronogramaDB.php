@@ -4,7 +4,6 @@
     iconv_set_encoding("internal_encoding", "UTF-8");
     date_default_timezone_set('America/Argentina/Buenos_Aires');
     require_once('connectDB.php');
-    setlocale(LC_ALL,"es_AR");
     //Va a ser utilizada cuando existan sesiones
     //require_once('token.php');
 
@@ -25,7 +24,7 @@
 
         $fechaBusqueda = DateTime::createFromFormat("Y-m-d", $fechaInicio);
         $nombreDiaBusqueda = strftime("%A",$fechaBusqueda->getTimestamp());
-        
+
         //**********//
         //se arma toda la informacion de las zonas
         //**********//
@@ -34,7 +33,6 @@
         $zonaAlumno = obtenerZonaAlumno($direccion);
 
         $totalDiasTentativosRetornar; //Total de dias tentativos a retornar
-        $cantDiasTentativos = 0; //cantidad actual de dias tentativos acumulados;
 
         switch ($cantClases) {
             case 1:  $totalDiasTentativosRetornar = 7; break;
@@ -50,7 +48,7 @@
 
         $i = 1;
         while ($i <= $totalDiasTentativosRetornar) { //Se recorrera hasta tanto obtener la cantidad de dias posibles a retornar
-            if ($disponibilidad[stripAccents($nombreDiaBusqueda)] != null) { //entonces es un dia que el usuario esta disponible
+            if ($disponibilidad[$nombreDiaBusqueda] != null) { //entonces es un dia que el usuario esta disponible
                 $clasesDelDiaPorAuto = obtenerCronogramaDelDia($fechaBusqueda); //armo un diccionario auto => clases
 
                 //hasta el momento no estoy teniendo en cuenta los autos que ese dia no tienen asignada ninguna clase y estan absolutamente libres !!!!
@@ -111,7 +109,7 @@
                         $horariosTentativos[$fechaBusquedaString][$idAuto] = $diccionarioFechaHorariosLibres; //agrego en el diccionario el nuevo auto con sus horarios disponibles que coinciden con los del alumno
                     }
                 } else { //ese dia aun no posee clases
-                    $diasDisponiblesUsuario = $disponibilidad[stripAccents($nombreDiaBusqueda)];
+                    $diasDisponiblesUsuario = $disponibilidad[$nombreDiaBusqueda];
                     $horariosLibresDataGeneral = [];
                     $horarioData = [
                         'horaInicio' => '',
@@ -596,19 +594,15 @@
         }
     }
 
-    function stripAccents($str) {
-        return strtr(utf8_decode($str), utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'), 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
-    }
-
 
     $disponibilidad = [
-        'lunes' => ['09:00', '12:00', '15:00', '19:00'], 
-        'martes' => null,
-        'miercoles' => ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00','19:00'],
-        'jueves' => ['08:00', '09:00', '10:00', '11:00', '12:00', '17:00', '18:00', '19:00'],
-        'viernes' => ['09:00', '12:00', '15:00', '19:00'],
-        'sabado' => null,
-        'domingo' => ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00','19:00']
+        'Monday' => ['09:00', '12:00', '15:00', '19:00'], 
+        'Tuesday' => null,
+        'Wednesday' => ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00','19:00'],
+        'Thursday' => ['08:00', '09:00', '10:00', '11:00', '12:00', '17:00', '18:00', '19:00'],
+        'Friday' => ['09:00', '12:00', '15:00', '19:00'],
+        'Saturday' => null,
+        'Sunday' => ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00','19:00']
     ];
 
     echo json_encode(obtenerCronograma(4, $disponibilidad, 'no importa la direccion por ahora', '2020-01-09'));
