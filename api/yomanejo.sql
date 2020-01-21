@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.3
+-- version 4.9.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 16, 2020 at 06:41 PM
--- Server version: 10.1.36-MariaDB
--- PHP Version: 7.2.10
+-- Generation Time: Jan 21, 2020 at 05:46 PM
+-- Server version: 10.4.11-MariaDB
+-- PHP Version: 7.4.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -53,16 +53,19 @@ INSERT INTO `alumno` (`idAlumno`, `direccion`, `direccionClase`, `fechaAlta`, `a
 CREATE TABLE `auto` (
   `idAuto` int(11) NOT NULL,
   `patente` varchar(8) NOT NULL,
-  `color` varchar(30) NOT NULL
+  `color` varchar(30) NOT NULL,
+  `disponibilidad` varchar(1) NOT NULL,
+  `descripcion` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `auto`
 --
 
-INSERT INTO `auto` (`idAuto`, `patente`, `color`) VALUES
-(1, '456ABC', 'Rojo'),
-(2, '123YTR', 'Naranja');
+INSERT INTO `auto` (`idAuto`, `patente`, `color`, `disponibilidad`, `descripcion`) VALUES
+(1, '456ABC', 'Rojo', 'A', ''),
+(2, '123YTR', 'Naranja', 'A', ''),
+(3, '124214', 'Naranja', 'T', 'Auto automatico');
 
 -- --------------------------------------------------------
 
@@ -81,7 +84,7 @@ CREATE TABLE `autoinactivo` (
 --
 
 INSERT INTO `autoinactivo` (`idAuto`, `fechaInicioinactividad`, `fechaFininactividad`) VALUES
-(1, '2020-01-08', '2019-01-08');
+(1, '2020-01-08', '2020-01-08');
 
 -- --------------------------------------------------------
 
@@ -107,7 +110,7 @@ INSERT INTO `clase` (`idClase`, `alumno`, `auto`, `fecha`, `horaInicio`, `horaFi
 (1, 1, 1, '2020-01-09', '13:00', '09:00', 1),
 (2, 2, 2, '2020-01-09', '09:00', '10:00', 3),
 (3, 1, 1, '2020-01-09', '14:00', '15:00', 4),
-(5, 2, 2, '2020-01-09', '28:00', '27:00', 3);
+(5, 2, 2, '2020-01-09', '10:00', '27:00', 3);
 
 -- --------------------------------------------------------
 
@@ -259,7 +262,7 @@ ALTER TABLE `alumno`
 -- AUTO_INCREMENT for table `auto`
 --
 ALTER TABLE `auto`
-  MODIFY `idAuto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idAuto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1214216;
 
 --
 -- AUTO_INCREMENT for table `clase`
