@@ -71,9 +71,41 @@
             <mat-tab-group mat-align-tabs="start">
                 <div *ngFor="let day of week">
                     <mat-tab label="{{day}}">
-                        <mat-checkbox (change)="allDay(day,$event)">Disponible todo el dia</mat-checkbox>
+                        <div class="container" style="overflow-y: hidden;">
+                            <div class="row margin-top-30">
+                                <div class="col-sm-5">
+                                    <mat-form-field class="example-full-width">
+                                        <mat-label>Desde</mat-label>
+                                        <mat-select>
+                                            <mat-option *ngFor="let hour of schedule" [value]="hour">
+                                            {{hour}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div> 
+                                <div class="col-sm-5">
+                                    <mat-form-field class="example-full-width">
+                                        <mat-label>Hasta</mat-label>
+                                        <mat-select>
+                                            <mat-option *ngFor="let hour of schedule" [value]="hour">
+                                            {{hour}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <!-- <div class="col-sm-2" style="margin: auto;">
+                                    <button style="width: 100%;" mat-button><span style="font-size: 25px"><i class="fas fa-trash-alt"></i></span></button>   
+                                </div> -->
+                            </div>
+                            <div style="margin: auto;">
+                                <button style="width: 100%;" mat-button (click)="addDateTime(day)"><span style="font-size: 25px"><i class="fas fa-plus-circle"></i></span></button>   
+                            </div>
+                            <div class="margin-top-30">
+                                <mat-checkbox  (change)="allDay(day,$event)">Disponible todo el dia</mat-checkbox>
+                            </div>
+                        </div>
                     </mat-tab>
-                </div>
+                </div> 
             </mat-tab-group>
                 
 
