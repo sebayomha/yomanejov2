@@ -8,14 +8,16 @@
     //require_once('token.php');
 
     /*Funcionalidad que falta hacer
-        1. Los autos que no poseen clases tenerlos en cuenta;
-        2. Si el dia no posee clases llenar el cronograma con todos los autos
-        3. Hay 1 auto que por las mañanas no puede, ese no hay que tenerlo en cuenta.
-        4. Lo mismo para el punto 3) pero si es por la tarde    
+        1. Los autos que no poseen clases tenerlos en cuenta; DONE
+        2. Si el dia no posee clases llenar el cronograma con todos los autos; DONE
+        3. Hay 1 auto que por las mañanas no puede, ese no hay que tenerlo en cuenta. DONE
+        4. Lo mismo para el punto 3) pero si es por la tarde  DONE
         5. Obtener zona de la clase
         6. Cargar la BD
         7. Hacer el codigo principal de la llamada GET con las validaciones
         8. Hacer logica con los horarios REALES
+        9. Que cada auto no sea solo un ID, sino que tambien te ponga un flag de si ese dia tiene clases o no. DONE
+        10. Cada dia tiene que ser un objeto que te diga el dia en letras tambien DONE    
     */
 
     //Funcion principal que se encargara de armar el cronograma
@@ -30,7 +32,10 @@
         //**********//
         $zonas = obtenerZonas(); //obtengo las zonas y las cargo solo 1 vez
         $arrayGrafo = crearGrafoZonas($zonas); //creo el grafo con todas las zonas y sus adyacentes
-        $zonaAlumno = obtenerZonaAlumno($direccion);
+        $zonaAlumno = obtenerZonaAlumno($direccion); //obtengo la zona del alumno a partir de su direccion
+
+        //me guardo las disponibilidades de los autos
+        $disponibilidadesAutos = obtenerDisponibilidadesAutos();
 
         $totalDiasTentativosRetornar; //Total de dias tentativos a retornar
 
@@ -44,34 +49,34 @@
             case 8:  $totalDiasTentativosRetornar = 21; break;
             case 10: $totalDiasTentativosRetornar = 25; break;
             case 12: $totalDiasTentativosRetornar = 30; break;
+            default: $totalDiasTentativosRetornar = 20; break;
         };
 
         $i = 1;
         while ($i <= $totalDiasTentativosRetornar) { //Se recorrera hasta tanto obtener la cantidad de dias posibles a retornar
             if ($disponibilidad[$nombreDiaBusqueda] != null) { //entonces es un dia que el usuario esta disponible
                 $clasesDelDiaPorAuto = obtenerCronogramaDelDia($fechaBusqueda); //armo un diccionario auto => clases
+                $clasesDelDiaPorAuto = eliminarAutosInactivos($clasesDelDiaPorAuto, $fechaBusqueda); //quito los autos que esten inactivos esa fecha
+                $autos = []; //array que se usa para armar la estructura final que se retornara
 
-                //hasta el momento no estoy teniendo en cuenta los autos que ese dia no tienen asignada ninguna clase y estan absolutamente libres !!!!
-                if(!empty($clasesDelDiaPorAuto)) { //este dia posee clases ya
-                    $clasesDelDiaPorAuto = eliminarAutosInactivos($clasesDelDiaPorAuto, $fechaBusqueda); //quito los autos que esten inactivos esa fecha
-                    foreach ($clasesDelDiaPorAuto as $idAuto => $clases) { //recorro cada clase
-                    
-                        //horarios libres va a contener los dias que el auto no este ocupado y el usuario este disponible
-                        $horariosLibres = obtenerHorariosLibresAutoYAlumno($clases, $disponibilidad, $nombreDiaBusqueda);
-                        $horariosOcupados = array_column($clases, 'horaInicio'); //son los horarios que estan efectivamente ocupados por clases
-    
-                        $horariosLibresDataGeneral = [];
-                        $horarioData = [
-                            'horaInicio' => '',
-                            'ratingHorario' => '',
-                            'ratingZona' => '',
-                            'ratingGeneral' => ''
-                        ];
-    
-                        //**********//
-                        //comienzo a armar el array que se va a retornar
-                        //**********//
-                        foreach ($horariosLibres as $horarioAuto) { //en base a los horarios libres instancio los objetos que se van a terminar retornando
+                foreach ($clasesDelDiaPorAuto as $idAuto => $clases) { //recorro cada clase
+                    //horarios libres va a contener los dias que el auto no este ocupado y el usuario este disponible
+                    $horariosLibres = obtenerHorariosLibresAutoYAlumno($clases, $disponibilidad, $nombreDiaBusqueda);
+                    $horariosOcupados = array_column($clases, 'horaInicio'); //son los horarios que estan efectivamente ocupados por clases
+
+                    $horariosLibresDataGeneral = [];
+                    $horarioData = [
+                        'horaInicio' => '',
+                        'ratingHorario' => '',
+                        'ratingZona' => '',
+                        'ratingGeneral' => ''
+                    ];
+
+                    //**********//
+                    //comienzo a armar el array que se va a retornar
+                    //**********//
+                    foreach ($horariosLibres as $horarioAuto) { //en base a los horarios libres instancio los objetos que se van a terminar retornando
+                        if($disponibilidadesAutos[$idAuto] === "A" || esHorarioDisponible($disponibilidadesAutos[$idAuto], $horarioAuto)) { //si el horario esta en el turno que el auto puede (A = todo el dia,T= solo por la tarde, M= solo por la maniana)
                             $horarioData['horaInicio'] = $horarioAuto;
                             $horarioData['ratingHorario'] = obtenerRatingHorario($horariosOcupados, $horarioAuto);
                             $zonasVecinas = zonasDeClasesVecinas($clases, $horarioAuto); //busco si el horario posee clases vecinas para ver si es necesario calcular la cercania o no.
@@ -98,31 +103,6 @@
                             }
                             array_push($horariosLibresDataGeneral, $horarioData);
                         }
-    
-                        $fechaBusquedaString = $fechaBusqueda->format('Y-m-d');
-                        $diccionarioFechaHorariosLibres = [];
-                        if (array_key_exists($idAuto, $diccionarioFechaHorariosLibres)) { //si este auto ya fue agregado solo le pusheo los nuevos valores
-                            array_push($diccionarioFechaHorariosLibres[$idAuto], $horariosLibresDataGeneral);
-                        } else {
-                            $diccionarioFechaHorariosLibres = $horariosLibresDataGeneral; //el auto aun no fue agregado
-                        }
-                        $horariosTentativos[$fechaBusquedaString][$idAuto] = $diccionarioFechaHorariosLibres; //agrego en el diccionario el nuevo auto con sus horarios disponibles que coinciden con los del alumno
-                    }
-                } else { //ese dia aun no posee clases
-                    $diasDisponiblesUsuario = $disponibilidad[$nombreDiaBusqueda];
-                    $horariosLibresDataGeneral = [];
-                    $horarioData = [
-                        'horaInicio' => '',
-                        'ratingHorario' => '',
-                        'ratingZona' => '',
-                        'ratingGeneral' => ''
-                    ];
-                    foreach($diasDisponiblesUsuario as $dia) {
-                        $horarioData['horaInicio'] = $dia;
-                        $horarioData['ratingHorario'] = 10;
-                        $horarioData['ratingZona'] = null;
-                        $horarioData['ratingGeneral'] = 10;
-                        array_push($horariosLibresDataGeneral, $horarioData);
                     }
 
                     $fechaBusquedaString = $fechaBusqueda->format('Y-m-d');
@@ -132,11 +112,41 @@
                     } else {
                         $diccionarioFechaHorariosLibres = $horariosLibresDataGeneral; //el auto aun no fue agregado
                     }
-                    $horariosTentativos[$fechaBusquedaString][$idAuto] = $diccionarioFechaHorariosLibres; //agrego en el diccionario el nuevo auto con sus horarios disponibles que coinciden con los del alumno
+
+                    /************/
+                    /* ARMO LA ESTRUCTURA QUE SE VA A RETORNAR */
+                    /************/
+                    $tieneEldiaLibre = false;
+                    if (count($horariosOcupados) === 1 && $horariosOcupados[0] === null) { //no hay horarios ocupados, por ende todos estan libres en el dia.
+                        $tieneEldiaLibre = true;
+                    }
+
+                    $autoObject = (object) [
+                        'horarios' => $diccionarioFechaHorariosLibres,
+                        'tieneEldiaLibre' => $tieneEldiaLibre,
+                        'idAuto' => $idAuto
+                    ];
+                    array_push($autos, $autoObject);                        
+                    usort($autos, "sortAutosPorID");
+                    
+                    $fechaObject = (object) [
+                        'fecha' => $fechaBusquedaString,
+                        'dia' => obtenerNombreDia($fechaBusquedaString),
+                        'autos' => $autos                         
+                    ];
+                    /************/
+                    /* FIN DE ARMAR LA ESTRUCTURA QUE SE VA A RETORNAR */
+                    /************/
+                    
+                    $horariosTentativos[$fechaBusquedaString] = $fechaObject;
+                    //DEPRECTATED PERO SE VA A MANTENER
+                    //$horariosTentativos[$fechaBusquedaString][$idAuto] = $autoObject; //agrego en el diccionario el nuevo auto con sus horarios disponibles que coinciden con los del alumno
                 }
+
             } else { //aumento el total de dia para poder retornar la cantidad correspondiente
                 $totalDiasTentativosRetornar++;
             }
+            
             $fechaBusqueda = DateTime::createFromFormat("Y-m-d", $fechaInicio);
             $fechaBusqueda->modify('+'.$i.' day');
             $nombreDiaBusqueda = strftime("%A",$fechaBusqueda->getTimestamp());
@@ -144,6 +154,10 @@
         }
 
         return $horariosTentativos;     
+    }
+
+    function sortAutosPorID($a, $b) {
+        return strcmp($a->idAuto, $b->idAuto);
     }
 
     function obtenerHorariosLibresAutoYAlumno($clases, $disponibilidad, $nombreDiaBusqueda) {
@@ -171,7 +185,9 @@
 
         $db = new ConnectionDB();
         $conn = $db->getConnection();
-        $state = $conn->prepare('SELECT * FROM clase WHERE clase.fecha = ? ORDER BY clase.horaInicio');
+        //$state = $conn->prepare('SELECT * FROM clase WHERE clase.fecha = ? ORDER BY clase.horaInicio');
+        //$state = $conn->prepare('SELECT * FROM auto LEFT JOIN clase ON auto.idAuto = clase.auto WHERE clase.fecha = ? OR clase.fecha IS NULL ORDER BY clase.horaInicio');
+        $state = $conn->prepare('SELECT * FROM auto LEFT JOIN clase ON auto.idAuto = clase.auto AND clase.fecha = ? ORDER BY clase.horaInicio');
         $state->bind_param('s', $fechaString);
         $state->execute();
         $result = $state->get_result();
@@ -179,7 +195,7 @@
         $cronograma = [];
         if ($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
-                $cronograma[$row['auto']][] = $row;
+                $cronograma[$row['idAuto']][] = $row;
             }
         } else {
             mysqli_close($conn);
@@ -193,6 +209,7 @@
     function eliminarAutosInactivos($cronogramaDelDiaPorAuto, $fechaBusqueda) {
         $db = new ConnectionDB();
         $conn = $db->getConnection();
+
         foreach ($cronogramaDelDiaPorAuto as $idAuto => $cronogramaAuto) {
             $state = $conn->prepare('SELECT * FROM autoinactivo WHERE autoinactivo.idAuto = ?');
             $state->bind_param('s', $idAuto);
@@ -210,8 +227,28 @@
                 }
             }
 
+        }
+        mysqli_close($conn);
+        return $cronogramaDelDiaPorAuto;
+    }
+
+    function obtenerDisponibilidadesAutos() {
+        $db = new ConnectionDB();
+        $conn = $db->getConnection();
+        $state = $conn->prepare('SELECT auto.idAuto, auto.disponibilidad FROM auto');
+        $state->execute();
+        $result = $state->get_result();
+
+        $disponibilidades = [];
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                $disponibilidades[$row['idAuto']] = $row['disponibilidad'];
+            }
             mysqli_close($conn);
-            return $cronogramaDelDiaPorAuto;
+            return $disponibilidades;
+        } else {
+            mysqli_close($conn);
+            return [];
         }
     }
 
@@ -318,6 +355,45 @@
         }
 
         return $zonasVecinas;
+    }
+
+    function esHorarioDisponible($disponibilidad, $horarioAuto) {
+        if ($disponibilidad === "A") {
+            return true;
+        }
+
+        if ($disponibilidad === "M") {
+            $horarioBusqueda = strtotime($horarioAuto);
+            $horarioInicial = strtotime("08:00");
+            $horarioFinal = strtotime("13:15");
+            if (($horarioBusqueda >= $horarioInicial) && ($horarioBusqueda <= $horarioFinal)) {
+                return true;
+            }
+            return false;
+        }
+
+        if ($disponibilidad === "T") {
+            $horarioBusqueda = strtotime($horarioAuto);
+            $horarioInicial = strtotime("14:30");
+            $horarioFinal = strtotime("19:45");
+            if (($horarioBusqueda >= $horarioInicial) && ($horarioBusqueda <= $horarioFinal)) {
+                return true;
+            }
+            return false; 
+        }
+    }
+    
+    function obtenerNombreDia($fecha) {
+        $day = date('l', strtotime($fecha));
+        switch ($day) {
+            case 'Monday': return 'Lunes'; break;
+            case 'Tuesday': return 'Martes'; break;
+            case 'Wednesday': return 'Miércoles'; break;
+            case 'Thursday': return 'Jueves'; break;
+            case 'Friday': return 'Viernes'; break;
+            case 'Saturday': return 'Sábado'; break;
+            case 'Sunday': return 'Domingo'; break;
+        }
     }
 
     function obtenerDiferenciaHoraria($horarioLibre, $primerHorarioOcupado) {
@@ -529,7 +605,7 @@
     }*/
 
     function obtenerRatingHorario($horariosOcupados, $horarioLibre) {
-        if (count($horariosOcupados) === 0) { //no hay horarios ocupados, por ende todos estan libres en el dia.
+        if (count($horariosOcupados) === 1 && $horariosOcupados[0] === null) { //no hay horarios ocupados, por ende todos estan libres en el dia.
             return 10;
         }
 
