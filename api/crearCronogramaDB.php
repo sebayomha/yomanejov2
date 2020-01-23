@@ -342,8 +342,133 @@
         return 10 - $cantidadZonas;
     }
 
+    function obtenerInformacionZonas() {
+        $db = new ConnectionDB();
+        $conn = $db->getConnection();
+
+        $state = $conn->prepare('SELECT * FROM zona');
+        $state->execute();
+        $result = $state->get_result();
+
+        $zonas = [];
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                $points = (object) [
+                    'puntoSuperiorIzquierdo' => $row['puntoSuperiorIzquierdo'],
+                    'puntoSuperiorDerecho' => $row['puntoSuperiorDerecho'],
+                    'puntoInferiorIzquierdo' => $row['puntoInferiorIzquierdo'],
+                    'puntoInferiorDerecho' => $row['puntoInferiorDerecho']
+                ];
+                $zonas[$row['idZona']] = $points;
+            }
+        }
+
+        return $zonas;
+    }
+
     function obtenerZonaAlumno($direccion) {
-        return 2;
+        //$dirBusqueda = obtenerDireccionParaBusqueda($direccion);
+
+        //API PARA CUANDO SON INTERSECCIONES Y NO ES CON NUMERO. SOLO ES PRECISO CON LA PLATA
+        //https://geocoder.ls.hereapi.com/6.2/geocode.json?city=La%20Plata&street=45%20%40%203&apiKey=keJFZOq_jmWtTdun9_bUg_JfQKPPj8pWFsw0nIDtjEY
+        
+        //API KEY HERE 
+        $response = file_get_contents('https://geocoder.ls.hereapi.com/6.2/geocode.json?apiKey=keJFZOq_jmWtTdun9_bUg_JfQKPPj8pWFsw0nIDtjEY&searchtext=Calle+123+Calle+47+Ensenada+Argentina');
+        $response = json_decode($response);
+        $latitude = $response->Response->View[0]->Result[0]->Location->NavigationPosition[0]->Latitude;
+        $longitude = $response->Response->View[0]->Result[0]->Location->NavigationPosition[0]->Longitude;
+
+        $zonas = obtenerInformacionZonas(); //consulto la BD para traerme por cada zona sus puntos.
+        foreach ($zonas as $idZona => $informacionZona) {
+            $latLong = obtenerLatitudesYLongitudes($informacionZona);
+            
+            $vertices_x = $latLong[1]; //Longitud    // x-coordinates of the vertices of the polygon
+            $vertices_y = $latLong[0]; //Latitud // y-coordinates of the vertices of the polygon
+            $points_polygon = count($vertices_x);  // number vertices - zero-based array
+            $longitude_x = $longitude;  // x-coordinate of the point to test
+            $latitude_y = $latitude;    // y-coordinate of the point to test
+
+            if (is_in_polygon($points_polygon, $vertices_x, $vertices_y, $longitude_x, $latitude_y)){
+                echo "Is in polygon!";
+                echo $idZona;
+            }
+            else echo "Is not in polygon";
+        }
+    }
+
+    function is_in_polygon($points_polygon, $vertices_x, $vertices_y, $longitude_x, $latitude_y) {
+      $i = $j = $c = 0;
+      for ($i = 0, $j = $points_polygon-1 ; $i < $points_polygon; $j = $i++) {
+        if ( (($vertices_y[$i] > $latitude_y != ($vertices_y[$j] > $latitude_y)) &&
+        ($longitude_x < ($vertices_x[$j] - $vertices_x[$i]) * ($latitude_y - $vertices_y[$i]) / ($vertices_y[$j] - $vertices_y[$i]) + $vertices_x[$i]) ) ) 
+            $c = !$c;
+      }
+      return $c;
+    }
+
+    function obtenerLatitudesYLongitudes($informacionZona) {
+        $latitudLongitudPrimerPunto = explode(',', $informacionZona->puntoSuperiorIzquierdo);
+        $latitudLongitudSegundoPunto = explode(',', $informacionZona->puntoSuperiorDerecho);
+        $latitudLongitudTercerPunto = explode(',', $informacionZona->puntoInferiorIzquierdo);
+        $latitudLongitudCuartoPunto = explode(',', $informacionZona->puntoInferiorDerecho);
+
+        $latitudes = [$latitudLongitudPrimerPunto[0], $latitudLongitudSegundoPunto[0], $latitudLongitudTercerPunto[0], $latitudLongitudCuartoPunto[0]];
+        $longitudes = [$latitudLongitudPrimerPunto[1], $latitudLongitudSegundoPunto[1], $latitudLongitudTercerPunto[1], $latitudLongitudCuartoPunto[1]];
+        
+        $latLong = [$latitudes, $longitudes];
+
+        return $latLong;
+    }
+
+    function obtenerDireccionParaBusqueda($direccion) {
+        $stringDireccion = "";
+        $finalPart = '+'.$direccion[4]->city.'+Buenos+Aires+Argentina';
+
+        if ($direccion[0]->diag) {
+            $stringDireccion += "Diagonal+".$direccion[0]->street."+";
+        } 
+        if (!$direccion[0]->diag) {
+            $minusculas = strtolower($direccion[0]->street);
+            if(strpos($minusculas, 'boulevard')) {
+                $stringDireccion += "Boulevard+".$direccion[0]->street.'+';
+            } else {
+                $stringDireccion += "Calle+".$direccion[0]->street."+";
+            }
+        }
+
+        if ($direccion[3]->altitud != '') {
+            $stringDireccion += $direccion[3]->altitud.$finalPart;
+            return $stringDireccion;
+        } else {
+            if ($direccion[1]->street_a != '') {
+                if ($direccion[1]->diag) {
+                    $stringDireccion += "Diagonal+".$direccion[1]->street_a.$finalPart;
+                    return $stringDireccion;
+                } else {
+                    $minusculas = strtolower($direccion[1]->street_a);
+                    if(strpos($minusculas, 'boulevard')) {
+                        $stringDireccion += "Boulevard+".$direccion[1]->street_a.$finalPart;
+                    } else {
+                        $stringDireccion += "Calle+".$direccion[1]->street_a.$finalPart;
+                    }
+                    return $stringDireccion;
+                }
+            } else {
+                if ($direccion[2]->diag) {
+                    $stringDireccion += "Diagonal+".$direccion[2]->street_b.$finalPart;
+                    return $stringDireccion;
+                } else {
+                    $minusculas = strtolower($direccion[2]->street_b);
+                    if(strpos($minusculas, 'boulevard')) {
+                        $stringDireccion += "Boulevard+".$direccion[2]->street_b.$finalPart;
+                    } else {
+                        $stringDireccion += "Calle+".$direccion[2]->street_b.$finalPart;
+                    }
+                    return $stringDireccion;
+                }
+            }
+        }
+
     }
 
     function zonasDeClasesVecinas($clases, $horario) {
@@ -681,6 +806,8 @@
         'Sunday' => ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00','19:00']
     ];
 
-    echo json_encode(obtenerCronograma(4, $disponibilidad, 'no importa la direccion por ahora', '2020-01-09'));
+    $direccion = "hola";
+
+    echo json_encode(obtenerCronograma(4, $disponibilidad, $direccion, '2020-01-15'));
 
 ?>
