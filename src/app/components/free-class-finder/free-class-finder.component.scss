@@ -12,3 +12,7 @@
     overflow-y: hidden !important;
     overflow-x: hidden !important;
   }
+
+  ::ng-deep .mat-checkbox-layout{
+    margin: auto !important;
+  }

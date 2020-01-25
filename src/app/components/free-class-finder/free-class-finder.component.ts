@@ -14,84 +14,11 @@ import { Option } from 'src/app/models/option';
 
 export class FreeClassFinderComponent {
 
+  locations = ["La Plata","Berisso","Ensenada"];
   predefinedHours = ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
   search: Search;
-
-  /* search: {
-    lessons: number,
-    date: Date,
-    address: [
-      { 'street': string, 'diag': boolean },
-      { 'street_a': string, 'diag': boolean },
-      { 'street_b': string, 'diag': boolean },
-      { 'altitud': string }
-    ],
-    dates_times: [{
-      name_day: string,
-      all_day: boolean,
-      option: [{
-        hour_start: string,
-        hour_finish: string,
-        scheduleFrom: Array<string>,
-        scheduleTo: Array<string>
-      }]
-    }, {
-      name_day: string,
-      all_day: boolean,
-      option: [{
-        hour_start: string,
-        hour_finish: string,
-        scheduleFrom: Array<string>,
-        scheduleTo: Array<string>
-      }]
-    }, {
-      name_day: string,
-      all_day: boolean,
-      option: [{
-        hour_start: string,
-        hour_finish: string,
-        scheduleFrom: Array<string>,
-        scheduleTo: Array<string>
-      }]
-    }, {
-      name_day: string,
-      all_day: boolean,
-      option: [{
-        hour_start: string,
-        hour_finish: string,
-        scheduleFrom: Array<string>,
-        scheduleTo: Array<string>
-      }]
-    }, {
-      name_day: string,
-      all_day: boolean,
-      option: [{
-        hour_start: string,
-        hour_finish: string,
-        scheduleFrom: Array<string>,
-        scheduleTo: Array<string>
-      }]
-    }, {
-      name_day: string,
-      all_day: boolean,
-
-      option: [{
-        hour_start: string,
-        hour_finish: string,
-        scheduleFrom: Array<string>,
-        scheduleTo: Array<string>
-      }]
-    }, {
-      name_day: string,
-      all_day: boolean,
-      option: [{
-        hour_start: string,
-        hour_finish: string,
-        scheduleFrom: Array<string>,
-        scheduleTo: Array<string>
-      }]
-    }]
-  } */
+  address_complete:boolean = false;
+  control_flag_empty:boolean = false;
 
   constructor() { }
 
@@ -105,82 +32,6 @@ export class FreeClassFinderComponent {
     }
 
     this.search = new Search(dates_times);
-
-    /* //this.search = new Search('Lunes');
-    this.search = {
-      lessons: null,
-      date: new Date(),
-      address: [
-        { 'street': null, 'diag': null },
-        { 'street_a': null, 'diag': null },
-        { 'street_b': null, 'diag': null },
-        { 'altitud': null }
-      ],
-      dates_times: [{
-        name_day: "Lunes",
-        all_day: false,
-        option: [{
-          hour_start: null,
-          hour_finish: null,
-          scheduleFrom: this.predefinedHours,
-          scheduleTo: []
-        }]
-      }, {
-        name_day: "Martes",
-        all_day: false,
-        option: [{
-          hour_start: null,
-          hour_finish: null,
-          scheduleFrom: ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"],
-          scheduleTo: []
-        }]
-      }, {
-        name_day: "Miercoles",
-        all_day: false,
-        option: [{
-          hour_start: null,
-          hour_finish: null,
-          scheduleFrom: ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"],
-          scheduleTo: []
-        }]
-      }, {
-        name_day: "Jueves",
-        all_day: false,
-        option: [{
-          hour_start: null,
-          hour_finish: null,
-          scheduleFrom: ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"],
-          scheduleTo: []
-        }]
-      }, {
-        name_day: "Viernes",
-        all_day: false,
-        option: [{
-          hour_start: null,
-          hour_finish: null,
-          scheduleFrom: ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"],
-          scheduleTo: []
-        }]
-      }, {
-        name_day: "Sabado",
-        all_day: false,
-        option: [{
-          hour_start: null,
-          hour_finish: null,
-          scheduleFrom: ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"],
-          scheduleTo: []
-        }]
-      }, {
-        name_day: "Domingo",
-        all_day: false,
-        option: [{
-          hour_start: '',
-          hour_finish: '',
-          scheduleFrom: ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"],
-          scheduleTo: []
-        }]
-      }]
-    } */
 
     console.log(this.search);
   }
@@ -233,31 +84,45 @@ export class FreeClassFinderComponent {
   }
 
   addDateTime(day) {
-    let index = this.search.dates_times.findIndex(element => { return element.name_day == day });
 
-    if (index != -1) {
-      if(this.search.dates_times[index].option.length == 1){
-        if(this.search.dates_times[index].option[0].hour_start == null && this.search.dates_times[index].option[0].hour_finish == null) {
-          this.search.dates_times[index].option[0].hour_start = '08:00';
-          this.search.dates_times[index].option[0].hour_finish = '09:00';
-          this.search.dates_times[index].option[0].scheduleFrom = ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
-          this.search.dates_times[index].option[0].scheduleTo = [];
+    if (!this.control_flag_empty) {
+      let index = this.search.dates_times.findIndex(element => { return element.name_day == day });
+
+      if (index != -1) {
+        if(this.search.dates_times[index].option.length == 1 && this.search.dates_times[index].option[0].hour_start == '' && this.search.dates_times[index].option[0].hour_finish == ''){
+
+            this.search.dates_times[index].option[0].hour_start = 'not_assigned';
+            this.search.dates_times[index].option[0].hour_finish = 'not_assigned';
+            this.search.dates_times[index].option[0].scheduleFrom = ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
+            this.search.dates_times[index].option[0].scheduleTo = [];
+
         } else {
+          let option_length = this.search.dates_times[index].option.length;
+
+          let j = option_length - 1;
+
+          let hour_finish_selected = this.search.dates_times[index].option[j].hour_finish;
+
+          let new_schedule_from = [];
+
+          this.search.dates_times[index].option[j].scheduleFrom.forEach( (h:string) => {
+            if (h > hour_finish_selected ) {
+              new_schedule_from.push(h);
+            }
+          })
+
           this.search.dates_times[index].option.push({
-            hour_start: '08:00',
-            hour_finish: '09:00',
-            scheduleFrom: new Array("08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"),
+            hour_start: 'not_assigned',
+            hour_finish: 'not_assigned',
+            scheduleFrom: new_schedule_from,
             scheduleTo: []
-          });
-        }
-      } else {
-        this.search.dates_times[index].option.push({
-          hour_start: '08:00',
-          hour_finish: '09:00',
-          scheduleFrom: ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"],
-          scheduleTo: []
-        });
-      }       
+          }); 
+        }       
+      }
+      
+      console.log('Busqueda', this.search);
+
+      this.control_flag_empty = true;
     }
   }
 
@@ -276,8 +141,31 @@ export class FreeClassFinderComponent {
     })
   }
 
-  setHourFinish(day,hour) {
-    day.hour_finish = hour;
+  setHourFinish(option,hour) {
+    option.hour_finish = hour;
+    this.control_flag_empty = false;
   }
+
+  selectionCity(city) {
+    this.search.address[4].city = city;
+  }
+
+  isAddressFull() {
+    if(this.search.address[1].street_a != null || this.search.address[2].street_b != null || this.search.address[3].altitud != null) return this.address_complete = true; return this.address_complete = false;
+  }
+
+  removeOption(index, day_options) {
+    
+    if (day_options.length > 1) {
+    day_options.splice( index, 1 );
+    } else {
+      day_options[index].hour_start = '';
+      day_options[index].hour_finish = '';
+      day_options[index].scheduleTo = [];
+    }
+    this.control_flag_empty = false;
+    console.log('Busqueda', this.search);
+  }
+  
 
 }

@@ -7,7 +7,8 @@ export class Search {
     address: [{ street: string, diag: boolean },
         { street_a: string, diag: boolean },
         { street_b: string, diag: boolean },
-        { altitud: string }];
+        { altitud: string },
+        { city: string }];
     dates_times: Array<DatesTimes>
 
     constructor(datesTime: Array<DatesTimes>, lessons?:number, date?:Date) {
@@ -17,7 +18,8 @@ export class Search {
                 { 'street': '', 'diag': false },
                 { 'street_a': '', 'diag': false },
                 { 'street_b': '', 'diag': false },
-                { 'altitud': '' }
+                { 'altitud': '' },
+                { 'city': "La Plata"}
               ];
         this.dates_times = datesTime;
     }

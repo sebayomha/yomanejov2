@@ -1,21 +1,36 @@
 <div class="container">
 
-    <div class="col-sm-12">
+    <div>
         <form (ngSubmit)="guardar(forma)" #forma="ngForm" novalidate="">
             <div class="form-group">
-                <div class="col-sm-9">
-
-                    
-                    <mat-form-field>
-                        <input matInput [matDatepicker]="picker" placeholder="Desde" [(ngModel)]="search.date" [ngModelOptions]="{standalone: true}">
-                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-datepicker #picker></mat-datepicker>
-                    </mat-form-field>
+                <div class="col-sm-12">
 
                     <div class="row">
-                        <div class="col-sm-2" style="margin: auto;"><mat-checkbox name="street_diag" [(ngModel)]="search.address[0].diag">Diag</mat-checkbox></div>
-                        <div class="col-sm-10">
+                        <div class="col-6 col-sm-6 col-md-6 col-lg-4">
                             <mat-form-field class="example-full-width">
+                                <input matInput [matDatepicker]="picker" placeholder="Desde" [(ngModel)]="search.date" [ngModelOptions]="{standalone: true}">
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-6 col-sm-6 col-md-6 col-lg-4">
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Localidad</mat-label>
+                                <mat-select (selectionChange)="selectionCity($event.value)">
+                                    <mat-option *ngFor="let city of locations" [value]="city">
+                                    {{city}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div><label>Direccion:</label></div>
+                    <div class="row">
+                        
+                        <div class="col-9 col-sm-7 col-md-6 col-lg-4">
+                            <mat-checkbox style="margin-right: 15px;" name="street_diag" [(ngModel)]="search.address[0].diag">Diag</mat-checkbox>
+                            <mat-form-field style="width: 125px;"> 
                                 <input 
                                     matInput 
                                     placeholder="Calle"
@@ -25,33 +40,40 @@
                                     required
                                 >
                             </mat-form-field>
+                            <div *ngIf="street.errors?.required && street.touched" style="color: #f44336; font-size: 12px;">
+                                Debe ingresar una calle para continuar.
+                            </div>
+                        </div>
+                        <div class="col-3 col-sm-5 col-md-6 col-lg-4">
+                            <mat-form-field class="example-full-width">
+                                <input 
+                                    matInput 
+                                    placeholder="Numero"
+                                    name="altitud"
+                                    [(ngModel)]="search.address[3].altitud"
+                                    #altitud="ngModel"
+                                >
+                            </mat-form-field>
                         </div>
                     </div>
-                    
-
-                    <div *ngIf="street.errors?.required && street.touched" style="color: #f44336;">
-                        Debe ingresar una calle para continuar.
-                    </div>
-
+                
+                    <div><label>Entre:</label></div>
                     <div class="row">
-                        <div class="col-sm-2" style="margin: auto;"><span>Entre:</span></div>
-                        <div class="col-sm-2" style="margin: auto;"><mat-checkbox name="street_a_diag" [(ngModel)]="search.address[1].diag">Diag</mat-checkbox></div>
-                        <div class="col-sm-2">
-                            <mat-form-field class="example-full-width">
+                        <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                            <mat-checkbox style="margin-right: 15px;" name="street_a_diag" [(ngModel)]="search.address[1].diag">Diag</mat-checkbox>
+                            <mat-form-field  style="width: 125px;">
                                 <input 
                                     matInput 
                                     placeholder="Calle"
                                     name="street_a"
                                     [(ngModel)]="search.address[1].street_a"
-                                    #street_a="ngModel"
-                                    required
                                 >
                             </mat-form-field>
                         </div>
-                        <div class="col-sm-1" style="margin: auto;"><span>y</span></div>
-                        <div class="col-sm-2" style="margin: auto;"><mat-checkbox name="street_b_diag" [(ngModel)]="search.address[2].diag">Diag</mat-checkbox></div>
-                        <div class="col-sm-2">
-                            <mat-form-field class="example-full-width">
+                        <!-- <div class="col-sm-1" style="margin: auto;"></div> -->
+                        <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                            <mat-checkbox style="margin-right: 15px;" name="street_b_diag" [(ngModel)]="search.address[2].diag">Diag</mat-checkbox>
+                            <mat-form-field  style="width: 125px;">
                                 <input 
                                     matInput 
                                     placeholder="Calle"
@@ -62,8 +84,8 @@
                         </div>
                     </div>
 
-                    <div *ngIf="street_a.errors?.required && street_a.touched" style="color: #f44336;">
-                        Debe ingresar una interseccion para continuar.
+                    <div *ngIf="address_complete" style="color: #f44336; font-size: 12px;">
+                        Debe ingresar al menos una interseccion o un numero para realizar la busqueda
                     </div>
                 </div>
             </div>
@@ -74,7 +96,7 @@
                         <div class="container" style="overflow-y: hidden;">
                             <div *ngIf="!search.dates_times[i].all_day">
                                 <div class="row margin-top-30" *ngFor="let option of search.dates_times[i].option; let j = index;">
-                                    <div class="col-sm-5">
+                                    <div class="col-sm-5" *ngIf="search.dates_times[i].option[j].hour_start">
                                         <mat-form-field class="example-full-width">
                                             <mat-label>Desde</mat-label>
                                             <mat-select (selectionChange)="doScheduleTo(day.name_day,$event.value,j)">
@@ -94,12 +116,12 @@
                                             </mat-select>
                                         </mat-form-field>
                                     </div>
-                                    <!-- <div class="col-sm-2" style="margin: auto;">
-                                        <button style="width: 100%;" mat-button><span style="font-size: 25px"><i class="fas fa-trash-alt"></i></span></button>   
-                                    </div> -->
+                                    <div class="col-sm-2" style="margin: auto;" *ngIf="search.dates_times[i].option[j].hour_start && j == (search.dates_times[i].option.length - 1)">
+                                        <button style="width: 100%;" mat-button (click)="removeOption(j,search.dates_times[i].option)"><span style="font-size: 25px"><i class="fas fa-trash-alt"></i></span></button>   
+                                    </div>
                                 </div>
                                 <div style="margin: auto;">
-                                    <button style="width: 100%;" mat-button (click)="addDateTime(day.name_day)"><span style="font-size: 25px"><i class="fas fa-plus-circle"></i></span></button>   
+                                    <button type="button" style="width: 100%;" mat-button (click)="addDateTime(day.name_day)" [disabled]="control_flag_empty"><span style="font-size: 25px"><i class="fas fa-plus-circle"></i></span></button>   
                                 </div>
                             </div>
                             <div class="margin-top-30">
@@ -112,7 +134,7 @@
                 
 
             <div class="form-group">
-                <button mat-button type="submit" [disabled]="!forma.valid">GUARDAR</button>
+                <button mat-button type="submit" (click)="isAddressFull()" [disabled]="!forma.valid">BUSCAR</button>
             </div>
         </form>
     </div>
