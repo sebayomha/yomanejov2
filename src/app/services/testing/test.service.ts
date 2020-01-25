@@ -12,6 +12,6 @@ export class TestService {
     const params = new HttpParams()
     .set('nomdia', nomdia)
     .set('fecha', fecha);
-    return this.http.get('api/obtenerCronograma/', {params: params});
+    return this.http.get('api/calcularCronograma/', {params: params});
   }
 }

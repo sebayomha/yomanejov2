@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 21, 2020 at 05:46 PM
+-- Generation Time: Jan 24, 2020 at 12:41 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -108,9 +108,9 @@ CREATE TABLE `clase` (
 
 INSERT INTO `clase` (`idClase`, `alumno`, `auto`, `fecha`, `horaInicio`, `horaFin`, `idZona`) VALUES
 (1, 1, 1, '2020-01-09', '13:00', '09:00', 1),
-(2, 2, 2, '2020-01-09', '09:00', '10:00', 3),
+(2, 2, 2, '2020-01-09', '09:00', '10:00', 2),
 (3, 1, 1, '2020-01-09', '14:00', '15:00', 4),
-(5, 2, 2, '2020-01-09', '10:00', '27:00', 3);
+(5, 2, 2, '2020-01-09', '10:00', '27:00', 1);
 
 -- --------------------------------------------------------
 
@@ -172,18 +172,23 @@ INSERT INTO `instructor` (`idInstructor`, `nombre`, `apellido`) VALUES
 
 CREATE TABLE `zona` (
   `idZona` int(11) NOT NULL,
-  `nombreZona` varchar(255) NOT NULL
+  `nombreZona` varchar(255) NOT NULL,
+  `puntoSuperiorIzquierdo` varchar(255) NOT NULL,
+  `puntoSuperiorDerecho` varchar(255) NOT NULL,
+  `puntoInferiorIzquierdo` varchar(255) NOT NULL,
+  `puntoInferiorDerecho` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `zona`
 --
 
-INSERT INTO `zona` (`idZona`, `nombreZona`) VALUES
-(1, 'Zona norte'),
-(2, 'Zona sur'),
-(3, 'Zona este'),
-(4, 'Zona oeste');
+INSERT INTO `zona` (`idZona`, `nombreZona`, `puntoSuperiorIzquierdo`, `puntoSuperiorDerecho`, `puntoInferiorIzquierdo`, `puntoInferiorDerecho`) VALUES
+(1, 'plazaitaliahasta1', '-34.905929,-57.961377', '-34.900759,-57.956332', '-34.905114,-57.949352', '-34.910191,-57.955877'),
+(2, 'Plazaitaliaenadelante', '-34.911222,-57.968101', '-34.906245,-57.962427', '-34.911345,-57.956196', '-34.915900,-57.961811'),
+(3, 'plazabelgranoaplazaguemes', '-34.916448,-57.973737', '-34.911724,-57.968456', '-34.916812,-57.962182', '-34.921247,-57.966954'),
+(4, 'plazaguemeshastaalberti', '-34.917603,-57.974834', '-34.921534,-57.979446', '-34.927008,-57.974227', '-34.922504,-57.968400'),
+(5, 'ZonaMiCasa', '-34.896444, -57.941498', '-34.893470, -57.938214', '-34.903799, -57.924555', '-34.907129, -57.927009');
 
 -- --------------------------------------------------------
 
@@ -193,20 +198,23 @@ INSERT INTO `zona` (`idZona`, `nombreZona`) VALUES
 
 CREATE TABLE `zonasvecinas` (
   `idZona` int(11) NOT NULL,
-  `idZonaVecina` int(11) NOT NULL
+  `idZonaVecina` int(11) NOT NULL,
+  `id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `zonasvecinas`
 --
 
-INSERT INTO `zonasvecinas` (`idZona`, `idZonaVecina`) VALUES
-(1, 2),
-(1, 4),
-(2, 1),
-(4, 1),
-(4, 3),
-(3, 4);
+INSERT INTO `zonasvecinas` (`idZona`, `idZonaVecina`, `id`) VALUES
+(1, 2, 1),
+(1, 4, 2),
+(2, 1, 3),
+(4, 1, 4),
+(4, 3, 5),
+(3, 4, 6),
+(4, 5, 7),
+(5, 1, 8);
 
 --
 -- Indexes for dumped tables
@@ -249,6 +257,12 @@ ALTER TABLE `zona`
   ADD PRIMARY KEY (`idZona`);
 
 --
+-- Indexes for table `zonasvecinas`
+--
+ALTER TABLE `zonasvecinas`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -286,7 +300,13 @@ ALTER TABLE `instructor`
 -- AUTO_INCREMENT for table `zona`
 --
 ALTER TABLE `zona`
-  MODIFY `idZona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idZona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `zonasvecinas`
+--
+ALTER TABLE `zonasvecinas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
