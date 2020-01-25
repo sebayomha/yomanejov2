@@ -5,7 +5,7 @@
             <div class="form-group">
                 <div class="col-sm-12">
 
-                    <div class="row">
+                    <div class="row" style="margin-top: 30px;">
                         <div class="col-6 col-sm-6 col-md-6 col-lg-4">
                             <mat-form-field class="example-full-width">
                                 <input matInput [matDatepicker]="picker" placeholder="Desde" [(ngModel)]="search.date" [ngModelOptions]="{standalone: true}">
@@ -14,6 +14,21 @@
                             </mat-form-field>
                         </div>
                         <div class="col-6 col-sm-6 col-md-6 col-lg-4">
+                            <mat-form-field class="example-full-width">
+                                <input 
+                                    matInput 
+                                    placeholder="N° de clases"
+                                    name="lessons"
+                                    [(ngModel)]="search.lessons"
+                                    #altitud="ngModel"
+                                >
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 30px;"><label style="font-weight: 500; font-size: 18px;">Direccion:</label></div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 col-lg-4">
                             <mat-form-field class="example-full-width">
                                 <mat-label>Localidad</mat-label>
                                 <mat-select (selectionChange)="selectionCity($event.value)">
@@ -24,8 +39,6 @@
                             </mat-form-field>
                         </div>
                     </div>
-
-                    <div><label>Direccion:</label></div>
                     <div class="row">
                         
                         <div class="col-9 col-sm-7 col-md-6 col-lg-4">
@@ -96,7 +109,7 @@
                         <div class="container" style="overflow-y: hidden;">
                             <div *ngIf="!search.dates_times[i].all_day">
                                 <div class="row margin-top-30" *ngFor="let option of search.dates_times[i].option; let j = index;">
-                                    <div class="col-sm-5" *ngIf="search.dates_times[i].option[j].hour_start">
+                                    <div class="col-sm-5" *ngIf="search.dates_times[i].option[j].hour_start || search.dates_times[i].option[j].hour_start == null">
                                         <mat-form-field class="example-full-width">
                                             <mat-label>Desde</mat-label>
                                             <mat-select (selectionChange)="doScheduleTo(day.name_day,$event.value,j)">
@@ -116,7 +129,7 @@
                                             </mat-select>
                                         </mat-form-field>
                                     </div>
-                                    <div class="col-sm-2" style="margin: auto;" *ngIf="search.dates_times[i].option[j].hour_start && j == (search.dates_times[i].option.length - 1)">
+                                    <div class="col-sm-2" style="margin: auto;" *ngIf="(search.dates_times[i].option[j].hour_start || search.dates_times[i].option[j].hour_start == null) && j == (search.dates_times[i].option.length - 1)">
                                         <button style="width: 100%;" mat-button (click)="removeOption(j,search.dates_times[i].option)"><span style="font-size: 25px"><i class="fas fa-trash-alt"></i></span></button>   
                                     </div>
                                 </div>

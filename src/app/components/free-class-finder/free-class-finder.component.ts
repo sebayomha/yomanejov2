@@ -14,7 +14,7 @@ import { Response } from 'src/app/models/response';
 export class FreeClassFinderComponent {
 
   locations = ["La Plata", "Berisso", "Ensenada"];
-  predefinedHours = ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
+  predefinedHours = ["08:00", "09:00", "10:00", "11:15", "12:15", "13:15", "14:30", "15:30", "16:30", "17:45", "18:45", "19:45"];
   search: Search;
   address_complete:boolean = false;
   control_flag_empty:boolean = false;
@@ -30,7 +30,7 @@ export class FreeClassFinderComponent {
       dates_times.push(dateTime);
     }
 
-    this.search = new Search(dates_times);
+    this.search = new Search(dates_times,1);
 
     console.log(this.search);
   }
@@ -91,9 +91,9 @@ export class FreeClassFinderComponent {
       if (index != -1) {
         if(this.search.dates_times[index].option.length == 1 && this.search.dates_times[index].option[0].hour_start == '' && this.search.dates_times[index].option[0].hour_finish == ''){
 
-            this.search.dates_times[index].option[0].hour_start = 'not_assigned';
-            this.search.dates_times[index].option[0].hour_finish = 'not_assigned';
-            this.search.dates_times[index].option[0].scheduleFrom = ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
+            this.search.dates_times[index].option[0].hour_start = null;
+            this.search.dates_times[index].option[0].hour_finish = null;
+            this.search.dates_times[index].option[0].scheduleFrom = ["08:00", "09:00", "10:00", "11:15", "12:15", "13:15", "14:30", "15:30", "16:30", "17:45", "18:45", "19:45"];
             this.search.dates_times[index].option[0].scheduleTo = [];
 
         } else {
@@ -112,8 +112,8 @@ export class FreeClassFinderComponent {
           })
 
           this.search.dates_times[index].option.push({
-            hour_start: 'not_assigned',
-            hour_finish: 'not_assigned',
+            hour_start: null,
+            hour_finish: null,
             scheduleFrom: new_schedule_from,
             scheduleTo: []
           }); 
@@ -132,7 +132,7 @@ export class FreeClassFinderComponent {
       if (element.name_day == day) {
         element.option[index].hour_start = hour;
         element.option[index].scheduleFrom.forEach( (h:string) => {
-          if (h >= hour) {
+          if (h > hour) {
             element.option[index].scheduleTo.push(h);
           }
         })
