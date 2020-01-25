@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
-import { NgForm } from '@angular/forms';
 import { Search } from 'src/app/models/free-class-finder.model';
 import { DatesTimes } from 'src/app/models/dates-times';
 import { Option } from 'src/app/models/option';
-
-
+import { CronogramaService } from 'src/app/services/cronograma/cronograma.service';
+import { Response } from 'src/app/models/response';
 
 @Component({
   selector: 'free-class-finder',
@@ -14,13 +13,13 @@ import { Option } from 'src/app/models/option';
 
 export class FreeClassFinderComponent {
 
-  locations = ["La Plata","Berisso","Ensenada"];
+  locations = ["La Plata", "Berisso", "Ensenada"];
   predefinedHours = ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
   search: Search;
   address_complete:boolean = false;
   control_flag_empty:boolean = false;
 
-  constructor() { }
+  constructor(private cronogramaService: CronogramaService) { }
 
   ngOnInit() {
     let dates_times = new Array<DatesTimes>();
@@ -63,8 +62,9 @@ export class FreeClassFinderComponent {
   }
 
   guardar(forma: string) {
-    console.log('Forma', forma);
-
+    this.cronogramaService.getCronograma(this.search).subscribe( (response: Response) => {
+      console.log(response);
+    });
     console.log('Busqueda', this.search);
   }
 
@@ -126,14 +126,13 @@ export class FreeClassFinderComponent {
     }
   }
 
-
   doScheduleTo(day,hour,index) {
 
     this.search.dates_times.forEach(element => {
       if (element.name_day == day) {
         element.option[index].hour_start = hour;
         element.option[index].scheduleFrom.forEach( (h:string) => {
-          if (h > hour) {
+          if (h >= hour) {
             element.option[index].scheduleTo.push(h);
           }
         })
@@ -165,7 +164,6 @@ export class FreeClassFinderComponent {
     }
     this.control_flag_empty = false;
     console.log('Busqueda', this.search);
-  }
-  
+  }  
 
 }

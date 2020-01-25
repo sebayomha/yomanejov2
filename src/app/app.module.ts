@@ -10,7 +10,7 @@ import { MatNativeDateModule  } from '@angular/material';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
-
+import { DatePipe } from '@angular/common';
 
 /* Components */
 import { AppComponent } from './app.component';
@@ -39,7 +39,7 @@ import { FreeClassFinderComponent } from './components/free-class-finder/free-cl
     MatSelectModule,
     MatButtonModule
   ],
-  providers: [],
+  providers:[DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

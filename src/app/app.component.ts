@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { TestService } from './services/testing/test.service';
 
 @Component({
   selector: 'app-root',
@@ -10,12 +9,10 @@ import { TestService } from './services/testing/test.service';
 export class AppComponent {
   title = 'yoManejo';
 
-  constructor(private testService: TestService) {}
+  constructor() {}
 
   probarServicios() {
-   this.testService.getCronograma('papa', 'papa2').subscribe( (response) => {
-      console.log(response);
-    });
+
   }
 }
 
