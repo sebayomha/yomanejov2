@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { Search } from 'src/app/models/free-class-finder.model';
-import { DatesTimes } from 'src/app/models/dates-times';
-import { Option } from 'src/app/models/option';
-import { CronogramaService } from 'src/app/services/cronograma/cronograma.service';
-import { Response } from 'src/app/models/response';
+import { Search } from '../../models/free-class-finder.model';
+import { DatesTimes } from '../../models/dates-times';
+import { Option } from '../../models/option';
+import { CronogramaService } from '../../services/cronograma/cronograma.service';
+import { Response } from '../../models/response';
+
 
 @Component({
   selector: 'free-class-finder',
@@ -31,7 +32,6 @@ export class FreeClassFinderComponent {
     }
 
     this.search = new Search(dates_times,1);
-
     console.log(this.search);
   }
 
@@ -39,33 +39,57 @@ export class FreeClassFinderComponent {
     switch (i) {
       case 0:
         return 'Lunes';
-        break;
       case 1:
         return 'Martes';
-        break;
       case 2:
         return 'Miércoles';
-        break;
       case 3:
         return 'Jueves';
-        break;
       case 4:
         return 'Viernes';
-        break;
       case 5:
         return 'Sábado';
-        break;
       case 6:
         return 'Domingo';
-        break;
     }
   }
 
   guardar(forma: string) {
-    this.cronogramaService.getCronograma(this.search).subscribe( (response: Response) => {
-      console.log(response);
-    });
+
+
+    //Transformo los nombres de los dias en ingles
+    for (let i = 0; i <=6; i++) {
+      switch (i) {
+        case 0:
+          this.search.dates_times[i].name_day = 'Monday';
+          break;
+        case 1:
+          this.search.dates_times[i].name_day = 'Tuesday';
+          break;
+        case 2:
+          this.search.dates_times[i].name_day = 'Wednesday';
+          break;
+        case 3:
+          this.search.dates_times[i].name_day = 'Thursday';
+          break;
+        case 4:
+          this.search.dates_times[i].name_day = 'Friday';
+          break;
+        case 5:
+          this.search.dates_times[i].name_day = 'Saturday';
+          break;
+        case 6:
+          this.search.dates_times[i].name_day = 'Sunday';
+          break;
+      }
+    }
+
     console.log('Busqueda', this.search);
+
+    // this.cronogramaService.getCronograma(this.search).subscribe( (response: Response) => {
+    //   console.log(response);
+    // });
+    
   }
 
   allDay(day) {

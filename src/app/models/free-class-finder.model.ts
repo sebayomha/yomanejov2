@@ -19,7 +19,7 @@ export class Search {
                 { 'street_a': '', 'diag': false },
                 { 'street_b': '', 'diag': false },
                 { 'altitud': '' },
-                { 'city': "La Plata"}
+                { 'city': 'La Plata'}
               ];
         this.dates_times = datesTime;
     }
