@@ -12,13 +12,17 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
 import { DatePipe } from '@angular/common';
 import {MatExpansionModule} from '@angular/material/expansion';
-import { LOCALE_ID } from '@angular/core'
+import { LOCALE_ID } from '@angular/core';
+import localeEsAr from '@angular/common/locales/es-AR';
+import { registerLocaleData } from '@angular/common';
+
 /* Components */
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FreeClassFinderComponent } from './components/free-class-finder/free-class-finder.component';
 
 
+registerLocaleData(localeEsAr);
 
 
 @NgModule({

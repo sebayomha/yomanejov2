@@ -1,26 +1,17 @@
 import { DatesTimes } from "./dates-times";
+import { Address } from "./address.model";
 
 export class Search {
 
     lessons: number;
     date: Date;
-    address: [{ street: string, diag: boolean },
-        { street_a: string, diag: boolean },
-        { street_b: string, diag: boolean },
-        { altitud: string },
-        { city: string }];
+    address:Array<Address>;
     dates_times: Array<DatesTimes>
 
-    constructor(datesTime: Array<DatesTimes>, lessons?:number, date?:Date) {
+    constructor(datesTime: Array<DatesTimes>, address:Array<Address>, lessons?:number, date?:Date) {
         this.lessons = lessons;
         this.date = date;
-        this.address = [
-                { 'street': '', 'diag': false },
-                { 'street_a': '', 'diag': false },
-                { 'street_b': '', 'diag': false },
-                { 'altitud': '' },
-                { 'city': 'La Plata'}
-              ];
+        this.address = address;
         this.dates_times = datesTime;
     }
 }
