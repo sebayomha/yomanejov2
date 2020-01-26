@@ -16,3 +16,7 @@
   ::ng-deep .mat-checkbox-layout{
     margin: auto !important;
   }
+
+  ::ng-deep .mat-expansion-indicator::after {
+    color:white;
+  }

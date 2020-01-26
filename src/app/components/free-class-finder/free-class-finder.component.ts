@@ -4,7 +4,7 @@ import { DatesTimes } from '../../models/dates-times';
 import { Option } from '../../models/option';
 import { CronogramaService } from '../../services/cronograma/cronograma.service';
 import { Response } from '../../models/response';
-
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
   selector: 'free-class-finder',
@@ -14,25 +14,30 @@ import { Response } from '../../models/response';
 
 export class FreeClassFinderComponent {
 
+  minDate = new Date();
   locations = ["La Plata", "Berisso", "Ensenada"];
   predefinedHours = ["08:00", "09:00", "10:00", "11:15", "12:15", "13:15", "14:30", "15:30", "16:30", "17:45", "18:45", "19:45"];
   search: Search;
   address_complete:boolean = false;
   control_flag_empty:boolean = false;
+  control_collapse_search:boolean = false;
 
-  constructor(private cronogramaService: CronogramaService) { }
+  constructor(private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver) { }
 
   ngOnInit() {
     let dates_times = new Array<DatesTimes>();
     for (let i = 0; i <=6; i++) {
-      let option = new Option('', '', this.predefinedHours, []);
+      let option = new Option('', '', this.predefinedHours, [], null);
       let options = new Array(option);
       let dateTime = new DatesTimes(this.getDay(i), false, options);
       dates_times.push(dateTime);
     }
 
-    this.search = new Search(dates_times,1);
-    console.log(this.search);
+    this.control_collapse_search = true;
+
+    this.search = new Search(dates_times, 1, new Date());
+    this.search.address[4].city = "La Plata";
+      console.log(this.search);
   }
 
   getDay(i: number) {
@@ -56,40 +61,45 @@ export class FreeClassFinderComponent {
 
   guardar(forma: string) {
 
-
+    let object = JSON.parse(JSON.stringify(this.search));
+    
     //Transformo los nombres de los dias en ingles
     for (let i = 0; i <=6; i++) {
       switch (i) {
         case 0:
-          this.search.dates_times[i].name_day = 'Monday';
+          object.dates_times[i].name_day = 'Monday';
           break;
         case 1:
-          this.search.dates_times[i].name_day = 'Tuesday';
+          object.dates_times[i].name_day = 'Tuesday';
           break;
         case 2:
-          this.search.dates_times[i].name_day = 'Wednesday';
+          object.dates_times[i].name_day = 'Wednesday';
           break;
         case 3:
-          this.search.dates_times[i].name_day = 'Thursday';
+          object.dates_times[i].name_day = 'Thursday';
           break;
         case 4:
-          this.search.dates_times[i].name_day = 'Friday';
+          object.dates_times[i].name_day = 'Friday';
           break;
         case 5:
-          this.search.dates_times[i].name_day = 'Saturday';
+          object.dates_times[i].name_day = 'Saturday';
           break;
         case 6:
-          this.search.dates_times[i].name_day = 'Sunday';
+          object.dates_times[i].name_day = 'Sunday';
           break;
       }
     }
 
-    console.log('Busqueda', this.search);
+    console.log('Busqueda', object);
 
-    // this.cronogramaService.getCronograma(this.search).subscribe( (response: Response) => {
+    // this.cronogramaService.getCronograma(object).subscribe( (response: Response) => {
     //   console.log(response);
     // });
     
+  }
+
+  isMobile() {
+    return this.breakpointObserver.isMatched('(max-width: 767px)');
   }
 
   allDay(day) {
@@ -119,6 +129,7 @@ export class FreeClassFinderComponent {
             this.search.dates_times[index].option[0].hour_finish = null;
             this.search.dates_times[index].option[0].scheduleFrom = ["08:00", "09:00", "10:00", "11:15", "12:15", "13:15", "14:30", "15:30", "16:30", "17:45", "18:45", "19:45"];
             this.search.dates_times[index].option[0].scheduleTo = [];
+            this.search.dates_times[index].option[0].scheduleSend = null;
 
         } else {
           let option_length = this.search.dates_times[index].option.length;
@@ -139,7 +150,8 @@ export class FreeClassFinderComponent {
             hour_start: null,
             hour_finish: null,
             scheduleFrom: new_schedule_from,
-            scheduleTo: []
+            scheduleTo: [],
+            scheduleSend: null
           }); 
         }       
       }
@@ -167,14 +179,19 @@ export class FreeClassFinderComponent {
   setHourFinish(option,hour) {
     option.hour_finish = hour;
     this.control_flag_empty = false;
+    option.scheduleSend = [];
+
+    //Armo el array final a enviar.
+    option.scheduleFrom.forEach( (h:string) => {
+      if (h >= option.hour_start && h <= option.hour_finish) {
+        option.scheduleSend.push(h);
+      }
+    })
+
   }
 
   selectionCity(city) {
     this.search.address[4].city = city;
-  }
-
-  isAddressFull() {
-    if(this.search.address[1].street_a != null || this.search.address[2].street_b != null || this.search.address[3].altitud != null) return this.address_complete = true; return this.address_complete = false;
   }
 
   removeOption(index, day_options) {
@@ -185,6 +202,7 @@ export class FreeClassFinderComponent {
       day_options[index].hour_start = '';
       day_options[index].hour_finish = '';
       day_options[index].scheduleTo = [];
+      day_options[index].scheduleSend = null;
     }
     this.control_flag_empty = false;
     console.log('Busqueda', this.search);

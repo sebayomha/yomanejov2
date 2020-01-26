@@ -3,11 +3,13 @@ export class Option {
     hour_finish: string;
     scheduleFrom: Array<string>;
     scheduleTo: Array<string>;
+    scheduleSend: Array<string>;
 
-    constructor(hour_start: string, hour_finish: string, scheduleFrom: Array<string>, scheduleTo: Array<string>) {
+    constructor(hour_start: string, hour_finish: string, scheduleFrom: Array<string>, scheduleTo: Array<string>, scheduleSend: Array<string>) {
         this.hour_start = hour_start;
         this.hour_finish = hour_finish;
         this.scheduleFrom = scheduleFrom;
         this.scheduleTo = scheduleTo;
+        this.scheduleSend = scheduleSend;
     }
 }

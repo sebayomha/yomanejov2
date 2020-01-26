@@ -11,7 +11,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
 import { DatePipe } from '@angular/common';
-
+import {MatExpansionModule} from '@angular/material/expansion';
+import { LOCALE_ID } from '@angular/core'
 /* Components */
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -37,9 +38,10 @@ import { FreeClassFinderComponent } from './components/free-class-finder/free-cl
     MatNativeDateModule,
     MatCheckboxModule,
     MatSelectModule,
-    MatButtonModule
+    MatButtonModule,
+    MatExpansionModule
   ],
-  providers:[DatePipe],
+  providers:[DatePipe, {provide: LOCALE_ID, useValue: "es-AR"}],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
