@@ -40,6 +40,7 @@
 
             //me guardo las disponibilidades de los autos
             $disponibilidadesAutos = $this->obtenerDisponibilidadesAutos();
+            $tolerancias = $this->obtenerMaximosDiasTolerancia();
 
             $totalDiasTentativosRetornar; //Total de dias tentativos a retornar
 
@@ -82,7 +83,7 @@
                         foreach ($horariosLibres as $horarioAuto) { //en base a los horarios libres instancio los objetos que se van a terminar retornando
                             if($disponibilidadesAutos[$idAuto] === "A" || $this->esHorarioDisponible($disponibilidadesAutos[$idAuto], $horarioAuto)) { //si el horario esta en el turno que el auto puede (A = todo el dia,T= solo por la tarde, M= solo por la maniana)
                                 $horarioData['horaInicio'] = $horarioAuto;
-                                $horarioData['ratingHorario'] = $this->obtenerRatingHorario($horariosOcupados, $horarioAuto);
+                                $horarioData['ratingHorario'] = $this->obtenerRatingHorario($horariosOcupados, $horarioAuto, $tolerancias, $fechaInicio, $fechaBusqueda);
                                 $zonasVecinas = $this->zonasDeClasesVecinas($clases, $horarioAuto); //busco si el horario posee clases vecinas para ver si es necesario calcular la cercania o no.
                                                                                             //Si no posee clases vecinas no vale la pena calcular la distancia
                                 if(!empty($zonasVecinas)) {
@@ -130,6 +131,7 @@
                             'tieneEldiaLibre' => $tieneEldiaLibre,
                             'idAuto' => $idAuto
                         ];
+
                         array_push($autos, $autoObject);                        
                         usort($autos, array( $this, 'sortAutosPorID' ));
                         
@@ -181,7 +183,7 @@
                     array_push($horariosOcupados, $claseData);
                 }
             }
-        
+
             return array_values(array_diff($disponibilidad[$nombreDiaBusqueda], array_column($horariosOcupados, 'horaInicio'))); //obtengo los horarios libres que tanto el usuario como el auto estan libres
         }
 
@@ -430,23 +432,24 @@
 
         function obtenerDireccionParaBusqueda($direccion) {
             $stringDireccion = "";
-            $ciudad = $direccion[4]->city;
-            if($direccion[4]->city == "La Plata") {
+
+            $ciudad = $direccion[4]['city'];
+            if($direccion[4]['city'] == "La Plata") {
                 $ciudad = "La+Plata";
             }
 
             $finalPart = '+'.$ciudad.'+Buenos+Aires+Argentina';
 
-            if ($direccion[0]->diag) {
-                $stringDireccion .= "Diagonal+".$direccion[0]->street."+";
+            if ($direccion[0]['diag']) {
+                $stringDireccion .= "Diagonal+".$direccion[0]['street']."+";
             }
 
-            if (!$direccion[0]->diag) {
-                $minusculas = strtolower($direccion[0]->street);
+            if (!$direccion[0]['diag']) {
+                $minusculas = strtolower($direccion[0]['diag']);
                 if(strpos($minusculas, 'boulevard')) {
-                    $stringDireccion .= "Boulevard+".$direccion[0]->street.'+'.$direccion[3]->altitud.$finalPart;
+                    $stringDireccion .= "Boulevard+".$direccion[0]['street'].'+'.$direccion[3]['altitud'].$finalPart;
                 } else {
-                    $stringDireccion .= "Calle+".$direccion[0]->street."+".$direccion[3]->altitud.$finalPart;
+                    $stringDireccion .= "Calle+".$direccion[0]['street']."+".$direccion[3]['altitud'].$finalPart;
                 }
             }
 
@@ -456,41 +459,42 @@
                 $stringDireccion += $direccion[3]->altitud.$finalPart;
                 return $stringDireccion;
             } else {
-                if ($direccion[1]->street_a != '') {
+                if ($direccion[1]['diag']_a != '') {
                     if ($direccion[1]->diag) {
-                        $stringDireccion += "Diagonal+".$direccion[1]->street_a.$finalPart;
+                        $stringDireccion += "Diagonal+".$direccion[1]['diag']_a.$finalPart;
                         return $stringDireccion;
                     } else {
-                        $minusculas = strtolower($direccion[1]->street_a);
+                        $minusculas = strtolower($direccion[1]['diag']_a);
                         if(strpos($minusculas, 'boulevard')) {
-                            $stringDireccion += "Boulevard+".$direccion[1]->street_a.$finalPart;
+                            $stringDireccion += "Boulevard+".$direccion[1]['diag']_a.$finalPart;
                         } else {
-                            $stringDireccion += "Calle+".$direccion[1]->street_a.$finalPart;
+                            $stringDireccion += "Calle+".$direccion[1]['diag']_a.$finalPart;
                         }
                         return $stringDireccion;
                     }
                 } else {
                     if ($direccion[2]->diag) {
-                        $stringDireccion += "Diagonal+".$direccion[2]->street_b.$finalPart;
+                        $stringDireccion += "Diagonal+".$direccion[2]['diag']_b.$finalPart;
                         return $stringDireccion;
                     } else {
-                        $minusculas = strtolower($direccion[2]->street_b);
+                        $minusculas = strtolower($direccion[2]['diag']_b);
                         if(strpos($minusculas, 'boulevard')) {
-                            $stringDireccion += "Boulevard+".$direccion[2]->street_b.$finalPart;
+                            $stringDireccion += "Boulevard+".$direccion[2]['diag']_b.$finalPart;
                         } else {
-                            $stringDireccion += "Calle+".$direccion[2]->street_b.$finalPart;
+                            $stringDireccion += "Calle+".$direccion[2]['diag']_b.$finalPart;
                         }
                         return $stringDireccion;
                     }
                 }
-            } */
+            } 
+        */
 
         }
 
         function zonasDeClasesVecinas($clases, $horario) {
             $zonasVecinas = [];
             foreach ($clases as $clase) {
-                if($this->obtenerDiferenciaHoraria($clase['horaInicio'], $horario) == 1) {
+                if($this->obtenerDiferenciaHoraria($clase['horaInicio'], $horario) == 1 || $this->obtenerDiferenciaHoraria($clase['horaInicio'], $horario) == 1.15 || $this->obtenerDiferenciaHoraria($clase['horaInicio'], $horario) == 1.30) {
                     array_push($zonasVecinas, $clase['idZona']);
                 }
             }
@@ -539,6 +543,31 @@
 
         function obtenerDiferenciaHoraria($horarioLibre, $primerHorarioOcupado) {
             return abs(round((strtotime($horarioLibre) - strtotime($primerHorarioOcupado))/3600, 1));
+        }
+
+        function obtenerMaximosDiasTolerancia() {
+            $idParametro = 1;
+            $db = new ConnectionDB();
+            $conn = $db->getConnection();
+
+            $state = $conn->prepare('SELECT * FROM parametros WHERE idParametro = ?');
+            $state->bind_param('s', $idParametro);
+            $state->execute();
+            $result = $state->get_result();
+
+            $maximoDiasTolerancia;
+            $minimoDiasTolerancia;
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    $maximoDiasTolerancia = $row['maximoDiasTolerancia'];
+                    $minimoDiasTolerancia = $row['diasToleranciaBajo'];
+                }
+            }
+            $tolerancias = [];
+            array_push($tolerancias, $maximoDiasTolerancia);
+            array_push($tolerancias, $minimoDiasTolerancia);
+            mysqli_close($conn);
+            return $tolerancias;
         }
 
         //deprecated
@@ -736,7 +765,7 @@
         //deprecated
         /*function obtenerRatingHorario($horario, $horariosOcupados) { 
             return obtenerRatingHorariosTotales($horariosOcupados, $horario);
-        /*  if ($horario === '08:00' || $horario === '19:00' || $horario === '09:00' || $horario === '18:00') { //es el primer horario o el ultimo horario
+            /*  if ($horario === '08:00' || $horario === '19:00' || $horario === '09:00' || $horario === '18:00') { //es el primer horario o el ultimo horario
                 return obtenerRating819y918($horariosOcupados, $horario);
             }
             
@@ -745,9 +774,23 @@
             }        
         }*/
 
-        function obtenerRatingHorario($horariosOcupados, $horarioLibre) {
+        function obtenerDiferenciaDias($fechaInicio, $fechaBusqueda) {
+            $earlier = date_create($fechaInicio);
+            $diff = date_diff($earlier, $fechaBusqueda);
+            return $diff->days;
+        }
+
+        function obtenerRatingHorario($horariosOcupados, $horarioLibre, $tolerancias, $fechaInicio, $fechaBusqueda) {
             if (count($horariosOcupados) === 1 && $horariosOcupados[0] === null) { //no hay horarios ocupados, por ende todos estan libres en el dia.
-                return 10;
+                if ( (int) $this->obtenerDiferenciaDias($fechaInicio, $fechaBusqueda) > (int) $tolerancias[0]) {
+                    return 10;
+                } else {
+                    if ( (int) $this->obtenerDiferenciaDias($fechaInicio, $fechaBusqueda) <= (int) $tolerancias[1]) {
+                        return 3;
+                    } else {
+                        return 6;
+                    }
+                }                
             }
 
             $horariosOcupadosSorted = [];        
@@ -762,14 +805,14 @@
             if($horariosOcupadosSortedValues[0] >= 4) {
                 return 2;
             } else {
-                if ($horariosOcupadosSortedValues[0] == 3) {
+                if ($horariosOcupadosSortedValues[0] == 3 || $horariosOcupadosSortedValues[0] == 3.15 || $horariosOcupadosSortedValues[0] == 3.30 || $horariosOcupadosSortedValues[0] == 3.45) {
                     return 4;
                 } else { 
-                    if ($horariosOcupadosSortedValues[0] == 2) {
+                    if ($horariosOcupadosSortedValues[0] == 2 || $horariosOcupadosSortedValues[0] == 2.15 || $horariosOcupadosSortedValues[0] == 2.30 || $horariosOcupadosSortedValues[0] == 2.45) {
                         if (count($horariosOcupadosSortedValues) >= 2) {
-                            if ($horariosOcupadosSortedValues[1] == 2) { //si el segundo horario mas cercano tambien es a las 2, busco el proximo
+                            if ($horariosOcupadosSortedValues[1] == 2 || $horariosOcupadosSortedValues[1] == 2.15 || $horariosOcupadosSortedValues[1] == 2.30 || $horariosOcupadosSortedValues[1] == 2.45) { //si el segundo horario mas cercano tambien es a las 2, busco el proximo
                                 if (count($horariosOcupadosSortedValues) >= 3) {
-                                    if ($horariosOcupadosSortedValues[2] == 3) { //esta pegado al anterior horario
+                                    if ($horariosOcupadosSortedValues[2] == 3 || $horariosOcupadosSortedValues[2] == 3.15 || $horariosOcupadosSortedValues[2] == 3.30 || $horariosOcupadosSortedValues[2] == 3.45) { //esta pegado al anterior horario
                                         return 7;
                                     } else { //es 4 o mayor, por lo que no esta pegado al anterior
                                         return 6;
@@ -778,7 +821,7 @@
                                     return 6;
                                 }
                             } else { //el segundo horario mas cercano no es a 2 horas
-                                if ($horariosOcupadosSortedValues[1] == 3) {
+                                if ($horariosOcupadosSortedValues[1] == 3 || $horariosOcupadosSortedValues[1] == 3.15 || $horariosOcupadosSortedValues[1] == 3.30 || $horariosOcupadosSortedValues[1] == 3.45) {
                                     return 7;
                                 } else {
                                     return 6;
@@ -789,16 +832,17 @@
                         }
                     } else { //la diferencia es 1 con el horario mas cercano
                         if (count($horariosOcupadosSortedValues) >= 2) { //hay mas horarios ocupados
-                            if ($horariosOcupadosSortedValues[1] == 2) { //si el segundo horario ocupado es a 2 horas, entonces ya es un 10
+                            if ($horariosOcupadosSortedValues[1] == 2 || $horariosOcupadosSortedValues[1] == 2.15 || $horariosOcupadosSortedValues[1] == 2.30 || $horariosOcupadosSortedValues[1] == 2.45) { //si el segundo horario ocupado es a 2 horas, entonces ya es un 10
                                 //evaluo si la diferencia entre [0] y [1] es de 1 hora, si es de 1 hora es un 10, sino un 8
-                                if($this->obtenerDiferenciaHoraria($horariosOcupadosSortedKeys[0], $horariosOcupadosSortedKeys[1]) == 1) {
+                                $diff = $this->obtenerDiferenciaHoraria($horariosOcupadosSortedKeys[0], $horariosOcupadosSortedKeys[1]);
+                                if($diff == 1 || $diff == 1.15 || $diff == 1.30 || $diff == 1.45) {
                                     return 10;
                                 } else {
                                     return 8;
                                 }
                             } else {
-                                if ($horariosOcupadosSortedValues[1] == 1) { //el segundo horario ocupado tambien es a 1 hora
-                                return 10; //se forma un sanguchito
+                                if ($horariosOcupadosSortedValues[1] == 1 || $horariosOcupadosSortedValues[1] == 1.15 || $horariosOcupadosSortedValues[1] == 1.30 || $horariosOcupadosSortedValues[1] == 1.45) { //el segundo horario ocupado tambien es a 1 hora
+                                    return 10; //se forma un sanguchito
                                 } else {
                                     return 8;
                                 }

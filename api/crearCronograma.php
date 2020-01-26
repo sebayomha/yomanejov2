@@ -14,11 +14,11 @@
 	//Defino todas las funciones que voy a utilizar
 	function calcularCronograma(){
 
-		$cantClases = 4;
+		$cantClases = (int) $_GET['cantClases'];
+		$fechaInicio = $_GET['fechaInicio'];
+		$direccion = json_decode($_GET['direccion'], true);
 
-		$fechaInicio = '2020-01-07';
-	
-		$disponibilidad = [
+/* 		$disponibilidad = [
 			'Monday' => ['09:00', '12:00', '15:00', '19:00'], 
 			'Tuesday' => null,
 			'Wednesday' => ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00','19:00'],
@@ -26,9 +26,30 @@
 			'Friday' => ['09:00', '12:00', '15:00', '19:00'],
 			'Saturday' => null,
 			'Sunday' => ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00','19:00']
-		];
+		]; 
+*/
+
+		$disponibilidad = json_decode($_GET['disponibilidad'], true);
+
+		$resDisponibilidad = [];
+		foreach ($disponibilidad as $dia) {
+			$resDisponibilidad[$dia['name_day']] = null;
+
+			if($dia['option'][0]['scheduleSend'] != null) {
+				$resDisponibilidad[$dia['name_day']] = [];
+				$options = [];
+				foreach ($dia['option'] as $option) {
+					foreach ($option['scheduleSend'] as $schedule) {
+						array_push($options, $schedule);
+					}
+				}
+				$resDisponibilidad[$dia['name_day']] = $options;
+			} else {
+				$resDisponibilidad[$dia['name_day']] = null;
+			}		
+		}
 	
-		$direccion = [ (object) [
+	/* 	$direccion = [ (object) [
 				'street' => '123',
 				'diag' => false,
 			],
@@ -47,11 +68,9 @@
 				'city' => 'Ensenada'
 			]
 		];
-
-		$params = json_decode(file_get_contents('php://input'), true);
-
+ */
 		$cronograma = new Cronograma();
-		$cronogramaResultante = $cronograma->calcularCronograma($cantClases, $disponibilidad, $direccion, $fechaInicio);
+		$cronogramaResultante = $cronograma->calcularCronograma($cantClases, $resDisponibilidad, $direccion, $fechaInicio);
 
 		if (!empty($cronogramaResultante)) {
 			echo json_encode($GLOBALS['utils']->getResponse(0, $cronogramaResultante));
