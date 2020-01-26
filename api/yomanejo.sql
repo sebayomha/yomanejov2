@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 24, 2020 at 12:41 AM
+-- Generation Time: Jan 26, 2020 at 11:47 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -107,7 +107,7 @@ CREATE TABLE `clase` (
 --
 
 INSERT INTO `clase` (`idClase`, `alumno`, `auto`, `fecha`, `horaInicio`, `horaFin`, `idZona`) VALUES
-(1, 1, 1, '2020-01-09', '13:00', '09:00', 1),
+(1, 1, 1, '2020-01-26', '13:15', '09:00', 3),
 (2, 2, 2, '2020-01-09', '09:00', '10:00', 2),
 (3, 1, 1, '2020-01-09', '14:00', '15:00', 4),
 (5, 2, 2, '2020-01-09', '10:00', '27:00', 1);
@@ -167,6 +167,25 @@ INSERT INTO `instructor` (`idInstructor`, `nombre`, `apellido`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `parametros`
+--
+
+CREATE TABLE `parametros` (
+  `idParametro` int(11) NOT NULL,
+  `maximoDiasTolerancia` int(11) NOT NULL,
+  `diasToleranciaBajo` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `parametros`
+--
+
+INSERT INTO `parametros` (`idParametro`, `maximoDiasTolerancia`, `diasToleranciaBajo`) VALUES
+(1, 10, 3);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `zona`
 --
 
@@ -209,12 +228,13 @@ CREATE TABLE `zonasvecinas` (
 INSERT INTO `zonasvecinas` (`idZona`, `idZonaVecina`, `id`) VALUES
 (1, 2, 1),
 (1, 4, 2),
-(2, 1, 3),
+(2, 5, 3),
 (4, 1, 4),
 (4, 3, 5),
 (3, 4, 6),
-(4, 5, 7),
-(5, 1, 8);
+(4, 1, 7),
+(5, 1, 8),
+(1, 3, 9);
 
 --
 -- Indexes for dumped tables
@@ -249,6 +269,12 @@ ALTER TABLE `disponibilidad`
 --
 ALTER TABLE `instructor`
   ADD PRIMARY KEY (`idInstructor`);
+
+--
+-- Indexes for table `parametros`
+--
+ALTER TABLE `parametros`
+  ADD PRIMARY KEY (`idParametro`);
 
 --
 -- Indexes for table `zona`
@@ -297,6 +323,12 @@ ALTER TABLE `instructor`
   MODIFY `idInstructor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `parametros`
+--
+ALTER TABLE `parametros`
+  MODIFY `idParametro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `zona`
 --
 ALTER TABLE `zona`
@@ -306,7 +338,7 @@ ALTER TABLE `zona`
 -- AUTO_INCREMENT for table `zonasvecinas`
 --
 ALTER TABLE `zonasvecinas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
