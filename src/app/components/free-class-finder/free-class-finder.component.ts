@@ -69,7 +69,9 @@ export class FreeClassFinderComponent {
     }
   }
 
-  guardar(forma: string) {
+  searchSchedules(forma: string) {
+
+    this.control_collapse_search = false;
 
     let object = JSON.parse(JSON.stringify(this.search));
     

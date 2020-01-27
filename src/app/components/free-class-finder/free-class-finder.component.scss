@@ -25,6 +25,11 @@
     background-color:#43c89d;
   }
 
+
+  ::ng-deep .mat-checkbox-inner-container {
+    height: 15px !important;
+    width: 15px !important;
+  }
   // ::ng-deep .mat-tab-label-active {
   //   color: #43c89d !important;
   //   font-weight: 500;

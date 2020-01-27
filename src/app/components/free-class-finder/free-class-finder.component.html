@@ -1,6 +1,6 @@
 <div class="container">
     <div>
-        <mat-expansion-panel [expanded]="control_collapse_search == true" style="margin-top: 30px;">
+        <mat-expansion-panel [expanded]="control_collapse_search == true" (opened)="control_collapse_search = true" style="margin-top: 30px;">
             <mat-expansion-panel-header style="background-color:#43c89d;">
                 <mat-panel-title style="color:white;">
                     <i style="margin-top: 3px; margin-right: 20px;" class="fas fa-search"></i><span>BUSCAR</span>
@@ -8,7 +8,7 @@
                 <mat-panel-description style="color:white;">
                 </mat-panel-description>
             </mat-expansion-panel-header>
-            <form (ngSubmit)="guardar(forma)" #forma="ngForm" novalidate="">
+            <form (ngSubmit)="searchSchedules(forma)" #forma="ngForm" novalidate="">
                 <div class="form-group">
                     <div>
                         <div class="row" style="margin-top: 30px;">
