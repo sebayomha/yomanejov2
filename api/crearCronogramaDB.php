@@ -485,41 +485,6 @@
             }
 
             return $stringDireccion;
-
-    /*         if ($direccion[3]->altitud != '') {
-                $stringDireccion += $direccion[3]->altitud.$finalPart;
-                return $stringDireccion;
-            } else {
-                if ($direccion[1]['diag']_a != '') {
-                    if ($direccion[1]->diag) {
-                        $stringDireccion += "Diagonal+".$direccion[1]['diag']_a.$finalPart;
-                        return $stringDireccion;
-                    } else {
-                        $minusculas = strtolower($direccion[1]['diag']_a);
-                        if(strpos($minusculas, 'boulevard')) {
-                            $stringDireccion += "Boulevard+".$direccion[1]['diag']_a.$finalPart;
-                        } else {
-                            $stringDireccion += "Calle+".$direccion[1]['diag']_a.$finalPart;
-                        }
-                        return $stringDireccion;
-                    }
-                } else {
-                    if ($direccion[2]->diag) {
-                        $stringDireccion += "Diagonal+".$direccion[2]['diag']_b.$finalPart;
-                        return $stringDireccion;
-                    } else {
-                        $minusculas = strtolower($direccion[2]['diag']_b);
-                        if(strpos($minusculas, 'boulevard')) {
-                            $stringDireccion += "Boulevard+".$direccion[2]['diag']_b.$finalPart;
-                        } else {
-                            $stringDireccion += "Calle+".$direccion[2]['diag']_b.$finalPart;
-                        }
-                        return $stringDireccion;
-                    }
-                }
-            } 
-        */
-
         }
 
         function zonasDeClasesVecinas($clases, $horario) {
