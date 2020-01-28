@@ -113,15 +113,15 @@ export class FreeClassFinderComponent {
   }
   
   onSwipeLeft($event, tabulator) {
-    if(tabulator.selectedIndex > 0){
-      tabulator.selectedIndex--;
-    } 
-  }
-
-  onSwipeRight($event, tabulator) {
     if(tabulator.selectedIndex < tabulator._tabs.length){
       tabulator.selectedIndex++;
     }
+  }
+
+  onSwipeRight($event, tabulator) {
+    if(tabulator.selectedIndex > 0){
+      tabulator.selectedIndex--;
+    } 
   }
 
   allDay(day) {
