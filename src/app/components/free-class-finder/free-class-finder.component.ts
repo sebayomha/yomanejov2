@@ -44,7 +44,9 @@ export class FreeClassFinderComponent {
     this.addresses.push(street, street_a, street_b, altitud, city);
     this.control_collapse_search = true;
 
-    this.search = new Search(dates_times, this.addresses, 1, new Date());
+    var tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    this.search = new Search(dates_times, this.addresses, 1, tomorrow);
     this.search.address[4].city = "La Plata";
       console.log(this.search);
   }
