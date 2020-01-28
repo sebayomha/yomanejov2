@@ -375,16 +375,19 @@
 
         function obtenerZonaAlumno($direccion) {
             $dirBusqueda = $this->obtenerDireccionParaBusqueda($direccion);
-
+            $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='.$dirBusqueda.'&key=AIzaSyCvMYjfZVe25lflg8fb6PlfKc3zipGmGCM';
             //API PARA CUANDO SON INTERSECCIONES Y NO ES CON NUMERO. SOLO ES PRECISO CON LA PLATA
             //https://geocoder.ls.hereapi.com/6.2/geocode.json?city=La%20Plata&street=45%20%40%203&apiKey=keJFZOq_jmWtTdun9_bUg_JfQKPPj8pWFsw0nIDtjEY
             
             //API KEY HERE
             $context = stream_context_create(array('http' => array('header'=>'Connection: close\r\n')));
-            $response = file_get_contents('https://geocoder.ls.hereapi.com/6.2/geocode.json?apiKey=keJFZOq_jmWtTdun9_bUg_JfQKPPj8pWFsw0nIDtjEY&searchtext='.$dirBusqueda,false,$context);
+            //$response = file_get_contents('https://geocoder.ls.hereapi.com/6.2/geocode.json?apiKey=keJFZOq_jmWtTdun9_bUg_JfQKPPj8pWFsw0nIDtjEY&searchtext='.$dirBusqueda,false,$context);
+            $response = file_get_contents($url,false,$context);
+            
             $response = json_decode($response);
-            $latitude = $response->Response->View[0]->Result[0]->Location->NavigationPosition[0]->Latitude;
-            $longitude = $response->Response->View[0]->Result[0]->Location->NavigationPosition[0]->Longitude;
+            //$latitude = $response->results[2]->View[0]->Result[0]->Location->NavigationPosition[0]->Latitude;
+            $latitude = $response->results[0]->geometry->location->lat;
+            $longitude = $response->results[0]->geometry->location->lng;
 
             $zonas = $this->obtenerInformacionZonas(); //consulto la BD para traerme por cada zona sus puntos.
             $zona = null;
@@ -441,15 +444,43 @@
             $finalPart = '+'.$ciudad.'+Buenos+Aires+Argentina';
 
             if ($direccion[0]['diag']) {
-                $stringDireccion .= "Diagonal+".$direccion[0]['street']."+";
+                $stringDireccion .= "Diagonal".$direccion[0]['street']."+";
             }
 
             if (!$direccion[0]['diag']) {
                 $minusculas = strtolower($direccion[0]['diag']);
                 if(strpos($minusculas, 'boulevard')) {
-                    $stringDireccion .= "Boulevard+".$direccion[0]['street'].'+'.$direccion[3]['altitud'].$finalPart;
+                    $stringDireccion .= "Boulevard".$direccion[0]['street'].'+';
                 } else {
-                    $stringDireccion .= "Calle+".$direccion[0]['street']."+".$direccion[3]['altitud'].$finalPart;
+                    $stringDireccion .= "Calle".$direccion[0]['street']."+";
+                }
+            }
+
+            if ($direccion[3]['altitud'] != '') {
+                $stringDireccion .= $direccion[3]['altitud'].$finalPart;
+            } else {
+                if ($direccion[1]['street_a'] != '') {
+                    if ($direccion[1]['diag']) {
+                        $stringDireccion .= "Diagonal".$direccion[1]['street_a'].$finalPart;
+                    } else {
+                        $minusculas = strtolower($direccion[1]['street_a']);
+                        if(strpos($minusculas, 'boulevard')) {
+                            $stringDireccion .= "Boulevard".$direccion[1]['street_a'].$finalPart;
+                        } else {
+                            $stringDireccion .= "Calle".$direccion[1]['street_a'].$finalPart;
+                        }
+                    }
+                } else {
+                    if ($direccion[2]['diag']) {
+                        $stringDireccion .= "Diagonal".$direccion[2]['street_b'].$finalPart;
+                    } else {
+                        $minusculas = strtolower($direccion[2]['street_b']);
+                        if(strpos($minusculas, 'boulevard')) {
+                            $stringDireccion .= "Boulevard".$direccion[2]['street_b'].$finalPart;
+                        } else {
+                            $stringDireccion .= "Calle".$direccion[2]['street_b'].$finalPart;
+                        }
+                    }
                 }
             }
 
