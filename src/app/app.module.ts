@@ -1,26 +1,34 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import {MatCardModule} from '@angular/material/card';
-import {MatInputModule} from '@angular/material/input';
-import { FormsModule }   from '@angular/forms';
-import {MatTabsModule} from '@angular/material/tabs';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import { MatNativeDateModule  } from '@angular/material';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatSelectModule} from '@angular/material/select';
-import {MatButtonModule} from '@angular/material/button';
-import { DatePipe } from '@angular/common';
-import {MatExpansionModule} from '@angular/material/expansion';
+import { DatePipe, registerLocaleData } from '@angular/common';
 import { LOCALE_ID } from '@angular/core';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import localeEsAr from '@angular/common/locales/es-AR';
-import { registerLocaleData } from '@angular/common';
+
+/* Material Components */
+import { MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import 'hammerjs';
 
 /* Components */
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FreeClassFinderComponent } from './components/free-class-finder/free-class-finder.component';
+import { LoaderComponent } from './components/loader/loader/loader.component';
 
+/* Services */
+import { LoaderService } from './services/loader/loader-service.service';
+import { RequestInterceptorService } from './services/interceptor/request-interceptor.service';
 
 registerLocaleData(localeEsAr);
 
@@ -28,7 +36,8 @@ registerLocaleData(localeEsAr);
 @NgModule({
   declarations: [
     AppComponent,
-    FreeClassFinderComponent
+    FreeClassFinderComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,
@@ -43,9 +52,10 @@ registerLocaleData(localeEsAr);
     MatCheckboxModule,
     MatSelectModule,
     MatButtonModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatProgressSpinnerModule
   ],
-  providers:[DatePipe, {provide: LOCALE_ID, useValue: "es-AR"}],
+  providers:[DatePipe, {provide: LOCALE_ID, useValue: "es-AR"}, LoaderService, { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptorService, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

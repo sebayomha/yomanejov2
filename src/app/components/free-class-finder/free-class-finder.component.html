@@ -93,10 +93,11 @@
                 <div style="margin-top: 30px;"><label style="font-weight: 500; font-size: 18px;">Horarios habiles:</label></div>
                 <div style="font-size: 13px; margin-bottom: 15px;" class="text-muted">Recuerde que debe ingresar
                     al menos un horario para realizar la busqueda</div>
-                <mat-tab-group mat-align-tabs="start">
+                <mat-tab-group mat-align-tabs="start" #tabulator>
                     <div *ngFor="let day of search.dates_times; let i = index;">
                         <mat-tab label="{{day.name_day}}">
-                            <div class="container" style="overflow-y: hidden;">
+                            <div class="container" (swipeleft)="onSwipeLeft($event, tabulator)"
+                            (swiperight)="onSwipeRight($event, tabulator)" style="overflow-y: hidden;">
                                 <div *ngIf="!search.dates_times[i].all_day">
                                     <div class="row margin-top-30"
                                         *ngFor="let option of search.dates_times[i].option; let j = index;">

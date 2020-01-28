@@ -111,6 +111,18 @@ export class FreeClassFinderComponent {
   isMobile() {
     return this.breakpointObserver.isMatched('(max-width: 767px)');
   }
+  
+  onSwipeLeft($event, tabulator) {
+    if(tabulator.selectedIndex > 0){
+      tabulator.selectedIndex--;
+    } 
+  }
+
+  onSwipeRight($event, tabulator) {
+    if(tabulator.selectedIndex < tabulator._tabs.length){
+      tabulator.selectedIndex++;
+    }
+  }
 
   allDay(day) {
 
