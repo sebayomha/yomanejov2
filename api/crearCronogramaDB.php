@@ -39,7 +39,7 @@
             $zonaAlumno = $this->obtenerZonaAlumno($direccion); //obtengo la zona del alumno a partir de su direccion
             $idAutoMaster = $this->obtenerIdAutoMaster($zonaAlumno); //obtengo el id del auto que tiene asignada la zona master del alumno
 
-            $fechasExcepciones = array_column($excepciones, 'fecha');
+            $fechasExcepciones = array_keys($excepciones);
 
             //me guardo las disponibilidades de los autos
             $disponibilidadesAutos = $this->obtenerDisponibilidadesAutos();
@@ -70,8 +70,10 @@
                     foreach ($clasesDelDiaPorAuto as $idAuto => $clases) { //recorro cada clase
                         //horarios libres va a contener los dias que el auto no este ocupado y el usuario este disponible
                         $horariosLibres;
-                        if (in_array($fechaBusqueda, $fechasExcepciones)) {
-                            $horariosLibres = $this->obtenerHorariosLibresAutoYAlumnoExcepciones($clases, array_column($excepciones, 'horario'));
+                        $result = $fechaBusqueda->format('Y-m-d');
+
+                        if (in_array($result, $fechasExcepciones)) {
+                            $horariosLibres = $this->obtenerHorariosLibresAutoYAlumnoExcepciones($clases, $excepciones[$result]);
                         } else {
                             $horariosLibres = $this->obtenerHorariosLibresAutoYAlumno($clases, $disponibilidad, $nombreDiaBusqueda);
                         }
@@ -236,7 +238,7 @@
                 'horaInicio' => '',
                 'idZona' => ''
             ];
-
+            
             foreach ($clases as $clase) { //recorro cada clase que tenga este auto
                 if(in_array($clase['horaInicio'], $disponibilidad)) { //el auto esta ocupado en uno de los horarios disponibles del alumno
                     $claseData['idClase'] = $clase['idClase'];

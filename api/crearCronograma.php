@@ -52,10 +52,9 @@
 			}
 			$resExcepciones[$excepcion['date_string']] = $options;
 		}
-		echo json_encode($resExcepciones);
 
 		$cronograma = new Cronograma();
-		$cronogramaResultante = $cronograma->calcularCronograma($cantClases, $resDisponibilidad, $direccion, $fechaInicio);
+		$cronogramaResultante = $cronograma->calcularCronograma($cantClases, $resDisponibilidad, $direccion, $fechaInicio, $resExcepciones);
 
 		if (!empty($cronogramaResultante)) {
 			echo json_encode($GLOBALS['utils']->getResponse(0, $cronogramaResultante));
