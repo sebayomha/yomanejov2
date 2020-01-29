@@ -2,6 +2,8 @@
 	header("Access-Control-Allow-Origin: *");
 	header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
 	require_once('crearCronogramaDB.php');
+	iconv_set_encoding("internal_encoding", "UTF-8");
+    date_default_timezone_set('America/Argentina/Buenos_Aires');
 	//Va a ser utilizada cuando existan sesiones
 	//require_once('token.php');
 	require_once('utils.php');
@@ -17,19 +19,8 @@
 		$cantClases = (int) $_GET['cantClases'];
 		$fechaInicio = $_GET['fechaInicio'];
 		$direccion = json_decode($_GET['direccion'], true);
-
-/* 		$disponibilidad = [
-			'Monday' => ['09:00', '12:00', '15:00', '19:00'], 
-			'Tuesday' => null,
-			'Wednesday' => ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00','19:00'],
-			'Thursday' => ['08:00', '09:00', '10:00', '11:00', '12:00', '17:00', '18:00', '19:00'],
-			'Friday' => ['09:00', '12:00', '15:00', '19:00'],
-			'Saturday' => null,
-			'Sunday' => ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00','19:00']
-		]; 
-*/
-
 		$disponibilidad = json_decode($_GET['disponibilidad'], true);
+		$excepciones = json_decode($_GET['excepciones'], true);
 
 		$resDisponibilidad = [];
 		foreach ($disponibilidad as $dia) {
@@ -49,26 +40,20 @@
 			}		
 		}
 	
-	/* 	$direccion = [ (object) [
-				'street' => '123',
-				'diag' => false,
-			],
-			(object) [
-				'street_a' => '47',
-				'diag' => false,
-			],
-			(object) [
-				'street' => '48',
-				'diag' => false,
-			],
-			(object) [
-				'altitud' => '755'
-			],
-			(object) [
-				'city' => 'Ensenada'
-			]
-		];
- */
+		$resExcepciones = [];
+		foreach ($excepciones as $excepcion) {
+			$resExcepciones[$excepcion['date_string']] = [];
+
+			$options = [];
+			foreach ($excepcion['horarios'] as $horario) {
+				foreach ($horario['horariosTotales'] as $schedule) {
+					array_push($options, $schedule);
+				}
+			}
+			$resExcepciones[$excepcion['date_string']] = $options;
+		}
+		echo json_encode($resExcepciones);
+
 		$cronograma = new Cronograma();
 		$cronogramaResultante = $cronograma->calcularCronograma($cantClases, $resDisponibilidad, $direccion, $fechaInicio);
 

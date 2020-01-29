@@ -6,6 +6,9 @@ import { CronogramaService } from '../../services/cronograma/cronograma.service'
 import { Response } from '../../models/response';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Address } from '../../models/address.model';
+import { Excepcion } from 'src/app/models/excepcion';
+import { ExcepcionRowTIme } from 'src/app/models/excepcion-row-time';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'free-class-finder',
@@ -15,6 +18,7 @@ import { Address } from '../../models/address.model';
 
 export class FreeClassFinderComponent {
 
+  excepciones = Array<Excepcion>();
   addresses = Array<Address>();
   minDate = new Date();
   locations = ["La Plata", "Berisso", "Ensenada"];
@@ -25,7 +29,7 @@ export class FreeClassFinderComponent {
   control_collapse_search:boolean = false;
   schedule_send_null:boolean = true;
 
-  constructor(private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver) { }
+  constructor(private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private datePipe: DatePipe) { }
 
   ngOnInit() {
     let dates_times = new Array<DatesTimes>();
@@ -104,7 +108,9 @@ export class FreeClassFinderComponent {
       }
     }
 
-    this.cronogramaService.getCronograma(object).subscribe( (response: Response) => {
+    this.setExceptionHours();
+    console.log(this.excepciones);
+    this.cronogramaService.getCronograma(object, this.excepciones).subscribe( (response: Response) => {
       console.log(response);
     });
     
@@ -124,6 +130,53 @@ export class FreeClassFinderComponent {
     if(tabulator.selectedIndex > 0){
       tabulator.selectedIndex--;
     } 
+  }
+
+  addException() {
+    let rowTime = new Array<ExcepcionRowTIme>({'hour_start':'', 'hour_finish':'', 'horariosDesde': this.predefinedHours, 'horariosHasta': [], 'horariosTotales': []});
+    this.excepciones.push({'date': new Date(), 'date_string': '', 'horarios': rowTime});
+  }
+  
+  removeExcepcion(excepcionIndex) {
+    this.excepciones.splice(excepcionIndex, 1);
+  }
+
+  addNewRowTime(excepcionIndex){
+    let rowTime: ExcepcionRowTIme = {'hour_start':'', 'hour_finish':'', 'horariosDesde': this.predefinedHours, 'horariosHasta': [], 'horariosTotales': []};
+    this.excepciones[excepcionIndex].horarios.push(rowTime);
+  }
+
+  removeRowTime(excepcionIndex, rowRemove){
+    this.excepciones[excepcionIndex].horarios.splice(rowRemove, 1);
+    if (this.excepciones[excepcionIndex].horarios.length == 0) {
+      this.removeExcepcion(excepcionIndex);
+    }
+  }
+
+  doExcepcionHours(rowTImeIndex, excepcionIndex, rowExcepcionIndex) {
+    this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].hour_start = this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].horariosDesde[rowTImeIndex];
+    this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].horariosHasta = this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].horariosDesde.slice(rowTImeIndex + 1);
+  }
+  
+  setExceptionHourFinish(rowTImeIndex, excepcionIndex, rowExcepcionIndex) {
+    this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].hour_finish = this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].horariosHasta[rowTImeIndex];
+  }
+
+  setExceptionHours() {
+    //Armo el array final a enviar.
+    if (this.excepciones.length) {
+      this.excepciones.forEach( (excepcion: Excepcion) => {
+        excepcion.date_string = this.datePipe.transform(excepcion.date, 'yyyy-MM-dd');
+        excepcion.horarios.forEach( (horario: ExcepcionRowTIme) => {
+            horario.horariosTotales = horario.horariosDesde.filter( (hora: String) => {
+              if (hora >= horario.hour_start && hora <= horario.hour_finish) {
+                return true;
+              }
+              return false;
+            })
+        })
+      })
+    }
   }
 
   allDay(day) {

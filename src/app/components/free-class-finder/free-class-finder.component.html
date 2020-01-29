@@ -152,6 +152,94 @@
                         </mat-tab>
                     </div>
                 </mat-tab-group>
+
+                <!-- Excepciones -->
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header style="background-color:#43c89d;">
+                        <mat-panel-title style="color:white;">
+                            <i style="margin-top: 3px; margin-right: 20px;"></i><span>Excepciones</span>
+                        </mat-panel-title>
+                        <mat-panel-description style="color:white;">
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    <!-- agregar excepcion -->
+                    <div style="margin: auto;">
+                        <button type="button" style="width: 100%;" mat-button
+                            (click)="addException()"><span
+                                style="font-size: 25px"><i
+                                    class="fas fa-plus-circle"></i></span>
+                        </button>
+                    </div>
+
+
+
+                    <!-- array de excepciones -->
+                    <div *ngIf="excepciones.length" class="col-6 col-sm-6 col-md-6 col-lg-4">
+                        <div *ngFor="let excepcion of excepciones; let j = index">
+                            <!-- fecha excepcion -->
+                            <mat-form-field class="example-full-width">
+                                <input matInput readonly [matDatepicker]="pickerExcepcion" (click)="pickerExcepcion.open()"
+                                    (focus)="pickerExcepcion.open()" placeholder="Fecha"
+                                    [min]="minDate" [(ngModel)]="excepcion.date" name="excepcionDate">
+                                <mat-datepicker-toggle matSuffix [for]="pickerExcepcion"></mat-datepicker-toggle>
+                                <mat-datepicker [touchUi]="isMobile()" #pickerExcepcion></mat-datepicker>
+                            </mat-form-field>
+
+                            <!-- tramos de horarios de excepcion -->
+                            <div *ngFor="let excepcionRowTIme of excepcion.horarios; let h = index">
+                                <!-- fecha desde tramo -->
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Desde</mat-label>
+                                    <mat-select #horariosDesde
+                                        (selectionChange)="doExcepcionHours($event.value, j, h)">
+                                        <mat-option *ngFor="let horario of excepcionRowTIme.horariosDesde; let i = index" [value]="i">
+                                            {{horario}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <!-- fecha hasta tramo -->
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Hasta</mat-label>
+                                    <mat-select (selectionChange)="setExceptionHourFinish($event.value, j, h)"> 
+                                        <mat-option *ngFor="let horario of excepcionRowTIme.horariosHasta; let i = index" [value]="i">
+                                            {{horario}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <!-- agregar nuevo tramo -->
+                                <div style="margin: auto;">
+                                    <button type="button" style="width: 100%;" mat-button
+                                        (click)="addNewRowTime(j)"><span
+                                            style="font-size: 25px"><i
+                                                class="fas fa-plus-circle"></i></span>
+                                    </button>
+                                </div>
+
+                                <!-- eliminar tramo -->
+                                <div class="col-sm-2" style="margin: auto;">
+                                    <button style="width: 100%;" mat-button
+                                        (click)="removeRowTime(j, h)"><span
+                                            style="font-size: 25px"><i
+                                                class="fas fa-trash-alt"></i></span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- eliminar excepcion -->
+                            <div *ngIf="excepciones.length" class="col-sm-2" style="margin: auto;">
+                                <button style="width: 100%;" mat-button
+                                    (click)="removeExcepcion(j)"><span
+                                        style="font-size: 25px"><i
+                                            class="fas fa-trash-alt"></i></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </mat-expansion-panel>
                 <div class="form-group" style="text-align: right;">
                     <button mat-button type="submit"
                         [disabled]="(!forma.valid || (!(search.address[3].altitud != '') && !(search.address[1].street_a != '') && !(search.address[2].street_b != '')) || schedule_send_null)">BUSCAR</button>
