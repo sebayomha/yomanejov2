@@ -72,7 +72,7 @@
                         $horariosLibres;
                         $result = $fechaBusqueda->format('Y-m-d');
 
-                        if (in_array($result, $fechasExcepciones)) {
+                        if (in_array($result, $fechasExcepciones) && count($excepciones[$result]) > 0) {
                             $horariosLibres = $this->obtenerHorariosLibresAutoYAlumnoExcepciones($clases, $excepciones[$result]);
                         } else {
                             $horariosLibres = $this->obtenerHorariosLibresAutoYAlumno($clases, $disponibilidad, $nombreDiaBusqueda);
@@ -238,7 +238,7 @@
                 'horaInicio' => '',
                 'idZona' => ''
             ];
-            
+
             foreach ($clases as $clase) { //recorro cada clase que tenga este auto
                 if(in_array($clase['horaInicio'], $disponibilidad)) { //el auto esta ocupado en uno de los horarios disponibles del alumno
                     $claseData['idClase'] = $clase['idClase'];
