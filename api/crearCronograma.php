@@ -56,10 +56,16 @@
 		$cronograma = new Cronograma();
 		$cronogramaResultante = $cronograma->calcularCronograma($cantClases, $resDisponibilidad, $direccion, $fechaInicio, $resExcepciones);
 
-		if (!empty($cronogramaResultante)) {
-			echo json_encode($GLOBALS['utils']->getResponse(0, $cronogramaResultante));
+		if (is_array($cronogramaResultante)) {
+			if (!empty($cronogramaResultante)) {
+				echo json_encode($GLOBALS['utils']->getResponse(0, $cronogramaResultante));
+			} else {
+				echo json_encode($GLOBALS['utils']->getResponse(1, "Ocurrió un error al calcular el cronograma, por favor vuelva a intentar."));
+			}
 		} else {
-			echo json_encode($GLOBALS['utils']->getResponse(1, "Ocurrió un error al calcular el cronograma, por favor vuelva a intentar."));
+			if ($cronogramaResultante == 2) {
+				echo json_encode($GLOBALS['utils']->getResponse(2, "La dirección ingresada no corresponde a una zona de trabajo. Por favor, ingrese un punto de encuentro"));
+			}
 		}
 		
 	}

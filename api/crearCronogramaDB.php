@@ -37,7 +37,13 @@
             $zonas = $this->obtenerZonas(); //obtengo las zonas y las cargo solo 1 vez
             $arrayGrafo = $this->crearGrafoZonas($zonas); //creo el grafo con todas las zonas y sus adyacentes
             $zonaAlumno = $this->obtenerZonaAlumno($direccion); //obtengo la zona del alumno a partir de su direccion
+            
+            if ($zonaAlumno === null) {
+                return 2;
+            }
+            
             $idAutoMaster = $this->obtenerIdAutoMaster($zonaAlumno); //obtengo el id del auto que tiene asignada la zona master del alumno
+
 
             $fechasExcepciones = array_keys($excepciones);
 
@@ -449,10 +455,11 @@
             $response = file_get_contents($url,false,$context);
             
             $response = json_decode($response);
+            
             //$latitude = $response->results[2]->View[0]->Result[0]->Location->NavigationPosition[0]->Latitude;
             $latitude = $response->results[0]->geometry->location->lat;
             $longitude = $response->results[0]->geometry->location->lng;
-
+           
             $zonas = $this->obtenerInformacionZonas(); //consulto la BD para traerme por cada zona sus puntos.
             $zona = null;
             foreach ($zonas as $idZona => $informacionZona) {

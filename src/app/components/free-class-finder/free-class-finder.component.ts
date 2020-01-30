@@ -9,6 +9,8 @@ import { Address } from '../../models/address.model';
 import { Excepcion } from 'src/app/models/excepcion';
 import { ExcepcionRowTIme } from 'src/app/models/excepcion-row-time';
 import { DatePipe } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackbarComponent } from '../snackbar/snackbar/snackbar.component';
 
 @Component({
   selector: 'free-class-finder',
@@ -29,8 +31,9 @@ export class FreeClassFinderComponent {
   control_collapse_search:boolean = false;
   schedule_send_null:boolean = true;
   available_schedules:any;
+  durationInSeconds = 3;
 
-  constructor(private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private datePipe: DatePipe) { }
+  constructor(private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private datePipe: DatePipe, private _snackBar: MatSnackBar) { }
 
   ngOnInit() {
     let dates_times = new Array<DatesTimes>();
@@ -112,7 +115,21 @@ export class FreeClassFinderComponent {
     this.setExceptionHours();
     console.log(this.excepciones);
     this.cronogramaService.getCronograma(object, this.excepciones).subscribe( (response: Response) => {
-      this.available_schedules = response.data;
+      switch (response.code) {
+        case 0:
+          this.available_schedules = response.data;
+          this._snackBar.dismiss();
+          break;
+        case 2:{
+          this.available_schedules = null;
+          this._snackBar.openFromComponent(SnackbarComponent, {
+            duration: this.durationInSeconds * 1000,
+            data: response.data
+          });
+          console.log("error controlado");
+          }
+          break;
+      }
     });
     
   }

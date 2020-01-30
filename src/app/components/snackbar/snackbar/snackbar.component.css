@@ -1,0 +1,18 @@
+.mat-snack-bar-container {
+    margin-bottom: 10px !important;
+    font-size: 15px !important;
+    border-radius: 50px !important;
+    padding: 14px !important;
+}
+
+.message {
+    position: relative;
+    bottom: 6px;
+    left: 11px;
+}
+
+.infoIcon {
+    color: #ea1010;
+    position: relative;
+    left: 7px;
+}

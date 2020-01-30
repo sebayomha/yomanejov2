@@ -18,6 +18,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import 'hammerjs';
 
 /* Components */
@@ -31,6 +32,7 @@ import { AvailableSchedulesComponent } from './components/available-schedules/av
 /* Services */
 import { LoaderService } from './services/loader/loader-service.service';
 import { RequestInterceptorService } from './services/interceptor/request-interceptor.service';
+import { SnackbarComponent } from './components/snackbar/snackbar/snackbar.component';
 
 registerLocaleData(localeEsAr);
 
@@ -40,7 +42,8 @@ registerLocaleData(localeEsAr);
     AppComponent,
     FreeClassFinderComponent,
     LoaderComponent,
-    AvailableSchedulesComponent
+    AvailableSchedulesComponent,
+    SnackbarComponent
   ],
   imports: [
     BrowserModule,
@@ -56,9 +59,13 @@ registerLocaleData(localeEsAr);
     MatSelectModule,
     MatButtonModule,
     MatExpansionModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatSnackBarModule
   ],
   providers:[DatePipe, {provide: LOCALE_ID, useValue: "es-AR"}, LoaderService, { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptorService, multi: true }],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [
+    SnackbarComponent
+]
 })
 export class AppModule {}
