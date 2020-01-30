@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 26, 2020 at 11:47 PM
+-- Generation Time: Jan 30, 2020 at 01:36 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -55,17 +55,18 @@ CREATE TABLE `auto` (
   `patente` varchar(8) NOT NULL,
   `color` varchar(30) NOT NULL,
   `disponibilidad` varchar(1) NOT NULL,
-  `descripcion` varchar(100) NOT NULL
+  `descripcion` varchar(100) NOT NULL,
+  `zonaMaster` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `auto`
 --
 
-INSERT INTO `auto` (`idAuto`, `patente`, `color`, `disponibilidad`, `descripcion`) VALUES
-(1, '456ABC', 'Rojo', 'A', ''),
-(2, '123YTR', 'Naranja', 'A', ''),
-(3, '124214', 'Naranja', 'T', 'Auto automatico');
+INSERT INTO `auto` (`idAuto`, `patente`, `color`, `disponibilidad`, `descripcion`, `zonaMaster`) VALUES
+(1, '456ABC', 'Rojo', 'A', '', 2),
+(2, '123YTR', 'Naranja', 'A', '', 3),
+(3, '124214', 'Naranja', 'T', 'Auto automatico', 1);
 
 -- --------------------------------------------------------
 
@@ -107,10 +108,10 @@ CREATE TABLE `clase` (
 --
 
 INSERT INTO `clase` (`idClase`, `alumno`, `auto`, `fecha`, `horaInicio`, `horaFin`, `idZona`) VALUES
-(1, 1, 1, '2020-01-26', '13:15', '09:00', 3),
-(2, 2, 2, '2020-01-09', '09:00', '10:00', 2),
+(1, 1, 1, '2020-02-03', '13:15', '09:00', 5),
+(2, 2, 2, '2020-02-03', '09:00', '10:00', 3),
 (3, 1, 1, '2020-01-09', '14:00', '15:00', 4),
-(5, 2, 2, '2020-01-09', '10:00', '27:00', 1);
+(5, 2, 3, '2020-02-10', '14:30', '15:30', 5);
 
 -- --------------------------------------------------------
 
@@ -195,19 +196,39 @@ CREATE TABLE `zona` (
   `puntoSuperiorIzquierdo` varchar(255) NOT NULL,
   `puntoSuperiorDerecho` varchar(255) NOT NULL,
   `puntoInferiorIzquierdo` varchar(255) NOT NULL,
-  `puntoInferiorDerecho` varchar(255) NOT NULL
+  `puntoInferiorDerecho` varchar(255) NOT NULL,
+  `zonaMaster` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `zona`
 --
 
-INSERT INTO `zona` (`idZona`, `nombreZona`, `puntoSuperiorIzquierdo`, `puntoSuperiorDerecho`, `puntoInferiorIzquierdo`, `puntoInferiorDerecho`) VALUES
-(1, 'plazaitaliahasta1', '-34.905929,-57.961377', '-34.900759,-57.956332', '-34.905114,-57.949352', '-34.910191,-57.955877'),
-(2, 'Plazaitaliaenadelante', '-34.911222,-57.968101', '-34.906245,-57.962427', '-34.911345,-57.956196', '-34.915900,-57.961811'),
-(3, 'plazabelgranoaplazaguemes', '-34.916448,-57.973737', '-34.911724,-57.968456', '-34.916812,-57.962182', '-34.921247,-57.966954'),
-(4, 'plazaguemeshastaalberti', '-34.917603,-57.974834', '-34.921534,-57.979446', '-34.927008,-57.974227', '-34.922504,-57.968400'),
-(5, 'ZonaMiCasa', '-34.896444, -57.941498', '-34.893470, -57.938214', '-34.903799, -57.924555', '-34.907129, -57.927009');
+INSERT INTO `zona` (`idZona`, `nombreZona`, `puntoSuperiorIzquierdo`, `puntoSuperiorDerecho`, `puntoInferiorIzquierdo`, `puntoInferiorDerecho`, `zonaMaster`) VALUES
+(1, 'plazaitaliahasta1', '-34.905929,-57.961377', '-34.900759,-57.956332', '-34.905114,-57.949352', '-34.910191,-57.955877', 1),
+(2, 'Plazaitaliaenadelante', '-34.911222,-57.968101', '-34.906245,-57.962427', '-34.911345,-57.956196', '-34.915900,-57.961811', 1),
+(3, 'plazabelgranoaplazaguemes', '-34.916448,-57.973737', '-34.911724,-57.968456', '-34.916812,-57.962182', '-34.921247,-57.966954', 1),
+(4, 'plazaguemeshastaalberti', '-34.917603,-57.974834', '-34.921534,-57.979446', '-34.927008,-57.974227', '-34.922504,-57.968400', 3),
+(5, 'ZonaMiCasa', '-34.896444, -57.941498', '-34.893470, -57.938214', '-34.903799, -57.924555', '-34.907129, -57.927009', 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `zonamaster`
+--
+
+CREATE TABLE `zonamaster` (
+  `idZonaMaster` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `zonamaster`
+--
+
+INSERT INTO `zonamaster` (`idZonaMaster`) VALUES
+(1),
+(2),
+(3);
 
 -- --------------------------------------------------------
 
@@ -283,6 +304,12 @@ ALTER TABLE `zona`
   ADD PRIMARY KEY (`idZona`);
 
 --
+-- Indexes for table `zonamaster`
+--
+ALTER TABLE `zonamaster`
+  ADD PRIMARY KEY (`idZonaMaster`);
+
+--
 -- Indexes for table `zonasvecinas`
 --
 ALTER TABLE `zonasvecinas`
@@ -333,6 +360,12 @@ ALTER TABLE `parametros`
 --
 ALTER TABLE `zona`
   MODIFY `idZona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `zonamaster`
+--
+ALTER TABLE `zonamaster`
+  MODIFY `idZonaMaster` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `zonasvecinas`
