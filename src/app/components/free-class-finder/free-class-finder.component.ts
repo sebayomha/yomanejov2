@@ -28,6 +28,7 @@ export class FreeClassFinderComponent {
   control_flag_empty:boolean = false;
   control_collapse_search:boolean = false;
   schedule_send_null:boolean = true;
+  available_schedules:any;
 
   constructor(private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private datePipe: DatePipe) { }
 
@@ -111,7 +112,7 @@ export class FreeClassFinderComponent {
     this.setExceptionHours();
     console.log(this.excepciones);
     this.cronogramaService.getCronograma(object, this.excepciones).subscribe( (response: Response) => {
-      console.log(response);
+      this.available_schedules = response.data;
     });
     
   }

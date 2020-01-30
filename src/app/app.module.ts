@@ -25,6 +25,8 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FreeClassFinderComponent } from './components/free-class-finder/free-class-finder.component';
 import { LoaderComponent } from './components/loader/loader/loader.component';
+import { AvailableSchedulesComponent } from './components/available-schedules/available-schedules.component';
+
 
 /* Services */
 import { LoaderService } from './services/loader/loader-service.service';
@@ -37,7 +39,8 @@ registerLocaleData(localeEsAr);
   declarations: [
     AppComponent,
     FreeClassFinderComponent,
-    LoaderComponent
+    LoaderComponent,
+    AvailableSchedulesComponent
   ],
   imports: [
     BrowserModule,
