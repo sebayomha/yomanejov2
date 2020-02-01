@@ -20,6 +20,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import 'hammerjs';
+import {MatRadioModule} from '@angular/material/radio';
 
 /* Components */
 import { AppComponent } from './app.component';
@@ -60,7 +61,8 @@ registerLocaleData(localeEsAr);
     MatButtonModule,
     MatExpansionModule,
     MatProgressSpinnerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatRadioModule
   ],
   providers:[DatePipe, {provide: LOCALE_ID, useValue: "es-AR"}, LoaderService, { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptorService, multi: true }],
   bootstrap: [AppComponent],

@@ -113,20 +113,20 @@ export class FreeClassFinderComponent {
     }
 
     this.setExceptionHours();
-    console.log(this.excepciones);
+
     this.cronogramaService.getCronograma(object, this.excepciones).subscribe( (response: Response) => {
       switch (response.code) {
         case 0:
-          this.available_schedules = response.data;
+          this.available_schedules = Object.values(response.data);
           this._snackBar.dismiss();
           break;
         case 2:{
           this.available_schedules = null;
+          this.control_collapse_search = true;
           this._snackBar.openFromComponent(SnackbarComponent, {
-            duration: this.durationInSeconds * 1000,
+            duration: this.durationInSeconds * 1100,
             data: response.data
           });
-          console.log("error controlado");
           }
           break;
       }
