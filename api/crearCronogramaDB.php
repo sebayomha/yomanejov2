@@ -153,6 +153,7 @@
 
                         $autoObject = (object) [
                             'horarios' => $diccionarioFechaHorariosLibres,
+                            'cronogramaActual' => $horariosOcupados,
                             'tieneEldiaLibre' => $tieneEldiaLibre,
                             'idAuto' => $idAuto
                         ];
