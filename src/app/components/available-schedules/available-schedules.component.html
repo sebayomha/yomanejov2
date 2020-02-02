@@ -1,82 +1,34 @@
 <mat-accordion class="example-headers-align">
-    <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          DIA
-        </mat-panel-title>
-        <mat-panel-description>
-          Aun no selecciono una opción.
-          
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-  
-      <div>
-        <div class="row">
-            <div class="col-2">RADIO BUTTON
-            </div>
-            <div class="col-8"> ACA IRIA UNA ROW DE OPCION CON SU INFORMACION</div>
-            <div class="col-2"> AUTO 1</div>
-        </div>
-        <div class="row">
-            <div class="col-2">RADIO BUTTON
-            </div>
-            <div class="col-8"> ACA IRIA UNA ROW DE OPCION CON SU INFORMACION</div>
-            <div class="col-2"> AUTO 1</div>
-        </div>
-        <div class="row">
-            <div class="col-2">RADIO BUTTON
-            </div>
-            <div class="col-8"> ACA IRIA UNA ROW DE OPCION CON SU INFORMACION</div>
-            <div class="col-2"> AUTO 1</div>
-        </div>
+  <mat-expansion-panel #panel *ngFor="let option of this.data; let i = index;" [expanded]="step === i" (opened)="setStep(i)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{option.dia}} - {{option.fecha}}
+      </mat-panel-title>
+      <mat-panel-description>
+        <a *ngIf="!option.opcion_selecionada">Aun no selecciono una opción.</a>
+        <a *ngIf="option.opcion_selecionada">El horario seleccionado para este dia es: {{option.opcion_selecionada}} hs</a>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <div *ngFor="let element of option.autos; let j = index;">
+      <div style="margin: auto; border-top: 1px solid rgba(0, 0, 0, 0.12); padding-top: 15px; padding-bottom: 10px; line-height: 35px;" class="row" *ngFor="let horario of element.horarios">
+          <div class="col-1">
+            <mat-radio-button #button [checked]="horario.checked" [value]="horario.horaInicio" (click)="resetRadio(button,i,horario)" style="vertical-align: sub;"></mat-radio-button>
+          </div>
+          <div class="col-8"><span style="margin-right:15px;vertical-align: middle;">Inicio de clase: {{horario.horaInicio}} hs</span><span class="dot"style="vertical-align: middle;"></span></div>
+          <div class="col-3" style="line-height: 35px;"><span style="float: right;">Auto: {{element.idAuto}}</span></div>
       </div>
-  
-      <mat-action-row>
-        <button mat-button color="primary" (click)="nextStep()">SIGUIENTE</button>
-      </mat-action-row>
-    </mat-expansion-panel>
-  
-    <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-            DIA
-          </mat-panel-title>
-          <mat-panel-description>
-            Aun no selecciono una opción.
-            
-          </mat-panel-description>
-      </mat-expansion-panel-header>
-  
-      <mat-form-field>
-        <input matInput placeholder="Country">
-      </mat-form-field>
-  
-      <mat-action-row>
-        <button mat-button color="warn" (click)="prevStep()">Previous</button>
-        <button mat-button color="primary" (click)="nextStep()">Next</button>
-      </mat-action-row>
-    </mat-expansion-panel>
-  
-    <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-            DIA
-          </mat-panel-title>
-          <mat-panel-description>
-            Aun no selecciono una opción.
-            
-          </mat-panel-description>
-      </mat-expansion-panel-header>
-  
-      <mat-form-field>
-        <input matInput placeholder="Date" [matDatepicker]="picker" (focus)="picker.open()" readonly>
-      </mat-form-field>
-      <mat-datepicker #picker></mat-datepicker>
-  
-      <mat-action-row>
-        <button mat-button color="warn" (click)="prevStep()">Previous</button>
-        <button mat-button color="primary" (click)="nextStep()">End</button>
-      </mat-action-row>
-    </mat-expansion-panel>
-  
-  </mat-accordion>
+    </div>
+
+    <mat-action-row>
+      <button *ngIf="i != 0" mat-button color="warn" (click)="prevStep()">ANTERIOR</button>
+      <button *ngIf="i != (this.data.length - 1)" mat-button color="primary" (click)="nextStep()">SIGUIENTE</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+</mat-accordion>
+<div class="col-12" style="margin-top: 20px;"><label style="font-size: 14px;float: right; padding: 0px 15px;">Clases seleccionadas : {{classes}} / {{number_of_classes}}</label></div>
+<br>
+<div class="col-12" style="margin-top: 20px;"><button style="margin-bottom:45px;float: right;" mat-button [disabled]="classes != number_of_classes" (click)="saveOptions()">FINALIZAR</button></div>
+<br>
+<br>
+<br>

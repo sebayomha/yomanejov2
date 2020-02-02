@@ -24,7 +24,7 @@
                             <div class="col-6 col-sm-6 col-md-6 col-lg-4">
                                 <mat-form-field class="example-full-width">
                                     <input matInput placeholder="N° de clases" name="lessons"
-                                        [(ngModel)]="search.lessons" #altitud="ngModel">
+                                        [(ngModel)]="search.lessons" #lessons="ngModel">
                                 </mat-form-field>
                             </div>
                         </div>
@@ -247,6 +247,6 @@
             </form>
         </mat-expansion-panel>
         <br>
-        <available-schedules *ngIf="available_schedules" [data]="available_schedules"></available-schedules>
+        <available-schedules *ngIf="available_schedules" [number_of_classes]="search.lessons" [data]="available_schedules"></available-schedules>
     </div>
 </div>

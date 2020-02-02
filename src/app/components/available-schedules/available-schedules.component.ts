@@ -10,50 +10,39 @@ export class AvailableSchedulesComponent {
 
 
     @Input() data: any;
+    @Input() number_of_classes: number;
 
     step:number;
+    classes:number;
     order_information:any;
+    currentCheckedValue:String;
+    arraySelectedOptions:Array<any>;
 
     constructor() { }
 
     ngOnInit() {
         this.step = 0;
+        this.order_information = this.data;
         console.log('LLEGO', this.data);
+
+        //Recorrer todos los horarios y los pongo los estatus en false.
+        this.order_information.forEach(option => {
+          option.autos.forEach(element => {
+            element.horarios.forEach(horario => {
+              horario.checked = false;
+              // if(horario.horaInicio == '08:00') {
+              //   horario.checked = true;
+              // } else { horario.checked = false; } 
+            });
+          });
+        });
+        console.log('FALSE', this.order_information);
+        this.currentCheckedValue = null;
+        this.classes = 0;
+        
         // if (this.data) this.orderInformation();
         
     }
-
-    // orderInformation() {
-    //     for (let i = 0; i <=6; i++) {
-    //         let nombre_dia = this.getDay(i);
-    //         this.order_information.push({'dia' : nombre_dia, 'opciones' : []});
-    //         this.data.forEach(element => {
-    //             if (element.dia == nombre_dia) {
-    //                 this.order_information[i].opciones.push({'fecha':element.fecha,'autos':element.autos});
-    //             } 
-    //         });
-    //     }
-    //     console.log('dataordenada',this.order_information);
-    // }
-    
-    getDay(i: number) {
-        switch (i) {
-          case 0:
-            return 'Lunes';
-          case 1:
-            return 'Martes';
-          case 2:
-            return 'Miércoles';
-          case 3:
-            return 'Jueves';
-          case 4:
-            return 'Viernes';
-          case 5:
-            return 'Sábado';
-          case 6:
-            return 'Domingo';
-        }
-      }
 
     setStep(index: number) {
         this.step = index;
@@ -65,6 +54,54 @@ export class AvailableSchedulesComponent {
 
     prevStep() {
         this.step--;
+    }
+
+    resetRadio(radio:any, index, horario){
+      setTimeout(() => {
+
+          //Recorrer los arrays de horarios del grupo seleccionado
+          this.order_information[index].autos.forEach(option => {
+            option.horarios.forEach(horario => {
+              horario.checked = false;
+            });
+          });
+
+          if (this.currentCheckedValue && radio.value == this.currentCheckedValue) {
+            radio.checked = false;
+            horario.checked = false;
+
+            this.currentCheckedValue = null;
+            this.order_information[index].opcion_selecionada = '';
+            console.log('INFO:', this.order_information);
+            this.classes = this.classes - 1;
+
+
+          } else {
+            this.currentCheckedValue = radio.value;
+            horario.checked = true;
+            this.order_information[index].opcion_selecionada = this.currentCheckedValue;
+            console.log('INFO:', this.order_information);
+            this.classes = this.classes + 1;
+          }
+      })
+    }
+
+    saveOptions(){
+
+      this.arraySelectedOptions = [];
+
+      this.order_information.forEach(option => {
+        option.autos.forEach(element => {
+          element.horarios.forEach(horario => {
+            if(horario.checked == true){
+              this.arraySelectedOptions.push({day: option.fecha, hora:horario.horaInicio, auto: element.idAuto});
+            }
+          });
+        });
+      });
+
+      console.log('ARRAY:', this.arraySelectedOptions);
+
     }
 
 }
