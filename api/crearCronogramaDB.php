@@ -56,14 +56,16 @@
             switch ($cantClases) {
                 case 1:  $totalDiasTentativosRetornar = 7; break;
                 case 2:  $totalDiasTentativosRetornar = 8; break;
-                case 3:  $totalDiasTentativosRetornar = 10; break;
-                case 4:  $totalDiasTentativosRetornar = 14; break;
-                case 5:  $totalDiasTentativosRetornar = 16; break;
-                case 6:  $totalDiasTentativosRetornar = 17; break;
-                case 8:  $totalDiasTentativosRetornar = 21; break;
-                case 10: $totalDiasTentativosRetornar = 25; break;
-                case 12: $totalDiasTentativosRetornar = 30; break;
-                default: $totalDiasTentativosRetornar = 20; break;
+                case 3:  $totalDiasTentativosRetornar = 8; break;
+                case 4:  $totalDiasTentativosRetornar = 10; break;
+                case 5:  $totalDiasTentativosRetornar = 12; break;
+                case 6:  $totalDiasTentativosRetornar = 13; break;
+                case 7:  $totalDiasTentativosRetornar = 13; break;
+                case 8:  $totalDiasTentativosRetornar = 15; break;
+                case 9:  $totalDiasTentativosRetornar = 20; break;
+                case 10: $totalDiasTentativosRetornar = 20; break;
+                case 12: $totalDiasTentativosRetornar = 25; break;
+                default: $totalDiasTentativosRetornar = 30; break;
             };
 
             $i = 1;
