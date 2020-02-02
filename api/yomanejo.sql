@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 30, 2020 at 01:36 AM
+-- Generation Time: Feb 02, 2020 at 03:43 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -30,19 +30,21 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `alumno` (
   `idAlumno` int(11) NOT NULL,
-  `direccion` varchar(255) NOT NULL,
-  `direccionClase` varchar(255) NOT NULL,
+  `idDireccion` int(11) NOT NULL,
   `fechaAlta` date NOT NULL,
-  `activo` varchar(6) NOT NULL
+  `activo` varchar(6) NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `apellido` varchar(100) NOT NULL,
+  `fecha_nacimiento` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `alumno`
 --
 
-INSERT INTO `alumno` (`idAlumno`, `direccion`, `direccionClase`, `fechaAlta`, `activo`) VALUES
-(1, '123 N755', '123 N755', '2020-01-09', 'true'),
-(2, '59 y 10', '59 y 10', '2020-01-09', 'true');
+INSERT INTO `alumno` (`idAlumno`, `idDireccion`, `fechaAlta`, `activo`, `nombre`, `apellido`, `fecha_nacimiento`) VALUES
+(1, 1, '2020-01-09', 'true', 'Sebastian', 'Yomha', '0000-00-00'),
+(2, 1, '2020-01-09', 'true', 'Matias', 'Guazzaroni', '0000-00-00');
 
 -- --------------------------------------------------------
 
@@ -100,51 +102,44 @@ CREATE TABLE `clase` (
   `fecha` date NOT NULL,
   `horaInicio` varchar(11) NOT NULL,
   `horaFin` varchar(11) NOT NULL,
-  `idZona` int(11) NOT NULL
+  `idZona` int(11) NOT NULL,
+  `idDireccion` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `clase`
 --
 
-INSERT INTO `clase` (`idClase`, `alumno`, `auto`, `fecha`, `horaInicio`, `horaFin`, `idZona`) VALUES
-(1, 1, 1, '2020-02-03', '13:15', '09:00', 5),
-(2, 2, 2, '2020-02-03', '09:00', '10:00', 3),
-(3, 1, 1, '2020-01-09', '14:00', '15:00', 4),
-(5, 2, 3, '2020-02-10', '14:30', '15:30', 5);
+INSERT INTO `clase` (`idClase`, `alumno`, `auto`, `fecha`, `horaInicio`, `horaFin`, `idZona`, `idDireccion`) VALUES
+(1, 1, 1, '2020-02-03', '13:15', '09:00', 5, 1),
+(2, 2, 2, '2020-02-03', '09:00', '10:00', 4, 1),
+(3, 1, 1, '2020-02-03', '14:30', '15:00', 4, 1),
+(5, 2, 3, '2020-02-10', '14:30', '15:30', 5, 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `disponibilidad`
+-- Table structure for table `direccion`
 --
 
-CREATE TABLE `disponibilidad` (
-  `idDisponibilidad` int(11) NOT NULL,
-  `nombreDia` varchar(14) NOT NULL,
-  `rangoHorario` varchar(255) NOT NULL,
-  `idAlumno` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE `direccion` (
+  `idDireccion` int(11) NOT NULL,
+  `calle` varchar(100) NOT NULL,
+  `calle_diag` varchar(5) NOT NULL,
+  `calle_a` varchar(100) NOT NULL,
+  `calle_a_diag` varchar(5) NOT NULL,
+  `calle_b` varchar(100) NOT NULL,
+  `calle_b_diag` varchar(5) NOT NULL,
+  `numero` varchar(100) NOT NULL,
+  `ciudad` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `disponibilidad`
+-- Dumping data for table `direccion`
 --
 
-INSERT INTO `disponibilidad` (`idDisponibilidad`, `nombreDia`, `rangoHorario`, `idAlumno`) VALUES
-(1, 'Jueves', '08:00-10:00,13:00-16:00', 1),
-(2, 'Viernes', '08:00-20:00', 1),
-(3, 'Lunes', '08:00-20:00', 1),
-(4, 'Martes', '16:00-18:00', 1),
-(5, 'Miercoles', 'null', 1),
-(6, 'Sabado', 'null', 1),
-(7, 'Domingo', '11:00-17:00', 1),
-(8, 'Jueves', '08:00-10:00,13:00-16:00', 2),
-(9, 'Domingo', '11:00-17:00', 2),
-(10, 'Viernes', '11:00-15:00,19:00-20:00', 2),
-(11, 'Sabado', 'null', 2),
-(12, 'Martes', '08:00-20:00', 2),
-(13, 'Lunes', '08:00-20:00', 2),
-(14, 'Miercoles', '10:00-18:00', 2);
+INSERT INTO `direccion` (`idDireccion`, `calle`, `calle_diag`, `calle_a`, `calle_a_diag`, `calle_b`, `calle_b_diag`, `numero`, `ciudad`) VALUES
+(1, '123', 'false', '47', 'false', '', 'false', '755', 'Ensenada');
 
 -- --------------------------------------------------------
 
@@ -280,10 +275,10 @@ ALTER TABLE `clase`
   ADD PRIMARY KEY (`idClase`);
 
 --
--- Indexes for table `disponibilidad`
+-- Indexes for table `direccion`
 --
-ALTER TABLE `disponibilidad`
-  ADD PRIMARY KEY (`idDisponibilidad`);
+ALTER TABLE `direccion`
+  ADD PRIMARY KEY (`idDireccion`);
 
 --
 -- Indexes for table `instructor`
@@ -338,10 +333,10 @@ ALTER TABLE `clase`
   MODIFY `idClase` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `disponibilidad`
+-- AUTO_INCREMENT for table `direccion`
 --
-ALTER TABLE `disponibilidad`
-  MODIFY `idDisponibilidad` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+ALTER TABLE `direccion`
+  MODIFY `idDireccion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `instructor`

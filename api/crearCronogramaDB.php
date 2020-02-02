@@ -74,6 +74,8 @@
                     $autos = []; //array que se usa para armar la estructura final que se retornara
 
                     foreach ($clasesDelDiaPorAuto as $idAuto => $clases) { //recorro cada clase
+                        $cronogramasActuales = [];
+                        
                         //horarios libres va a contener los dias que el auto no este ocupado y el usuario este disponible
                         $horariosLibres;
                         $result = $fechaBusqueda->format('Y-m-d');
@@ -151,9 +153,27 @@
                             $tieneEldiaLibre = true;
                         }
 
+                        if ($clases[0]['idClase'] != null) { //armo el cronograma actual del auto. Si este auto posee clases armo el array, sino retorno un array vacio
+                            foreach ($clases as $clase) {
+                                $nombreAlumno = $this->obtenerNombreAlumno($clase['alumno']);
+                                $direccionClase = $this->obtenerDireccionClase($clase['idDireccion']);
+                                
+                                $cronogramaActualObject = (object) [
+                                    'alumno' => $nombreAlumno,
+                                    'direccion' => $direccionClase,
+                                    'horario' => $clase['horaInicio']
+                                ];
+    
+                                array_push($cronogramasActuales, $cronogramaActualObject);
+                            }
+                        } else {
+                            $cronogramasActuales = [];
+                        }
+
+
                         $autoObject = (object) [
                             'horarios' => $diccionarioFechaHorariosLibres,
-                            'cronogramaActual' => $horariosOcupados,
+                            'cronogramaActual' => $cronogramasActuales,
                             'tieneEldiaLibre' => $tieneEldiaLibre,
                             'idAuto' => $idAuto
                         ];
@@ -479,6 +499,102 @@
             }
 
             return $zona;
+        }
+
+        function obtenerNombreAlumno($idAlumno) {
+            $db = new ConnectionDB();
+            $conn = $db->getConnection();
+            $state = $conn->prepare('SELECT * FROM alumno WHERE alumno.idAlumno = ?');
+            $state->bind_param('i', $idAlumno);
+            $state->execute();
+            $result = $state->get_result();
+
+            $nombreAlumno = '';
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    $nombreAlumno .= $row['nombre']. ' '.$row['apellido'];
+                }
+                mysqli_close($conn);
+                return $nombreAlumno;
+            } else {
+                mysqli_close($conn);
+                return null;
+            }
+        }
+
+        function obtenerDireccionClase($idDireccion) {
+            $db = new ConnectionDB();
+            $conn = $db->getConnection();
+            $state = $conn->prepare('SELECT * FROM direccion WHERE direccion.idDireccion = ?');
+            $state->bind_param('i', $idDireccion);
+            $state->execute();
+            $result = $state->get_result();
+
+            $direccionStringFormateada;
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    $direccionStringFormateada = $this->obtenerDireccionParaMostrar($row['calle'], $row['calle_diag'], $row['calle_a'], $row['calle_a_diag'], $row['calle_b'], $row['calle_b_diag'], $row['numero'], $row['ciudad']);
+                }
+                mysqli_close($conn);
+                return $direccionStringFormateada;
+            } else {
+                mysqli_close($conn);
+                return null;
+            }
+        }
+
+        function obtenerDireccionParaMostrar($calle, $calle_diag, $calle_a, $calle_a_diag, $calle_b, $calle_b_diag, $numero, $ciudad) {
+            $stringDireccion = "";
+
+            if($calle_diag) {
+                $stringDireccion .= "Diagonal ".$calle;
+            } else {
+                $stringDireccion .= "Calle ".$calle;
+            }
+
+            if ($numero != '') {
+                $stringDireccion .= " N°".$numero;
+            }
+
+            if ($calle_a != '' && $calle_b != '') {
+                $stringDireccion .= ' Entre ';
+                if ($calle_a_diag) {
+                    $stringDireccion .= 'Diagonal '.$calle_a. ' y ';
+                    if ($calle_b_diag) {
+                        $stringDireccion .= 'Diagonal '.$calle_b;
+                    } else {
+                        $stringDireccion .= $calle_b;
+                    }
+                } else {
+                    $stringDireccion .= $calle_a. ' y ';
+                    if ($calle_b_diag) {
+                        $stringDireccion .= 'Diagonal '.$calle_b;
+                    } else {
+                        $stringDireccion .= $calle_b;
+                    }
+                }
+            } else {
+                if ($calle_a != '' || $calle_b != '') {
+                    $stringDireccion .= ' Esquina ';
+                    if ($calle_a != '') {
+                        if ($calle_a_diag) {
+                            $stringDireccion .= 'Diagonal '.$calle_a;
+                        } else {
+                            $stringDireccion .= $calle_a;
+                        }
+                    } else {
+                        if ($calle_b_diag) {
+                            $stringDireccion .= 'Diagonal '.$calle_b;
+                        } else {
+                            $stringDireccion .= $calle_b;
+                        }
+                    }
+                }
+            }
+
+            $stringDireccion .= ', '.$ciudad;
+
+            return $stringDireccion;
         }
 
         function is_in_polygon($points_polygon, $vertices_x, $vertices_y, $longitude_x, $latitude_y) {
