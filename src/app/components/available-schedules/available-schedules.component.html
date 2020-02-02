@@ -1,3 +1,4 @@
+<div class="col-12" style="margin-bottom: 15px; text-align: right;"><label style="font-size: 14px;">Clases seleccionadas : {{classes}} / {{number_of_classes}}</label></div>
 <mat-accordion class="example-headers-align">
   <mat-expansion-panel #panel *ngFor="let option of this.data; let i = index;" [expanded]="step === i" (opened)="setStep(i)" hideToggle>
     <mat-expansion-panel-header>
@@ -15,7 +16,12 @@
           <div class="col-1">
             <mat-radio-button #button [checked]="horario.checked" [value]="horario.horaInicio" (click)="resetRadio(button,i,horario)" style="vertical-align: sub;"></mat-radio-button>
           </div>
-          <div class="col-8"><span style="margin-right:15px;vertical-align: middle;">Inicio de clase: {{horario.horaInicio}} hs</span><span class="dot"style="vertical-align: middle;"></span></div>
+          <div class="col-8"><span style="margin-right:15px;vertical-align: middle;">Inicio de clase: {{horario.horaInicio}} hs</span>
+            <span *ngIf="element.tieneEldiaLibre == true" class="dot grey"style="vertical-align: middle;"></span>
+            <span *ngIf="element.tieneEldiaLibre == false && horario.ratingGeneral > 8" class="dot green"style="vertical-align: middle;"></span>
+            <span *ngIf="element.tieneEldiaLibre == false && horario.ratingGeneral >= 3 && horario.ratingGeneral <=8" class="dot yellow"style="vertical-align: middle;"></span>
+            <span *ngIf="element.tieneEldiaLibre == false && horario.ratingGeneral < 3" class="dot red"style="vertical-align: middle;"></span>
+          </div>
           <div class="col-3" style="line-height: 35px;"><span style="float: right;">Auto: {{element.idAuto}}</span></div>
       </div>
     </div>
@@ -26,9 +32,7 @@
     </mat-action-row>
   </mat-expansion-panel>
 </mat-accordion>
-<div class="col-12" style="margin-top: 20px;"><label style="font-size: 14px;float: right; padding: 0px 15px;">Clases seleccionadas : {{classes}} / {{number_of_classes}}</label></div>
-<br>
+
 <div class="col-12" style="margin-top: 20px;"><button style="margin-bottom:45px;float: right;" mat-button [disabled]="classes != number_of_classes" (click)="saveOptions()">FINALIZAR</button></div>
-<br>
 <br>
 <br>
