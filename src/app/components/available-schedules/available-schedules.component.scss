@@ -1,11 +1,25 @@
 .dot {
     height: 25px;
     width: 25px;
-    background-color: #bbb;
     border-radius: 50%;
     display: inline-block;
-  }
+}
 
+.grey {
+  background-color: #bbb;
+}
+
+.green {
+  background-color: green;
+}
+
+.yellow {
+  background-color: yellow;
+}
+
+.red {
+  background-color: red;
+}
 
 ::ng-deep .mat-expansion-panel-body {
     padding: 0 24px;

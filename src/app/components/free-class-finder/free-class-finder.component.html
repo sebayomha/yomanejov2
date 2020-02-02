@@ -29,7 +29,7 @@
                             </div>
                         </div>
                         <div style="margin-top: 20px;"><label
-                                style="font-weight: 500; font-size: 18px;">Dirección:</label></div>
+                                style="font-weight: 500; font-size: 17px;">Dirección:</label></div>
                         <div style="font-size: 13px; margin-bottom: 15px;" class="text-muted">Recuerde que debe ingresar
                             al menos una interseccion o un numero para realizar la busqueda</div>
                         <div class="row">
@@ -90,7 +90,7 @@
                         </div>
                     </div>
                 </div>
-                <div style="margin-top: 30px;"><label style="font-weight: 500; font-size: 18px;">Horarios habiles:</label></div>
+                <div style="margin-top: 30px;"><label style="font-weight: 500; font-size: 17px;">Horarios habiles:</label></div>
                 <div style="font-size: 13px; margin-bottom: 15px;" class="text-muted">Recuerde que debe ingresar
                     al menos un horario para realizar la busqueda</div>
                 <mat-tab-group mat-align-tabs="start" #tabulator>
@@ -144,7 +144,7 @@
                                                     class="fas fa-plus-circle"></i></span></button>
                                     </div>
                                 </div>
-                                <div class="margin-top-30" style="text-align: center;">
+                                <div class="margin-top-30" style="text-align: center; margin-bottom: 30px;">
                                     <mat-checkbox (change)="allDay(day.name_day,$event)">Disponible todo el dia
                                     </mat-checkbox>
                                 </div>
@@ -155,7 +155,7 @@
 
                 <!-- Excepciones -->
                 <mat-expansion-panel>
-                    <mat-expansion-panel-header style="background-color:#43c89d;">
+                    <mat-expansion-panel-header style="background-color:#6c757dc7;">
                         <mat-panel-title style="color:white;">
                             <i style="margin-top: 3px; margin-right: 20px;"></i><span>Excepciones</span>
                         </mat-panel-title>
@@ -165,7 +165,7 @@
 
                     <!-- agregar excepcion -->
                     <div style="margin: auto;">
-                        <button type="button" style="width: 100%;" mat-button
+                        <button type="button" style="width: 100%; margin-top: 20px;" mat-button
                             (click)="addException()"><span
                                 style="font-size: 25px"><i
                                     class="fas fa-plus-circle"></i></span>
@@ -175,8 +175,9 @@
 
 
                     <!-- array de excepciones -->
-                    <div *ngIf="excepciones.length" class="col-6 col-sm-6 col-md-6 col-lg-4">
+                    <div *ngIf="excepciones.length" class="col-12" style="margin-top: 15px;">
                         <div *ngFor="let excepcion of excepciones; let j = index">
+
                             <!-- fecha excepcion -->
                             <mat-form-field class="example-full-width">
                                 <input matInput readonly [matDatepicker]="pickerExcepcion" (click)="pickerExcepcion.open()"
@@ -188,43 +189,51 @@
 
                             <!-- tramos de horarios de excepcion -->
                             <div *ngFor="let excepcionRowTIme of excepcion.horarios; let h = index">
-                                <!-- fecha desde tramo -->
-                                <mat-form-field class="example-full-width">
-                                    <mat-label>Desde</mat-label>
-                                    <mat-select #horariosDesde
-                                        (selectionChange)="doExcepcionHours($event.value, j, h)">
-                                        <mat-option *ngFor="let horario of excepcionRowTIme.horariosDesde; let i = index" [value]="i">
-                                            {{horario}}
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
 
-                                <!-- fecha hasta tramo -->
-                                <mat-form-field class="example-full-width">
-                                    <mat-label>Hasta</mat-label>
-                                    <mat-select (selectionChange)="setExceptionHourFinish($event.value, j, h)"> 
-                                        <mat-option *ngFor="let horario of excepcionRowTIme.horariosHasta; let i = index" [value]="i">
-                                            {{horario}}
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-
-                                <!-- agregar nuevo tramo -->
-                                <div style="margin: auto;">
-                                    <button type="button" style="width: 100%;" mat-button
-                                        (click)="addNewRowTime(j)"><span
-                                            style="font-size: 25px"><i
-                                                class="fas fa-plus-circle"></i></span>
-                                    </button>
-                                </div>
-
-                                <!-- eliminar tramo -->
-                                <div class="col-sm-2" style="margin: auto;">
-                                    <button style="width: 100%;" mat-button
-                                        (click)="removeRowTime(j, h)"><span
-                                            style="font-size: 25px"><i
-                                                class="fas fa-trash-alt"></i></span>
-                                    </button>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <!-- fecha desde tramo -->
+                                        <mat-form-field class="example-full-width">
+                                            <mat-label>Desde</mat-label>
+                                            <mat-select #horariosDesde
+                                                (selectionChange)="doExcepcionHours($event.value, j, h)">
+                                                <mat-option *ngFor="let horario of excepcionRowTIme.horariosDesde; let i = index" [value]="i">
+                                                    {{horario}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-4">
+                                        <!-- fecha hasta tramo -->
+                                        <mat-form-field class="example-full-width">
+                                            <mat-label>Hasta</mat-label>
+                                            <mat-select (selectionChange)="setExceptionHourFinish($event.value, j, h)"> 
+                                                <mat-option *ngFor="let horario of excepcionRowTIme.horariosHasta; let i = index" [value]="i">
+                                                    {{horario}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-2">
+                                        <!-- agregar nuevo tramo -->
+                                        <div style="margin: auto;">
+                                            <button type="button" style="width: 100%;" mat-button
+                                                (click)="addNewRowTime(j)"><span
+                                                    style="font-size: 25px"><i
+                                                        class="fas fa-plus-circle"></i></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <!-- eliminar tramo -->
+                                        <div style="margin: auto;">
+                                            <button style="width: 100%;" mat-button
+                                                (click)="removeRowTime(j, h)"><span
+                                                    style="font-size: 25px"><i
+                                                        class="fas fa-trash-alt"></i></span>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -240,7 +249,7 @@
                     </div>
 
                 </mat-expansion-panel>
-                <div class="form-group" style="text-align: right;">
+                <div class="form-group" style="text-align: right; margin-top:30px;">
                     <button mat-button type="submit"
                         [disabled]="(!forma.valid || (!(search.address[3].altitud != '') && !(search.address[1].street_a != '') && !(search.address[2].street_b != '')) || schedule_send_null)">BUSCAR</button>
                 </div>
