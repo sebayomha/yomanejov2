@@ -28,7 +28,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FreeClassFinderComponent } from './components/free-class-finder/free-class-finder.component';
 import { LoaderComponent } from './components/loader/loader/loader.component';
 import { AvailableSchedulesComponent } from './components/available-schedules/available-schedules.component';
-
+import { ScheduleTooltipComponent } from './components/schedule-tooltip/schedule-tooltip.component';
 
 /* Services */
 import { LoaderService } from './services/loader/loader-service.service';
@@ -44,7 +44,8 @@ registerLocaleData(localeEsAr);
     FreeClassFinderComponent,
     LoaderComponent,
     AvailableSchedulesComponent,
-    SnackbarComponent
+    SnackbarComponent,
+    ScheduleTooltipComponent
   ],
   imports: [
     BrowserModule,
