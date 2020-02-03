@@ -129,19 +129,19 @@
                                                 </mat-select>
                                             </mat-form-field>
                                         </div>
-                                        <div class="col-sm-2" style="margin: auto;"
+                                        <div class="col-sm-2"
                                             *ngIf="(search.dates_times[i].option[j].hour_start || search.dates_times[i].option[j].hour_start == null) && j == (search.dates_times[i].option.length - 1)">
-                                            <button style="width: 100%;" mat-button
+                                            <button style="width: 100%; margin-top: 5px;" mat-button
                                                 (click)="removeOption(j,search.dates_times[i].option)"><span
-                                                    style="font-size: 25px"><i
+                                                    style="font-size: 20px;"><i
                                                         class="fas fa-trash-alt"></i></span></button>
                                         </div>
                                     </div>
                                     <div style="margin: auto;">
                                         <button type="button" style="width: 100%;" mat-button
                                             (click)="addDateTime(day.name_day)" [disabled]="control_flag_empty"><span
-                                                style="font-size: 25px"><i
-                                                    class="fas fa-plus-circle"></i></span></button>
+                                                style="font-size: 20px"><i
+                                                    class="fas fa-plus-circle"></i></span> Agregar nuevo horario</button>
                                     </div>
                                 </div>
                                 <div class="margin-top-30" style="text-align: center; margin-bottom: 30px;">
@@ -163,17 +163,7 @@
                         </mat-panel-description>
                     </mat-expansion-panel-header>
 
-                    <!-- agregar excepcion -->
-                    <div style="margin: auto;">
-                        <button type="button" style="width: 100%; margin-top: 20px;" mat-button
-                            (click)="addException()"><span
-                                style="font-size: 25px"><i
-                                    class="fas fa-plus-circle"></i></span>
-                        </button>
-                    </div>
-
-
-
+                    
                     <!-- array de excepciones -->
                     <div *ngIf="excepciones.length" class="col-12" style="margin-top: 15px;">
                         <div *ngFor="let excepcion of excepciones; let j = index">
@@ -219,7 +209,7 @@
                                         <div style="margin: auto;">
                                             <button type="button" style="width: 100%;" mat-button
                                                 (click)="addNewRowTime(j)"><span
-                                                    style="font-size: 25px"><i
+                                                    style="font-size: 20px"><i
                                                         class="fas fa-plus-circle"></i></span>
                                             </button>
                                         </div>
@@ -229,7 +219,7 @@
                                         <div style="margin: auto;">
                                             <button style="width: 100%;" mat-button
                                                 (click)="removeRowTime(j, h)"><span
-                                                    style="font-size: 25px"><i
+                                                    style="font-size: 20px"><i
                                                         class="fas fa-trash-alt"></i></span>
                                             </button>
                                         </div>
@@ -241,11 +231,20 @@
                             <div *ngIf="excepciones.length" class="col-sm-2" style="margin: auto;">
                                 <button style="width: 100%;" mat-button
                                     (click)="removeExcepcion(j)"><span
-                                        style="font-size: 25px"><i
+                                        style="font-size: 20px"><i
                                             class="fas fa-trash-alt"></i></span>
                                 </button>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- agregar excepcion -->
+                    <div style="margin: auto;">
+                        <button type="button" style="width: 100%; margin-top: 20px;" mat-button
+                            (click)="addException()"><span
+                                style="font-size: 20px"><i
+                                    class="fas fa-plus-circle"></i></span> Agregar nueva excepcion
+                        </button>
                     </div>
 
                 </mat-expansion-panel>
