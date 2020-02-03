@@ -25,7 +25,7 @@
                 <span>Inicio de clase: {{horario.horaInicio}} hs</span>
               </div>
               <div id="puntajeContainer" class="col-12 col-sm-3 NoPadding">
-                <div id="iconContainer" style="margin-right: 15px; display: inline;">
+                <div id="iconContainer" style="margin-right: 15px; display: inline; position: relative; top: 3px;">
                   <span *ngIf="element.tieneEldiaLibre" class="dot grey"></span>
                   <span *ngIf="!element.tieneEldiaLibre && horario.ratingGeneral >= 7" class="dot green"></span>
                   <span *ngIf="!element.tieneEldiaLibre && horario.ratingGeneral >= 4 && horario.ratingGeneral < 7" class="dot yellow"></span>

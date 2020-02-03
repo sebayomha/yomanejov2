@@ -102,7 +102,7 @@
                         //comienzo a armar el array que se va a retornar
                         //**********//
                         foreach ($horariosLibres as $horarioAuto) { //en base a los horarios libres instancio los objetos que se van a terminar retornando
-                            if($disponibilidadesAutos[$idAuto] === "A" || $this->esTurnoDisponible($disponibilidadesAutos[$idAuto], $horarioAuto)) { //si el horario esta en el turno que el auto puede (A = todo el dia,T= solo por la tarde, M= solo por la maniana)
+                            if($disponibilidadesAutos[$idAuto] === "A" || $this->esTurnoDisponible($disponibilidadesAutos[$idAuto], $horarioAuto, $nombreDiaBusqueda)) { //si el horario esta en el turno que el auto puede (A = todo el dia,T= solo por la tarde, M= solo por la maniana)
                                 
                                 $horarioData['horaInicio'] = $horarioAuto;
                                 $horarioData['ratingHorario'] = $this->obtenerRatingHorario($horariosOcupados, $horarioAuto, $tolerancias, $fechaInicio, $fechaBusqueda);
@@ -693,7 +693,7 @@
             return $zonasVecinas;
         }
 
-        function esTurnoDisponible($disponibilidad, $horarioAuto) {
+        function esTurnoDisponible($disponibilidad, $horarioAuto, $nombreDiaBusqueda) {
             if ($disponibilidad === "A") {
                 return true;
             }
@@ -701,7 +701,7 @@
             if ($disponibilidad === "M") {
                 $horarioBusqueda = strtotime($horarioAuto);
                 $horarioInicial = strtotime("08:00");
-                $horarioFinal = strtotime("13:15");
+                $horarioFinal = strtotime("11:15");
                 if (($horarioBusqueda >= $horarioInicial) && ($horarioBusqueda <= $horarioFinal)) {
                     return true;
                 }
@@ -709,11 +709,15 @@
             }
 
             if ($disponibilidad === "T") {
-                $horarioBusqueda = strtotime($horarioAuto);
-                $horarioInicial = strtotime("14:30");
-                $horarioFinal = strtotime("19:45");
-                if (($horarioBusqueda >= $horarioInicial) && ($horarioBusqueda <= $horarioFinal)) {
+                if ($nombreDiaBusqueda == 'Tuesday' || $nombreDiaBusqueda == 'Thursday' || $nombreDiaBusqueda == 'Sunday') {
                     return true;
+                } else {
+                    $horarioBusqueda = strtotime($horarioAuto);
+                    $horarioInicial = strtotime("12:15");
+                    $horarioFinal = strtotime("19:45");
+                    if (($horarioBusqueda >= $horarioInicial) && ($horarioBusqueda <= $horarioFinal)) {
+                        return true;
+                    }
                 }
                 return false; 
             }
