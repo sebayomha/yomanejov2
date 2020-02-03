@@ -15,7 +15,7 @@
       </mat-panel-description>
     </mat-expansion-panel-header>
 
-    <mat-selection-list #classChoser (selectionChange)="totalClassesSelected(classChoser.selectedOptions, i);">
+    <mat-selection-list #classChoser (selectionChange)="totalClassesSelected(classChoser.selectedOptions, i, $event);">
       <div *ngFor="let element of option.autos; let j = index;">
          <mat-list-option checkboxPosition="before" [value]="horario" style="border-top: 1px solid rgba(0, 0, 0, 0.12); padding: 3px;" class="classChoser container NoPadding" *ngFor="let horario of element.horarios; let h = index">
           <div class="row NoPadding">

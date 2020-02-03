@@ -1,5 +1,6 @@
 import { Component, Input, ViewChildren, QueryList } from '@angular/core';
-import { MatSelectionList } from '@angular/material';
+import { MatSelectionList, MatListOption } from '@angular/material';
+import {SelectionModel} from '@angular/cdk/collections';
 declare var $: any;
 
 @Component({
@@ -34,10 +35,6 @@ export class AvailableSchedulesComponent {
     }
 
     ngAfterViewInit() {
-      this.viewChildren._results.forEach( element => {
-        element.selectedOptions._multiple = false;
-      });
-
       $('[data-toggle="tooltip"]').tooltip();
     }
 
@@ -53,7 +50,15 @@ export class AvailableSchedulesComponent {
       this.step--;
     }
 
-    totalClassesSelected(selectedOptions, index){
+    totalClassesSelected(selectedOptions, index, event){
+
+      if (event.option.selected) {
+        event.source.deselectAll();
+        event.option._setSelected(true);
+      } else {
+        event.source.deselectAll();
+      }
+
 
       var option = {
         'index': '',
