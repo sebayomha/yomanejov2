@@ -26,7 +26,7 @@
               <span *ngIf="element.tieneEldiaLibre == false && horario.ratingGeneral < 4" class="dot red"style="vertical-align: middle;"></span>
               <span style="margin-left: 15px;">Inicio de clase: {{horario.horaInicio}} hs</span>
             </div>
-            <div class="col-4 NoPadding" style="line-height: 35px;"><span style="float: right;">Auto: {{element.idAuto}}</span><schedule-tooltip [id_car]="element.idAuto" [info_schedule_car]="element.cronogramaActual"></schedule-tooltip></div>
+            <div class="col-4 NoPadding" style="line-height: 35px; text-align: right;"><schedule-tooltip [id_car]="element.idAuto" [info_schedule_car]="element.cronogramaActual"></schedule-tooltip></div>
           </div>
         </mat-list-option>
       </div>
