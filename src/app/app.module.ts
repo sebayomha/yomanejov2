@@ -38,6 +38,7 @@ import { SnackbarComponent } from './components/snackbar/snackbar/snackbar.compo
 
 registerLocaleData(localeEsAr);
 
+import { BarRatingModule } from "ngx-bar-rating";
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ registerLocaleData(localeEsAr);
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatRadioModule,
-    MatListModule
+    MatListModule,
+    BarRatingModule
   ],
   providers:[DatePipe, {provide: LOCALE_ID, useValue: "es-AR"}, LoaderService, { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptorService, multi: true }],
   bootstrap: [AppComponent],

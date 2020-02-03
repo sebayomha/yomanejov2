@@ -7,7 +7,7 @@
   <mat-expansion-panel #panel *ngFor="let option of this.data; let i = index;" [expanded]="step === i" (opened)="setStep(i)" hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>
-        {{option.dia}} - {{option.fecha | date: 'dd/MM/yyyy'}}
+        {{option.dia}} {{option.fecha | date: 'dd/MM/yyyy'}}
       </mat-panel-title>
       <mat-panel-description>
         <a *ngIf="!option.opcion_selecionada">Aún no seleccionó una opción.</a>
@@ -17,16 +17,29 @@
 
     <mat-selection-list #classChoser (selectionChange)="totalClassesSelected(classChoser.selectedOptions, i, $event);">
       <div *ngFor="let element of option.autos; let j = index;">
-         <mat-list-option checkboxPosition="before" [value]="horario" style="border-top: 1px solid rgba(0, 0, 0, 0.12); padding: 3px;" class="classChoser container NoPadding" *ngFor="let horario of element.horarios; let h = index">
+         <mat-list-option checkboxPosition="before" [value]="horario" style="height: auto !important; border-top: 1px solid rgba(0, 0, 0, 0.12); padding: 3px !important;" class="classChoser container NoPadding" *ngFor="let horario of element.horarios; let h = index">
+          <!-- <bar-rating title="{{horario.ratingGeneral}}" [readOnly]="true" [(rate)]="horario.ratingGeneral" [max]="10"></bar-rating> -->
           <div class="row NoPadding">
-            <div class="col-8 NoPadding" style="position: relative; top: 7px;">
-              <span *ngIf="element.tieneEldiaLibre == true" class="dot grey"style="vertical-align: middle;"></span>
-              <span *ngIf="element.tieneEldiaLibre == false && horario.ratingGeneral >= 7" class="dot green"style="vertical-align: middle;"></span>
-              <span *ngIf="element.tieneEldiaLibre == false && horario.ratingGeneral >= 4 && horario.ratingGeneral < 7" class="dot yellow"style="vertical-align: middle;"></span>
-              <span *ngIf="element.tieneEldiaLibre == false && horario.ratingGeneral < 4" class="dot red"style="vertical-align: middle;"></span>
-              <span style="margin-left: 15px;">Inicio de clase: {{horario.horaInicio}} hs</span>
+            <div class="col-9 col-sm-8 NoPadding infoContainer">
+              <div id="horaInicioContainer" class="col-12 col-sm-4 NoPadding">
+                <span>Inicio de clase: {{horario.horaInicio}} hs</span>
+              </div>
+              <div id="puntajeContainer" class="col-12 col-sm-3 NoPadding">
+                <div id="iconContainer" style="margin-right: 15px; display: inline;">
+                  <span *ngIf="element.tieneEldiaLibre" class="dot grey"></span>
+                  <span *ngIf="!element.tieneEldiaLibre && horario.ratingGeneral >= 7" class="dot green"></span>
+                  <span *ngIf="!element.tieneEldiaLibre && horario.ratingGeneral >= 4 && horario.ratingGeneral < 7" class="dot yellow"></span>
+                  <span *ngIf="!element.tieneEldiaLibre && horario.ratingGeneral < 4" class="dot red"></span>
+                </div>
+                <span style="font-size: 14px; font-style: italic;" class="text-muted">Puntaje: {{element.tieneEldiaLibre ? 'No aplica' : horario.ratingGeneral}}</span>
+              </div>
+              <div id="infoMessageContainer" class="col-12 col-sm-5 NoPadding">
+                <span *ngIf="!element.esDeLaZona" style="font-size: 14px; font-weight: 500;" class="text-muted">El auto no pertenece a la zona del alumno.</span>
+              </div>
             </div>
-            <div class="col-4 NoPadding" style="line-height: 35px; text-align: right;"><schedule-tooltip [id_car]="element.idAuto" [info_schedule_car]="element.cronogramaActual"></schedule-tooltip></div>
+            <div class="col-3 col-sm-4 NoPadding" style="line-height: 35px; text-align: right;">
+              <schedule-tooltip [id_car]="element.idAuto" [info_schedule_car]="element.cronogramaActual"></schedule-tooltip>      
+            </div>
           </div>
         </mat-list-option>
       </div>

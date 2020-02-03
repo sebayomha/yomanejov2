@@ -1,6 +1,6 @@
 .dot {
-    height: 15px;
-    width: 15px;
+    height: 20px;
+    width: 20px;
     border-radius: 50%;
     display: inline-block;
 }
@@ -35,4 +35,34 @@
 
 ::ng-deep mat-pseudo-checkbox.mat-pseudo-checkbox.mat-pseudo-checkbox-checked {
   background-color:#43c89d !important;
+}
+
+::ng-deep bar-rating > div {
+  display: inline !important;
+}
+
+::ng-deep .br.br-default {
+  display: inline !important;
+}
+
+::ng-deep .br-unit.br-selected {
+  margin-right: 1px !important;
+}
+
+::ng-deep .br-unit.br-selected::after {
+  color: #43c89d !important;
+}
+
+.iconContainer span{
+  vertical-align: middle;
+}
+
+@media (min-width: 767px) {
+  .infoContainer {
+    line-height: 37px;
+  }
+
+  .infoContainer div{
+    display: inline-block;
+  }
 }

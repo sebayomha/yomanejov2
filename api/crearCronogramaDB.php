@@ -172,12 +172,17 @@
                             $cronogramasActuales = [];
                         }
 
-
+                        $esDeLaZona = false;
+                        if ($idAutoMaster == $idAuto) {
+                            $esDeLaZona = true;
+                        }
+                        
                         $autoObject = (object) [
                             'horarios' => $diccionarioFechaHorariosLibres,
                             'cronogramaActual' => $cronogramasActuales,
                             'tieneEldiaLibre' => $tieneEldiaLibre,
-                            'idAuto' => $idAuto
+                            'idAuto' => $idAuto,
+                            'esDeLaZona' => $esDeLaZona
                         ];
 
                         if (!empty($autoObject->horarios)) { //descarto los autos que no posean horarios disponibles.

@@ -22,7 +22,7 @@ export class AvailableSchedulesComponent {
     currentCheckedValue:String;
     arraySelectedOptions:Array<any>;
     indexesClasses = [];
-    cantSelectedClasses;
+    cantSelectedClasses: number;
 
     constructor() { }
 
