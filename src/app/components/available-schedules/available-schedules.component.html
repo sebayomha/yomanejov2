@@ -1,30 +1,36 @@
-<div class="col-12" style="margin-bottom: 15px; text-align: right;"><label style="font-size: 14px;">Clases seleccionadas : {{classes}} / {{number_of_classes}}</label></div>
+<div class="col-12" style="margin-bottom: 15px; text-align: right;">
+  <label style="font-size: 14px;">Clases seleccionadas : {{cantSelectedClasses}} / {{number_of_classes}}</label>
+  <label *ngIf="cantSelectedClasses > number_of_classes" style="display: block; font-size: 14px; color: red;">No puede seleccionar más clases del límite establecido</label>
+</div>
+
 <mat-accordion class="example-headers-align">
   <mat-expansion-panel #panel *ngFor="let option of this.data; let i = index;" [expanded]="step === i" (opened)="setStep(i)" hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>
-        {{option.dia}} - {{option.fecha}}
+        {{option.dia}} - {{option.fecha | date: 'dd/MM/yyyy'}}
       </mat-panel-title>
       <mat-panel-description>
-        <a *ngIf="!option.opcion_selecionada">Aun no selecciono una opción.</a>
-        <a *ngIf="option.opcion_selecionada">El horario seleccionado para este dia es: {{option.opcion_selecionada}} hs</a>
+        <a *ngIf="!option.opcion_selecionada">Aún no seleccionó una opción.</a>
+        <a *ngIf="option.opcion_selecionada">El horario seleccionado para este día es: {{option.opcion_selecionada}} hs</a>
       </mat-panel-description>
     </mat-expansion-panel-header>
 
-    <div *ngFor="let element of option.autos; let j = index;">
-      <div style="margin: auto; border-top: 1px solid rgba(0, 0, 0, 0.12); padding-top: 15px; padding-bottom: 10px; line-height: 35px;" class="row" *ngFor="let horario of element.horarios">
-          <div class="col-1">
-            <mat-radio-button #button [checked]="horario.checked" [value]="horario.horaInicio" (click)="resetRadio(button,i,horario)" style="vertical-align: sub;"></mat-radio-button>
+    <mat-selection-list #classChoser (selectionChange)="totalClassesSelected(classChoser.selectedOptions, i);">
+      <div *ngFor="let element of option.autos; let j = index;">
+         <mat-list-option checkboxPosition="before" [value]="horario" style="border-top: 1px solid rgba(0, 0, 0, 0.12); padding: 3px;" class="classChoser container NoPadding" *ngFor="let horario of element.horarios; let h = index">
+          <div class="row NoPadding">
+            <div class="col-8 NoPadding" style="position: relative; top: 7px;">
+              <span *ngIf="element.tieneEldiaLibre == true" class="dot grey"style="vertical-align: middle;"></span>
+              <span *ngIf="element.tieneEldiaLibre == false && horario.ratingGeneral >= 7" class="dot green"style="vertical-align: middle;"></span>
+              <span *ngIf="element.tieneEldiaLibre == false && horario.ratingGeneral >= 4 && horario.ratingGeneral < 7" class="dot yellow"style="vertical-align: middle;"></span>
+              <span *ngIf="element.tieneEldiaLibre == false && horario.ratingGeneral < 4" class="dot red"style="vertical-align: middle;"></span>
+              <span style="margin-left: 15px;">Inicio de clase: {{horario.horaInicio}} hs</span>
+            </div>
+            <div class="col-4 NoPadding" style="line-height: 35px;"><span style="float: right;">Auto: {{element.idAuto}}</span><schedule-tooltip [id_car]="element.idAuto" [info_schedule_car]="element.cronogramaActual"></schedule-tooltip></div>
           </div>
-          <div class="col-8"><span style="margin-right:15px;vertical-align: middle;">Inicio de clase: {{horario.horaInicio}} hs</span>
-            <span *ngIf="element.tieneEldiaLibre == true" class="dot grey"style="vertical-align: middle;"></span>
-            <span *ngIf="element.tieneEldiaLibre == false && horario.ratingGeneral > 8" class="dot green"style="vertical-align: middle;"></span>
-            <span *ngIf="element.tieneEldiaLibre == false && horario.ratingGeneral >= 3 && horario.ratingGeneral <=8" class="dot yellow"style="vertical-align: middle;"></span>
-            <span *ngIf="element.tieneEldiaLibre == false && horario.ratingGeneral < 3" class="dot red"style="vertical-align: middle;"></span>
-          </div>
-          <div class="col-3" style="line-height: 35px;"><span style="float: right;">Auto: {{element.idAuto}}</span></div>
+        </mat-list-option>
       </div>
-    </div>
+    </mat-selection-list>
 
     <mat-action-row>
       <button *ngIf="i != 0" mat-button color="warn" (click)="prevStep()">ANTERIOR</button>

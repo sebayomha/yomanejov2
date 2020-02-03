@@ -1,4 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChildren, QueryList } from '@angular/core';
+import { MatSelectionList } from '@angular/material';
+declare var $: any;
 
 @Component({
   selector: 'available-schedules',
@@ -8,82 +10,77 @@ import { Component, Input } from '@angular/core';
 
 export class AvailableSchedulesComponent {
 
-
     @Input() data: any;
     @Input() number_of_classes: number;
 
+    @ViewChildren(MatSelectionList) viewChildren !: QueryList<MatSelectionList>;
+
     step:number;
-    classes:number;
+    classes: Array<any>;
     order_information:any;
     currentCheckedValue:String;
     arraySelectedOptions:Array<any>;
+    indexesClasses = [];
+    cantSelectedClasses;
 
     constructor() { }
 
     ngOnInit() {
         this.step = 0;
+        this.cantSelectedClasses = 0;
+        this.classes = [];        
         this.order_information = this.data;
         console.log('LLEGO', this.data);
+    }
 
-        //Recorrer todos los horarios y los pongo los estatus en false.
-        this.order_information.forEach(option => {
-          option.autos.forEach(element => {
-            element.horarios.forEach(horario => {
-              horario.checked = false;
-              // if(horario.horaInicio == '08:00') {
-              //   horario.checked = true;
-              // } else { horario.checked = false; } 
-            });
-          });
-        });
-        console.log('FALSE', this.order_information);
-        this.currentCheckedValue = null;
-        this.classes = 0;
-        
-        // if (this.data) this.orderInformation();
-        
+    ngAfterViewInit() {
+      this.viewChildren._results.forEach( element => {
+        element.selectedOptions._multiple = false;
+      });
+
+      $('[data-toggle="tooltip"]').tooltip();
     }
 
     setStep(index: number) {
-        this.step = index;
+      this.step = index;
     }
 
     nextStep() {
-        this.step++;
+      this.step++;
     }
 
     prevStep() {
-        this.step--;
+      this.step--;
     }
 
-    resetRadio(radio:any, index, horario){
-      setTimeout(() => {
+    totalClassesSelected(selectedOptions, index){
 
-          //Recorrer los arrays de horarios del grupo seleccionado
-          this.order_information[index].autos.forEach(option => {
-            option.horarios.forEach(horario => {
-              horario.checked = false;
-            });
-          });
+      var option = {
+        'index': '',
+        'cant': null
+      }
+      if (selectedOptions._selection.size == 0) {
+        if (!this.classes.some(e => e.index == index)) {
+          option.index = index;
+          option.cant = 0;
+          this.classes.push(option)
+        } else {
+          this.classes[this.classes.findIndex( element => element.index == index)].cant = 0;
+        }
+      } else {
+        if (!this.classes.some(e => e.index == index)) {
+          option.index = index;
+          option.cant = 1;
+          this.classes.push(option)
+        } else {
+          this.classes[this.classes.findIndex( element => element.index == index)].cant = 1;
+        }
+      }
 
-          if (this.currentCheckedValue && radio.value == this.currentCheckedValue) {
-            radio.checked = false;
-            horario.checked = false;
-
-            this.currentCheckedValue = null;
-            this.order_information[index].opcion_selecionada = '';
-            console.log('INFO:', this.order_information);
-            this.classes = this.classes - 1;
-
-
-          } else {
-            this.currentCheckedValue = radio.value;
-            horario.checked = true;
-            this.order_information[index].opcion_selecionada = this.currentCheckedValue;
-            console.log('INFO:', this.order_information);
-            this.classes = this.classes + 1;
-          }
-      })
+      this.cantSelectedClasses = this.classes.reduce( (total, element) => {
+        return total + element.cant;
+      }, 0)
+ 
     }
 
     saveOptions(){

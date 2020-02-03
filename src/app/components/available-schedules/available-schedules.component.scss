@@ -1,6 +1,6 @@
 .dot {
-    height: 25px;
-    width: 25px;
+    height: 15px;
+    width: 15px;
     border-radius: 50%;
     display: inline-block;
 }
@@ -21,6 +21,18 @@
   background-color: red;
 }
 
+.NoPadding {
+  padding: 0px !important;
+}
+
+.classChoser .mat-list-item-content{
+  padding: 3px !important;
+}
+
 ::ng-deep .mat-expansion-panel-body {
     padding: 0 24px;
+}
+
+::ng-deep mat-pseudo-checkbox.mat-pseudo-checkbox.mat-pseudo-checkbox-checked {
+  background-color:#43c89d !important;
 }
