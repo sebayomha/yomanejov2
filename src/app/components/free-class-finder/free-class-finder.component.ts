@@ -327,11 +327,12 @@ export class FreeClassFinderComponent {
       day_options[index].scheduleSend = null;
     }
     this.control_flag_empty = false;
-
     this.schedule_send_null = true;
 
     for (let i = 0; i <=6; i++) {
-      if (this.search.dates_times[i].all_day == false) {
+      if (this.search.dates_times[i].all_day == true) {
+        return this.schedule_send_null = false;
+      } else {
         if(this.search.dates_times[i].option[0].scheduleSend != null) {
           this.schedule_send_null = false;
         }
