@@ -1,2 +1,5 @@
-<span data-placement="right" data-toggle="tooltip" data-html="true"
+<span *ngIf="this.info_schedule_car.length > 0" data-placement="right" data-toggle="tooltip" data-html="true" 
     title="{{tooltipString}}">Auto: {{id_car == 4 ? 'AT' : id_car}}</span>
+
+<span *ngIf="this.info_schedule_car.length == 0" data-placement="right" data-toggle="tooltip" data-html="true"
+        title="Cronograma vacio">Auto: {{id_car == 4 ? 'AT' : id_car}}</span>

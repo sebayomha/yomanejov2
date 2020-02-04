@@ -23,7 +23,7 @@ export class ScheduleTooltipComponent {
 
         this.tooltipString = '<br><ul style="margin-bottom: 0px;">';
         this.info_schedule_car.forEach(element => {
-            this.tooltipString = this.tooltipString.concat('<li>Alumno: ' + element.alumno +'<br>Dir: '+ element.direccion +'<br> Horario: '+ element.horario+ ' hs</li><br>');
+            this.tooltipString = this.tooltipString.concat('<li>Alumno: ' + element.alumno +'<br>Dire: '+ element.direccion +'<br> Horario: '+ element.horario+ ' hs</li><br>');
         });
 
         this.tooltipString = this.tooltipString.concat('</ul>')
