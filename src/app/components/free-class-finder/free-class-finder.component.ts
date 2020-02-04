@@ -120,6 +120,7 @@ export class FreeClassFinderComponent {
     this.setExceptionHours();
 
     this.cronogramaService.getCronograma(object, this.excepciones).subscribe( (response: Response) => {
+      console.log(response)
       switch (response.code) {
         case 0:
           this.available_schedules = Object.values(response.data);

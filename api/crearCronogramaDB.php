@@ -7,19 +7,6 @@
     //Va a ser utilizada cuando existan sesiones
     //require_once('token.php');
 
-    /*Funcionalidad que falta hacer
-        1. Los autos que no poseen clases tenerlos en cuenta; DONE
-        2. Si el dia no posee clases llenar el cronograma con todos los autos; DONE
-        3. Hay 1 auto que por las mañanas no puede, ese no hay que tenerlo en cuenta. DONE
-        4. Lo mismo para el punto 3) pero si es por la tarde  DONE
-        5. Obtener zona de la clase
-        6. Cargar la BD
-        7. Hacer el codigo principal de la llamada GET con las validaciones
-        8. Hacer logica con los horarios REALES
-        9. Que cada auto no sea solo un ID, sino que tambien te ponga un flag de si ese dia tiene clases o no. DONE
-        10. Cada dia tiene que ser un objeto que te diga el dia en letras tambien DONE    
-    */
-
     class Cronograma {
 
         function __construct() { }
@@ -443,7 +430,6 @@
                     break;
                 }
             }
-            //echo $cantidadZonas;
             return 10 - $cantidadZonas;
         }
 
@@ -473,6 +459,7 @@
 
         function obtenerZonaAlumno($direccion) {
             $dirBusqueda = $this->obtenerDireccionParaBusqueda($direccion);
+
             $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='.$dirBusqueda.'&key=AIzaSyCvMYjfZVe25lflg8fb6PlfKc3zipGmGCM';
             //API PARA CUANDO SON INTERSECCIONES Y NO ES CON NUMERO. SOLO ES PRECISO CON LA PLATA
             //https://geocoder.ls.hereapi.com/6.2/geocode.json?city=La%20Plata&street=45%20%40%203&apiKey=keJFZOq_jmWtTdun9_bUg_JfQKPPj8pWFsw0nIDtjEY
@@ -488,17 +475,18 @@
             $latitude = $response->results[0]->geometry->location->lat;
             $longitude = $response->results[0]->geometry->location->lng;
            
+
             $zonas = $this->obtenerInformacionZonas(); //consulto la BD para traerme por cada zona sus puntos.
             $zona = null;
             foreach ($zonas as $idZona => $informacionZona) {
                 $latLong = $this->obtenerLatitudesYLongitudes($informacionZona);
-                
+
                 $vertices_x = $latLong[1]; //Longitud    // x-coordinates of the vertices of the polygon
                 $vertices_y = $latLong[0]; //Latitud // y-coordinates of the vertices of the polygon
                 $points_polygon = count($vertices_x);  // number vertices - zero-based array
                 $longitude_x = $longitude;  // x-coordinate of the point to test
                 $latitude_y = $latitude;    // y-coordinate of the point to test
-
+                
                 if ($this->is_in_polygon($points_polygon, $vertices_x, $vertices_y, $longitude_x, $latitude_y)){
                     $zona = $idZona;
                     break;
@@ -629,6 +617,7 @@
         }
 
         function obtenerDireccionParaBusqueda($direccion) {
+            $avenidasLaPlata = (array) ['66', '31', '60', '52', '44', '38', '32', '31', '25', '19', '13', '7', '1', '122'];
             $stringDireccion = "";
 
             $ciudad = $direccion[4]['city'];
@@ -639,15 +628,19 @@
             $finalPart = '+'.$ciudad.'+Buenos+Aires+Argentina';
 
             if ($direccion[0]['diag']) {
-                $stringDireccion .= "Diagonal".$direccion[0]['street']."+";
+                $stringDireccion .= "Diagonal+".$direccion[0]['street']."+";
             }
 
             if (!$direccion[0]['diag']) {
                 $minusculas = strtolower($direccion[0]['diag']);
                 if(strpos($minusculas, 'boulevard')) {
-                    $stringDireccion .= "Boulevard".$direccion[0]['street'].'+';
+                    $stringDireccion .= "Boulevard+".$direccion[0]['street'].'+';
                 } else {
-                    $stringDireccion .= "Calle".$direccion[0]['street']."+";
+                    if (in_array($direccion[0]['street'], $avenidasLaPlata)) {
+                        $stringDireccion .= "Avenida+".$direccion[0]['street']."+";
+                    } else{
+                        $stringDireccion .= "Calle+".$direccion[0]['street']."+";
+                    }
                 }
             }
 
@@ -656,24 +649,32 @@
             } else {
                 if ($direccion[1]['street_a'] != '') {
                     if ($direccion[1]['diag']) {
-                        $stringDireccion .= "Diagonal".$direccion[1]['street_a'].$finalPart;
+                        $stringDireccion .= "Diagonal+".$direccion[1]['street_a'].$finalPart;
                     } else {
                         $minusculas = strtolower($direccion[1]['street_a']);
                         if(strpos($minusculas, 'boulevard')) {
-                            $stringDireccion .= "Boulevard".$direccion[1]['street_a'].$finalPart;
+                            $stringDireccion .= "Boulevard+".$direccion[1]['street_a'].$finalPart;
                         } else {
-                            $stringDireccion .= "Calle".$direccion[1]['street_a'].$finalPart;
+                            if (in_array($direccion[1]['street_a'], $avenidasLaPlata)) {
+                                $stringDireccion .= "Avenida+".$direccion[1]['street_a'].$finalPart;
+                            } else {
+                                $stringDireccion .= "Calle+".$direccion[1]['street_a'].$finalPart;
+                            }
                         }
                     }
                 } else {
                     if ($direccion[2]['diag']) {
-                        $stringDireccion .= "Diagonal".$direccion[2]['street_b'].$finalPart;
+                        $stringDireccion .= "Diagonal+".$direccion[2]['street_b'].$finalPart;
                     } else {
                         $minusculas = strtolower($direccion[2]['street_b']);
                         if(strpos($minusculas, 'boulevard')) {
-                            $stringDireccion .= "Boulevard".$direccion[2]['street_b'].$finalPart;
+                            $stringDireccion .= "Boulevard+".$direccion[2]['street_b'].$finalPart;
                         } else {
-                            $stringDireccion .= "Calle".$direccion[2]['street_b'].$finalPart;
+                            if (in_array($direccion[2]['street_b'], $avenidasLaPlata)) {
+                                $stringDireccion .= "Avenida+".$direccion[2]['street_b'].$finalPart;
+                            } else {
+                                $stringDireccion .= "Calle+".$direccion[2]['street_b'].$finalPart;
+                            }
                         }
                     }
                 }
