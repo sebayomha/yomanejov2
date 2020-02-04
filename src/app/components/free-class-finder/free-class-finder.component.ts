@@ -33,6 +33,7 @@ export class FreeClassFinderComponent {
   available_schedules:any;
   durationInSeconds = 3;
 
+
   constructor(private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private datePipe: DatePipe, private _snackBar: MatSnackBar) { }
 
   ngOnInit() {
@@ -56,7 +57,11 @@ export class FreeClassFinderComponent {
     tomorrow.setDate(tomorrow.getDate() + 1);
     this.search = new Search(dates_times, this.addresses, 1, tomorrow);
     this.search.address[4].city = "La Plata";
-      console.log(this.search);
+    console.log(this.search);
+
+    // this.excepciones.forEach(excep => {
+    //   excep.date = tomorrow;
+    // });
   }
 
 
