@@ -1,8 +1,8 @@
 .dot {
-    height: 20px;
-    width: 20px;
-    border-radius: 50%;
-    display: inline-block;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  display: inline-block;
 }
 
 .grey {
@@ -30,7 +30,7 @@
 }
 
 ::ng-deep .mat-expansion-panel-body {
-    padding: 0 24px;
+  padding: 0 24px;
 }
 
 ::ng-deep mat-pseudo-checkbox.mat-pseudo-checkbox.mat-pseudo-checkbox-checked {
