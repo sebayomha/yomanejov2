@@ -29,8 +29,12 @@
   padding: 3px !important;
 }
 
+::ng-deep .mat-list-item-content {
+  padding: 5px 10px !important;
+}
+
 ::ng-deep .mat-expansion-panel-body {
-  padding: 0 24px;
+  padding: 0 10px;
 }
 
 ::ng-deep mat-pseudo-checkbox.mat-pseudo-checkbox.mat-pseudo-checkbox-checked {
@@ -65,4 +69,5 @@
   .infoContainer div{
     display: inline-block;
   }
+  
 }
