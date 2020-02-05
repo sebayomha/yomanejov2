@@ -95,7 +95,11 @@
                     al menos un horario para realizar la búsqueda</div>
                 <mat-tab-group mat-align-tabs="start" #tabulator>
                     <div *ngFor="let day of search.dates_times; let i = index;">
-                        <mat-tab label="{{day.name_day}}">
+                        <mat-tab>
+                            <ng-template mat-tab-label>
+                                <i class="far fa-check-circle" *ngIf="(day.option[0].hour_start != '' && day.option[0].hour_start != null) || day.all_day == true" style="margin-right: 5px;color: #43c89d;font-size: 16px;"></i>
+                                <span>{{day.name_day}}</span>
+                            </ng-template>
                             <div class="container" (swipeleft)="onSwipeLeft($event, tabulator)"
                             (swiperight)="onSwipeRight($event, tabulator)" style="overflow-y: hidden;">
                                 <div *ngIf="!search.dates_times[i].all_day">
