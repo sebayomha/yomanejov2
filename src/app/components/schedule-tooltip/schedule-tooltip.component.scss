@@ -1,0 +1,20 @@
+::ng-deep .tooltip-inner {
+    background-color: #00acd6;
+    color: #fff;
+    width: 100%;
+}
+
+::ng-deep .tooltip .arrow::before {
+    background: white;
+    border-right-color: #00acd6;
+    border-left-color: #00acd6;
+}
+
+::ng-deep .tooltip-inner ul {
+    list-style-type: none;
+}
+
+::ng-deep .tooltip-inner ul li {
+    border-top: 1px solid grey;
+    width: 100%;
+}
