@@ -89,7 +89,7 @@ export class FreeClassFinderComponent {
     this.control_collapse_search = false;
 
     let object = JSON.parse(JSON.stringify(this.search));
-    
+
     //Transformo los nombres de los dias en ingles
     for (let i = 0; i <=6; i++) {
       switch (i) {
@@ -139,13 +139,13 @@ export class FreeClassFinderComponent {
 
       }
     });
-    
+
   }
 
   isMobile() {
     return this.breakpointObserver.isMatched('(max-width: 767px)');
   }
-  
+
   onSwipeLeft($event, tabulator) {
     if(tabulator.selectedIndex < tabulator._tabs.length){
       tabulator.selectedIndex++;
@@ -155,14 +155,14 @@ export class FreeClassFinderComponent {
   onSwipeRight($event, tabulator) {
     if(tabulator.selectedIndex > 0){
       tabulator.selectedIndex--;
-    } 
+    }
   }
 
   addException() {
     let rowTime = new Array<ExcepcionRowTIme>({'hour_start':'', 'hour_finish':'', 'horariosDesde': this.predefinedHours, 'horariosHasta': [], 'horariosTotales': []});
     this.excepciones.push({'date': new Date(), 'date_string': '', 'horarios': rowTime});
   }
-  
+
   removeExcepcion(excepcionIndex) {
     this.excepciones.splice(excepcionIndex, 1);
   }
@@ -183,7 +183,7 @@ export class FreeClassFinderComponent {
     this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].hour_start = this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].horariosDesde[rowTImeIndex];
     this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].horariosHasta = this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].horariosDesde.slice(rowTImeIndex + 1);
   }
-  
+
   setExceptionHourFinish(rowTImeIndex, excepcionIndex, rowExcepcionIndex) {
     this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].hour_finish = this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].horariosHasta[rowTImeIndex];
   }
@@ -231,8 +231,10 @@ export class FreeClassFinderComponent {
             this.search.dates_times[index].option[0].hour_finish = '';
             this.search.dates_times[index].option[0].scheduleFrom = ["08:00", "09:00", "10:00", "11:15", "12:15", "13:15", "14:30", "15:30", "16:30", "17:45", "18:45", "19:45"];
             this.search.dates_times[index].option[0].scheduleTo = [];
-            this.search.dates_times[index].option[0].scheduleSend = ["08:00", "09:00", "10:00", "11:15", "12:15", "13:15", "14:30", "15:30", "16:30", "17:45", "18:45", "19:45"];
           }
+
+          this.search.dates_times[index].option[0].scheduleSend = ["08:00", "09:00", "10:00", "11:15", "12:15", "13:15", "14:30", "15:30", "16:30", "17:45", "18:45", "19:45"];
+
 
         } else {
           this.search.dates_times[index].all_day = false;
@@ -250,7 +252,7 @@ export class FreeClassFinderComponent {
           }
           this.control_flag_empty = false;
         }
-      } 
+      }
 
     console.log('Busqueda', this.search);
   }
@@ -290,10 +292,10 @@ export class FreeClassFinderComponent {
             scheduleFrom: new_schedule_from,
             scheduleTo: [],
             scheduleSend: null
-          }); 
-        }       
+          });
+        }
       }
-      
+
       console.log('Busqueda', this.search);
 
       this.control_flag_empty = true;
@@ -335,7 +337,7 @@ export class FreeClassFinderComponent {
   }
 
   removeOption(index, day_options) {
-    
+
     if (day_options.length > 1) {
     day_options.splice( index, 1 );
     } else {
@@ -358,6 +360,6 @@ export class FreeClassFinderComponent {
     }
 
     console.log('Busqueda', this.search);
-  }  
+  }
 
 }
