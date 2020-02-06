@@ -126,15 +126,17 @@ export class FreeClassFinderComponent {
           this.available_schedules = Object.values(response.data);
           this._snackBar.dismiss();
           break;
-        case 2:{
+        case 2:
+        case 3:{
           this.available_schedules = null;
           this.control_collapse_search = true;
           this._snackBar.openFromComponent(SnackbarComponent, {
             duration: this.durationInSeconds * 1100,
             data: response.data
           });
-          }
-          break;
+        }
+        break;
+
       }
     });
     

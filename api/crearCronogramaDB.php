@@ -28,9 +28,7 @@
             if ($zonaAlumno === null) {
                 return 2;
             }
-            
             $idAutoMaster = $this->obtenerIdAutoMaster($zonaAlumno); //obtengo el id del auto que tiene asignada la zona master del alumno
-
 
             $fechasExcepciones = array_keys($excepciones);
 

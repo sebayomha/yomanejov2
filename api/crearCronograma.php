@@ -39,35 +39,43 @@
 				$resDisponibilidad[$dia['name_day']] = null;
 			}		
 		}
-	
-		$resExcepciones = [];
-		foreach ($excepciones as $excepcion) {
-			$resExcepciones[$excepcion['date_string']] = [];
 
-			$options = [];
-			foreach ($excepcion['horarios'] as $horario) {
-				foreach ($horario['horariosTotales'] as $schedule) {
-					array_push($options, $schedule);
-				}
-			}
-			$resExcepciones[$excepcion['date_string']] = $options;
-		}
-
-		$cronograma = new Cronograma();
-		$cronogramaResultante = $cronograma->calcularCronograma($cantClases, $resDisponibilidad, $direccion, $fechaInicio, $resExcepciones);
-
-		if (is_array($cronogramaResultante)) {
-			if (!empty($cronogramaResultante)) {
-				echo json_encode($GLOBALS['utils']->getResponse(0, $cronogramaResultante));
-			} else {
-				echo json_encode($GLOBALS['utils']->getResponse(1, "Ocurrió un error al calcular el cronograma, por favor vuelva a intentar."));
-			}
+		if (containsOnlyNull($resDisponibilidad)) {
+			echo json_encode($GLOBALS['utils']->getResponse(3, "Debe completar al menos un dia"));
 		} else {
-			if ($cronogramaResultante == 2) {
-				echo json_encode($GLOBALS['utils']->getResponse(2, "La dirección ingresada no corresponde a una zona de trabajo. Por favor, ingrese un punto de encuentro"));
+			$resExcepciones = [];
+			foreach ($excepciones as $excepcion) {
+				$resExcepciones[$excepcion['date_string']] = [];
+
+				$options = [];
+				foreach ($excepcion['horarios'] as $horario) {
+					foreach ($horario['horariosTotales'] as $schedule) {
+						array_push($options, $schedule);
+					}
+				}
+				$resExcepciones[$excepcion['date_string']] = $options;
+			}
+
+			$cronograma = new Cronograma();
+			$cronogramaResultante = $cronograma->calcularCronograma($cantClases, $resDisponibilidad, $direccion, $fechaInicio, $resExcepciones);
+
+			if (is_array($cronogramaResultante)) {
+				if (!empty($cronogramaResultante)) {
+					echo json_encode($GLOBALS['utils']->getResponse(0, $cronogramaResultante));
+				} else {
+					echo json_encode($GLOBALS['utils']->getResponse(1, "Ocurrió un error al calcular el cronograma, por favor vuelva a intentar."));
+				}
+			} else {
+				if ($cronogramaResultante == 2) {
+					echo json_encode($GLOBALS['utils']->getResponse(2, "La dirección ingresada no corresponde a una zona de trabajo. Por favor, ingrese un punto de encuentro"));
+				}
 			}
 		}
 		
+	}
+
+	function containsOnlyNull($input) {
+		return empty(array_filter($input, function ($a) { return $a !== null;}));
 	}
 
 	switch ($method) {
