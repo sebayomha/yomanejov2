@@ -50,10 +50,6 @@ export class AvailableSchedulesComponent {
       this.step--;
     }
 
-    log(lala){
-      console.log(lala)
-    }
-
     totalClassesSelected(selectedOptions, index, event){
 
       if (event.option.selected) {
