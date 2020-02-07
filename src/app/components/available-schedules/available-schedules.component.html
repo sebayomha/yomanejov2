@@ -7,11 +7,14 @@
   <mat-expansion-panel #panel *ngFor="let option of this.data; let i = index;" [expanded]="step === i" (opened)="setStep(i)" hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>
+        <i class="far fa-check-circle" *ngIf="classChoser.selectedOptions.selected[0]" style="position: relative; top: 3px; margin-right: 8px; color: #43c89d; font-size: 16px;"></i>
         {{option.dia}} {{option.fecha | date: 'dd/MM/yyyy'}}
       </mat-panel-title>
       <mat-panel-description>
-        <a *ngIf="!classChoser.selectedOptions.selected[0]">Aún no seleccionó una opción.</a>
-        <a *ngIf="classChoser.selectedOptions.selected[0]">El horario seleccionado para este día es: {{classChoser.selectedOptions.selected[0].value.horaInicio}} hs</a>
+        <div>
+          <a *ngIf="!classChoser.selectedOptions.selected[0]">Aún no seleccionó una opción.</a>
+          <a *ngIf="classChoser.selectedOptions.selected[0]">El horario seleccionado para este día es: {{classChoser.selectedOptions.selected[0].value.horaInicio}} hs</a>
+        </div>
       </mat-panel-description>
     </mat-expansion-panel-header>
 

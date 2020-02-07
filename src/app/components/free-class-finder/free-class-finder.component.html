@@ -10,8 +10,16 @@
             </mat-expansion-panel-header>
             <form (ngSubmit)="searchSchedules(forma)" #forma="ngForm" novalidate="">
                 <div class="form-group">
+                    <div class="row" style="margin-top: 30px;">
+                        <div class="col-sm-12 col-md-4">
+                            <mat-form-field style="width: 100%;">
+                                <input matInput placeholder="Alumno" name="street"
+                                  required>
+                            </mat-form-field>
+                        </div>
+                    </div>
                     <div>
-                        <div class="row" style="margin-top: 30px;">
+                        <div class="row" style="margin-top: 15px;">
                             <div class="col-6 col-sm-6 col-md-6 col-lg-4">
                                 <mat-form-field class="example-full-width">
                                     <input matInput readonly [matDatepicker]="picker" (click)="picker.open()"
