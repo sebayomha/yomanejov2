@@ -46,14 +46,18 @@
 			$resExcepciones = [];
 			foreach ($excepciones as $excepcion) {
 				$resExcepciones[$excepcion['date_string']] = [];
-
 				$options = [];
 				foreach ($excepcion['horarios'] as $horario) {
 					foreach ($horario['horariosTotales'] as $schedule) {
 						array_push($options, $schedule);
 					}
 				}
-				$resExcepciones[$excepcion['date_string']] = $options;
+				$objetoExcepcion = (object) [
+					'options' => $options,
+					'no_puede' => $excepcion['no_puede']
+				];
+
+				$resExcepciones[$excepcion['date_string']] = $objetoExcepcion;
 			}
 
 			$cronograma = new Cronograma();

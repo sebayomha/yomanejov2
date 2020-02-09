@@ -8,15 +8,15 @@
                 <mat-panel-description style="color:white;">
                 </mat-panel-description>
             </mat-expansion-panel-header>
-            <form (ngSubmit)="searchSchedules(forma)" #forma="ngForm" novalidate="">
+            <form (ngSubmit)="searchSchedules()" #forma="ngForm" novalidate="">
                 <div class="form-group">
                     <div class="row" style="margin-top: 30px;">
                         <div class="col-sm-12 col-md-4">
                             <mat-form-field style="width: 100%;">
-                                <input matInput placeholder="Nombre del alumno" name="street" [(ngModel)]="search.student_name"
+                                <input #student_name="ngModel" matInput placeholder="Nombre del alumno" name="student_name" [(ngModel)]="search.student_name"
                                   required autofocus>
                             </mat-form-field>
-                            <div *ngIf="street.errors?.required && street.touched"
+                            <div *ngIf="student_name.errors?.required && student_name.touched"
                                 style="color: #f44336; font-size: 12px; margin-bottom: 10px; margin-top: -10px;">
                                 Debe ingresar el nombre del alumno para continuar
                             </div>
@@ -112,8 +112,8 @@
                                 <i class="far fa-check-circle" *ngIf="(day.option[0].hour_start != '' && day.option[0].hour_start != null) || day.all_day == true" style="margin-right: 5px;color: #43c89d;font-size: 16px;"></i>
                                 <span>{{day.name_day}}</span>
                             </ng-template>
-                            <div class="container" (swipeleft)="onSwipeLeft($event, tabulator)"
-                            (swiperight)="onSwipeRight($event, tabulator)" style="overflow-y: hidden;">
+                            <div class="container" (swipeleft)="onSwipeLeft(tabulator)"
+                            (swiperight)="onSwipeRight(tabulator)" style="overflow-y: hidden;">
                                 <div *ngIf="!search.dates_times[i].all_day">
                                     <div class="row margin-top-30"
                                         *ngFor="let option of search.dates_times[i].option; let j = index;">
@@ -173,7 +173,7 @@
                 <mat-expansion-panel>
                     <mat-expansion-panel-header style="background-color:#6c757dc7;">
                         <mat-panel-title style="color:white;">
-                            <i style="margin-top: 3px; margin-right: 20px;"></i><span>Excepciones</span>
+                            <i style="margin-top: 3px; margin-right: 20px;"></i><span>Filtro avanzado</span>
                         </mat-panel-title>
                         <mat-panel-description style="color:white;">
                         </mat-panel-description>
@@ -194,6 +194,7 @@
                                         </button>
                                     </div>
                                 </div>
+
                                 <!-- fecha excepcion -->
                                 <div class="col-12" style="margin-top: 15px;">
                                     <div class="row">
@@ -206,12 +207,17 @@
                                                 <mat-datepicker [touchUi]="isMobile()" #pickerExcepcion></mat-datepicker>
                                             </mat-form-field>
                                         </div>
+                                        <!-- checkbox de si puede o no -->
+                                        <div class="col-6" style="text-align: right; line-height: 56px;">
+                                            <mat-checkbox name="excepcion_no_puede"
+                                            [(ngModel)]="excepcion.no_puede">No puede
+                                            </mat-checkbox>
+                                        </div>
                                     </div>
                                 </div>
-                            
 
                                 <!-- tramos de horarios de excepcion -->
-                                <div class="col-12" style="margin-top: 15px;">
+                                <div class="col-12" style="margin-top: 15px;" *ngIf="!excepcion.no_puede">
 
                                     <div *ngFor="let excepcionRowTIme of excepcion.horarios; let h = index">
 

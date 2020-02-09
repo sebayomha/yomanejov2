@@ -55,7 +55,8 @@ export class FreeClassFinderComponent {
     this.control_collapse_search = true;
 
     var tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setDate(
+      tomorrow.getDate() + 1);
     this.search = new Search(this.student_name, dates_times, this.addresses, 1, tomorrow);
     this.search.address[4].city = "La Plata";
     console.log(this.search);
@@ -85,7 +86,7 @@ export class FreeClassFinderComponent {
     }
   }
 
-  searchSchedules(forma: string) {
+  searchSchedules() {
 
     this.control_collapse_search = false;
 
@@ -147,13 +148,13 @@ export class FreeClassFinderComponent {
     return this.breakpointObserver.isMatched('(max-width: 767px)');
   }
 
-  onSwipeLeft($event, tabulator) {
+  onSwipeLeft(tabulator) {
     if(tabulator.selectedIndex < tabulator._tabs.length){
       tabulator.selectedIndex++;
     }
   }
 
-  onSwipeRight($event, tabulator) {
+  onSwipeRight(tabulator) {
     if(tabulator.selectedIndex > 0){
       tabulator.selectedIndex--;
     }
@@ -161,7 +162,7 @@ export class FreeClassFinderComponent {
 
   addException() {
     let rowTime = new Array<ExcepcionRowTIme>({'hour_start':'', 'hour_finish':'', 'horariosDesde': this.predefinedHours, 'horariosHasta': [], 'horariosTotales': []});
-    this.excepciones.push({'date': new Date(), 'date_string': '', 'horarios': rowTime});
+    this.excepciones.push({'date': new Date(), 'date_string': '', 'no_puede': false, 'horarios': rowTime});
   }
 
   removeExcepcion(excepcionIndex) {
@@ -194,16 +195,20 @@ export class FreeClassFinderComponent {
     if (this.excepciones.length) {
       this.excepciones.forEach( (excepcion: Excepcion) => {
         excepcion.date_string = this.datePipe.transform(excepcion.date, 'yyyy-MM-dd');
-        excepcion.horarios.forEach( (horario: ExcepcionRowTIme) => {
+        if (!excepcion.no_puede) {
+          excepcion.horarios.forEach( (horario: ExcepcionRowTIme) => {
             horario.horariosTotales = horario.horariosDesde.filter( (hora: String) => {
               if (hora >= horario.hour_start && hora <= horario.hour_finish) {
                 return true;
               }
               return false;
             })
-        })
+          })
+        }
       })
     }
+
+    console.log(this.excepciones);
   }
 
   allDay(day) {

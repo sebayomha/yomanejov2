@@ -55,7 +55,14 @@
 
             $i = 1;
             while ($i <= $totalDiasTentativosRetornar) { //Se recorrera hasta tanto obtener la cantidad de dias posibles a retornar
-                if ($disponibilidad[$nombreDiaBusqueda] != null) { //entonces es un dia que el usuario esta disponible
+                $puede = true;
+                if (in_array($fechaBusqueda->format('Y-m-d'), $fechasExcepciones)) {
+                    if ($excepciones[$fechaBusqueda->format('Y-m-d')]->no_puede == true) {
+                        $puede = false;
+                    }
+                }
+                
+                if ($disponibilidad[$nombreDiaBusqueda] != null && $puede) { //entonces es un dia que el usuario esta disponible
                     $clasesDelDiaPorAuto = $this->obtenerCronogramaDelDia($fechaBusqueda); //armo un diccionario auto => clases
                     $clasesDelDiaPorAuto = $this->eliminarAutosInactivos($clasesDelDiaPorAuto, $fechaBusqueda); //quito los autos que esten inactivos esa fecha
                     $autos = []; //array que se usa para armar la estructura final que se retornara
@@ -68,8 +75,8 @@
                         $horariosLibres;
                         $result = $fechaBusqueda->format('Y-m-d');
 
-                        if (in_array($result, $fechasExcepciones) && count($excepciones[$result]) > 0) {
-                            $horariosLibres = $this->obtenerHorariosLibresAutoYAlumnoExcepciones($clases, $excepciones[$result]);
+                        if (in_array($result, $fechasExcepciones) && count($excepciones[$result]->options) > 0) {
+                            $horariosLibres = $this->obtenerHorariosLibresAutoYAlumnoExcepciones($clases, $excepciones[$result]->options);
                         } else {
                             $horariosLibres = $this->obtenerHorariosLibresAutoYAlumno($clases, $disponibilidad, $nombreDiaBusqueda);
                         }
