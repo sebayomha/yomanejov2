@@ -15,11 +15,11 @@ export class ScheduleTooltipComponent {
     constructor() { }
 
     ngOnInit() {
-        this.tooltipString = '<br><ul>';
+        this.tooltipString = '<br>';
         this.info_schedule_car.forEach(element => {
-            this.tooltipString = this.tooltipString.concat('<li>Alumno: ' + element.alumno +'<br>Dire: '+ element.direccion +'<br> Horario: '+ element.horario+ ' hs</li><br>');
+            this.tooltipString = this.tooltipString.concat('<tr><td>Horario: ' +element.horario+'hs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Alumno: </td><td>'+ element.alumno +'</td></tr><br><tr><td>Dirección: '+ element.direccion+ '</td></tr><br><br>');
         });
 
-        this.tooltipString = this.tooltipString.concat('</ul>')
+        // this.tooltipString = this.tooltipString.concat('</table>')
      }
 }

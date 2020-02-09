@@ -1,9 +1,10 @@
 ::ng-deep .tooltip-inner {
-    max-width: 250px;
-    background-color: #bfbfbfb8;
+    max-width: 450px;
+    background-color: #bfbfbf;
     color: #000;
     font-weight: 600;
     width: 100%;
+    padding: 0.25rem 1.5rem;
 }
 
 ::ng-deep .tooltip .arrow::before {
