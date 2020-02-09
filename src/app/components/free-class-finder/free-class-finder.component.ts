@@ -162,7 +162,11 @@ export class FreeClassFinderComponent {
 
   addException() {
     let rowTime = new Array<ExcepcionRowTIme>({'hour_start':'', 'hour_finish':'', 'horariosDesde': this.predefinedHours, 'horariosHasta': [], 'horariosTotales': []});
-    this.excepciones.push({'date': new Date(), 'date_string': '', 'no_puede': false, 'horarios': rowTime});
+    let newExcepcion = {'date': new Date(), 'date_string': '', 'no_puede': false, 'horarios': rowTime};
+    console.log("amtges; ", this.excepciones)
+    this.excepciones.push(newExcepcion);
+    console.log("despues; ", this.excepciones)
+
   }
 
   removeExcepcion(excepcionIndex) {
@@ -207,8 +211,6 @@ export class FreeClassFinderComponent {
         }
       })
     }
-
-    console.log(this.excepciones);
   }
 
   allDay(day) {

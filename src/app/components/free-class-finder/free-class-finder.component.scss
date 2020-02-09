@@ -30,6 +30,11 @@
     height: 15px !important;
     width: 15px !important;
   }
+
+  .excepcion:hover {
+    background-color:rgba(108, 117, 125, 0.12);
+    border-radius: 4px;
+  }
   // ::ng-deep .mat-tab-label-active {
   //   color: #43c89d !important;
   //   font-weight: 500;

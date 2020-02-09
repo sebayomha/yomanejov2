@@ -182,8 +182,8 @@
                     <div class="row">
                     <!-- array de excepciones -->
                         <div *ngIf="excepciones.length" class="col-12" style="margin-top: 15px;">
-                            <div *ngFor="let excepcion of excepciones; let j = index" style="border: 2px solid #6c757d;border-radius: 8.5px;margin-top: 10px;margin-bottom:15px">
-
+                            <div *ngFor="let excepcion of excepciones; let j = index; let firstItem = first;" style="margin-bottom:15px" class="excepcion">
+                                <mat-divider *ngIf="!firstItem"></mat-divider>
                                 <div class="offset-10 col-2" style="text-align: right;">
                                     <!-- eliminar excepcion -->
                                     <div *ngIf="excepciones.length">
@@ -209,7 +209,7 @@
                                         </div>
                                         <!-- checkbox de si puede o no -->
                                         <div class="col-6" style="text-align: right; line-height: 56px;">
-                                            <mat-checkbox name="excepcion_no_puede"
+                                            <mat-checkbox [checked]="excepcion.no_puede" name="excepcion_no_puede_{{j}}"
                                             [(ngModel)]="excepcion.no_puede">No puede
                                             </mat-checkbox>
                                         </div>
@@ -268,9 +268,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                
-
-
                             </div>
                         </div>
                     </div>
