@@ -13,9 +13,13 @@
                     <div class="row" style="margin-top: 30px;">
                         <div class="col-sm-12 col-md-4">
                             <mat-form-field style="width: 100%;">
-                                <input matInput placeholder="Alumno" name="street"
-                                  required>
+                                <input matInput placeholder="Nombre del alumno" name="street" [(ngModel)]="search.student_name"
+                                  required autofocus>
                             </mat-form-field>
+                            <div *ngIf="street.errors?.required && street.touched"
+                                style="color: #f44336; font-size: 12px; margin-bottom: 10px; margin-top: -10px;">
+                                Debe ingresar el nombre del alumno para continuar
+                            </div>
                         </div>
                     </div>
                     <div>
@@ -277,7 +281,7 @@
                 </mat-expansion-panel>
                 <div class="form-group" style="text-align: right; margin-top:30px;">
                     <button mat-button type="submit"
-                        [disabled]="(!forma.valid || (!(search.address[3].altitud != '') && !(search.address[1].street_a != '') && !(search.address[2].street_b != '')) || schedule_send_null)">BUSCAR</button>
+                        [disabled]="(!forma.valid || (!(search.address[3].altitud != '') && !(search.address[1].street_a != '') && !(search.address[2].street_b != '')) || schedule_send_null || !(search.student_name != ''))">BUSCAR</button>
                 </div>
             </form>
         </mat-expansion-panel>

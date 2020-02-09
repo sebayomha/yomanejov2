@@ -32,6 +32,7 @@ export class FreeClassFinderComponent {
   schedule_send_null:boolean = true;
   available_schedules:any;
   durationInSeconds = 3;
+  student_name = '';
 
 
   constructor(private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private datePipe: DatePipe, private _snackBar: MatSnackBar) { }
@@ -55,7 +56,7 @@ export class FreeClassFinderComponent {
 
     var tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    this.search = new Search(dates_times, this.addresses, 1, tomorrow);
+    this.search = new Search(this.student_name, dates_times, this.addresses, 1, tomorrow);
     this.search.address[4].city = "La Plata";
     console.log(this.search);
 
