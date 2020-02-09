@@ -19,8 +19,7 @@
     </mat-expansion-panel-header>
 
     <mat-selection-list #classChoser (selectionChange)="totalClassesSelected(classChoser.selectedOptions, i, $event);">
-        <div *ngFor="let element of option.autos; let j = index;">
-         <mat-list-option checkboxPosition="before" [value]="horario" style="height: auto !important; border-top: 1px solid rgba(0, 0, 0, 0.12); padding: 3px !important;" class="classChoser container NoPadding" *ngFor="let horario of element.horarios; let h = index">
+        <mat-list-option checkboxPosition="before" [value]="horario" style="height: auto !important; border-top: 1px solid rgba(0, 0, 0, 0.12); padding: 3px !important;" class="classChoser container NoPadding" *ngFor="let horario of option.horarios; let h = index">
           <!-- <bar-rating title="{{horario.ratingGeneral}}" [readOnly]="true" [(rate)]="horario.ratingGeneral" [max]="10"></bar-rating> -->
           <div class="row NoPadding">
             <div class="col-9 col-sm-10 col-lg-11 NoPadding infoContainer">
@@ -29,23 +28,22 @@
               </div>
               <div id="puntajeContainer" class="col-12 col-sm-12 col-md-6 col-lg-3 NoPadding">
                 <div id="iconContainer" style="margin-right: 15px; display: inline; position: relative; top: 5px;">
-                  <span *ngIf="element.tieneEldiaLibre" class="dot grey"></span>
-                  <span *ngIf="!element.tieneEldiaLibre && horario.ratingGeneral >= 7" class="dot green"></span>
-                  <span *ngIf="!element.tieneEldiaLibre && horario.ratingGeneral >= 4 && horario.ratingGeneral < 7" class="dot yellow"></span>
-                  <span *ngIf="!element.tieneEldiaLibre && horario.ratingGeneral < 4" class="dot red"></span>
+                  <span *ngIf="horario.tieneEldiaLibre" class="dot grey"></span>
+                  <span *ngIf="!horario.tieneEldiaLibre && horario.ratingGeneral >= 7" class="dot green"></span>
+                  <span *ngIf="!horario.tieneEldiaLibre && horario.ratingGeneral >= 4 && horario.ratingGeneral < 7" class="dot yellow"></span>
+                  <span *ngIf="!horario.tieneEldiaLibre && horario.ratingGeneral < 4" class="dot red"></span>
                 </div>
-                <span style="font-size: 14px; font-style: italic;" class="text-muted">Puntaje: {{element.tieneEldiaLibre ? 'No aplica' : horario.ratingGeneral}}</span>
+                <span style="font-size: 14px; font-style: italic;" class="text-muted">Puntaje: {{horario.tieneEldiaLibre ? 'No aplica' : horario.ratingGeneral}}</span>
               </div>
-              <div *ngIf="!element.esDeLaZona" id="infoMessageContainer" class="col-12 col-sm-12 col-lg-6 NoPadding">
+              <div *ngIf="!horario.esDeLaZona" id="infoMessageContainer" class="col-12 col-sm-12 col-lg-6 NoPadding">
                 <span style="font-size: 14px; font-weight: 500;" class="text-muted mobile-text-12">Auto fuera de la zona del alumno.</span>
               </div>
             </div>
             <div class="col-3 col-sm-2 col-lg-1 NoPadding" style="line-height: 35px; text-align: right;">
-              <schedule-tooltip [id_car]="element.idAuto" [info_schedule_car]="element.cronogramaActual"></schedule-tooltip>      
+              <schedule-tooltip [id_car]="horario.idAuto" [info_schedule_car]="horario.cronogramaActual"></schedule-tooltip>      
             </div>
           </div>
         </mat-list-option>
-      </div>
     </mat-selection-list>
 
     <mat-action-row>
