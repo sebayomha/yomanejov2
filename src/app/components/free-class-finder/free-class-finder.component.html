@@ -183,15 +183,18 @@
                     <!-- array de excepciones -->
                         <div *ngIf="excepciones.length" class="col-12" style="margin-top: 15px;">
                             <div *ngFor="let excepcion of excepciones; let j = index; let firstItem = first;" style="margin-bottom:15px" class="excepcion">
-                                <mat-divider *ngIf="!firstItem"></mat-divider>
-                                <div class="offset-10 col-2" style="text-align: right;">
-                                    <!-- eliminar excepcion -->
-                                    <div *ngIf="excepciones.length">
-                                        <button style="width: 100%; padding: 0px; margin-top:5px; text-align:right; min-width: 0px;" mat-button
-                                            (click)="removeExcepcion(j)"><span
-                                                style="font-size: 20px"><i
-                                                    class="fas fa-times"></i></span>
-                                        </button>
+                                <mat-divider *ngIf="!firstItem"></mat-divider>      
+                                <div class="row" style="padding: 15px;">
+                                    <div class="col-9" style="text-align: left; line-height: 41px;">Filtro {{j + 1}}:</div>
+                                    <div class="col-3">
+                                        <!-- eliminar excepcion -->
+                                        <div style="text-align: right;" *ngIf="excepciones.length">
+                                            <button style="width: 100%; padding: 0px; margin-top:5px; text-align:right; min-width: 0px;" mat-button
+                                                (click)="removeExcepcion(j)"><span
+                                                    style="font-size: 20px"><i
+                                                        class="fas fa-times"></i></span>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -277,7 +280,7 @@
                         <button type="button" style="width: 100%;" mat-button
                             (click)="addException()"><span
                                 style="font-size: 20px"><i
-                                    class="fas fa-plus-circle"></i></span> Agregar nueva excepcion
+                                    class="fas fa-plus-circle"></i></span> Agregar excepción
                         </button>
                     </div>
 
