@@ -28,13 +28,10 @@ export class AvailableSchedulesComponent {
 
     showMore(option) {
       option.showMoreHours = 12;
-      this.showMoreHours = 12;
-      console.log(this.showMoreHours)
     }
 
     showLess(option) {
       option.showMoreHours = 4;
-      this.showMoreHours = 4;
     }
 
     ngOnInit() {
