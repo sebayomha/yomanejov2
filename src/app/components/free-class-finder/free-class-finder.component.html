@@ -70,10 +70,22 @@
                                     Debe ingresar una calle para continuar
                                 </div>
                             </div>
-                            <div class="col-3 col-sm-5 col-md-6 col-lg-4">
+                            <div class="col-3 col-sm-5 col-md-6 col-lg-2">
                                 <mat-form-field class="example-full-width">
                                     <input matInput placeholder="Número" name="altitud"
                                         [(ngModel)]="search.address[3].altitud" #altitud="ngModel">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-6 col-md-6 col-lg-1">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Piso" name="piso"
+                                        [(ngModel)]="search.address[5].piso" #piso="ngModel">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-6 col-md-6 col-lg-1">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Depto" name="depto"
+                                        [(ngModel)]="search.address[6].depto" #depto="ngModel">
                                 </mat-form-field>
                             </div>
                         </div>
@@ -99,6 +111,14 @@
                         </div>
                         <div *ngIf="address_complete" style="color: #f44336; font-size: 12px;">
                             Debe ingresar al menos una intersección o un número para realizar la búsqueda
+                        </div>
+                        <div class="row">
+                            <div class="col-6 col-md-6 col-lg-4">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Observaciones" name="obser"
+                                        [(ngModel)]="search.observations" #obser="ngModel">
+                                </mat-form-field>
+                            </div>
                         </div>
                     </div>
                 </div>

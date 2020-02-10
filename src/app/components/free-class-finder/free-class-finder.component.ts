@@ -51,7 +51,9 @@ export class FreeClassFinderComponent {
     let street_b = new Address(undefined,false, undefined, '');
     let altitud = new Address(undefined,false, undefined, undefined, '');
     let city = new Address(undefined,false, undefined, undefined, undefined, '');
-    this.addresses.push(street, street_a, street_b, altitud, city);
+    let piso =  new Address(undefined,false, undefined, undefined, undefined, '', '');
+    let depto = new Address(undefined,false, undefined, undefined, undefined, '', '', '');
+    this.addresses.push(street, street_a, street_b, altitud, city, piso, depto);
     this.control_collapse_search = true;
 
     var tomorrow = new Date();
