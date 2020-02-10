@@ -16,6 +16,7 @@ export class AvailableSchedulesComponent {
 
     @ViewChildren(MatSelectionList) viewChildren !: QueryList<MatSelectionList>;
 
+    showMoreHours: number = 4;
     step:number;
     classes: Array<any>;
     order_information:any;
@@ -25,6 +26,17 @@ export class AvailableSchedulesComponent {
     cantSelectedClasses: number;
 
     constructor() { }
+
+    showMore(option) {
+      option.showMoreHours = 12;
+      this.showMoreHours = 12;
+      console.log(this.showMoreHours)
+    }
+
+    showLess(option) {
+      option.showMoreHours = 4;
+      this.showMoreHours = 4;
+    }
 
     ngOnInit() {
         this.step = 0;
