@@ -44,7 +44,7 @@
             </div>
           </div>
         </mat-list-option>
-        <button *ngIf="option.showMoreHours == 4" (click)="showMore(option)">Mostrar más</button>
+        <button *ngIf="option.showMoreHours == 4 && option.horarios.length > 4" (click)="showMore(option)">Mostrar más</button>
         <button *ngIf="option.showMoreHours == 12" (click)="showLess(option)">Mostrar menos</button>
     </mat-selection-list>
 

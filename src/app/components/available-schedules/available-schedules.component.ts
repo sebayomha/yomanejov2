@@ -16,7 +16,6 @@ export class AvailableSchedulesComponent {
 
     @ViewChildren(MatSelectionList) viewChildren !: QueryList<MatSelectionList>;
 
-    showMoreHours: number = 4;
     step:number;
     classes: Array<any>;
     order_information:any;
