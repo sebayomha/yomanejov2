@@ -213,7 +213,7 @@
         }
 
         function sortHorariosPorHora($a, $b) {
-            return $b->ratingGeneral - $a->ratingGeneral;
+            return $b->ratingGeneral > $a->ratingGeneral ? 1 : -1;
         }
         
         function obtenerIdAutoMaster($zonaAlumno) {
