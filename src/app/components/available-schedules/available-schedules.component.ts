@@ -1,12 +1,26 @@
-import { Component, Input, ViewChildren, QueryList } from '@angular/core';
+import { Component, Input, ViewChildren, QueryList, } from '@angular/core';
 import { MatSelectionList, MatListOption } from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
+import { trigger,animate,transition,style } from '@angular/animations';
+
 declare var $: any;
 
 @Component({
   selector: 'available-schedules',
   templateUrl: './available-schedules.component.html',
-  styleUrls: ['./available-schedules.component.scss', '../../global-styles.scss']
+  styleUrls: ['./available-schedules.component.scss', '../../global-styles.scss'],
+  animations: [
+    trigger('fadeIn', [
+      transition(':enter', [
+        style({ opacity: '0' }),
+        animate('.5s ease-out', style({ opacity: '1' })),
+      ]),
+      transition(':leave', [
+        style({ opacity: '1' }),
+        animate('.5s ease-out', style({ opacity: '0' })),
+      ])
+    ]),
+  ]
 })
 
 export class AvailableSchedulesComponent {
