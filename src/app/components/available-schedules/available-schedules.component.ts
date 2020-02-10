@@ -1,6 +1,5 @@
 import { Component, Input, ViewChildren, QueryList, } from '@angular/core';
 import { MatSelectionList, MatListOption } from '@angular/material';
-import {SelectionModel} from '@angular/cdk/collections';
 import { trigger,animate,transition,style } from '@angular/animations';
 
 declare var $: any;
