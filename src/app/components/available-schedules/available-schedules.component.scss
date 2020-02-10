@@ -61,6 +61,15 @@
   vertical-align: middle;
 }
 
+.showMoreBtn {
+  border: 0;
+  background: inherit;
+  color: rgb(67, 200, 157);
+  font-weight: bold;
+  position: relative;
+  bottom: 7px;
+}
+
 @media (min-width: 767px) {
   .infoContainer {
     line-height: 37px;

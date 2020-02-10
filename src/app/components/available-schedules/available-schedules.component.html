@@ -44,13 +44,27 @@
             </div>
           </div>
         </mat-list-option>
-        <button *ngIf="option.showMoreHours == 4 && option.horarios.length > 4" (click)="showMore(option)">Mostrar más</button>
-        <button *ngIf="option.showMoreHours == 12" (click)="showLess(option)">Mostrar menos</button>
     </mat-selection-list>
 
     <mat-action-row>
-      <button *ngIf="i != 0" mat-button color="warn" (click)="prevStep()">ANTERIOR</button>
-      <button *ngIf="i != (this.data.length - 1)" mat-button color="primary" (click)="nextStep()">SIGUIENTE</button>
+      <div style="text-align: center; width: 80%;">
+        <div style="cursor: pointer; margin-left: 14%;" (click)="showMore(option)" *ngIf="option.showMoreHours == 4 && option.horarios.length > 4">
+          <i style="color: rgb(67, 200, 157);" class="material-icons">
+            keyboard_arrow_down
+            </i>
+          <button class="showMoreBtn">Ver más</button>
+        </div>
+        <div style="cursor: pointer; margin-left: 14%;" (click)="showLess(option)" *ngIf="option.showMoreHours == 12">
+          <i style="color: rgb(67, 200, 157);" class="material-icons">
+            keyboard_arrow_up
+            </i>
+          <button class="showMoreBtn">Ver menos</button>
+        </div>
+      </div>
+      <div>
+        <button *ngIf="i != 0" mat-button color="warn" (click)="prevStep()">ANTERIOR</button>
+        <button *ngIf="i != (this.data.length - 1)" mat-button color="primary" (click)="nextStep()">SIGUIENTE</button>
+      </div>
     </mat-action-row>
   </mat-expansion-panel>
 </mat-accordion>
