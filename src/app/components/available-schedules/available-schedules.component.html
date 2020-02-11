@@ -54,7 +54,7 @@
             </i>
           <button class="showMoreBtn">VER MÁS</button>
         </div>
-        <div style="cursor: pointer; margin-top: 5px;" (click)="showLess(option)" *ngIf="option.showMoreHours == 12">
+        <div style="cursor: pointer; margin-top: 5px;" [ngClass]="{'margin-left-14': i != '0', 'margin-left-0': i == '0' }" (click)="showLess(option)" *ngIf="option.showMoreHours == 12">
           <i style="color: rgb(67, 200, 157);" class="material-icons">
             keyboard_arrow_up
             </i>
