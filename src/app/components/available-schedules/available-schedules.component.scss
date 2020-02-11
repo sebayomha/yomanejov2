@@ -65,9 +65,16 @@
   border: 0;
   background: inherit;
   color: rgb(67, 200, 157);
-  font-weight: bold;
   position: relative;
   bottom: 7px;
+}
+
+.margin-left-14 {
+  margin-left: 14%;
+}
+
+.margin-left-0 {
+  margin-left: 0%;
 }
 
 @media (min-width: 767px) {
@@ -78,5 +85,5 @@
   .infoContainer div{
     display: inline-block;
   }
-  
+
 }

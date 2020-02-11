@@ -40,7 +40,7 @@
               </div>
             </div>
             <div class="col-3 col-sm-2 col-lg-1 NoPadding" style="line-height: 35px; text-align: right;">
-              <schedule-tooltip [id_car]="horario.idAuto" [info_schedule_car]="horario.cronogramaActual"></schedule-tooltip>      
+              <schedule-tooltip [id_car]="horario.idAuto" [info_schedule_car]="horario.cronogramaActual"></schedule-tooltip>
             </div>
           </div>
         </mat-list-option>
@@ -48,17 +48,17 @@
 
     <mat-action-row>
       <div style="text-align: center; width: 80%;">
-        <div style="cursor: pointer; margin-left: 14%;" (click)="showMore(option)" *ngIf="option.showMoreHours == 4 && option.horarios.length > 4">
+        <div style="cursor: pointer; margin-top: 5px;" [ngClass]="{'margin-left-14': i != '0', 'margin-left-0': i == '0' }" (click)="showMore(option)" *ngIf="option.showMoreHours == 4 && option.horarios.length > 4">
           <i style="color: rgb(67, 200, 157);" class="material-icons">
             keyboard_arrow_down
             </i>
-          <button class="showMoreBtn">Ver más</button>
+          <button class="showMoreBtn">VER MÁS</button>
         </div>
-        <div style="cursor: pointer; margin-left: 14%;" (click)="showLess(option)" *ngIf="option.showMoreHours == 12">
+        <div style="cursor: pointer; margin-top: 5px;" (click)="showLess(option)" *ngIf="option.showMoreHours == 12">
           <i style="color: rgb(67, 200, 157);" class="material-icons">
             keyboard_arrow_up
             </i>
-          <button class="showMoreBtn">Ver menos</button>
+          <button class="showMoreBtn">VER MENOS</button>
         </div>
       </div>
       <div>
