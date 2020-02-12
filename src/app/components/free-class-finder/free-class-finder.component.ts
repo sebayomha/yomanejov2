@@ -22,17 +22,18 @@ export class FreeClassFinderComponent {
 
   excepciones = Array<Excepcion>();
   addresses = Array<Address>();
+  addresses_alt = Array<Address>();
   minDate = new Date();
   locations = ["La Plata", "Berisso", "Ensenada"];
   predefinedHours = ["08:00", "09:00", "10:00", "11:15", "12:15", "13:15", "14:30", "15:30", "16:30", "17:45", "18:45", "19:45"];
   search: Search;
-  address_complete:boolean = false;
   control_flag_empty:boolean = false;
   control_collapse_search:boolean = false;
   schedule_send_null:boolean = true;
   available_schedules:any;
   durationInSeconds = 3;
   student_name = '';
+  flag_address_alt:boolean = false;
 
 
   constructor(private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private datePipe: DatePipe, private _snackBar: MatSnackBar) { }
@@ -51,16 +52,28 @@ export class FreeClassFinderComponent {
     let street_b = new Address(undefined,false, undefined, '');
     let altitud = new Address(undefined,false, undefined, undefined, '');
     let city = new Address(undefined,false, undefined, undefined, undefined, '');
-    let piso =  new Address(undefined,false, undefined, undefined, undefined, '', '');
-    let depto = new Address(undefined,false, undefined, undefined, undefined, '', '', '');
-    this.addresses.push(street, street_a, street_b, altitud, city, piso, depto);
+    let floor =  new Address(undefined,false, undefined, undefined, undefined, '', '');
+    let department = new Address(undefined,false, undefined, undefined, undefined, '', '', '');
+    let obser = new Address(undefined,false, undefined, undefined, undefined, '', '', '', '');
+    this.addresses.push(street, street_a, street_b, altitud, city, floor, department, obser);
+    
+    let street_alt = new Address('',false);
+    let street_a_alt = new Address(undefined, false, '');
+    let street_b_alt = new Address(undefined,false, undefined, '');
+    let altitud_alt = new Address(undefined,false, undefined, undefined, '');
+    let city_alt = new Address(undefined,false, undefined, undefined, undefined, '');
+    let floor_alt =  new Address(undefined,false, undefined, undefined, undefined, '', '');
+    let department_alt = new Address(undefined,false, undefined, undefined, undefined, '', '', '');
+    let obser_alt = new Address(undefined,false, undefined, undefined, undefined, '', '', '', '');
+    this.addresses_alt.push(street_alt, street_a_alt, street_b_alt, altitud_alt, city_alt, floor_alt, department_alt, obser_alt);
+
     this.control_collapse_search = true;
 
     var tomorrow = new Date();
-    tomorrow.setDate(
-      tomorrow.getDate() + 1);
-    this.search = new Search(this.student_name, dates_times, this.addresses, 1, tomorrow);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    this.search = new Search(this.student_name, dates_times, this.addresses, this.addresses_alt, 1, tomorrow);
     this.search.address[4].city = "La Plata";
+    this.search.address_alternative[4].city = "La Plata";
     console.log(this.search);
 
     // this.excepciones.forEach(excep => {
@@ -344,6 +357,10 @@ export class FreeClassFinderComponent {
 
   selectionCity(city) {
     this.search.address[4].city = city;
+  }
+
+  selectionCityAlt(city) {
+    this.search.address_alternative[4].city = city;
   }
 
   removeOption(index, day_options) {
