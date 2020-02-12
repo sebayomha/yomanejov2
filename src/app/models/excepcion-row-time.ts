@@ -4,4 +4,5 @@ export interface ExcepcionRowTIme {
     horariosDesde: Array<String>;
     horariosHasta: Array<String>;
     horariosTotales: Array<String>;
+    dir_alt: boolean;
 }

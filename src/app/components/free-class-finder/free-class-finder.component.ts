@@ -41,9 +41,9 @@ export class FreeClassFinderComponent {
   ngOnInit() {
     let dates_times = new Array<DatesTimes>();
     for (let i = 0; i <=6; i++) {
-      let option = new Option('', '', this.predefinedHours, [], null);
+      let option = new Option('', '', this.predefinedHours, [], null, false);
       let options = new Array(option);
-      let dateTime = new DatesTimes(this.getDay(i), false, options);
+      let dateTime = new DatesTimes(this.getDay(i), false, options, false);
       dates_times.push(dateTime);
     }
 
@@ -56,7 +56,7 @@ export class FreeClassFinderComponent {
     let department = new Address(undefined,false, undefined, undefined, undefined, '', '', '');
     let obser = new Address(undefined,false, undefined, undefined, undefined, '', '', '', '');
     this.addresses.push(street, street_a, street_b, altitud, city, floor, department, obser);
-    
+
     let street_alt = new Address('',false);
     let street_a_alt = new Address(undefined, false, '');
     let street_b_alt = new Address(undefined,false, undefined, '');
@@ -176,9 +176,9 @@ export class FreeClassFinderComponent {
   }
 
   addException() {
-    let rowTime = new Array<ExcepcionRowTIme>({'hour_start':'', 'hour_finish':'', 'horariosDesde': this.predefinedHours, 'horariosHasta': [], 'horariosTotales': []});
+    let rowTime = new Array<ExcepcionRowTIme>({'hour_start':'', 'hour_finish':'', 'horariosDesde': this.predefinedHours, 'horariosHasta': [], 'horariosTotales': [], 'dir_alt':false});
     let newExcepcion = {'date': new Date(), 'date_string': '', 'no_puede': false, 'horarios': rowTime};
-    console.log("amtges; ", this.excepciones)
+    console.log("antes; ", this.excepciones)
     this.excepciones.push(newExcepcion);
     console.log("despues; ", this.excepciones)
 
@@ -189,7 +189,7 @@ export class FreeClassFinderComponent {
   }
 
   addNewRowTime(excepcionIndex){
-    let rowTime: ExcepcionRowTIme = {'hour_start':'', 'hour_finish':'', 'horariosDesde': this.predefinedHours, 'horariosHasta': [], 'horariosTotales': []};
+    let rowTime: ExcepcionRowTIme = {'hour_start':'', 'hour_finish':'', 'horariosDesde': this.predefinedHours, 'horariosHasta': [], 'horariosTotales': [], 'dir_alt':false};
     this.excepciones[excepcionIndex].horarios.push(rowTime);
   }
 
@@ -261,6 +261,7 @@ export class FreeClassFinderComponent {
 
         } else {
           this.search.dates_times[index].all_day = false;
+          this.search.dates_times[index].dir_alt = false;
           this.search.dates_times[index].option[0].scheduleSend = null;
 
           this.schedule_send_null = true;
@@ -278,6 +279,18 @@ export class FreeClassFinderComponent {
       }
 
     console.log('Busqueda', this.search);
+  }
+
+  allDayDA(day) {                                                                                                                                   +`ç7`
+    let index = this.search.dates_times.findIndex(element => { return element.name_day == day });
+
+    if (index != -1) {
+      if (this.search.dates_times[index].all_day == true ) {
+        this.search.dates_times[index].dir_alt = true;
+      } else {
+        this.search.dates_times[index].dir_alt = false;
+      }
+    }
   }
 
   addDateTime(day) {
@@ -314,7 +327,8 @@ export class FreeClassFinderComponent {
             hour_finish: null,
             scheduleFrom: new_schedule_from,
             scheduleTo: [],
-            scheduleSend: null
+            scheduleSend: null,
+            dir_alt: false
           });
         }
       }

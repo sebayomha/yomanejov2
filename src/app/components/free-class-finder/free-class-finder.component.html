@@ -109,7 +109,7 @@
                                 </mat-form-field>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" style="margin-bottom:15px;">
                             <div class="col-6 col-md-6 col-lg-4">
                                 <mat-form-field class="example-full-width">
                                     <input matInput placeholder="Observaciones" name="obser"
@@ -117,7 +117,7 @@
                                 </mat-form-field>
                             </div>
                         </div>
-                        <mat-checkbox style="margin-right: 15px;" name="flag_address_alt"
+                        <mat-checkbox style="margin-right: 15px; font-weight: 500;" name="flag_address_alt"
                         [(ngModel)]="flag_address_alt">Agregar dirección alternativa</mat-checkbox>
                         <div *ngIf="flag_address_alt">
                             <div style="margin-top: 20px;"><label
@@ -259,7 +259,9 @@
                                     </div>
                                 </div>
                                 <div class="margin-top-30" style="text-align: center; margin-bottom: 30px;">
-                                    <mat-checkbox (change)="allDay(day.name_day,$event)">Disponible todo el día
+                                    <mat-checkbox (change)="allDay(day.name_day,$event)" style="margin-right:15px">Disponible todo el día
+                                    </mat-checkbox>
+                                    <mat-checkbox (change)="allDayDA(day.name_day,$event)">DA
                                     </mat-checkbox>
                                 </div>
                             </div>
@@ -281,7 +283,7 @@
                     <!-- array de excepciones -->
                         <div *ngIf="excepciones.length" class="col-12" style="margin-top: 15px;">
                             <div *ngFor="let excepcion of excepciones; let j = index; let firstItem = first;" style="margin-bottom:15px" class="excepcion">
-                                <mat-divider *ngIf="!firstItem"></mat-divider>      
+                                <mat-divider *ngIf="!firstItem"></mat-divider>
                                 <div class="row" style="padding: 15px;">
                                     <div class="col-9" style="text-align: left; line-height: 41px;">Filtro {{j + 1}}:</div>
                                     <div class="col-3">
@@ -339,7 +341,7 @@
                                                 <!-- fecha hasta tramo -->
                                                 <mat-form-field class="example-full-width">
                                                     <mat-label>Hasta</mat-label>
-                                                    <mat-select (selectionChange)="setExceptionHourFinish($event.value, j, h)"> 
+                                                    <mat-select (selectionChange)="setExceptionHourFinish($event.value, j, h)">
                                                         <mat-option *ngFor="let horario of excepcionRowTIme.horariosHasta; let i = index" [value]="i">
                                                             {{horario}}
                                                         </mat-option>
@@ -362,7 +364,7 @@
                                                                 class="fas fa-trash-alt"></i></span>
                                                     </button>
                                                     </div>
-                                                    
+
                                                 </div>
                                             </div>
                                             <!--  -->
