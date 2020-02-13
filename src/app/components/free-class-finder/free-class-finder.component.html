@@ -118,7 +118,7 @@
                             </div>
                         </div>
                         <mat-checkbox style="margin-right: 15px; font-weight: 500;" name="flag_address_alt"
-                        [(ngModel)]="flag_address_alt">Agregar dirección alternativa</mat-checkbox>
+                        [(ngModel)]="flag_address_alt" (change)="quitDA()">Agregar dirección alternativa</mat-checkbox>
                         <div *ngIf="flag_address_alt">
                             <div style="margin-top: 20px;"><label
                                 style="font-weight: 500; font-size: 17px;">Dirección Alternativa:</label></div>
@@ -128,7 +128,7 @@
                                 <div class="col-sm-12 col-md-6 col-lg-4">
                                     <mat-form-field class="example-full-width">
                                         <mat-label>Localidad</mat-label>
-                                        <mat-select [(ngModel)]="search.address_alternative[4].city" name="city"
+                                        <mat-select [(ngModel)]="search.address_alternative[4].city" name="city_alt"
                                             (selectionChange)="selectionCityAlt($event.value)">
                                             <mat-option *ngFor="let city of locations" [value]="city">
                                                 {{city}}
@@ -246,8 +246,8 @@
                                             </mat-form-field>
                                         </div>
                                         <div class="col-sm-2"
-                                            *ngIf="(search.dates_times[i].option[j].scheduleSend != null)" style="text-align: center; margin: auto;">
-                                            <mat-checkbox name="{{j}}" [(ngModel)]="search.dates_times[i].option[j].dir_alt">DA
+                                            *ngIf="(search.dates_times[i].option[j].scheduleSend != null) && flag_address_alt" style="text-align: center; margin: auto;">
+                                            <mat-checkbox name="check_da_{{j}}" [(ngModel)]="search.dates_times[i].option[j].dir_alt">DA
                                             </mat-checkbox>
                                         </div>
                                         <div class="col-sm-2"
@@ -268,7 +268,7 @@
                                 <div class="margin-top-30" style="text-align: center; margin-bottom: 30px;">
                                     <mat-checkbox (change)="allDay(day.name_day,$event)" style="margin-right:15px">Disponible todo el día
                                     </mat-checkbox>
-                                    <mat-checkbox *ngIf="day.all_day" name="{{i}}" [(ngModel)]="search.dates_times[i].option[0].dir_alt">DA
+                                    <mat-checkbox *ngIf="day.all_day && flag_address_alt" name="{{i}}" [(ngModel)]="search.dates_times[i].option[0].dir_alt">DA
                                     </mat-checkbox>
                                 </div>
                             </div>
@@ -355,8 +355,8 @@
                                                     </mat-select>
                                                 </mat-form-field>
                                             </div>
-                                            <div class="col-2" style="text-align: center; margin: auto;">
-                                                <mat-checkbox name="{{h}}" [(ngModel)]="excepcionRowTIme.dir_alt">DA
+                                            <div class="col-2" style="text-align: center; margin: auto;" *ngIf="flag_address_alt">
+                                                <mat-checkbox name="check_excep_da_{{j}}{{h}}" [(ngModel)]="excepcionRowTIme.dir_alt">DA
                                                 </mat-checkbox>
                                             </div>
                                             <div class="col-2">

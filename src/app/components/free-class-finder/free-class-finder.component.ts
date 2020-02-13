@@ -271,6 +271,27 @@ export class FreeClassFinderComponent {
     console.log('Busqueda', this.search);
   }
 
+  quitDA(){
+    //Esta funcion resetea todas las direcciones alternativas.
+    if (!this.flag_address_alt) {
+      for (let i = 0; i <=6; i++) {
+        this.search.dates_times[i].option.forEach(opt => {
+          if ( opt.dir_alt == true ) {
+            opt.dir_alt = false;
+          }
+        });
+      }
+      this.excepciones.forEach(excep => {
+        excep.horarios.forEach(horario => {
+          if (horario.dir_alt) {
+            horario.dir_alt = false;
+          }
+        });
+      });
+    } 
+  }
+
+
   addDateTime(day) {
 
     if (!this.control_flag_empty) {
