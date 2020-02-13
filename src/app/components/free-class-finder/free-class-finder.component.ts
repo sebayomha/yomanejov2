@@ -250,14 +250,15 @@ export class FreeClassFinderComponent {
 
             let length = this.search.dates_times[index].option.length;
             this.search.dates_times[index].option.splice( 1, length );
-            this.search.dates_times[index].option[0].hour_start = '';
-            this.search.dates_times[index].option[0].hour_finish = '';
-            this.search.dates_times[index].option[0].scheduleFrom = ["08:00", "09:00", "10:00", "11:15", "12:15", "13:15", "14:30", "15:30", "16:30", "17:45", "18:45", "19:45"];
-            this.search.dates_times[index].option[0].scheduleTo = [];
+            
           }
 
+          this.search.dates_times[index].option[0].hour_start = '';
+          this.search.dates_times[index].option[0].hour_finish = '';
+          this.search.dates_times[index].option[0].scheduleFrom = ["08:00", "09:00", "10:00", "11:15", "12:15", "13:15", "14:30", "15:30", "16:30", "17:45", "18:45", "19:45"];
+          this.search.dates_times[index].option[0].scheduleTo = [];
           this.search.dates_times[index].option[0].scheduleSend = ["08:00", "09:00", "10:00", "11:15", "12:15", "13:15", "14:30", "15:30", "16:30", "17:45", "18:45", "19:45"];
-
+          this.search.dates_times[index].option[0].dir_alt = false;
 
         } else {
           this.search.dates_times[index].all_day = false;
@@ -281,16 +282,19 @@ export class FreeClassFinderComponent {
     console.log('Busqueda', this.search);
   }
 
-  allDayDA(day) {                                                                                                                                   +`ç7`
-    let index = this.search.dates_times.findIndex(element => { return element.name_day == day });
+  allDayDA(day) {                                                                                                                                  
+    // let index = this.search.dates_times.findIndex(element => { return element.name_day == day });
 
-    if (index != -1) {
-      if (this.search.dates_times[index].all_day == true ) {
-        this.search.dates_times[index].dir_alt = true;
-      } else {
-        this.search.dates_times[index].dir_alt = false;
-      }
-    }
+    // if (index != -1) {
+    //   if (this.search.dates_times[index].all_day == true ) {
+    //     this.search.dates_times[index].dir_alt = true;
+    //     console.log('Busqueda', this.search);
+    //   } else {
+    //     this.search.dates_times[index].dir_alt = false;
+    //     console.log('Busqueda', this.search);
+    //   }
+    // }
+    console.log('Busqueda', this.search);
   }
 
   addDateTime(day) {

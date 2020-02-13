@@ -215,12 +215,13 @@
                                 <div *ngIf="!search.dates_times[i].all_day">
                                     <div class="row margin-top-30"
                                         *ngFor="let option of search.dates_times[i].option; let j = index;">
-                                        <div class="col-sm-5"
+                                        <div class="col-sm-4"
                                             *ngIf="search.dates_times[i].option[j].hour_start || search.dates_times[i].option[j].hour_start == null">
-                                            <mat-form-field class="example-full-width">
+                                            <mat-form-field class="example-full-width" >
                                                 <mat-label>Desde</mat-label>
                                                 <mat-select
-                                                    (selectionChange)="doScheduleTo(day.name_day,$event.value,j)">
+                                                    (selectionChange)="doScheduleTo(day.name_day,$event.value,j)"
+                                                    [disabled]="search.dates_times[i].option.length - 1 > j">
                                                     <mat-option
                                                         *ngFor="let hour of search.dates_times[i].option[j].scheduleFrom"
                                                         [value]="hour">
@@ -229,12 +230,13 @@
                                                 </mat-select>
                                             </mat-form-field>
                                         </div>
-                                        <div class="col-sm-5"
+                                        <div class="col-sm-4"
                                             *ngIf="search.dates_times[i].option[j].scheduleTo.length > 0">
                                             <mat-form-field class="example-full-width">
                                                 <mat-label>Hasta</mat-label>
                                                 <mat-select
-                                                    (selectionChange)="setHourFinish(search.dates_times[i].option[j],$event.value)">
+                                                    (selectionChange)="setHourFinish(search.dates_times[i].option[j],$event.value)"
+                                                    [disabled]="search.dates_times[i].option.length - 1 > j">
                                                     <mat-option
                                                         *ngFor="let hour of search.dates_times[i].option[j].scheduleTo"
                                                         [value]="hour">
@@ -244,8 +246,13 @@
                                             </mat-form-field>
                                         </div>
                                         <div class="col-sm-2"
+                                            *ngIf="(search.dates_times[i].option[j].scheduleSend != null)" style="text-align: center; margin: auto;">
+                                            <mat-checkbox name="{{j}}" [(ngModel)]="search.dates_times[i].option[j].dir_alt">DA
+                                            </mat-checkbox>
+                                        </div>
+                                        <div class="col-sm-2"
                                             *ngIf="(search.dates_times[i].option[j].hour_start || search.dates_times[i].option[j].hour_start == null) && j == (search.dates_times[i].option.length - 1)">
-                                            <button style="width: 100%; margin-top: 5px;" mat-button
+                                            <button style="width: 100%; margin-top: 10px;" mat-button
                                                 (click)="removeOption(j,search.dates_times[i].option)"><span
                                                     style="font-size: 20px;"><i
                                                         class="fas fa-trash-alt"></i></span></button>
@@ -255,13 +262,13 @@
                                         <button type="button" style="width: 100%;" mat-button
                                             (click)="addDateTime(day.name_day)" [disabled]="control_flag_empty"><span
                                                 style="font-size: 20px"><i
-                                                    class="fas fa-plus-circle"></i></span> Nuevo horario</button>
+                                                    class="fas fa-plus-circle" style="color: #43c89d"></i></span> Nuevo horario</button>
                                     </div>
                                 </div>
                                 <div class="margin-top-30" style="text-align: center; margin-bottom: 30px;">
                                     <mat-checkbox (change)="allDay(day.name_day,$event)" style="margin-right:15px">Disponible todo el día
                                     </mat-checkbox>
-                                    <mat-checkbox (change)="allDayDA(day.name_day,$event)">DA
+                                    <mat-checkbox *ngIf="day.all_day"(change)="allDayDA(day.name_day,$event)" name="{{i}}" [(ngModel)]="day.dir_alt">DA
                                     </mat-checkbox>
                                 </div>
                             </div>
@@ -325,7 +332,7 @@
                                     <div *ngFor="let excepcionRowTIme of excepcion.horarios; let h = index">
 
                                         <div class="row">
-                                            <div class="col-5">
+                                            <div class="col-4">
                                                 <!-- fecha desde tramo -->
                                                 <mat-form-field class="example-full-width">
                                                     <mat-label>Desde</mat-label>
@@ -337,7 +344,7 @@
                                                     </mat-select>
                                                 </mat-form-field>
                                             </div>
-                                            <div class="col-5">
+                                            <div class="col-4">
                                                 <!-- fecha hasta tramo -->
                                                 <mat-form-field class="example-full-width">
                                                     <mat-label>Hasta</mat-label>
@@ -348,13 +355,17 @@
                                                     </mat-select>
                                                 </mat-form-field>
                                             </div>
+                                            <div class="col-2" style="text-align: center; margin: auto;">
+                                                <mat-checkbox name="{{h}}" [(ngModel)]="excepcionRowTIme.dir_alt">DA
+                                                </mat-checkbox>
+                                            </div>
                                             <div class="col-2">
-                                                <div class="row">
+                                                <div class="row" style="margin-top: 10px;">
                                                     <div style="width: 50%;">
-                                                        <button type="button" style="width: 100%;min-width: 0px;" mat-button
+                                                        <button *ngIf="h == (excepcion.horarios.length - 1)" type="button" style="width: 100%;min-width: 0px;" mat-button
                                                         (click)="addNewRowTime(j)"><span
                                                             style="font-size: 20px"><i
-                                                                class="fas fa-plus-circle"></i></span>
+                                                                class="fas fa-plus-circle" style="color: #43c89d"></i></span>
                                                     </button>
                                                     </div>
                                                     <div style="width: 50%;">
@@ -380,7 +391,7 @@
                         <button type="button" style="width: 100%;" mat-button
                             (click)="addException()"><span
                                 style="font-size: 20px"><i
-                                    class="fas fa-plus-circle"></i></span> Agregar filtro
+                                    class="fas fa-plus-circle" style="color: #43c89d"></i></span> Agregar filtro
                         </button>
                     </div>
 
