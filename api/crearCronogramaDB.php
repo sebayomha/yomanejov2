@@ -12,7 +12,7 @@
         function __construct() { }
 
         //Funcion principal que se encargara de armar el cronograma
-        function calcularCronograma($cantClases, $disponibilidad, $direccion, $fechaInicio, $excepciones){
+        function calcularCronograma($cantClases, $disponibilidad, $direccion, $fechaInicio, $excepciones, $direccion_alt, $hayDireccionAlternativa, $resOptions, $resExcepcionesOptions){
             $horariosTentativos = array(); //arreglo que se va a retornar con el cronograma
 
             $fechaBusqueda = DateTime::createFromFormat("Y-m-d", $fechaInicio);
@@ -24,8 +24,14 @@
             $zonas = $this->obtenerZonas(); //obtengo las zonas y las cargo solo 1 vez
             $arrayGrafo = $this->crearGrafoZonas($zonas); //creo el grafo con todas las zonas y sus adyacentes
             $zonaAlumno = $this->obtenerZonaAlumno($direccion); //obtengo la zona del alumno a partir de su direccion
-            
-            if ($zonaAlumno === null) {
+            $zonaAlumno_alt = true;
+            $idAutoMaster_alt;
+            if ($hayDireccionAlternativa) {
+                $zonaAlumno_alt = $this->obtenerZonaAlumno($direccion_alt);
+                $idAutoMaster_alt = $this->obtenerIdAutoMaster($zonaAlumno_alt);
+            }
+
+            if ($zonaAlumno === null || $zonaAlumno_alt === null) {
                 return 2;
             }
             
@@ -55,8 +61,8 @@
 
             $i = 1;
             while ($i <= $totalDiasTentativosRetornar) { //Se recorrera hasta tanto obtener la cantidad de dias posibles a retornar
-                $puede = true;
-                if (in_array($fechaBusqueda->format('Y-m-d'), $fechasExcepciones)) {
+                $puede = true; 
+                if (in_array($fechaBusqueda->format('Y-m-d'), $fechasExcepciones)) { //evaluo si en las excepciones, el alumno puede esta fecha.
                     if ($excepciones[$fechaBusqueda->format('Y-m-d')]->no_puede == true) {
                         $puede = false;
                     }
@@ -67,7 +73,6 @@
                     $clasesDelDiaPorAuto = $this->eliminarAutosInactivos($clasesDelDiaPorAuto, $fechaBusqueda); //quito los autos que esten inactivos esa fecha
                     $autos = []; //array que se usa para armar la estructura final que se retornara
                     $diccionarioFechaHorariosLibres = [];
-
                     foreach ($clasesDelDiaPorAuto as $idAuto => $clases) { //recorro cada clase
                         $cronogramasActuales = [];
                         
@@ -75,22 +80,20 @@
                         $horariosLibres;
                         $result = $fechaBusqueda->format('Y-m-d');
 
+                        $estoySobreUnaExcepcion = false;
                         if (in_array($result, $fechasExcepciones) && count($excepciones[$result]->options) > 0) {
+                            $estoySobreUnaExcepcion = true;
                             $horariosLibres = $this->obtenerHorariosLibresAutoYAlumnoExcepciones($clases, $excepciones[$result]->options);
                         } else {
                             $horariosLibres = $this->obtenerHorariosLibresAutoYAlumno($clases, $disponibilidad, $nombreDiaBusqueda);
                         }
+
 
                         $horariosOcupados = array_column($clases, 'horaInicio'); //son los horarios que estan efectivamente ocupados por clases
 
                         $horariosLibresDataGeneral = [];
 
                         /* INFO ADICIONAL POR CADA HORARIO */
-                        $esDeLaZona = false;
-                        if ($idAutoMaster == $idAuto) {
-                            $esDeLaZona = true;
-                        }
-
                         $tieneEldiaLibre = false;
                         if (count($horariosOcupados) === 1 && $horariosOcupados[0] === null) { //no hay horarios ocupados, por ende todos estan libres en el dia.
                             $tieneEldiaLibre = true;
@@ -116,9 +119,10 @@
 
                         //**********//
                         //comienzo a armar el array que se va a retornar
-                        //**********//
-                        foreach ($horariosLibres as $horarioAuto) { //en base a los horarios libres instancio los objetos que se van a terminar retornando
+                        //**********//                        
+                        foreach ($horariosLibres as $horarioAuto) { //en base a los horarios libres instancio los objetos que se van a terminar retornando     
                             if ($disponibilidadesAutos[$idAuto] === "A" || $this->esTurnoDisponible($disponibilidadesAutos[$idAuto], $horarioAuto, $nombreDiaBusqueda)) { //si el horario esta en el turno que el auto puede (A = todo el dia,T= solo por la tarde, M= solo por la maniana)
+                                $esDeLaZona = false;
                                 $horarioData = (object) [
                                     'horaInicio' => '',
                                     'ratingHorario' => '',
@@ -127,22 +131,50 @@
                                     'idAuto' => '',
                                     'cronogramaActual' => '',
                                     'tieneEldiaLibre' => '',
-                                    'esDeLaZona' => ''
+                                    'esDeLaZona' => '',
+                                    'usandoDirAlt' => ''
                                 ];
                                 $horarioData->idAuto = $idAuto;
                                 $horarioData->cronogramaActual = $cronogramasActuales;
                                 $horarioData->tieneEldiaLibre = $tieneEldiaLibre;
-                                $horarioData->esDeLaZona = $esDeLaZona;
 
                                 $horarioData->horaInicio = $horarioAuto;
                                 $horarioData->ratingHorario = $this->obtenerRatingHorario($horariosOcupados, $horarioAuto, $tolerancias, $fechaInicio, $fechaBusqueda);
                                 $zonasVecinas = $this->zonasDeClasesVecinas($clases, $horarioAuto); //busco si el horario posee clases vecinas para ver si es necesario calcular la cercania o no.
                                                                                             //Si no posee clases vecinas no vale la pena calcular la distancia
+                                
+                                
+                                $arrayABuscar;
+                                if ($estoySobreUnaExcepcion == true) {
+                                    $arrayABuscar = $resExcepcionesOptions[$fechaBusqueda->format('Y-m-d')];
+                                } else {
+                                    $arrayABuscar = $resOptions[$nombreDiaBusqueda];
+                                }
+
+                                $horarioTieneDireccionAlternativa = $this->verificarSiElHorarioTieneDireccionAlternativa($arrayABuscar, $horarioAuto, $estoySobreUnaExcepcion);                                
+
+                                $zonaBusqueda = $zonaAlumno; //por defecto va a ser la zona principal la que voy a buscar
+                                if ($horarioTieneDireccionAlternativa == true) {
+                                    if ($idAutoMaster_alt == $idAuto) {
+                                        $esDeLaZona = true;
+                                    }
+
+                                    $horarioData->usandoDirAlt = true;
+                                    $zonaBusqueda = $zonaAlumno_alt; //Este horario posee direccion alternativa asi que realizo el calculo del rating bajo esta zona.
+                                } else {
+                                    if ($idAutoMaster == $idAuto) {
+                                        $esDeLaZona = true;
+                                    }
+                                    $horarioData->usandoDirAlt = false;
+                                }
+                                
                                 if (!empty($zonasVecinas)) {
                                     $ratingZonaMasCerca = 0;
+
                                     foreach ($zonasVecinas as $zona) {
                                         $posicionGrafoZonaClase = array_search($zona, array_column($arrayGrafo, 'idZona'));
-                                        $ratingZonaActual = $this->obtenerRatingZona($posicionGrafoZonaClase, $zonaAlumno, $arrayGrafo);
+
+                                        $ratingZonaActual = $this->obtenerRatingZona($posicionGrafoZonaClase, $zonaBusqueda, $arrayGrafo);
                                         if($ratingZonaActual > $ratingZonaMasCerca) {
                                             $ratingZonaMasCerca = $ratingZonaActual;
                                         }
@@ -150,22 +182,40 @@
                                 } else {
                                     $ratingZonaMasCerca = null;
                                 }
-        
+
+                                $horarioData->esDeLaZona = $esDeLaZona;
                                 $horarioData->ratingZona = $ratingZonaMasCerca;
         
                                 if ($ratingZonaMasCerca == null) {
                                     $horarioData->ratingGeneral = $horarioData->ratingHorario;
                                 } else {
-                                    $horarioData->ratingGeneral = abs($horarioData->ratingHorario + $horarioData->ratingZona) / 2;
-                                }
-
-                                if ($idAuto == $idAutoMaster) { //si es el auto master entonces siempre lo agrego
-                                    array_push($horariosLibresDataGeneral, $horarioData);
-                                } else {
-                                    if ($ratingZonaMasCerca != null && $ratingZonaMasCerca > 6) { //no es el auto master pero tiene clases cercanas
-                                        array_push($horariosLibresDataGeneral, $horarioData);
+                                    if ($horarioData->ratingZona >= 6) { //si el rating de la zona es muy bueno, entonces mantengo el calculo
+                                        $horarioData->ratingGeneral = abs($horarioData->ratingHorario + $horarioData->ratingZona) / 2;
+                                    } else { //como el rating de la zona no es bueno, le quito algunos puntos al puntaje general para que sea mas realistico
+                                        $horarioData->ratingGeneral = (abs($horarioData->ratingHorario + $horarioData->ratingZona) / 2) - 2;
                                     }
                                 }
+
+                                /* ANALIZO SI DEBO AGREGAR EL HORARIO O NO PARA SER RETORNADO */
+                                if ($horarioTieneDireccionAlternativa == false) {
+                                    if ($idAuto == $idAutoMaster) { //si es el auto master entonces siempre lo agrego
+                                        array_push($horariosLibresDataGeneral, $horarioData);
+                                    } else {
+                                        if ($horarioData->ratingGeneral > 6) { //no es el auto master pero tiene clases cercanas
+                                            array_push($horariosLibresDataGeneral, $horarioData);
+                                        }
+                                    }
+                                } else {
+                                    if ($idAuto == $idAutoMaster_alt) { //si es el auto master entonces siempre lo agrego
+                                        array_push($horariosLibresDataGeneral, $horarioData);
+                                    } else {
+                                        if ($ratingZonaMasCerca != null && $ratingZonaMasCerca > 6) { //no es el auto master pero tiene clases cercanas
+                                            array_push($horariosLibresDataGeneral, $horarioData);
+                                        }
+                                    }
+                                }
+
+                                /* FIN DE ANALIZO SI DEBO AGREGAR EL HORARIO O NO PARA SER RETORNADO */
                             }
                         }
 
@@ -215,6 +265,23 @@
 
         function sortHorariosPorHora($a, $b) {
             return $b->ratingGeneral > $a->ratingGeneral ? 1 : -1;
+        }
+
+        function verificarSiElHorarioTieneDireccionAlternativa($options, $horarioAuto, $estoySobreUnaExcepcion) {
+            if ($estoySobreUnaExcepcion == false) {
+                foreach($options as $option) {
+                    if (in_array($horarioAuto, $option['scheduleSend'])) {
+                        return $option['dir_alt'];
+                    }
+                }
+            } else {
+                foreach($options as $option) {
+                    if (in_array($horarioAuto, $option['horariosTotales'])) {
+                        return $option['dir_alt'];
+                    }
+                }
+            }
+
         }
         
         function obtenerIdAutoMaster($zonaAlumno) {

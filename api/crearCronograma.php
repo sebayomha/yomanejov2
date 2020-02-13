@@ -19,12 +19,15 @@
 		$cantClases = (int) $_GET['cantClases'];
 		$fechaInicio = $_GET['fechaInicio'];
 		$direccion = json_decode($_GET['direccion'], true);
+		$direccion_alt = json_decode($_GET['direccion_alt'], true);
 		$disponibilidad = json_decode($_GET['disponibilidad'], true);
 		$excepciones = json_decode($_GET['excepciones'], true);
 
 		$resDisponibilidad = [];
+		$hayDireccionAlternativa = false;
 		foreach ($disponibilidad as $dia) {
 			$resDisponibilidad[$dia['name_day']] = null;
+			$resOptions[$dia['name_day']] = [];
 
 			if($dia['option'][0]['scheduleSend'] != null) {
 				$resDisponibilidad[$dia['name_day']] = [];
@@ -33,6 +36,10 @@
 					foreach ($option['scheduleSend'] as $schedule) {
 						array_push($options, $schedule);
 					}
+					if ($option['dir_alt'] == true) {
+						$hayDireccionAlternativa = true;
+					}
+					array_push($resOptions[$dia['name_day']], $option);
 				}
 				$resDisponibilidad[$dia['name_day']] = $options;
 			} else {
@@ -44,13 +51,19 @@
 			echo json_encode($GLOBALS['utils']->getResponse(3, "Debe completar al menos un dia"));
 		} else {
 			$resExcepciones = [];
+			$resExcepcionesOptions = [];
 			foreach ($excepciones as $excepcion) {
 				$resExcepciones[$excepcion['date_string']] = [];
+				$resExcepcionesOptions[$excepcion['date_string']] = [];
 				$options = [];
 				foreach ($excepcion['horarios'] as $horario) {
 					foreach ($horario['horariosTotales'] as $schedule) {
 						array_push($options, $schedule);
 					}
+					if ($horario['dir_alt'] == true) {
+						$hayDireccionAlternativa = true;
+					}
+					array_push($resExcepcionesOptions[$excepcion['date_string']], $horario);
 				}
 				$objetoExcepcion = (object) [
 					'options' => $options,
@@ -61,7 +74,7 @@
 			}
 
 			$cronograma = new Cronograma();
-			$cronogramaResultante = $cronograma->calcularCronograma($cantClases, $resDisponibilidad, $direccion, $fechaInicio, $resExcepciones);
+			$cronogramaResultante = $cronograma->calcularCronograma($cantClases, $resDisponibilidad, $direccion, $fechaInicio, $resExcepciones, $direccion_alt, $hayDireccionAlternativa, $resOptions, $resExcepcionesOptions);
 
 			if (is_array($cronogramaResultante)) {
 				if (!empty($cronogramaResultante)) {

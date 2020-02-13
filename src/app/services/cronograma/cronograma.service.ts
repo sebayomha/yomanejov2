@@ -18,6 +18,7 @@ export class CronogramaService {
     .set('fechaInicio', this.datePipe.transform(searchParameters.date, 'yyyy-MM-dd'))
     .set('disponibilidad', JSON.stringify(searchParameters.dates_times))
     .set('direccion', JSON.stringify(searchParameters.address))
+    .set('direccion_alt', JSON.stringify(searchParameters.address_alternative))
     .set('excepciones', JSON.stringify(excepciones))
     return this.http.get('api/calcularCronograma/', {params: params});
   }
