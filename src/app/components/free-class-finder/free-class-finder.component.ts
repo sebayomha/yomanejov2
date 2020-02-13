@@ -43,7 +43,7 @@ export class FreeClassFinderComponent {
     for (let i = 0; i <=6; i++) {
       let option = new Option('', '', this.predefinedHours, [], null, false);
       let options = new Array(option);
-      let dateTime = new DatesTimes(this.getDay(i), false, options, false);
+      let dateTime = new DatesTimes(this.getDay(i), false, options);
       dates_times.push(dateTime);
     }
 
@@ -237,20 +237,9 @@ export class FreeClassFinderComponent {
           this.search.dates_times[index].all_day = true;
           this.schedule_send_null = false;
 
-          // if (this.search.dates_times[index].option.length > 1) {
-          //   this.search.dates_times[index].option.splice( index, 1 );
-          // } else {
-          //     this.search.dates_times[index].option[0].hour_start = '';
-          //     this.search.dates_times[index].option[0].hour_finish = '';
-          //     this.search.dates_times[index].option[0].scheduleFrom = ["08:00", "09:00", "10:00", "11:15", "12:15", "13:15", "14:30", "15:30", "16:30", "17:45", "18:45", "19:45"];
-          //     this.search.dates_times[index].option[0].scheduleTo = [];
-          //     this.search.dates_times[index].option[0].scheduleSend = ["08:00", "09:00", "10:00", "11:15", "12:15", "13:15", "14:30", "15:30", "16:30", "17:45", "18:45", "19:45"];
-          // }
           if (this.search.dates_times[index].option.length > 1) {
-
             let length = this.search.dates_times[index].option.length;
-            this.search.dates_times[index].option.splice( 1, length );
-            
+            this.search.dates_times[index].option.splice( 1, length );      
           }
 
           this.search.dates_times[index].option[0].hour_start = '';
@@ -262,8 +251,8 @@ export class FreeClassFinderComponent {
 
         } else {
           this.search.dates_times[index].all_day = false;
-          this.search.dates_times[index].dir_alt = false;
           this.search.dates_times[index].option[0].scheduleSend = null;
+          this.search.dates_times[index].option[0].dir_alt = false;
 
           this.schedule_send_null = true;
           for (let i = 0; i <=6; i++) {
@@ -279,21 +268,6 @@ export class FreeClassFinderComponent {
         }
       }
 
-    console.log('Busqueda', this.search);
-  }
-
-  allDayDA(day) {                                                                                                                                  
-    // let index = this.search.dates_times.findIndex(element => { return element.name_day == day });
-
-    // if (index != -1) {
-    //   if (this.search.dates_times[index].all_day == true ) {
-    //     this.search.dates_times[index].dir_alt = true;
-    //     console.log('Busqueda', this.search);
-    //   } else {
-    //     this.search.dates_times[index].dir_alt = false;
-    //     console.log('Busqueda', this.search);
-    //   }
-    // }
     console.log('Busqueda', this.search);
   }
 

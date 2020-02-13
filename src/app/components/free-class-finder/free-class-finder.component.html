@@ -268,7 +268,7 @@
                                 <div class="margin-top-30" style="text-align: center; margin-bottom: 30px;">
                                     <mat-checkbox (change)="allDay(day.name_day,$event)" style="margin-right:15px">Disponible todo el día
                                     </mat-checkbox>
-                                    <mat-checkbox *ngIf="day.all_day"(change)="allDayDA(day.name_day,$event)" name="{{i}}" [(ngModel)]="day.dir_alt">DA
+                                    <mat-checkbox *ngIf="day.all_day" name="{{i}}" [(ngModel)]="search.dates_times[i].option[0].dir_alt">DA
                                     </mat-checkbox>
                                 </div>
                             </div>
