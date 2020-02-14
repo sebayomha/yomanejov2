@@ -78,6 +78,14 @@
   margin-left: 0%;
 }
 
+.emptyMessageList {
+  text-align: center;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  margin-bottom: 20px;
+  padding: 10px;
+  color: #d40808;
+}
+
 @media (min-width: 767px) {
   .infoContainer {
     line-height: 37px;

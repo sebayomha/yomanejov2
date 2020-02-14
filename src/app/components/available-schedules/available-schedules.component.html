@@ -44,6 +44,11 @@
             </div>
           </div>
         </mat-list-option>
+        <div class="emptyMessageList" *ngIf="option.horarios.length === 0">
+          <div>
+            No se han encontrado resultados para los criterios de búsqueda
+          </div>
+        </div>
     </mat-selection-list>
 
     <mat-action-row>
@@ -54,7 +59,7 @@
             </i>
           <button class="showMoreBtn">VER MÁS</button>
         </div>
-        <div style="cursor: pointer; margin-top: 5px;" [ngClass]="{'margin-left-14': i != '0', 'margin-left-0': i == '0' }" (click)="showLess(option)" *ngIf="option.showMoreHours == 12">
+        <div style="cursor: pointer; margin-top: 5px;" [ngClass]="{'margin-left-14': i != '0', 'margin-left-0': i == '0' }" (click)="showLess(option)" *ngIf="option.showMoreHours == 20">
           <i style="color: rgb(67, 200, 157);" class="material-icons">
             keyboard_arrow_up
             </i>

@@ -35,6 +35,15 @@
     background-color:rgba(108, 117, 125, 0.12);
     border-radius: 4px;
   }
+
+  .btnHover:hover {
+    border-radius: 25px;
+  }
+
+  .btnHover:focus {
+    outline: none !important;
+  }
+
   // ::ng-deep .mat-tab-label-active {
   //   color: #43c89d !important;
   //   font-weight: 500;

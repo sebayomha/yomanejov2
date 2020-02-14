@@ -40,7 +40,7 @@ export class AvailableSchedulesComponent {
     constructor() { }
 
     showMore(option) {
-      option.showMoreHours = 12;
+      option.showMoreHours = 20;
     }
 
     showLess(option) {

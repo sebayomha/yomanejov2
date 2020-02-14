@@ -356,7 +356,7 @@ export class FreeClassFinderComponent {
     option.hour_finish = hour;
     this.control_flag_empty = false;
     option.scheduleSend = [];
-
+    
     //Armo el array final a enviar.
     option.scheduleFrom.forEach( (h:string) => {
       if (h >= option.hour_start && h <= option.hour_finish) {
