@@ -25,7 +25,6 @@
     background-color:#43c89d;
   }
 
-
   ::ng-deep .mat-checkbox-inner-container {
     height: 15px !important;
     width: 15px !important;
@@ -44,6 +43,13 @@
     outline: none !important;
   }
 
+  .circle-color-primary {
+    color:#43c89d;
+  }
+
+  .circle-color-primary-disabled {
+    color:#43c89d7d
+  }
   // ::ng-deep .mat-tab-label-active {
   //   color: #43c89d !important;
   //   font-weight: 500;

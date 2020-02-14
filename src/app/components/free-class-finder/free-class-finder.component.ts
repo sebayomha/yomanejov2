@@ -294,7 +294,7 @@ export class FreeClassFinderComponent {
 
   addDateTime(day) {
 
-    if (!this.control_flag_empty) {
+    
       let index = this.search.dates_times.findIndex(element => { return element.name_day == day });
 
       if (index != -1) {
@@ -335,7 +335,7 @@ export class FreeClassFinderComponent {
       console.log('Busqueda', this.search);
 
       this.control_flag_empty = true;
-    }
+    
   }
 
   doScheduleTo(day,hour,index) {
