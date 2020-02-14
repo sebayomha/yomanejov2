@@ -9,7 +9,13 @@
 
     class Cronograma {
 
-        function __construct() { }
+        public $db;
+        public $conn;
+        
+        function __construct() { 
+            $this->db = new ConnectionDB();
+            $this->conn = $this->db->getConnection();
+        }
 
         //Funcion principal que se encargara de armar el cronograma
         function calcularCronograma($cantClases, $disponibilidad, $direccion, $fechaInicio, $excepciones, $direccion_alt, $hayDireccionAlternativa, $resOptions, $resExcepcionesOptions){
@@ -285,9 +291,7 @@
         }
         
         function obtenerIdAutoMaster($zonaAlumno) {
-            $db = new ConnectionDB();
-            $conn = $db->getConnection();
-            $state = $conn->prepare('SELECT auto.idAuto FROM auto WHERE auto.zonaMaster IN (SELECT zona.zonaMaster FROM zona WHERE zona.idZona = ?)');
+            $state = $this->conn->prepare('SELECT auto.idAuto FROM auto WHERE auto.zonaMaster IN (SELECT zona.zonaMaster FROM zona WHERE zona.idZona = ?)');
             $state->bind_param('s', $zonaAlumno);
             $state->execute();
             $result = $state->get_result();
@@ -297,10 +301,8 @@
                 while($row = $result->fetch_assoc()) {
                     $idAutoMaster = $row['idAuto'];
                 }
-                mysqli_close($conn);
                 return $idAutoMaster;
             } else {
-                mysqli_close($conn);
                 return null;
             }
         }
@@ -347,12 +349,9 @@
 
         function obtenerCronogramaDelDia($fecha) {
             $fechaString = $fecha->format('Y-m-d');
-
-            $db = new ConnectionDB();
-            $conn = $db->getConnection();
-            //$state = $conn->prepare('SELECT * FROM clase WHERE clase.fecha = ? ORDER BY clase.horaInicio');
-            //$state = $conn->prepare('SELECT * FROM auto LEFT JOIN clase ON auto.idAuto = clase.auto WHERE clase.fecha = ? OR clase.fecha IS NULL ORDER BY clase.horaInicio');
-            $state = $conn->prepare('SELECT * FROM auto LEFT JOIN clase ON auto.idAuto = clase.auto AND clase.fecha = ? ORDER BY clase.horaInicio');
+            //$state = $this->$conn->prepare('SELECT * FROM clase WHERE clase.fecha = ? ORDER BY clase.horaInicio');
+            //$state = $this->$conn->prepare('SELECT * FROM auto LEFT JOIN clase ON auto.idAuto = clase.auto WHERE clase.fecha = ? OR clase.fecha IS NULL ORDER BY clase.horaInicio');
+            $state = $this->conn->prepare('SELECT * FROM auto LEFT JOIN clase ON auto.idAuto = clase.auto AND clase.fecha = ? ORDER BY clase.horaInicio');
             $state->bind_param('s', $fechaString);
             $state->execute();
             $result = $state->get_result();
@@ -363,20 +362,14 @@
                     $cronograma[$row['idAuto']][] = $row;
                 }
             } else {
-                mysqli_close($conn);
                 return [];
             }
-
-            mysqli_close($conn);
             return $cronograma;
         }
 
         function eliminarAutosInactivos($cronogramaDelDiaPorAuto, $fechaBusqueda) {
-            $db = new ConnectionDB();
-            $conn = $db->getConnection();
-
             foreach ($cronogramaDelDiaPorAuto as $idAuto => $cronogramaAuto) {
-                $state = $conn->prepare('SELECT * FROM autoinactivo WHERE autoinactivo.idAuto = ?');
+                $state = $this->conn->prepare('SELECT * FROM autoinactivo WHERE autoinactivo.idAuto = ?');
                 $state->bind_param('s', $idAuto);
                 $state->execute();
                 $result = $state->get_result();
@@ -391,16 +384,13 @@
                         }
                     }
                 }
-
             }
-            mysqli_close($conn);
+            
             return $cronogramaDelDiaPorAuto;
         }
 
         function obtenerDisponibilidadesAutos() {
-            $db = new ConnectionDB();
-            $conn = $db->getConnection();
-            $state = $conn->prepare('SELECT auto.idAuto, auto.disponibilidad FROM auto');
+            $state = $this->conn->prepare('SELECT auto.idAuto, auto.disponibilidad FROM auto');
             $state->execute();
             $result = $state->get_result();
 
@@ -409,19 +399,14 @@
                 while($row = $result->fetch_assoc()) {
                     $disponibilidades[$row['idAuto']] = $row['disponibilidad'];
                 }
-                mysqli_close($conn);
                 return $disponibilidades;
             } else {
-                mysqli_close($conn);
                 return [];
             }
         }
 
         function obtenerZonas() {
-            $db = new ConnectionDB();
-            $conn = $db->getConnection();
-
-            $state = $conn->prepare('SELECT zona.idZona, zona.nombreZona, zonasvecinas.idZonaVecina FROM zona INNER JOIN zonasvecinas ON zona.idZona = zonasvecinas.idZona');
+            $state = $this->conn->prepare('SELECT zona.idZona, zona.nombreZona, zonasvecinas.idZonaVecina FROM zona INNER JOIN zonasvecinas ON zona.idZona = zonasvecinas.idZona');
             $state->execute();
             $result = $state->get_result();
 
@@ -430,8 +415,7 @@
                 while($row = $result->fetch_assoc()) {
                     $zonas[$row['idZona']][] = $row['idZonaVecina'];
                 }
-            }
-            mysqli_close($conn);
+            }         
             return $zonas;
         }
 
@@ -507,10 +491,7 @@
         }
 
         function obtenerInformacionZonas() {
-            $db = new ConnectionDB();
-            $conn = $db->getConnection();
-
-            $state = $conn->prepare('SELECT * FROM zona');
+            $state = $this->conn->prepare('SELECT * FROM zona');
             $state->execute();
             $result = $state->get_result();
 
@@ -526,7 +507,6 @@
                     $zonas[$row['idZona']] = $points;
                 }
             }
-            mysqli_close($conn);
             return $zonas;
         }
 
@@ -570,9 +550,7 @@
         }
 
         function obtenerNombreAlumno($idAlumno) {
-            $db = new ConnectionDB();
-            $conn = $db->getConnection();
-            $state = $conn->prepare('SELECT * FROM alumno WHERE alumno.idAlumno = ?');
+            $state = $this->conn->prepare('SELECT * FROM alumno WHERE alumno.idAlumno = ?');
             $state->bind_param('i', $idAlumno);
             $state->execute();
             $result = $state->get_result();
@@ -582,18 +560,14 @@
                 while($row = $result->fetch_assoc()) {
                     $nombreAlumno .= $row['nombre']. ' '.$row['apellido'];
                 }
-                mysqli_close($conn);
                 return $nombreAlumno;
             } else {
-                mysqli_close($conn);
                 return null;
             }
         }
 
         function obtenerDireccionClase($idDireccion) {
-            $db = new ConnectionDB();
-            $conn = $db->getConnection();
-            $state = $conn->prepare('SELECT * FROM direccion WHERE direccion.idDireccion = ?');
+            $state = $this->conn->prepare('SELECT * FROM direccion WHERE direccion.idDireccion = ?');
             $state->bind_param('i', $idDireccion);
             $state->execute();
             $result = $state->get_result();
@@ -603,10 +577,8 @@
                 while($row = $result->fetch_assoc()) {
                     $direccionStringFormateada = $this->obtenerDireccionParaMostrar($row['calle'], $row['calle_diag'], $row['calle_a'], $row['calle_a_diag'], $row['calle_b'], $row['calle_b_diag'], $row['numero'], $row['ciudad']);
                 }
-                mysqli_close($conn);
                 return $direccionStringFormateada;
             } else {
-                mysqli_close($conn);
                 return null;
             }
         }
@@ -816,10 +788,7 @@
 
         function obtenerMaximosDiasTolerancia() {
             $idParametro = 1;
-            $db = new ConnectionDB();
-            $conn = $db->getConnection();
-
-            $state = $conn->prepare('SELECT * FROM parametros WHERE idParametro = ?');
+            $state = $this->conn->prepare('SELECT * FROM parametros WHERE idParametro = ?');
             $state->bind_param('s', $idParametro);
             $state->execute();
             $result = $state->get_result();
@@ -835,7 +804,6 @@
             $tolerancias = [];
             array_push($tolerancias, $maximoDiasTolerancia);
             array_push($tolerancias, $minimoDiasTolerancia);
-            mysqli_close($conn);
             return $tolerancias;
         }
 
@@ -1123,6 +1091,6 @@
                 }
             }
         }
-
     }
+
 ?>
