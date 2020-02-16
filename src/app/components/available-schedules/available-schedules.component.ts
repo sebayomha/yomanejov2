@@ -26,6 +26,10 @@ export class AvailableSchedulesComponent {
 
     @Input() data: any;
     @Input() number_of_classes: number;
+    @Input() student_name: string;
+    @Input() address: Array<any>;
+    @Input() address_alternative: Array<any>;
+
 
     @ViewChildren(MatSelectionList) viewChildren !: QueryList<MatSelectionList>;
 
@@ -33,7 +37,7 @@ export class AvailableSchedulesComponent {
     classes: Array<any>;
     order_information:any;
     currentCheckedValue:String;
-    arraySelectedOptions:Array<any>;
+    dataToConfirm = [];
     indexesClasses = [];
     cantSelectedClasses: number;
 
@@ -71,7 +75,12 @@ export class AvailableSchedulesComponent {
       this.step--;
     }
 
-    totalClassesSelected(selectedOptions, index, event){
+    totalClassesSelected(selectedOptions, fecha, index, event){
+
+      console.log(selectedOptions);
+      console.log(fecha);
+
+      console.log(event);
 
       if (event.option.selected) {
         event.source.deselectAll();
@@ -80,11 +89,15 @@ export class AvailableSchedulesComponent {
         event.source.deselectAll();
       }
 
-
       var option = {
         'index': '',
-        'cant': null
+        'cant': null,
+        'fecha': fecha,
+        'horario': event.option.value.horaInicio,
+        'id_auto': event.option.value.idAuto,
+        'da': event.option.value.usandoDirAlt
       }
+
       if (selectedOptions._selection.size == 0) {
         if (!this.classes.some(e => e.index == index)) {
           option.index = index;
@@ -110,20 +123,22 @@ export class AvailableSchedulesComponent {
     }
 
     saveOptions(){
+      this.dataToConfirm.push({'selected_options' : this.classes});
+      this.dataToConfirm.push({'student' : this.student_name});
+      this.dataToConfirm.push({'address' : this.address});
+      this.dataToConfirm.push({'address_alternative' : this.address_alternative});
 
-      this.arraySelectedOptions = [];
+      // this.order_information.forEach(option => {
+      //   option.autos.forEach(element => {
+      //     element.horarios.forEach(horario => {
+      //       if(horario.checked == true){
+      //         this.dataToConfirm.push({day: option.fecha, hora:horario.horaInicio, auto: element.idAuto});
+      //       }
+      //     });
+      //   });
+      // });
 
-      this.order_information.forEach(option => {
-        option.autos.forEach(element => {
-          element.horarios.forEach(horario => {
-            if(horario.checked == true){
-              this.arraySelectedOptions.push({day: option.fecha, hora:horario.horaInicio, auto: element.idAuto});
-            }
-          });
-        });
-      });
-
-      console.log('ARRAY:', this.arraySelectedOptions);
+      console.log('ARRAY:', this.dataToConfirm);
 
     }
 

@@ -30,6 +30,7 @@ import { FreeClassFinderComponent } from './components/free-class-finder/free-cl
 import { LoaderComponent } from './components/loader/loader/loader.component';
 import { AvailableSchedulesComponent } from './components/available-schedules/available-schedules.component';
 import { ScheduleTooltipComponent } from './components/schedule-tooltip/schedule-tooltip.component';
+import { CustomModalComponent } from './components/custom-modal/custom-modal.component';
 
 /* Services */
 import { LoaderService } from './services/loader/loader-service.service';
@@ -47,7 +48,8 @@ registerLocaleData(localeEsAr);
     LoaderComponent,
     AvailableSchedulesComponent,
     SnackbarComponent,
-    ScheduleTooltipComponent
+    ScheduleTooltipComponent,
+    CustomModalComponent
   ],
   imports: [
     BrowserModule,
