@@ -22,6 +22,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import 'hammerjs';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatListModule} from '@angular/material/list';
+import {MatTableModule} from '@angular/material/table';
 
 /* Components */
 import { AppComponent } from './app.component';
@@ -31,11 +32,12 @@ import { LoaderComponent } from './components/loader/loader/loader.component';
 import { AvailableSchedulesComponent } from './components/available-schedules/available-schedules.component';
 import { ScheduleTooltipComponent } from './components/schedule-tooltip/schedule-tooltip.component';
 import { CustomModalComponent } from './components/custom-modal/custom-modal.component';
+import { SchedulesComponent } from './components/schedules/schedules.component';
+import { SnackbarComponent } from './components/snackbar/snackbar/snackbar.component';
 
 /* Services */
 import { LoaderService } from './services/loader/loader-service.service';
 import { RequestInterceptorService } from './services/interceptor/request-interceptor.service';
-import { SnackbarComponent } from './components/snackbar/snackbar/snackbar.component';
 
 registerLocaleData(localeEsAr);
 
@@ -49,7 +51,8 @@ registerLocaleData(localeEsAr);
     AvailableSchedulesComponent,
     SnackbarComponent,
     ScheduleTooltipComponent,
-    CustomModalComponent
+    CustomModalComponent,
+    SchedulesComponent
   ],
   imports: [
     BrowserModule,
@@ -68,7 +71,8 @@ registerLocaleData(localeEsAr);
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatRadioModule,
-    MatListModule
+    MatListModule,
+    MatTableModule
     // BarRatingModule
   ],
   providers:[DatePipe, {provide: LOCALE_ID, useValue: "es-AR"}, LoaderService, { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptorService, multi: true }],
