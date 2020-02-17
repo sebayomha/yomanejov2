@@ -28,6 +28,7 @@ export class AvailableSchedulesComponent {
     @Input() data: any;
     @Input() number_of_classes: number;
     @Input() student_name: string;
+    @Input() student_phone: number;
     @Input() address: Array<any>;
     @Input() address_alternative: Array<any>;
 
@@ -129,7 +130,8 @@ export class AvailableSchedulesComponent {
     saveOptions(){
       this.dataToConfirm = [];
       this.dataToConfirm.push({'selected_options' : this.classes});
-      this.dataToConfirm.push({'student' : this.student_name});
+      this.dataToConfirm.push({'student_name' : this.student_name});
+      this.dataToConfirm.push({'student_phone' : this.student_phone});
       this.dataToConfirm.push({'address' : this.address});
       this.dataToConfirm.push({'address_alternative' : this.address_alternative});
       this.customModal.open();

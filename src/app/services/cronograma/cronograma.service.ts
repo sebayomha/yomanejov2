@@ -24,7 +24,7 @@ export class CronogramaService {
   }
 
   guardarCronograma(cronograma) {
-    return this.http.post('api/calcularCronograma/guardar', {params: JSON.stringify(cronograma)});
+    return this.http.post('api/calcularCronograma/guardar', JSON.stringify(cronograma));
   }
 
 }

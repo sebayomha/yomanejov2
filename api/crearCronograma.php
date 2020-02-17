@@ -91,23 +91,47 @@
 		
 	}
 
+	function guardarCronograma() {
+		$post = json_decode(file_get_contents('php://input'));
+
+		$selectedOptions = $post[0]->selected_options;
+		$studentName = $post[1]->student_name;
+		$student_phone = $post[2]->student_phone;
+		$address = $post[3]->address;
+		$address_alt = $post[4]->address_alternative;
+
+		echo json_encode($address_alt);
+	}
+
 	function containsOnlyNull($input) {
 		return empty(array_filter($input, function ($a) { return $a !== null;}));
 	}
 
 	switch ($method) {
 		case 'GET': {
-		  //Obtengo la URL Final para saber cual accion ejecutar.
-		  $id = substr($requestMethod, strrpos($requestMethod, '/') + 1);
-		  switch ($requestMethod){
-			  case '/calcularCronograma':
-				calcularCronograma();
-				break;
-			  default:
-				echo "podriamos agregar otra consulta mas";
-				break;
-		  }	    	
-		}  
-		break;
+		  	//Obtengo la URL Final para saber cual accion ejecutar.
+		  	switch ($requestMethod){
+				case '/calcularCronograma':
+					calcularCronograma();
+					break;
+			  	default:
+					echo "podriamos agregar otra consulta mas";
+					break;
+		  	}	    
+			break;	
+		}
+
+		case 'POST': {
+			//Obtengo la URL Final para saber cual accion ejecutar.
+			switch ($requestMethod){
+				case '/calcularCronograma/guardar':
+				  guardarCronograma();
+				  break;
+				default:
+				  echo "podriamos agregar otra consulta mas";
+				  break;
+			}
+			break;    	
+		  }  
 	  }
 ?>

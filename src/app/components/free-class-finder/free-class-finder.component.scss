@@ -45,7 +45,12 @@
   .circle-color-primary-disabled {
     color:#43c89d7d
   }
-  // ::ng-deep .mat-tab-label-active {
-  //   color: #43c89d !important;
-  //   font-weight: 500;
-  // } 
+  
+  input[type='number'] {
+    -moz-appearance:textfield;
+  }
+
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
