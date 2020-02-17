@@ -1,6 +1,8 @@
 import { Component, Input, ViewChildren, QueryList, ViewChild } from '@angular/core';
 import { MatSelectionList } from '@angular/material';
 import { trigger,animate,transition,style } from '@angular/animations';
+import { CronogramaService } from 'src/app/services/cronograma/cronograma.service';
+import { Response } from 'src/app/models/response';
 declare var $: any;
 
 @Component({
@@ -40,7 +42,7 @@ export class AvailableSchedulesComponent {
     indexesClasses = [];
     cantSelectedClasses: number;
 
-    constructor() { }
+    constructor(private cronogramaService: CronogramaService) { }
 
     showMore(option) {
       option.showMoreHours = 20;
@@ -134,6 +136,9 @@ export class AvailableSchedulesComponent {
     }
 
     confirmSchedule($event) {
+      this.cronogramaService.guardarCronograma($event).subscribe( (response: Response) => {
+        console.log(response);
+      })
       console.log($event);
     }
 
