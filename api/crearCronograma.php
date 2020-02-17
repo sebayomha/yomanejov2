@@ -99,8 +99,11 @@
 		$student_phone = $post[2]->student_phone;
 		$address = $post[3]->address;
 		$address_alt = $post[4]->address_alternative;
+		$disponibilidad = $post[5]->disponibilidad;
 
-		echo json_encode($address_alt);
+		$cronograma = new Cronograma();
+		$resultGuardarCronograma = $cronograma->guardarCronograma($selectedOptions, $studentName, $student_phone, $address, $address_alt, $disponibilidad);
+		echo json_encode($disponibilidad);
 	}
 
 	function containsOnlyNull($input) {

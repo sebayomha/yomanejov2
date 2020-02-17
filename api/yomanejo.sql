@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 13, 2020 at 06:38 PM
+-- Generation Time: Feb 17, 2020 at 08:01 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -31,20 +31,25 @@ SET time_zone = "+00:00";
 CREATE TABLE `alumno` (
   `idAlumno` int(11) NOT NULL,
   `idDireccion` int(11) NOT NULL,
+  `idDireccionAlt` varchar(255) NOT NULL,
   `fechaAlta` date NOT NULL,
   `activo` varchar(6) NOT NULL,
   `nombre` varchar(100) NOT NULL,
-  `apellido` varchar(100) NOT NULL,
-  `fecha_nacimiento` date NOT NULL
+  `fecha_nacimiento` date NOT NULL,
+  `telefono` int(11) NOT NULL,
+  `confirmado` varchar(5) NOT NULL,
+  `fechaConfirmacion` date NOT NULL,
+  `idDisponibilidad` int(11) NOT NULL,
+  `idDireccionFisica` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `alumno`
 --
 
-INSERT INTO `alumno` (`idAlumno`, `idDireccion`, `fechaAlta`, `activo`, `nombre`, `apellido`, `fecha_nacimiento`) VALUES
-(1, 1, '2020-01-09', 'true', 'Sebastian', 'Yomha', '0000-00-00'),
-(2, 1, '2020-01-09', 'true', 'Matias', 'Guazzaroni', '0000-00-00');
+INSERT INTO `alumno` (`idAlumno`, `idDireccion`, `idDireccionAlt`, `fechaAlta`, `activo`, `nombre`, `fecha_nacimiento`, `telefono`, `confirmado`, `fechaConfirmacion`, `idDisponibilidad`, `idDireccionFisica`) VALUES
+(1, 1, '', '2020-01-09', 'true', 'Sebastian', '0000-00-00', 0, 'true', '0000-00-00', 0, 0),
+(2, 1, '', '2020-01-09', 'true', 'Matias', '0000-00-00', 0, 'true', '0000-00-00', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -398,15 +403,41 @@ CREATE TABLE `direccion` (
   `calle_b` varchar(100) NOT NULL,
   `calle_b_diag` varchar(5) NOT NULL,
   `numero` varchar(100) NOT NULL,
-  `ciudad` varchar(100) NOT NULL
+  `ciudad` varchar(100) NOT NULL,
+  `departamento` varchar(100) NOT NULL,
+  `floor_` varchar(100) NOT NULL,
+  `observaciones` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `direccion`
 --
 
-INSERT INTO `direccion` (`idDireccion`, `calle`, `calle_diag`, `calle_a`, `calle_a_diag`, `calle_b`, `calle_b_diag`, `numero`, `ciudad`) VALUES
-(1, '123', 'false', '47', 'false', '', 'false', '755', 'Ensenada');
+INSERT INTO `direccion` (`idDireccion`, `calle`, `calle_diag`, `calle_a`, `calle_a_diag`, `calle_b`, `calle_b_diag`, `numero`, `ciudad`, `departamento`, `floor_`, `observaciones`) VALUES
+(1, '123', '0', '47', '0', '', '0', '755', 'Ensenada', '', '', ''),
+(8, '123', 'false', '', 'false', '', 'false', '755', 'Ensenada', '1', '44', ''),
+(9, '123', 'false', '', 'false', '', 'false', '755', 'Ensenada', '1', '44', 'LALALALALA'),
+(10, '80', 'true', '', 'false', '5', 'false', '', 'Ensenada', '1', '44', 'LALALALALA'),
+(11, '123', 'false', '', 'false', '', 'false', '755', 'Ensenada', '', '', ''),
+(12, '123', 'false', '', 'false', '', 'false', '755', 'Ensenada', '', '', ''),
+(13, '123', 'false', '', 'false', '', 'false', '755', 'Ensenada', '', '', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `disponibilidad`
+--
+
+CREATE TABLE `disponibilidad` (
+  `idDisponibilidad` int(11) NOT NULL,
+  `Monday` varchar(255) DEFAULT NULL,
+  `Tuesday` varchar(255) DEFAULT NULL,
+  `Wednesday` varchar(255) DEFAULT NULL,
+  `Thursday` varchar(255) DEFAULT NULL,
+  `Friday` varchar(255) DEFAULT NULL,
+  `Saturday` varchar(255) DEFAULT NULL,
+  `Sunday` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -708,6 +739,12 @@ ALTER TABLE `direccion`
   ADD PRIMARY KEY (`idDireccion`);
 
 --
+-- Indexes for table `disponibilidad`
+--
+ALTER TABLE `disponibilidad`
+  ADD PRIMARY KEY (`idDisponibilidad`);
+
+--
 -- Indexes for table `instructor`
 --
 ALTER TABLE `instructor`
@@ -763,7 +800,13 @@ ALTER TABLE `clase`
 -- AUTO_INCREMENT for table `direccion`
 --
 ALTER TABLE `direccion`
-  MODIFY `idDireccion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `idDireccion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT for table `disponibilidad`
+--
+ALTER TABLE `disponibilidad`
+  MODIFY `idDisponibilidad` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `instructor`
