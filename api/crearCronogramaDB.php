@@ -264,7 +264,7 @@
             return $horariosTentativos;
         }
 
-        //funcion principal que se encargara de guardar el cronograma correspondiente PREVIO a la confirmacion
+        //Funcion principal que se encargara de guardar el cronograma correspondiente PREVIO a la confirmacion
         function guardarCronograma($selectedOptions, $studentName, $student_phone, $address, $address_alt, $disponibilidad) {
             /* SE INSERTA LA DIRECCION PRINCIPAL */            
             $state = $this->conn->prepare('INSERT INTO direccion (calle, calle_diag, calle_a, calle_a_diag, calle_b, calle_b_diag, numero, ciudad, departamento, floor_, observaciones) VALUES (?,?,?,?,?,?,?,?,?,?,?)');
@@ -277,6 +277,7 @@
             $idDireccionPrincipal;
             $idDireccionAlternativa = null;
             $idDisponibilidad;
+            $idAlumno;
 
             if ($state->execute()) { //el insert de la direccion fue exitoso
                 $idDireccionPrincipal = $this->conn->insert_id; //Me quedo con el id de la direccion para luego asignarselo al alumno
@@ -333,7 +334,7 @@
                 $state = $this->conn->prepare('INSERT INTO alumno (idDireccion, idDireccionAlt, fechaAlta, activo, nombre, telefono, confirmado, idDisponibilidad) VALUES (?,?,?,?,?,?,?,?)');
                 $state->bind_param('iisssssi', $idDireccionPrincipal, $idDireccionAlternativa, $today, $activoYConfirmado, $studentName, $student_phone, $activoYConfirmado, $idDisponibilidad);
                 if ($state->execute()) { //el insert del alumno fue exitoso
-
+                    $idAlumno = $this->conn->insert_id;
                 } 
             }
             $result = $state->get_result();
