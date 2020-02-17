@@ -276,6 +276,7 @@
             
             $idDireccionPrincipal;
             $idDireccionAlternativa = null;
+            $idDisponibilidad;
 
             if ($state->execute()) { //el insert de la direccion fue exitoso
                 $idDireccionPrincipal = $this->conn->insert_id; //Me quedo con el id de la direccion para luego asignarselo al alumno
@@ -297,15 +298,43 @@
                 }
 
                 /* SE INSERTA LA DISPONIBILIDAD DEL ALUMNO */
+                $disponibilidad_string = [];
+                foreach ($disponibilidad as $dia) {
+                    if ($dia->all_day) {
+                        $scheduleSend_string = implode (", ", $dia->option[0]->scheduleSend);
+                        $scheduleSend_string .= '|'.var_export($dia->option[0]->dir_alt, true);
+                        array_push($disponibilidad_string, $scheduleSend_string);
+                    } else {
+                        if ($dia->option[0]->scheduleSend != null) {
+                            $arrayTotal = [];
+                            foreach ($dia->option as $option) {
+                                $arrayTotal = array_merge($arrayTotal, $option->scheduleSend);
+                                $scheduleSend_string = '|'.var_export($option->dir_alt, true);
+                                array_push($arrayTotal, $scheduleSend_string);
+                            }       
+                            $scheduleSend_string = implode (", ", $arrayTotal);
+                            array_push($disponibilidad_string, $scheduleSend_string);
+                        } else {
+                            array_push($disponibilidad_string, null);
+                        }
+                    }
+                }                
+                $state = $this->conn->prepare('INSERT INTO disponibilidad (Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday) VALUES (?,?,?,?,?,?,?)');
+                $state->bind_param('sssssss', $disponibilidad_string[0], $disponibilidad_string[1], $disponibilidad_string[2], $disponibilidad_string[3], $disponibilidad_string[4], $disponibilidad_string[5], $disponibilidad_string[6]);
+                
+                if ($state->execute()) { //disponibilidad insertada con exito
+                    $idDisponibilidad = $this->conn->insert_id;
+                }
 
                 $today = date('Y-m-d');
                 $activoYConfirmado = 'false';
+                
                 /* SE INSERTA AL ALUMNO */
-                $state = $this->conn->prepare('INSERT INTO alumno (idDireccion, idDireccionAlt, fechaAlta, activo, nombre, telefono, confirmado) VALUES (?,?,?,?,?,?,?)');
-                $state->bind_param('sssssss', $idDireccionPrincipal, $idDireccionAlternativa, $today, $activoYConfirmado, $studentName, $student_phone, $activoYConfirmado);
+                $state = $this->conn->prepare('INSERT INTO alumno (idDireccion, idDireccionAlt, fechaAlta, activo, nombre, telefono, confirmado, idDisponibilidad) VALUES (?,?,?,?,?,?,?,?)');
+                $state->bind_param('iisssssi', $idDireccionPrincipal, $idDireccionAlternativa, $today, $activoYConfirmado, $studentName, $student_phone, $activoYConfirmado, $idDisponibilidad);
                 if ($state->execute()) { //el insert del alumno fue exitoso
 
-                }
+                } 
             }
             $result = $state->get_result();
         }

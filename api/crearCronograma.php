@@ -103,7 +103,7 @@
 
 		$cronograma = new Cronograma();
 		$resultGuardarCronograma = $cronograma->guardarCronograma($selectedOptions, $studentName, $student_phone, $address, $address_alt, $disponibilidad);
-		echo json_encode($disponibilidad);
+		echo json_encode($student_phone);
 	}
 
 	function containsOnlyNull($input) {
