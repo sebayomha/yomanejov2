@@ -34,7 +34,7 @@ export class FreeClassFinderComponent {
   durationInSeconds = 3;
   student_name = '';
   flag_address_alt:boolean = false;
-
+  numberOfClasses: Number = 0;
 
   constructor(private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private datePipe: DatePipe, private _snackBar: MatSnackBar) { }
 
@@ -134,6 +134,7 @@ export class FreeClassFinderComponent {
       }
     }
 
+    this.numberOfClasses = this.search.lessons;
     this.setExceptionHours();
 
     this.cronogramaService.getCronograma(object, this.excepciones).subscribe( (response: Response) => {
@@ -178,10 +179,7 @@ export class FreeClassFinderComponent {
   addException() {
     let rowTime = new Array<ExcepcionRowTIme>({'hour_start':'', 'hour_finish':'', 'horariosDesde': this.predefinedHours, 'horariosHasta': [], 'horariosTotales': [], 'dir_alt':false});
     let newExcepcion = {'date': new Date(), 'date_string': '', 'no_puede': false, 'horarios': rowTime};
-    console.log("antes; ", this.excepciones)
     this.excepciones.push(newExcepcion);
-    console.log("despues; ", this.excepciones)
-
   }
 
   removeExcepcion(excepcionIndex) {
@@ -267,8 +265,6 @@ export class FreeClassFinderComponent {
           this.control_flag_empty = false;
         }
       }
-
-    console.log('Busqueda', this.search);
   }
 
   quitDA(){
@@ -292,9 +288,7 @@ export class FreeClassFinderComponent {
   }
 
 
-  addDateTime(day) {
-
-    
+  addDateTime(day) {    
       let index = this.search.dates_times.findIndex(element => { return element.name_day == day });
 
       if (index != -1) {
@@ -331,15 +325,10 @@ export class FreeClassFinderComponent {
           });
         }
       }
-
-      console.log('Busqueda', this.search);
-
       this.control_flag_empty = true;
-    
   }
 
   doScheduleTo(day,hour,index) {
-
     this.search.dates_times.forEach(element => {
       if (element.name_day == day) {
         element.option[index].hour_start = hour;
@@ -398,8 +387,6 @@ export class FreeClassFinderComponent {
         }
       }
     }
-
-    console.log('Busqueda', this.search);
   }
 
 }

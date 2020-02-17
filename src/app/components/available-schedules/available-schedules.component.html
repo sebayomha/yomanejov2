@@ -77,4 +77,4 @@
 <div class="col-12" style="margin-top: 20px;"><button style="margin-bottom:45px;float: right;" mat-button [disabled]="cantSelectedClasses != number_of_classes" (click)="saveOptions()">FINALIZAR</button></div>
 <br>
 <br>
-<custom-modal #customModal></custom-modal>
+<custom-modal #customModal (confirmation)="confirmSchedule($event);" [data]="dataToConfirm" [component]="'availableSchedules'"></custom-modal>
