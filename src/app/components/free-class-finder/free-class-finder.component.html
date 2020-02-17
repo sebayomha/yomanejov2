@@ -297,7 +297,7 @@
                         <div *ngIf="excepciones.length" class="col-12" style="margin-top: 15px;">
                             <div *ngFor="let excepcion of excepciones; let j = index; let firstItem = first;" style="margin-bottom:15px" class="excepcion">
                                 <mat-divider *ngIf="!firstItem"></mat-divider>
-                                <div class="row" style="padding: 15px;">
+                                <div class="row" style="padding: 0px;">
                                     <div class="col-9" style="text-align: left; line-height: 41px;">Filtro {{j + 1}}:</div>
                                     <div class="col-3">
                                         <!-- eliminar excepcion -->
@@ -312,7 +312,7 @@
                                 </div>
 
                                 <!-- fecha excepcion -->
-                                <div class="col-12" style="margin-top: 15px;">
+                                <div class="col-12" style="margin-top: 15px; padding: 0px;">
                                     <div class="row">
                                         <div class="col-6">
                                             <mat-form-field class="example-full-width">
@@ -333,14 +333,14 @@
                                 </div>
 
                                 <!-- tramos de horarios de excepcion -->
-                                <div class="col-12" style="margin-top: 15px;" *ngIf="!excepcion.no_puede">
+                                <div class="col-12" style="margin-top: 15px; padding: 0px;" *ngIf="!excepcion.no_puede">
 
                                     <div *ngFor="let excepcionRowTIme of excepcion.horarios; let h = index">
 
                                         <div class="row">
                                             <div class="col-4">
                                                 <!-- fecha desde tramo -->
-                                                <mat-form-field class="example-full-width">
+                                                <mat-form-field>
                                                     <mat-label>Desde</mat-label>
                                                     <mat-select #horariosDesde
                                                         (selectionChange)="doExcepcionHours($event.value, j, h)">
@@ -352,7 +352,7 @@
                                             </div>
                                             <div class="col-4">
                                                 <!-- fecha hasta tramo -->
-                                                <mat-form-field class="example-full-width">
+                                                <mat-form-field>
                                                     <mat-label>Hasta</mat-label>
                                                     <mat-select (selectionChange)="setExceptionHourFinish($event.value, j, h)">
                                                         <mat-option *ngFor="let horario of excepcionRowTIme.horariosHasta; let i = index" [value]="i">
@@ -409,6 +409,6 @@
             </form>
         </mat-expansion-panel>
         <br>
-        <available-schedules *ngIf="available_schedules" [student_name]="search.student_name" [address]="search.address" [address_alternative]="search.address_alternative" [number_of_classes]="search.lessons" [data]="available_schedules"></available-schedules>
+        <available-schedules *ngIf="available_schedules" [student_name]="search.student_name" [address]="search.address" [address_alternative]="search.address_alternative" [number_of_classes]="numberOfClasses" [data]="available_schedules"></available-schedules>
     </div>
 </div>

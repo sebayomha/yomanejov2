@@ -1,4 +1,4 @@
-import { Component, Input, ElementRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 declare var $:any;
 
 @Component({
@@ -9,10 +9,21 @@ declare var $:any;
 
 export class CustomModalComponent {
 
+  @Output() confirmation = new EventEmitter<string>();
+  @Input() data: any;
+  @Input() component: string;
+  
+  constructor() { }
 
-    constructor() { }
+  ngOnInit() { }
 
-    ngOnInit() {
+  open() {
+    $('#confirmModal').modal('show');
+  }
 
-    }
+  onConfirm() {
+    $('#confirmModal').modal('hide');
+    this.confirmation.emit(this.data);
+  }
+    
 }

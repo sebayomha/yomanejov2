@@ -1,7 +1,6 @@
-import { Component, Input, ViewChildren, QueryList, } from '@angular/core';
-import { MatSelectionList, MatListOption } from '@angular/material';
+import { Component, Input, ViewChildren, QueryList, ViewChild } from '@angular/core';
+import { MatSelectionList } from '@angular/material';
 import { trigger,animate,transition,style } from '@angular/animations';
-
 declare var $: any;
 
 @Component({
@@ -30,8 +29,8 @@ export class AvailableSchedulesComponent {
     @Input() address: Array<any>;
     @Input() address_alternative: Array<any>;
 
-
     @ViewChildren(MatSelectionList) viewChildren !: QueryList<MatSelectionList>;
+    @ViewChild('customModal') customModal;
 
     step:number;
     classes: Array<any>;
@@ -52,11 +51,14 @@ export class AvailableSchedulesComponent {
     }
 
     ngOnInit() {
-        this.step = 0;
-        this.cantSelectedClasses = 0;
-        this.classes = [];        
-        this.order_information = this.data;
-        console.log('LLEGO', this.data);
+      this.step = 0;
+      this.cantSelectedClasses = 0;
+      this.classes = [];        
+      this.order_information = this.data;
+    }
+
+    ngOnChanges() {
+      this.cantSelectedClasses = 0;
     }
 
     ngAfterViewInit() {
@@ -76,12 +78,6 @@ export class AvailableSchedulesComponent {
     }
 
     totalClassesSelected(selectedOptions, fecha, index, event){
-
-      console.log(selectedOptions);
-      console.log(fecha);
-
-      console.log(event);
-
       if (event.option.selected) {
         event.source.deselectAll();
         event.option._setSelected(true);
@@ -104,7 +100,8 @@ export class AvailableSchedulesComponent {
           option.cant = 0;
           this.classes.push(option)
         } else {
-          this.classes[this.classes.findIndex( element => element.index == index)].cant = 0;
+          let indexClass = this.classes.findIndex( element => element.index == index);
+          this.classes[indexClass].cant = 0;
         }
       } else {
         if (!this.classes.some(e => e.index == index)) {
@@ -112,7 +109,12 @@ export class AvailableSchedulesComponent {
           option.cant = 1;
           this.classes.push(option)
         } else {
-          this.classes[this.classes.findIndex( element => element.index == index)].cant = 1;
+          let indexClass = this.classes.findIndex( element => element.index == index);
+          this.classes[indexClass].cant = 1;
+          this.classes[indexClass].horario = option.horario;
+          this.classes[indexClass].id_auto = option.id_auto;
+          this.classes[indexClass].da = option.da;
+          this.classes[indexClass].fecha = option.fecha;
         }
       }
 
@@ -123,23 +125,16 @@ export class AvailableSchedulesComponent {
     }
 
     saveOptions(){
+      this.dataToConfirm = [];
       this.dataToConfirm.push({'selected_options' : this.classes});
       this.dataToConfirm.push({'student' : this.student_name});
       this.dataToConfirm.push({'address' : this.address});
       this.dataToConfirm.push({'address_alternative' : this.address_alternative});
+      this.customModal.open();
+    }
 
-      // this.order_information.forEach(option => {
-      //   option.autos.forEach(element => {
-      //     element.horarios.forEach(horario => {
-      //       if(horario.checked == true){
-      //         this.dataToConfirm.push({day: option.fecha, hora:horario.horaInicio, auto: element.idAuto});
-      //       }
-      //     });
-      //   });
-      // });
-
-      console.log('ARRAY:', this.dataToConfirm);
-
+    confirmSchedule($event) {
+      console.log($event);
     }
 
 }
