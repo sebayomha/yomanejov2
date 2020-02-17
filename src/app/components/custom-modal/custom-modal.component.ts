@@ -9,10 +9,11 @@ declare var $:any;
 
 export class CustomModalComponent {
 
-
     constructor() { }
 
-    ngOnInit() {
+    ngOnInit() { }
 
+    open() {
+      $('#confirmModal').modal('show');
     }
 }

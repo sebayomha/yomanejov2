@@ -1,7 +1,6 @@
-import { Component, Input, ViewChildren, QueryList, } from '@angular/core';
-import { MatSelectionList, MatListOption } from '@angular/material';
+import { Component, Input, ViewChildren, QueryList, ViewChild } from '@angular/core';
+import { MatSelectionList } from '@angular/material';
 import { trigger,animate,transition,style } from '@angular/animations';
-
 declare var $: any;
 
 @Component({
@@ -32,6 +31,7 @@ export class AvailableSchedulesComponent {
 
 
     @ViewChildren(MatSelectionList) viewChildren !: QueryList<MatSelectionList>;
+    @ViewChild('customModal') customModal;
 
     step:number;
     classes: Array<any>;
@@ -138,6 +138,7 @@ export class AvailableSchedulesComponent {
       //   });
       // });
 
+      this.customModal.open();
       console.log('ARRAY:', this.dataToConfirm);
 
     }
