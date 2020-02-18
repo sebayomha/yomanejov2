@@ -3,6 +3,7 @@ import { MatSelectionList } from '@angular/material';
 import { trigger,animate,transition,style } from '@angular/animations';
 import { CronogramaService } from 'src/app/services/cronograma/cronograma.service';
 import { Response } from 'src/app/models/response';
+import { Excepcion } from 'src/app/models/excepcion';
 declare var $: any;
 
 @Component({
@@ -32,6 +33,7 @@ export class AvailableSchedulesComponent {
     @Input() disponibilidad: any;
     @Input() address: Array<any>;
     @Input() address_alternative: Array<any>;
+    @Input() excepciones: Array<Excepcion>;
 
     @ViewChildren(MatSelectionList) viewChildren !: QueryList<MatSelectionList>;
     @ViewChild('customModal') customModal;
@@ -95,7 +97,8 @@ export class AvailableSchedulesComponent {
         'fecha': fecha,
         'horario': event.option.value.horaInicio,
         'id_auto': event.option.value.idAuto,
-        'da': event.option.value.usandoDirAlt
+        'da': event.option.value.usandoDirAlt,
+        'idZona': event.option.value.idZona
       }
 
       if (selectedOptions._selection.size == 0) {
@@ -136,6 +139,7 @@ export class AvailableSchedulesComponent {
       this.dataToConfirm.push({'address' : this.address});
       this.dataToConfirm.push({'address_alternative' : this.address_alternative});
       this.dataToConfirm.push({'disponibilidad' : this.disponibilidad});
+      this.dataToConfirm.push({'excepciones' : this.excepciones});
       this.customModal.open();
     }
 

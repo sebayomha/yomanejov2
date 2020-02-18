@@ -138,7 +138,8 @@
                                     'cronogramaActual' => '',
                                     'tieneEldiaLibre' => '',
                                     'esDeLaZona' => '',
-                                    'usandoDirAlt' => ''
+                                    'usandoDirAlt' => '',
+                                    'idZona' => ''
                                 ];
                                 $horarioData->idAuto = $idAuto;
                                 $horarioData->cronogramaActual = $cronogramasActuales;
@@ -173,6 +174,8 @@
                                     }
                                     $horarioData->usandoDirAlt = false;
                                 }
+
+                                $horarioData->idZona = $zonaBusqueda; //Es la zona de ese horario.
                                 
                                 if (!empty($zonasVecinas)) {
                                     $ratingZonaMasCerca = 0;
@@ -265,7 +268,7 @@
         }
 
         //Funcion principal que se encargara de guardar el cronograma correspondiente PREVIO a la confirmacion
-        function guardarCronograma($selectedOptions, $studentName, $student_phone, $address, $address_alt, $disponibilidad) {
+        function guardarCronograma($selectedOptions, $studentName, $student_phone, $address, $address_alt, $disponibilidad, $excepciones) {
             /* SE INSERTA LA DIRECCION PRINCIPAL */            
             $state = $this->conn->prepare('INSERT INTO direccion (calle, calle_diag, calle_a, calle_a_diag, calle_b, calle_b_diag, numero, ciudad, departamento, floor_, observaciones) VALUES (?,?,?,?,?,?,?,?,?,?,?)');
             $address_diag_string = var_export($address[0]->diag, true);
@@ -278,6 +281,7 @@
             $idDireccionAlternativa = null;
             $idDisponibilidad;
             $idAlumno;
+            $idCronograma;
 
             if ($state->execute()) { //el insert de la direccion fue exitoso
                 $idDireccionPrincipal = $this->conn->insert_id; //Me quedo con el id de la direccion para luego asignarselo al alumno
@@ -326,18 +330,48 @@
                 if ($state->execute()) { //disponibilidad insertada con exito
                     $idDisponibilidad = $this->conn->insert_id;
                 }
-
-                $today = date('Y-m-d');
-                $activoYConfirmado = 'false';
                 
                 /* SE INSERTA AL ALUMNO */
+                $today = date('Y-m-d');
+                $activoYConfirmado = 'false';
                 $state = $this->conn->prepare('INSERT INTO alumno (idDireccion, idDireccionAlt, fechaAlta, activo, nombre, telefono, confirmado, idDisponibilidad) VALUES (?,?,?,?,?,?,?,?)');
                 $state->bind_param('iisssssi', $idDireccionPrincipal, $idDireccionAlternativa, $today, $activoYConfirmado, $studentName, $student_phone, $activoYConfirmado, $idDisponibilidad);
                 if ($state->execute()) { //el insert del alumno fue exitoso
                     $idAlumno = $this->conn->insert_id;
-                } 
+                }
+
+                /* SE INSERTAN LAS EXCEPCIONES SI POSEE */
+                //aca va el codigo para insertar excepciones
+                if (sizeof($excepciones) > 0) {
+                    foreach ($excepciones as $excepcion) {
+                        $no_puede = 'false';
+                        if ($excepcion->no_puede) {
+                            $no_puede = 'true';
+                        }
+                        
+
+                    }
+                }
+                
+                /* SE CREA UN NUEVO CRONOGRAMA */
+                $state = $this->conn->prepare('INSERT INTO cronograma (status, idAlumno) VALUES (?,?)');
+                $status = "NO CONFIRMADO";
+                $state->bind_param('si', $status, $idAlumno);
+                if ($state->execute()) { //el insert del alumno fue exitoso
+                    $idCronograma = $this->conn->insert_id;
+                }
+
+                /* SE CARGAN LAS CLASES SIN CONFIRMAR BAJO EL NUEVO CRONOGRAMA */
+                foreach ($selectedOptions as $option) {
+                    $state = $this->conn->prepare('INSERT INTO clase (alumno, auto, fecha, horaInicio, idZona, idDireccion, idCronograma, status) VALUES (?,?,?,?,?,?,?,?)');
+                    $direccionClase = $idDireccionPrincipal;
+                    if ($option->da) {
+                        $direccionClase = $idDireccionAlternativa;
+                    }
+                    $state->bind_param('iissiiis', $idAlumno, $option->id_auto, $option->fecha, $option->horario, $option->idZona, $direccionClase, $idCronograma, $status);
+                    $state->execute();
+                }
             }
-            $result = $state->get_result();
         }
 
         function hayDireccionAlternativa($selectedOptions) {
@@ -436,8 +470,9 @@
             $fechaString = $fecha->format('Y-m-d');
             //$state = $this->$conn->prepare('SELECT * FROM clase WHERE clase.fecha = ? ORDER BY clase.horaInicio');
             //$state = $this->$conn->prepare('SELECT * FROM auto LEFT JOIN clase ON auto.idAuto = clase.auto WHERE clase.fecha = ? OR clase.fecha IS NULL ORDER BY clase.horaInicio');
-            $state = $this->conn->prepare('SELECT * FROM auto LEFT JOIN clase ON auto.idAuto = clase.auto AND clase.fecha = ? ORDER BY clase.horaInicio');
-            $state->bind_param('s', $fechaString);
+            $state = $this->conn->prepare('SELECT * FROM auto LEFT JOIN clase ON auto.idAuto = clase.auto AND clase.fecha = ? AND clase.status = ? ORDER BY clase.horaInicio');
+            $status = 'CONFIRMADO';
+            $state->bind_param('ss', $fechaString, $status);
             $state->execute();
             $result = $state->get_result();
 
