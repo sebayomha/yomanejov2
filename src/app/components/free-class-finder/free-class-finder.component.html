@@ -21,6 +21,17 @@
                                 Debe ingresar el nombre del alumno para continuar
                             </div>
                         </div>
+
+                        <div class="col-sm-12 col-md-4">
+                            <mat-form-field style="width: 100%;">
+                                <input type="number" #student_phone="ngModel" matInput placeholder="Teléfono del alumno" name="student_phone" [(ngModel)]="search.student_phone"
+                                  required autofocus>
+                            </mat-form-field>
+                            <div *ngIf="student_phone.errors?.required && student_phone.touched"
+                                style="color: #f44336; font-size: 12px; margin-bottom: 10px; margin-top: -10px;">
+                                Debe ingresar el teléfono para continuar
+                            </div>
+                        </div>
                     </div>
                     <div>
                         <div class="row" style="margin-top: 15px;">
@@ -404,11 +415,11 @@
                 </mat-expansion-panel>
                 <div class="form-group" style="text-align: right; margin-top:30px;">
                     <button mat-button type="submit"
-                        [disabled]="(!forma.valid || (!(search.address[3].altitud != '') && !(search.address[1].street_a != '') && !(search.address[2].street_b != '')) || flag_address_alt && (!(search.address_alternative[3].altitud != '') && !(search.address_alternative[1].street_a != '') && !(search.address_alternative[2].street_b != '')) || schedule_send_null || !(search.student_name != ''))">BUSCAR</button>
+                        [disabled]="(!forma.valid || (!(search.address[3].altitud != '') && !(search.address[1].street_a != '') && !(search.address[2].street_b != '')) || flag_address_alt && (!(search.address_alternative[3].altitud != '') && !(search.address_alternative[1].street_a != '') && !(search.address_alternative[2].street_b != '')) || schedule_send_null || !(search.student_name != '') || !(search.student_phone != ''))">BUSCAR</button>
                 </div>
             </form>
         </mat-expansion-panel>
         <br>
-        <available-schedules *ngIf="available_schedules" [student_name]="search.student_name" [address]="search.address" [address_alternative]="search.address_alternative" [number_of_classes]="numberOfClasses" [data]="available_schedules"></available-schedules>
+        <available-schedules *ngIf="available_schedules" [disponibilidad]="search.dates_times" [student_name]="search.student_name" [student_phone]="search.student_phone" [address]="search.address" [address_alternative]="search.address_alternative" [number_of_classes]="numberOfClasses" [data]="available_schedules"></available-schedules>
     </div>
 </div>

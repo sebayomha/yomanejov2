@@ -1,6 +1,8 @@
 import { Component, Input, ViewChildren, QueryList, ViewChild } from '@angular/core';
 import { MatSelectionList } from '@angular/material';
 import { trigger,animate,transition,style } from '@angular/animations';
+import { CronogramaService } from 'src/app/services/cronograma/cronograma.service';
+import { Response } from 'src/app/models/response';
 declare var $: any;
 
 @Component({
@@ -26,6 +28,8 @@ export class AvailableSchedulesComponent {
     @Input() data: any;
     @Input() number_of_classes: number;
     @Input() student_name: string;
+    @Input() student_phone: number;
+    @Input() disponibilidad: any;
     @Input() address: Array<any>;
     @Input() address_alternative: Array<any>;
 
@@ -40,7 +44,7 @@ export class AvailableSchedulesComponent {
     indexesClasses = [];
     cantSelectedClasses: number;
 
-    constructor() { }
+    constructor(private cronogramaService: CronogramaService) { }
 
     showMore(option) {
       option.showMoreHours = 20;
@@ -127,13 +131,18 @@ export class AvailableSchedulesComponent {
     saveOptions(){
       this.dataToConfirm = [];
       this.dataToConfirm.push({'selected_options' : this.classes});
-      this.dataToConfirm.push({'student' : this.student_name});
+      this.dataToConfirm.push({'student_name' : this.student_name});
+      this.dataToConfirm.push({'student_phone' : this.student_phone});
       this.dataToConfirm.push({'address' : this.address});
       this.dataToConfirm.push({'address_alternative' : this.address_alternative});
+      this.dataToConfirm.push({'disponibilidad' : this.disponibilidad});
       this.customModal.open();
     }
 
     confirmSchedule($event) {
+      this.cronogramaService.guardarCronograma($event).subscribe( (response: Response) => {
+        console.log(response);
+      })
       console.log($event);
     }
 

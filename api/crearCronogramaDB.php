@@ -264,6 +264,91 @@
             return $horariosTentativos;
         }
 
+        //Funcion principal que se encargara de guardar el cronograma correspondiente PREVIO a la confirmacion
+        function guardarCronograma($selectedOptions, $studentName, $student_phone, $address, $address_alt, $disponibilidad) {
+            /* SE INSERTA LA DIRECCION PRINCIPAL */            
+            $state = $this->conn->prepare('INSERT INTO direccion (calle, calle_diag, calle_a, calle_a_diag, calle_b, calle_b_diag, numero, ciudad, departamento, floor_, observaciones) VALUES (?,?,?,?,?,?,?,?,?,?,?)');
+            $address_diag_string = var_export($address[0]->diag, true);
+            $address_a_diag_string = var_export($address[1]->diag, true);
+            $address_b_diag_string = var_export($address[2]->diag, true);
+
+            $state->bind_param('sssssssssss', $address[0]->street, $address_diag_string, $address[1]->street_a, $address_a_diag_string, $address[2]->street_b, $address_b_diag_string, $address[3]->altitud, $address[4]->city, $address[6]->department, $address[5]->floor, $address[7]->observations);
+            
+            $idDireccionPrincipal;
+            $idDireccionAlternativa = null;
+            $idDisponibilidad;
+            $idAlumno;
+
+            if ($state->execute()) { //el insert de la direccion fue exitoso
+                $idDireccionPrincipal = $this->conn->insert_id; //Me quedo con el id de la direccion para luego asignarselo al alumno
+                
+                /* SE INSERTA LA DIRECCION ALTERNATIVA SI ES QUE POSEE */
+                if ($this->hayDireccionAlternativa($selectedOptions)) {
+                    /* SE INSERTA LA DIRECCION ALTERNATIVA */            
+                    $state = $this->conn->prepare('INSERT INTO direccion (calle, calle_diag, calle_a, calle_a_diag, calle_b, calle_b_diag, numero, ciudad, departamento, floor_, observaciones) VALUES (?,?,?,?,?,?,?,?,?,?,?)');
+                    $address_diag_string = var_export($address_alt[0]->diag, true);
+                    $address_a_diag_string = var_export($address_alt[1]->diag, true);
+                    $address_b_diag_string = var_export($address_alt[2]->diag, true);
+
+                    $state->bind_param('sssssssssss', $address_alt[0]->street, $address_diag_string, $address_alt[1]->street_a, $address_a_diag_string, $address_alt[2]->street_b, $address_b_diag_string, $address_alt[3]->altitud, $address_alt[4]->city, $address_alt[6]->department, $address_alt[5]->floor, $address_alt[7]->observations);
+                    
+                    if ($state->execute()) { //el insert de la direccion alternativa fue exitoso
+                        $idDireccionAlternativa = $this->conn->insert_id;
+                        
+                    }
+                }
+
+                /* SE INSERTA LA DISPONIBILIDAD DEL ALUMNO */
+                $disponibilidad_string = [];
+                foreach ($disponibilidad as $dia) {
+                    if ($dia->all_day) {
+                        $scheduleSend_string = implode (", ", $dia->option[0]->scheduleSend);
+                        $scheduleSend_string .= '|'.var_export($dia->option[0]->dir_alt, true);
+                        array_push($disponibilidad_string, $scheduleSend_string);
+                    } else {
+                        if ($dia->option[0]->scheduleSend != null) {
+                            $arrayTotal = [];
+                            foreach ($dia->option as $option) {
+                                $arrayTotal = array_merge($arrayTotal, $option->scheduleSend);
+                                $scheduleSend_string = '|'.var_export($option->dir_alt, true);
+                                array_push($arrayTotal, $scheduleSend_string);
+                            }       
+                            $scheduleSend_string = implode (", ", $arrayTotal);
+                            array_push($disponibilidad_string, $scheduleSend_string);
+                        } else {
+                            array_push($disponibilidad_string, null);
+                        }
+                    }
+                }                
+                $state = $this->conn->prepare('INSERT INTO disponibilidad (Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday) VALUES (?,?,?,?,?,?,?)');
+                $state->bind_param('sssssss', $disponibilidad_string[0], $disponibilidad_string[1], $disponibilidad_string[2], $disponibilidad_string[3], $disponibilidad_string[4], $disponibilidad_string[5], $disponibilidad_string[6]);
+                
+                if ($state->execute()) { //disponibilidad insertada con exito
+                    $idDisponibilidad = $this->conn->insert_id;
+                }
+
+                $today = date('Y-m-d');
+                $activoYConfirmado = 'false';
+                
+                /* SE INSERTA AL ALUMNO */
+                $state = $this->conn->prepare('INSERT INTO alumno (idDireccion, idDireccionAlt, fechaAlta, activo, nombre, telefono, confirmado, idDisponibilidad) VALUES (?,?,?,?,?,?,?,?)');
+                $state->bind_param('iisssssi', $idDireccionPrincipal, $idDireccionAlternativa, $today, $activoYConfirmado, $studentName, $student_phone, $activoYConfirmado, $idDisponibilidad);
+                if ($state->execute()) { //el insert del alumno fue exitoso
+                    $idAlumno = $this->conn->insert_id;
+                } 
+            }
+            $result = $state->get_result();
+        }
+
+        function hayDireccionAlternativa($selectedOptions) {
+            foreach($selectedOptions as $option) {
+                if ($option->da) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         //deprecated
         function sortAutosPorID($a, $b) {
             return strcmp($a->idAuto, $b->idAuto);
@@ -558,7 +643,7 @@
             $nombreAlumno = '';
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
-                    $nombreAlumno .= $row['nombre']. ' '.$row['apellido'];
+                    $nombreAlumno .= $row['nombre'];
                 }
                 return $nombreAlumno;
             } else {
