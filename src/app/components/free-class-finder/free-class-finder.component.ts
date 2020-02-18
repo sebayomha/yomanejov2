@@ -16,7 +16,7 @@ import { NgForm } from '@angular/forms';
 @Component({
   selector: 'free-class-finder',
   templateUrl: './free-class-finder.component.html',
-  styleUrls: ['./free-class-finder.component.scss', '../../global-styles.scss']
+  styleUrls: ['./free-class-finder.component.scss', '../../global-styles.scss'],
 })
 
 export class FreeClassFinderComponent {
@@ -184,6 +184,10 @@ export class FreeClassFinderComponent {
     if(tabulator.selectedIndex > 0){
       tabulator.selectedIndex--;
     }
+  }
+
+  formatPhoneNumber(phoneNumberString) {
+
   }
 
   addException() {

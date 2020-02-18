@@ -39,6 +39,8 @@ import { SnackbarComponent } from './components/snackbar/snackbar/snackbar.compo
 import { LoaderService } from './services/loader/loader-service.service';
 import { RequestInterceptorService } from './services/interceptor/request-interceptor.service';
 
+/* Pipes */
+import { PhonePipe } from './pipes/address.model';
 registerLocaleData(localeEsAr);
 
 // import { BarRatingModule } from "ngx-bar-rating";
@@ -52,7 +54,8 @@ registerLocaleData(localeEsAr);
     SnackbarComponent,
     ScheduleTooltipComponent,
     CustomModalComponent,
-    LessonsComponent
+    LessonsComponent,
+    PhonePipe
   ],
   imports: [
     BrowserModule,
@@ -73,6 +76,7 @@ registerLocaleData(localeEsAr);
     MatRadioModule,
     MatListModule,
     MatTableModule
+    
     // BarRatingModule
   ],
   providers:[DatePipe, {provide: LOCALE_ID, useValue: "es-AR"}, LoaderService, { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptorService, multi: true }],
