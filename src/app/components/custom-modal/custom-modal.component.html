@@ -8,11 +8,13 @@
         </button>
       </div>
       <div class="modal-body">
+        <div *ngIf="successBanner">CRONOGRAMA GUARDADO EXITOSAMENTE</div>
         <p>Modal body text goes here.</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" (click)="onConfirm();">Save changes</button>
+        <button *ngIf="!successBanner" type="button" class="btn btn-primary" (click)="onConfirm();">Save changes</button>
+        <button *ngIf="successBanner" type="button" class="btn btn-primary" (click)="sendWsp();">Enviar vía Whatsapp <i class="fab fa-whatsapp"></i></button>
       </div>
     </div>
   </div>

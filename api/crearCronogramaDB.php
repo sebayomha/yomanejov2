@@ -310,7 +310,8 @@
                     
                     if ($state->execute()) { //el insert de la direccion alternativa fue exitoso
                         $idDireccionAlternativa = $this->conn->insert_id;
-                        
+                    } else {
+                        return false;
                     }
                 }
 
@@ -341,6 +342,8 @@
                 
                 if ($state->execute()) { //disponibilidad insertada con exito
                     $idDisponibilidad = $this->conn->insert_id;
+                } else {
+                    return false;
                 }
                 
                 /* SE INSERTA AL ALUMNO */
@@ -350,6 +353,8 @@
                 $state->bind_param('iisssssi', $idDireccionPrincipal, $idDireccionAlternativa, $today, $activoYConfirmado, $studentName, $student_phone, $activoYConfirmado, $idDisponibilidad);
                 if ($state->execute()) { //el insert del alumno fue exitoso
                     $idAlumno = $this->conn->insert_id;
+                } else {
+                    return false;
                 }
 
                 /* SE INSERTAN LAS EXCEPCIONES SI POSEE */
@@ -383,6 +388,8 @@
                 $state->bind_param('si', $status, $idAlumno);
                 if ($state->execute()) { //el insert del alumno fue exitoso
                     $idCronograma = $this->conn->insert_id;
+                } else {
+                    return false;
                 }
 
                 /* SE CARGAN LAS CLASES SIN CONFIRMAR BAJO EL NUEVO CRONOGRAMA */
@@ -395,7 +402,11 @@
                     $state->bind_param('iissiiis', $idAlumno, $option->id_auto, $option->fecha, $option->horario, $option->idZona, $direccionClase, $idCronograma, $status);
                     $state->execute();
                 }
+            } else {
+                return false;
             }
+
+            return true;
         }
 
         function hayDireccionAlternativa($selectedOptions) {

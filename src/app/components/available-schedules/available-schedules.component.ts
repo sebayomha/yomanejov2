@@ -45,6 +45,7 @@ export class AvailableSchedulesComponent {
     dataToConfirm = [];
     indexesClasses = [];
     cantSelectedClasses: number;
+    showSuccessBanner: boolean = false;
 
     constructor(private cronogramaService: CronogramaService) { }
 
@@ -146,6 +147,9 @@ export class AvailableSchedulesComponent {
     confirmSchedule($event) {
       this.cronogramaService.guardarCronograma($event).subscribe( (response: Response) => {
         console.log(response);
+        if (response.code == 0) {
+          this.showSuccessBanner = true;
+        }
       })
       console.log($event);
     }
