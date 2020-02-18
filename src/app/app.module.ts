@@ -32,7 +32,7 @@ import { LoaderComponent } from './components/loader/loader/loader.component';
 import { AvailableSchedulesComponent } from './components/available-schedules/available-schedules.component';
 import { ScheduleTooltipComponent } from './components/schedule-tooltip/schedule-tooltip.component';
 import { CustomModalComponent } from './components/custom-modal/custom-modal.component';
-import { SchedulesComponent } from './components/schedules/schedules.component';
+import { LessonsComponent } from './components/lessons/lessons.component';
 import { SnackbarComponent } from './components/snackbar/snackbar/snackbar.component';
 
 /* Services */
@@ -52,7 +52,7 @@ registerLocaleData(localeEsAr);
     SnackbarComponent,
     ScheduleTooltipComponent,
     CustomModalComponent,
-    SchedulesComponent
+    LessonsComponent
   ],
   imports: [
     BrowserModule,
