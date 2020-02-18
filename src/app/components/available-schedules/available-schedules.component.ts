@@ -1,9 +1,11 @@
-import { Component, Input, ViewChildren, QueryList, ViewChild } from '@angular/core';
+import { Component, Input, ViewChildren, QueryList, ViewChild, Output, EventEmitter } from '@angular/core';
 import { MatSelectionList } from '@angular/material';
 import { trigger,animate,transition,style } from '@angular/animations';
 import { CronogramaService } from 'src/app/services/cronograma/cronograma.service';
 import { Response } from 'src/app/models/response';
 import { Excepcion } from 'src/app/models/excepcion';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackbarComponent } from '../snackbar/snackbar/snackbar.component';
 declare var $: any;
 
 @Component({
@@ -35,6 +37,7 @@ export class AvailableSchedulesComponent {
     @Input() address_alternative: Array<any>;
     @Input() excepciones: Array<Excepcion>;
 
+    @Output() finish = new EventEmitter<any>();
     @ViewChildren(MatSelectionList) viewChildren !: QueryList<MatSelectionList>;
     @ViewChild('customModal') customModal;
 
@@ -46,8 +49,9 @@ export class AvailableSchedulesComponent {
     indexesClasses = [];
     cantSelectedClasses: number;
     showSuccessBanner: boolean = false;
+    durationInSeconds = 3;
 
-    constructor(private cronogramaService: CronogramaService) { }
+    constructor(private cronogramaService: CronogramaService, private _snackBar: MatSnackBar) { }
 
     showMore(option) {
       option.showMoreHours = 20;
@@ -149,9 +153,19 @@ export class AvailableSchedulesComponent {
         console.log(response);
         if (response.code == 0) {
           this.showSuccessBanner = true;
+        } else {
+          this.showSuccessBanner = false;
+          this._snackBar.openFromComponent(SnackbarComponent, {
+            duration: this.durationInSeconds * 1100,
+            data: response.data
+          });
         }
       })
       console.log($event);
+    }
+
+    onCustomModalClose($event) {
+      this.finish.emit($event);
     }
 
 }

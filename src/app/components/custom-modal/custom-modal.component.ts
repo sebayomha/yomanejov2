@@ -10,6 +10,7 @@ declare var $:any;
 export class CustomModalComponent {
 
   @Output() confirmation = new EventEmitter<string>();
+  @Output() close = new EventEmitter<string>();
   @Input() data: any;
   @Input() component: string;
   @Input() successBanner: boolean;
@@ -24,6 +25,11 @@ export class CustomModalComponent {
 
   onConfirm() {
     this.confirmation.emit(this.data);
+  }
+
+  onClose() {
+    $('#confirmModal').modal('hide');
+    this.close.emit(this.data);
   }
 
   sendWsp() {

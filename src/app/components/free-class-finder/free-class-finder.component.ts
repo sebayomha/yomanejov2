@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Search } from '../../models/free-class-finder.model';
 import { DatesTimes } from '../../models/dates-times';
 import { Option } from '../../models/option';
@@ -11,6 +11,7 @@ import { ExcepcionRowTIme } from 'src/app/models/excepcion-row-time';
 import { DatePipe } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackbarComponent } from '../snackbar/snackbar/snackbar.component';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'free-class-finder',
@@ -19,6 +20,8 @@ import { SnackbarComponent } from '../snackbar/snackbar/snackbar.component';
 })
 
 export class FreeClassFinderComponent {
+
+  @ViewChild('forma') formaSearch : NgForm;
 
   excepciones = Array<Excepcion>();
   addresses = Array<Address>();
@@ -157,7 +160,14 @@ export class FreeClassFinderComponent {
 
       }
     });
+  }
 
+  onAvailableSchedulesFinish($event) {
+    this.available_schedules = null;
+    this.control_collapse_search = true;
+    this.excepciones = [];
+    this.formaSearch.resetForm();
+    this.ngOnInit();
   }
 
   isMobile() {
