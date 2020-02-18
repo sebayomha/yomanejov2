@@ -269,6 +269,17 @@
 
         //Funcion principal que se encargara de guardar el cronograma correspondiente PREVIO a la confirmacion
         function guardarCronograma($selectedOptions, $studentName, $student_phone, $address, $address_alt, $disponibilidad, $excepciones) {
+            /*
+            SE HACE UN INSERT DE:
+            -Direccion principal
+            -Direccion alternativa
+            -Disponibilidad del alumno
+            -El alumno
+            -Excepciones que el alumno posea
+            -Un nuevo cronograma
+            -Las clases asociadas a dicho cronograma
+            */
+            
             /* SE INSERTA LA DIRECCION PRINCIPAL */            
             $state = $this->conn->prepare('INSERT INTO direccion (calle, calle_diag, calle_a, calle_a_diag, calle_b, calle_b_diag, numero, ciudad, departamento, floor_, observaciones) VALUES (?,?,?,?,?,?,?,?,?,?,?)');
             $address_diag_string = var_export($address[0]->diag, true);
@@ -282,6 +293,7 @@
             $idDisponibilidad;
             $idAlumno;
             $idCronograma;
+            $idExcepcion;
 
             if ($state->execute()) { //el insert de la direccion fue exitoso
                 $idDireccionPrincipal = $this->conn->insert_id; //Me quedo con el id de la direccion para luego asignarselo al alumno
@@ -341,15 +353,27 @@
                 }
 
                 /* SE INSERTAN LAS EXCEPCIONES SI POSEE */
-                //aca va el codigo para insertar excepciones
                 if (sizeof($excepciones) > 0) {
                     foreach ($excepciones as $excepcion) {
                         $no_puede = 'false';
                         if ($excepcion->no_puede) {
                             $no_puede = 'true';
                         }
-                        
+                        $state = $this->conn->prepare('INSERT INTO excepcion (fecha, no_puede, idAlumno) VALUES (?,?,?)');
+                        $state->bind_param('ssi', $excepcion->date_string, $no_puede, $idAlumno);
+                        if ($state->execute()) {  //me guardo la excepcion
+                            $idExcepcion = $this->conn->insert_id;
+                        }
 
+                        if (sizeof($excepcion->horarios) > 0) { //si tiene horarios agregados, inserto los mismos
+                            foreach ($excepcion->horarios as $horarioRowTime) {
+                                $dir_alt_excepcion = var_export($horarioRowTime->dir_alt, true);
+                                $horariosTotales_string = implode (", ", $horarioRowTime->horariosTotales);
+                                $state = $this->conn->prepare('INSERT INTO excepcionHorarios (dir_alt, horarios, idExcepcion) VALUES (?,?,?)');
+                                $state->bind_param('ssi', $dir_alt_excepcion, $horariosTotales_string, $idExcepcion);
+                                $state->execute();
+                            }
+                        }
                     }
                 }
                 
