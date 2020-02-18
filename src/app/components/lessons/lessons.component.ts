@@ -1,14 +1,15 @@
 import { Component, Input, ElementRef } from '@angular/core';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
-  selector: 'schedules',
-  templateUrl: './schedules.component.html',
-  styleUrls: ['./schedules.component.scss']
+  selector: 'lessons',
+  templateUrl: './lessons.component.html',
+  styleUrls: ['./lessons.component.scss']
 })
 
-export class  SchedulesComponent {
+export class  LessonsComponent {
 
-  constructor() { }
+  constructor(private breakpointObserver: BreakpointObserver) { }
 
   ELEMENT_DATA = [
     {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
@@ -25,9 +26,15 @@ export class  SchedulesComponent {
 
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   dataSource = this.ELEMENT_DATA;
+
+  select_day : Date;
   
 
     ngOnInit() {
 
+    }
+
+    isMobile() {
+      return this.breakpointObserver.isMatched('(max-width: 767px)');
     }
 }
