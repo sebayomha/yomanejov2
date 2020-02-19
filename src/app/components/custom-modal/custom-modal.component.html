@@ -2,18 +2,26 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Modal title</h5>
-        <button type="button" class="close" (click)="close();" aria-label="Close">
+        <h5 class="modal-title" *ngIf="!successBanner">Confirmar cronograma</h5>
+        <h5 class="modal-title" *ngIf="successBanner">Cronograma guardado con exito</h5>
+        <button *ngIf="!successBanner" type="button" class="close" (click)="onClose();" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <button *ngIf="successBanner" type="button" class="close" (click)="resetSearch();" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <div *ngIf="successBanner">CRONOGRAMA GUARDADO EXITOSAMENTE</div>
-        <p>Modal body text goes here.</p>
+        <div>
+          Clases:
+          <div *ngFor="let clase of this.data[0].selected_options;">
+            <p>Dia: {{clase.fecha}} - Hora: {{clase.horario}} hs - Auto: {{clase.id_auto}}</p>
+          </div>
+        </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="onClose();">Close</button>
-        <button *ngIf="!successBanner" type="button" class="btn btn-primary" (click)="onConfirm();">Save changes</button>
+        <!-- <button type="button" class="btn btn-secondary" (click)="onClose();">Close</button> -->
+        <button *ngIf="!successBanner" type="button" class="btn btn-primary" (click)="onConfirm();">Confirmar cronograma</button>
         <button *ngIf="successBanner" type="button" class="btn btn-primary" (click)="sendWsp();">Enviar vía Whatsapp <i class="fab fa-whatsapp"></i></button>
       </div>
     </div>

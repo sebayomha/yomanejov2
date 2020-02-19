@@ -15,9 +15,14 @@ export class CustomModalComponent {
   @Input() component: string;
   @Input() successBanner: boolean;
 
+  schedule : any;
+
   constructor() { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    console.log(this.data)
+    this.schedule = this.data[0].selected_options
+   }
 
   open() {
     $('#confirmModal').modal('show');
@@ -25,9 +30,16 @@ export class CustomModalComponent {
 
   onConfirm() {
     this.confirmation.emit(this.data);
+    
+    console.log(this.data)
   }
 
   onClose() {
+    $('#confirmModal').modal('hide');
+    // this.close.emit(this.data);
+  }
+
+  resetSearch() {
     $('#confirmModal').modal('hide');
     this.close.emit(this.data);
   }
