@@ -107,7 +107,17 @@
 		if ($resultGuardarCronograma) {
 			echo json_encode($GLOBALS['utils']->getResponse(0, 'Registros guardados exitosamente'));
 		} else {
-			echo json_encode($GLOBALS['utils']->getResponse(1, "Ocurrió un error al guardar algún registro"));
+			echo json_encode($GLOBALS['utils']->getResponse(1, "Ocurrió un error al guardar algún registro, vuelva a intentar más tarde."));
+		}
+	}
+
+	function obtenerCronogramasPendientesDeConfirmar() {
+		$cronograma = new Cronograma();
+		$resultCronograma = $cronograma->obtenerCronogramasPendientesDeConfirmar();
+		if ($resultCronograma == 1) {
+			echo json_encode($GLOBALS['utils']->getResponse(1, "Ocurrió un error al obtener los cronogramas, vuelva a intentar más tarde."));
+		} else {
+			echo json_encode($GLOBALS['utils']->getResponse(0, $resultCronograma));	
 		}
 	}
 
@@ -121,6 +131,9 @@
 		  	switch ($requestMethod){
 				case '/calcularCronograma':
 					calcularCronograma();
+					break;
+				case '/calcularCronograma/cronogramasPendientes':
+					obtenerCronogramasPendientesDeConfirmar();
 					break;
 			  	default:
 					echo "podriamos agregar otra consulta mas";
