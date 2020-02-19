@@ -1,4 +1,4 @@
-<div *ngIf="this.data" id="confirmModal" class="modal" tabindex="-1" role="dialog" #modalMensaje>
+<div *ngIf="data" id="confirmModal" class="modal" tabindex="-1" role="dialog" #modalMensaje>
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -12,7 +12,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <div>
+        <div *ngIf="data.length">
           Clases:
           <div *ngFor="let clase of this.data[0].selected_options;">
             <p>Dia: {{clase.fecha}} - Hora: {{clase.horario}} hs - Auto: {{clase.id_auto}}</p>
