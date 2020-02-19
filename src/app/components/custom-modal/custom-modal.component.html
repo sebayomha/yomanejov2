@@ -1,4 +1,4 @@
-<div *ngIf="data" id="confirmModal" class="modal" tabindex="-1" role="dialog" #modalMensaje>
+<div *ngIf="data.length" id="confirmModal" class="modal" tabindex="-1" role="dialog" #modalMensaje>
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -22,7 +22,7 @@
       <div class="modal-footer">
         <!-- <button type="button" class="btn btn-secondary" (click)="onClose();">Close</button> -->
         <button *ngIf="!successBanner" type="button" class="btn btn-primary" (click)="onConfirm();" style="margin: auto; border-radius: 20px; background-color: #43c89d; border-color: #43c89d;">Confirmar cronograma</button>
-        <button *ngIf="successBanner" type="button" class="btn btn-primary" (click)="sendWsp();" style="margin: auto; border-radius: 20px; background-color: #43c89d; border-color: #43c89d;">Enviar vía Whatsapp <i class="fab fa-whatsapp"></i></button>
+        <button *ngIf="successBanner" type="button" class="btn btn-primary" (click)="sendWsp();" style="margin: auto; border-radius: 20px; background-color: #43c89d; border-color: #43c89d;">Enviar Whatsapp <i class="fab fa-whatsapp"></i></button>
       </div>
     </div>
   </div>
