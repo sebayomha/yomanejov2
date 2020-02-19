@@ -418,6 +418,40 @@
             return false;
         }
 
+        function obtenerCronogramasPendientesDeConfirmar() {
+            $status = "NO CONFIRMADO";
+            $state = $this->conn->prepare('SELECT alumno.nombre, alumno.telefono, clase.idClase, clase.idCronograma, clase.alumno, clase.auto, clase.fecha, clase.horaInicio, clase.idZona, clase.idDireccion, clase.status AS satusClase, cronograma.status AS cronogramaStatus FROM clase INNER JOIN cronograma ON cronograma.idCronograma = clase.idCronograma AND cronograma.status = ? INNER JOIN alumno ON clase.alumno = alumno.idAlumno ORDER BY cronograma.idCronograma DESC');
+            $state->bind_param('s', $status);
+
+            $cronogramas = array();
+            if ($state->execute()) { //si la consulta fue exitosa
+                $result = $state->get_result();
+                while($row = $result->fetch_assoc()) {
+                    $cronogramaObject = (object) [
+                        'idCronograma' => $row['idCronograma'],
+                        'alumno' => $row['alumno'],
+                        'nombreAlumno' => $row['nombre'],
+                        'telefonoAlumno' => $row['telefono'],
+                        'clases' => array($row)
+                    ];
+                    $found = false;
+                    foreach ($cronogramas as $cronograma) {
+                        if ($cronograma->idCronograma == $row['idCronograma']) {
+                            $found = true;
+                            array_push($cronograma->clases, $row);
+                            break;
+                        }
+                    }
+                    if (!$found) {
+                        array_push($cronogramas, $cronogramaObject);
+                    }
+                }
+            } else {
+                return 1;
+            }
+            return $cronogramas;
+        }
+
         //deprecated
         function sortAutosPorID($a, $b) {
             return strcmp($a->idAuto, $b->idAuto);

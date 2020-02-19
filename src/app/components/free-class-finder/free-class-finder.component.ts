@@ -79,6 +79,10 @@ export class FreeClassFinderComponent {
     this.search.address_alternative[4].city = "La Plata";
     console.log(this.search);
 
+
+    this.cronogramaService.obtenerCronogramasPendientesDeConfirmar().subscribe( (response: Response) => {
+      console.log(response);
+    })
     // this.excepciones.forEach(excep => {
     //   excep.date = tomorrow;
     // });
@@ -184,10 +188,6 @@ export class FreeClassFinderComponent {
     if(tabulator.selectedIndex > 0){
       tabulator.selectedIndex--;
     }
-  }
-
-  formatPhoneNumber(phoneNumberString) {
-
   }
 
   addException() {
