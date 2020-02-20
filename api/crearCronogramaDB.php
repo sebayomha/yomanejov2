@@ -439,6 +439,7 @@
                         if ($cronograma->idCronograma == $row['idCronograma']) {
                             $found = true;
                             array_push($cronograma->clases, $row);
+                            usort($cronograma->clases, array($this, 'date_compare'));
                             break;
                         }
                     }
@@ -455,6 +456,12 @@
         //deprecated
         function sortAutosPorID($a, $b) {
             return strcmp($a->idAuto, $b->idAuto);
+        }
+
+        function date_compare($a, $b) {
+            $t1 = strtotime($a['fecha']);
+            $t2 = strtotime($b['fecha']);
+            return $t1 - $t2;
         }
 
         function sortHorariosPorHora($a, $b) {

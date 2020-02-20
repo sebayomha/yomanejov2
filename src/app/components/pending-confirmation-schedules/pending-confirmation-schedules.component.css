@@ -1,0 +1,45 @@
+.avatar {
+    background: #43c89d;
+    color: white;
+    font-weight: 500;
+    text-align: center;
+    line-height: 40px;
+}
+
+/* .confirmButton {
+    background: #43c89d;
+    color: white;
+}
+
+.deleteButton {
+    background: #ef2b2b;
+    color: white;
+} */
+
+.confirmButton {
+    color: #43c89d;
+}
+
+.confirmButton:hover {
+    background: #43c89d;
+    color: white;
+}
+
+.deleteButton {
+    color: #ef2b2b;
+}
+
+.deleteButton:hover {
+    background: #ef2b2b;
+    color: white;
+}
+
+.spanLink {
+    margin-left: 10px;
+    color: #43c89d;
+    cursor: pointer;
+}
+
+.spanLink:hover {
+    text-decoration: underline;
+}

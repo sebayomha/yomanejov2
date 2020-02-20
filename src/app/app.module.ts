@@ -41,6 +41,7 @@ import { RequestInterceptorService } from './services/interceptor/request-interc
 
 /* Pipes */
 import { PhonePipe } from './pipes/address.model';
+import { PendingConfirmationSchedulesComponent } from './components/pending-confirmation-schedules/pending-confirmation-schedules.component';
 registerLocaleData(localeEsAr);
 
 // import { BarRatingModule } from "ngx-bar-rating";
@@ -55,7 +56,8 @@ registerLocaleData(localeEsAr);
     ScheduleTooltipComponent,
     CustomModalComponent,
     LessonsComponent,
-    PhonePipe
+    PhonePipe,
+    PendingConfirmationSchedulesComponent
   ],
   imports: [
     BrowserModule,

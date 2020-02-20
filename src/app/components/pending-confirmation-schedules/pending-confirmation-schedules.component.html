@@ -1,0 +1,58 @@
+<div class="container">
+  <div class="row">
+    <mat-card *ngFor="let cronograma of cronogramas" class="col-8 offset-2" style="margin-top: 10px;"> 
+      <mat-card-header>
+        <div mat-card-avatar class="avatar">{{inicialesNombreAlumno(cronograma.nombreAlumno)}}</div>
+        <mat-card-title><span style="margin-right: 10px;">{{cronograma.nombreAlumno}}</span> - <span class="spanLink" style="margin-left: 10px;" (click)="sendWsp(cronograma.telefonoAlumno);" title="Enviar Whatsapp">{{cronograma.telefonoAlumno | phone}}<i style="margin-left: 7px; color: #43c89d;" class="fab fa-whatsapp"></i></span></mat-card-title>
+        <mat-card-subtitle>subtitulo va a ir las direcciones</mat-card-subtitle>
+      </mat-card-header>
+      <!-- <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu"> -->
+      <mat-card-content>
+        <table mat-table [dataSource]="cronograma.clases" style="width: 100%;" class="mat-elevation-z0">
+
+          <!--- Note that these columns can be defined in any order.
+                The actual rendered columns are set as a property on the row definition" -->
+        
+          <!-- No.Clase Column -->
+          <ng-container matColumnDef="noClase">
+            <th mat-header-cell *matHeaderCellDef> No. </th>
+            <td mat-cell *matCellDef="let element; let i = index"> {{i + 1}} </td>
+          </ng-container>
+
+          <!-- Fecha Column -->
+          <ng-container matColumnDef="fecha">
+            <th mat-header-cell *matHeaderCellDef> Fecha </th>
+            <td mat-cell *matCellDef="let element"> {{element.fecha | date:'mediumDate'}} </td>
+          </ng-container>
+        
+          <!-- Hora Column -->
+          <ng-container matColumnDef="hora">
+            <th mat-header-cell *matHeaderCellDef> Hora </th>
+            <td mat-cell *matCellDef="let element"> {{element.horaInicio}} </td>
+          </ng-container>
+        
+          <!-- Direccion Column -->
+          <ng-container matColumnDef="direccion">
+            <th mat-header-cell *matHeaderCellDef> Dirección </th>
+            <td mat-cell *matCellDef="let element"> {{element.idDireccion}} </td>
+          </ng-container>
+        
+          <!-- auto Column -->
+          <ng-container matColumnDef="auto">
+            <th mat-header-cell *matHeaderCellDef> Auto </th>
+            <td mat-cell *matCellDef="let element">{{element.auto == 4 ? 'AT' : element.auto}} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </mat-card-content>
+
+      <mat-card-actions align="end">
+        <button mat-button class="deleteButton">ELIMINAR</button>
+        <div fxFlex></div>
+        <button mat-button class="confirmButton">CONFIRMAR</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
