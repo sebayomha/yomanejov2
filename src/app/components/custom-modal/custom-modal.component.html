@@ -1,6 +1,6 @@
-<div *ngIf="data.length" id="confirmModal" class="modal" tabindex="-1" role="dialog" #modalMensaje>
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
+<div id="confirmModal" class="modal" tabindex="-1" role="dialog" #modalMensaje>
+  <div class="modal-dialog" [ngClass]="{'width-600': successBanner}" role="document">
+    <div class="modal-content" >
       <div class="modal-header">
         <h5 class="modal-title" *ngIf="!successBanner">Confirmar cronograma</h5>
         <h5 class="modal-title" *ngIf="successBanner">Cronograma guardado con exito</h5>
@@ -11,11 +11,22 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        <div *ngIf="data.length">
+      <div class="modal-body" style="height: 185px; overflow-y: auto;" *ngIf="data.length && !successBanner">
+        <div>
           Clases:
-          <div *ngFor="let clase of this.data[0].selected_options;">
-            <p>Dia: {{clase.fecha}} - Hora: {{clase.horario}} hs - Auto: {{clase.id_auto}}</p>
+          <div *ngFor="let clase of this.data[0].selected_options; let i = index">
+            <p>{{i+1}}°- Dia: {{clase.fecha | date: 'dd/MM/yyyy'}} - Hora: {{clase.horario}} hs</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-body" style="height:290px; overflow-y: auto;" *ngIf="data.length && successBanner">
+        <div>
+          Clases:
+          <div *ngFor="let clase of this.data[0].selected_options; let i = index">
+            <div class="row" *ngIf="i % 2 == 0" style="margin-bottom: 5px;">
+              <div class="col-6" *ngIf="this.data[0].selected_options[i]">{{i+1}}°- {{this.data[0].selected_options[i].fecha | date: 'dd/MM/yyyy'}} - {{this.data[0].selected_options[i].horario}} hs</div>
+              <div class="col-6" *ngIf="this.data[0].selected_options[i+1]">{{i+2}}°- {{this.data[0].selected_options[i+1].fecha | date: 'dd/MM/yyyy'}} - {{this.data[0].selected_options[i+1].horario}} hs</div>
+            </div>
           </div>
         </div>
       </div>
