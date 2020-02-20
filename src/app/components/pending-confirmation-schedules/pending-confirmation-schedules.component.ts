@@ -46,5 +46,4 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
     } 
     console.log("SENDWSP")
   }
-
 }
