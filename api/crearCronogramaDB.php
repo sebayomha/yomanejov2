@@ -316,6 +316,10 @@
                 }
 
                 /* SE INSERTA LA DISPONIBILIDAD DEL ALUMNO */
+                /* SE INSERTARA LA DISPONIBILIDAD DEL ALUMNO CON EL SIGUIENTE FORMATO:
+                [DISPONIBILIDADES: STRING] | [DIRECCION_ALTERNATIVA: BOOLEAN]
+                SI EL TRAMO HORARIO ES EN LA DIRECCION ALTERNATIVA SE PONDRA EN TRUE, SI ES EN LA PRINCIPAL EN FALSE. 
+                 */
                 $disponibilidad_string = [];
                 foreach ($disponibilidad as $dia) {
                     if ($dia->all_day) {
@@ -501,13 +505,81 @@
             $state = $this->conn->prepare('UPDATE cronograma SET status = ? WHERE cronograma.idCronograma = ?');
             $state->bind_param('si', $status, $idCronograma);
             $state->execute();
-            $confirmado = 'true';
+            $confirmado = 'true'; //INDICA QUE EL ALUMNO YA ES UN ALUMNO FIJO
             $today = date('Y-m-d');
             $state = $this->conn->prepare('UPDATE alumno SET confirmado = ?, activo = ?, fechaConfirmacion = ? WHERE alumno.idAlumno = ?');
             $state->bind_param('sssi', $confirmado, $confirmado, $today, $idAlumno);
 
             if ($state->execute()) {
                 return true;
+            } else {
+                return false;
+            }
+        }
+
+        function cancelarCronograma($idCronograma, $idAlumno) {
+            $state = $this->conn->prepare('DELETE FROM clase WHERE clase.idCronograma = ?');
+            $state->bind_param('i', $idCronograma);
+            if ($state->execute()) { 
+                $state = $this->conn->prepare('DELETE FROM cronograma WHERE cronograma.idCronograma = ?');
+                $state->bind_param('i', $idCronograma);
+                if ($state->execute()) {
+                    $state = $this->conn->prepare('SELECT alumno.confirmado, alumno.idDisponibilidad, alumno.idDireccion, alumno.idDireccionAlt FROM alumno WHERE alumno.idAlumno = ?');
+                    $state->bind_param('i', $idAlumno);
+                    if ($state->execute()) {
+                        $result = $state->get_result();
+
+                        $confirmado;
+                        $idDisponibilidad;
+                        $idDireccion;
+                        $idDireccionAlternativa;
+                        if ($result->num_rows > 0) {
+                            while($row = $result->fetch_assoc()) {
+                                $confirmado = filter_var($row['confirmado'], FILTER_VALIDATE_BOOLEAN);
+                                $idDisponibilidad = $row['idDisponibilidad'];
+                                $idDireccion = $row['idDireccion'];
+                                $idDireccionAlternativa = $row['idDireccionAlt'];
+                            }
+                        }               
+
+
+                        if (!$confirmado) { //SI EL ALUMNO ES ABSOLUTAMENTE NUEVO
+                            //ELIMINO SU DISPONIBILIDAD
+                            $state = $this->conn->prepare('DELETE FROM disponibilidad WHERE disponibilidad.idDisponibilidad = ?');
+                            $state->bind_param('i', $idDisponibilidad);
+                            if ($state->execute()) {
+                                //ELIMINO SU DIRECCION
+                                $state = $this->conn->prepare('DELETE FROM direccion WHERE direccion.idDireccion = ?');
+                                $state->bind_param('i', $idDireccion);
+                                if ($state->execute()) {
+                                    if ($idDireccionAlternativa != null) {
+                                        //ELIMINO SU DIRECCION ALTERNATIVA
+                                        $state = $this->conn->prepare('DELETE FROM direccion WHERE direccion.idDireccion = ?');
+                                        $state->bind_param('i', $idDireccionAlternativa);
+                                        $state->execute();
+                                    }
+                                    
+                                    //ELIMINO AL ALUMNO
+                                    $state = $this->conn->prepare('DELETE FROM alumno WHERE alumno.idAlumno = ?');
+                                    $state->bind_param('i', $idAlumno);
+                                    if ($state->execute()) {
+                                        return true;
+                                    } else {
+                                        return false;
+                                    }
+                                } else {
+                                    return false;
+                                }
+                            } else {
+                                return false;
+                            }
+                        }
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
             } else {
                 return false;
             }

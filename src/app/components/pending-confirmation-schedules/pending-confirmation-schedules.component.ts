@@ -19,6 +19,7 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
   showSuccessBanner: boolean = false;
   dataToConfirm: any;
   durationInSeconds: number = 3;
+  operation: string;
   @Output() finish = new EventEmitter<any>();
   @ViewChild('customModal') customModal;
 
@@ -60,11 +61,24 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
       'nombreAlumno': nombreAlumno,
       'idAlumno': idAlumno
     };
+    this.operation = 'Confirmar';
     this.customModal.open();
   }
 
   confirmSchedule($event) {
-    this.cronogramaService.confirmarCronogramaPendiente($event.idCronograma, $event.idAlumno).subscribe( (response: Response) => {
+    if (this.operation == 'Confirmar') {
+      this.confirmarCronograma($event.idCronograma, $event.idAlumno);
+    } else {
+      this.eliminarCronograma($event.idCronograma, $event.idAlumno);
+    }
+  }
+
+  onCustomModalClose() {
+    this.customModal.onClose();
+  }
+
+  confirmarCronograma(idCronograma, idAlumno) {
+    this.cronogramaService.confirmarCronogramaPendiente(idCronograma, idAlumno).subscribe( (response: Response) => {
       this.showSuccessBanner = false;
       this.customModal.onClose();
       this._snackBar.openFromComponent(SnackbarComponent, {
@@ -76,7 +90,26 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
     })
   }
 
-  onCustomModalClose() {
-    this.customModal.onClose();
+  eliminarCronograma(idCronograma, idAlumno) {
+    this.cronogramaService.cancelarCronogramaPendiente(idCronograma, idAlumno).subscribe( (response: Response) => {
+      this.showSuccessBanner = false;
+      this.customModal.onClose();
+      this._snackBar.openFromComponent(SnackbarComponent, {
+        duration: this.durationInSeconds * 1100,
+        data: response
+      });
+      this.ngOnInit();
+      window.scrollTo(0, 0);
+    })
+  }
+
+  onCancelSchedule(idCronograma, nombreAlumno, idAlumno) {
+    this.dataToConfirm = {
+      'idCronograma': idCronograma,
+      'nombreAlumno': nombreAlumno,
+      'idAlumno': idAlumno
+    };
+    this.operation = 'Cancelar';
+    this.customModal.open();
   }
 }

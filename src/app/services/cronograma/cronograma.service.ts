@@ -39,4 +39,12 @@ export class CronogramaService {
     return this.http.post('api/calcularCronograma/confirmarCronograma', {params: data});
   }
 
+  cancelarCronogramaPendiente(idCronograma, idAlumno) {
+    let data = {
+      idCronograma: idCronograma,
+      idAlumno: idAlumno
+    }
+    return this.http.post('api/calcularCronograma/cancelarCronograma', {params: data});
+  }
+
 }

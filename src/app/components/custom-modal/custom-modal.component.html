@@ -2,7 +2,14 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content" >
       <div class="modal-header" style="background: #43c89d; color: white; padding: 18px;">
-        <h5 class="modal-title" *ngIf="!successBanner">Confirmar cronograma</h5>
+        <h5 class="modal-title" *ngIf="!successBanner">
+          <span *ngIf="component == 'pendingConfirmationSchedules'">
+            {{ (operation == 'Confirmar') ? 'Confirmar cronograma': 'Eliminar cronograma'}}
+          </span>
+          <span *ngIf="component == 'availableSchedules'">
+            Confirmar cronograma
+          </span>
+        </h5>
         <h5 class="modal-title" *ngIf="successBanner" style="margin: auto; font-size: 90px; color: white;"><i class="fas fa-check-circle"></i></h5>
         <button *ngIf="!successBanner" type="button" class="close closeCross" (click)="onClose();" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -31,7 +38,7 @@
       </div>
       <div class="modal-body" style="height: 185px; margin-top: 10px;" *ngIf="data && !successBanner && component == 'pendingConfirmationSchedules'">
         <div>
-          <span>¿Está seguro que desea confirmar el cronograma </span>
+          <span>¿Está seguro que desea {{ (operation == 'Confirmar') ? 'confirmar': 'eliminar'}} el cronograma </span>
           <span style="font-weight: 500; color: #43c89d;">{{data.idCronograma}}</span>
           para
           <span style="font-weight: 500; color: #43c89d;">{{data.nombreAlumno | capitalize}}</span>?
@@ -39,7 +46,14 @@
       </div>
       <div class="modal-footer" style="padding: 25px;">
         <!-- <button type="button" class="btn btn-secondary" (click)="onClose();">Close</button> -->
-        <button *ngIf="!successBanner" type="button" class="btn btn-primary" (click)="onConfirm();" style="margin: auto; border-radius: 20px; background-color: #43c89d; border-color: #43c89d;">Confirmar cronograma</button>
+        <button *ngIf="!successBanner" type="button" class="btn btn-primary confirmCustomModal" [ngClass]="classConfirmBtn()" (click)="onConfirm();">
+          <span *ngIf="component == 'pendingConfirmationSchedules'">
+            {{ (operation == 'Confirmar') ? 'Confirmar cronograma': 'Eliminar cronograma'}}
+          </span>
+          <span *ngIf="component == 'availableSchedules'">
+            Confirmar cronograma
+          </span>
+        </button>
         <button *ngIf="successBanner" type="button" class="btn btn-primary" (click)="sendWsp();" style="margin: auto; border-radius: 20px; background-color: #43c89d; border-color: #43c89d;">Enviar Whatsapp <i class="fab fa-whatsapp"></i></button>
       </div>
     </div>
