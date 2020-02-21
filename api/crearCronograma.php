@@ -121,6 +121,19 @@
 		}
 	}
 
+	function confirmarCronograma() {
+		$post = json_decode(file_get_contents('php://input'));
+		$idCronograma = $post->params->idCronograma;
+		$idAlumno = $post->params->idAlumno;
+		$cronograma = new Cronograma();
+		$resultCronogramaUpdate = $cronograma->confirmarCronograma($idCronograma, $idAlumno);
+		if ($resultCronogramaUpdate) {
+			echo json_encode($GLOBALS['utils']->getResponse(0, 'El cronograma ha sido confirmado exitosamente'));	
+		} else {
+			echo json_encode($GLOBALS['utils']->getResponse(1, 'Lo lamentamos, ha ocurrido un error'));
+		}
+	}
+
 	function containsOnlyNull($input) {
 		return empty(array_filter($input, function ($a) { return $a !== null;}));
 	}
@@ -146,11 +159,14 @@
 			//Obtengo la URL Final para saber cual accion ejecutar.
 			switch ($requestMethod){
 				case '/calcularCronograma/guardar':
-				  guardarCronograma();
-				  break;
+					guardarCronograma();
+					break;
+				case '/calcularCronograma/confirmarCronograma':
+					confirmarCronograma();
+					break;
 				default:
-				  echo "podriamos agregar otra consulta mas";
-				  break;
+					echo "podriamos agregar otra consulta mas";
+					break;
 			}
 			break;    	
 		  }  

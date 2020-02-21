@@ -493,6 +493,26 @@
             return $cronogramas;
         }
 
+        function confirmarCronograma($idCronograma, $idAlumno) {
+            $status = "CONFIRMADO";
+            $state = $this->conn->prepare('UPDATE clase SET status = ? WHERE clase.idCronograma = ?');
+            $state->bind_param('si', $status, $idCronograma);
+            $state->execute();
+            $state = $this->conn->prepare('UPDATE cronograma SET status = ? WHERE cronograma.idCronograma = ?');
+            $state->bind_param('si', $status, $idCronograma);
+            $state->execute();
+            $confirmado = 'true';
+            $today = date('Y-m-d');
+            $state = $this->conn->prepare('UPDATE alumno SET confirmado = ?, activo = ?, fechaConfirmacion = ? WHERE alumno.idAlumno = ?');
+            $state->bind_param('sssi', $confirmado, $confirmado, $today, $idAlumno);
+
+            if ($state->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
         //deprecated
         function sortAutosPorID($a, $b) {
             return strcmp($a->idAuto, $b->idAuto);

@@ -171,7 +171,7 @@ export class AvailableSchedulesComponent {
           this.showSuccessBanner = false;
           this._snackBar.openFromComponent(SnackbarComponent, {
             duration: this.durationInSeconds * 1100,
-            data: response.data
+            data: response
           });
         }
       })

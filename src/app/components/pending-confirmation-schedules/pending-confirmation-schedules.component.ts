@@ -2,6 +2,8 @@ import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/cor
 import { CronogramaService } from 'src/app/services/cronograma/cronograma.service';
 import { Response } from '../../models/response';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackbarComponent } from '../snackbar/snackbar/snackbar.component';
 
 @Component({
   selector: 'app-pending-confirmation-schedules',
@@ -10,12 +12,13 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 })
 export class PendingConfirmationSchedulesComponent implements OnInit {
 
-  constructor(private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver) { }
+  constructor(private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private _snackBar: MatSnackBar) { }
 
   cronogramas: Array<any>;
   displayedColumns: string[] = ['noClase', 'fecha', 'hora', 'direccion', 'auto'];
   showSuccessBanner: boolean = false;
   dataToConfirm: any;
+  durationInSeconds: number = 3;
   @Output() finish = new EventEmitter<any>();
   @ViewChild('customModal') customModal;
 
@@ -51,15 +54,29 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
     console.log("SENDWSP")
   }
 
-  onConfirmSchedule(idCronograma, nombreAlumno) {
+  onConfirmSchedule(idCronograma, nombreAlumno, idAlumno) {
     this.dataToConfirm = {
       'idCronograma': idCronograma,
-      'nombreAlumno': nombreAlumno
+      'nombreAlumno': nombreAlumno,
+      'idAlumno': idAlumno
     };
-
     this.customModal.open();
-   /*  this.cronogramaService.confirmarCronogramaPendiente(idCronograma).subscribe( (response: Response) => {
-      console.log(response);
-    }) */
+  }
+
+  confirmSchedule($event) {
+    this.cronogramaService.confirmarCronogramaPendiente($event.idCronograma, $event.idAlumno).subscribe( (response: Response) => {
+      this.showSuccessBanner = false;
+      this.customModal.onClose();
+      this._snackBar.openFromComponent(SnackbarComponent, {
+        duration: this.durationInSeconds * 1100,
+        data: response
+      });
+      this.ngOnInit();
+      window.scrollTo(0, 0);
+    })
+  }
+
+  onCustomModalClose() {
+    this.customModal.onClose();
   }
 }

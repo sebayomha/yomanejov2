@@ -153,7 +153,7 @@ export class FreeClassFinderComponent {
           this.control_collapse_search = true;
           this._snackBar.openFromComponent(SnackbarComponent, {
             duration: this.durationInSeconds * 1100,
-            data: response.data
+            data: response
           });
         }
         break;

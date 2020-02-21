@@ -1,8 +1,10 @@
 <div class="snackBar">
-  <i class="material-icons infoIcon">
+  <i *ngIf="data.code != 0" class="material-icons infoIcon">
     info
   </i>
+  <i *ngIf="data.code == 0" class="far fa-check-circle successIcon">
+  </i>
   <span class="message">
-    {{data}}
+    {{data.data}}
   </span>
 </div>
