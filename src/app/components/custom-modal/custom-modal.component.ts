@@ -25,7 +25,7 @@ export class CustomModalComponent {
    }
 
   open() {
-    $('#confirmModal').modal('show');
+    $('#confirmModal').modal({show: true, backdrop: 'static',keyboard: false});
   }
 
   onConfirm() {

@@ -43,6 +43,7 @@ export class AvailableSchedulesComponent {
 
     step:number;
     classes: Array<any>;
+    classes_send: Array<any>;
     order_information:any;
     currentCheckedValue:String;
     dataToConfirm = [];
@@ -129,16 +130,29 @@ export class AvailableSchedulesComponent {
           this.classes[indexClass].fecha = option.fecha;
         }
       }
+      // this.cantSelectedClasses = 0;
+      // this.cantSelectedClasses = this.classes.reduce( (total, element) => {
+      //   return total + element.cant;
+      // }, 0)
+      this.cantSelectedClasses = 0;
+      this.classes_send = [];
+      this.classes.forEach(element => {
+        this.cantSelectedClasses = this.cantSelectedClasses + element.cant;
+        if (element.cant == 1) {
+          this.classes_send.push(element);
+        }
+      });
 
-      this.cantSelectedClasses = this.classes.reduce( (total, element) => {
-        return total + element.cant;
-      }, 0)
- 
+      console.log(this.classes_send);
+
     }
 
     saveOptions(){
       this.dataToConfirm = [];
-      this.dataToConfirm.push({'selected_options' : this.classes});
+      //Ordeno los dias
+      // this.classes_send.sort(function(a, b){return a.fecha - b.fecha});
+      // console.log(this.classes_send)
+      this.dataToConfirm.push({'selected_options' : this.classes_send});
       this.dataToConfirm.push({'student_name' : this.student_name});
       this.dataToConfirm.push({'student_phone' : this.student_phone.replace(/\s/g, "").replace('-', "")});
       this.dataToConfirm.push({'address' : this.address});
