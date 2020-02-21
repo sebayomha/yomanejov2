@@ -1,3 +1,11 @@
-.width-600 {
-    max-width: 700px !important;
+.height-290 {
+    height:290px !important;
+}
+
+.dot {
+    height: 25px;
+    width: 25px;
+    background-color: #43c89d;
+    border-radius: 50%;
+    display: inline-block;
 }

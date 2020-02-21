@@ -1,13 +1,13 @@
 <div id="confirmModal" class="modal" tabindex="-1" role="dialog" #modalMensaje>
-  <div class="modal-dialog" [ngClass]="{'width-600': successBanner}" role="document">
+  <div class="modal-dialog" role="document">
     <div class="modal-content" >
       <div class="modal-header">
         <h5 class="modal-title" *ngIf="!successBanner">Confirmar cronograma</h5>
-        <h5 class="modal-title" *ngIf="successBanner">Cronograma guardado con exito</h5>
+        <h5 class="modal-title" *ngIf="successBanner" style="margin: auto; font-size: 90px; color: #43c89d;"><i class="fas fa-check-circle"></i></h5>
         <button *ngIf="!successBanner" type="button" class="close" (click)="onClose();" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-        <button *ngIf="successBanner" type="button" class="close" (click)="resetSearch();" aria-label="Close">
+        <button *ngIf="successBanner" type="button" class="close" (click)="resetSearch();" aria-label="Close" style="margin: -1rem -1rem -1rem;">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -19,18 +19,17 @@
           </div>
         </div>
       </div>
-      <div class="modal-body" style="height:290px; overflow-y: auto;" *ngIf="data.length && successBanner">
+      <div class="modal-body" [ngClass]="{'height-290': this.data[0].selected_options.length > 10}" style="height: 185px; overflow-y: auto;" *ngIf="data.length && successBanner">
         <div>
-          Clases:
           <div *ngFor="let clase of this.data[0].selected_options; let i = index">
-            <div class="row" *ngIf="i % 2 == 0" style="margin-bottom: 5px;">
-              <div class="col-6" *ngIf="this.data[0].selected_options[i]">{{i+1}}°- {{this.data[0].selected_options[i].fecha | date: 'dd/MM/yyyy'}} - {{this.data[0].selected_options[i].horario}} hs</div>
-              <div class="col-6" *ngIf="this.data[0].selected_options[i+1]">{{i+2}}°- {{this.data[0].selected_options[i+1].fecha | date: 'dd/MM/yyyy'}} - {{this.data[0].selected_options[i+1].horario}} hs</div>
+            <div class="row" *ngIf="i % 2 == 0" style="margin-bottom: 10px;">
+              <div class="col-6" style="text-align: center;" *ngIf="this.data[0].selected_options[i]"><span class="dot"><p style="margin: 2px; color: white;">{{i+1}}</p></span>&nbsp;&nbsp; {{this.data[0].selected_options[i].fecha | date: 'dd/MM/yyyy'}} - {{this.data[0].selected_options[i].horario}} hs</div>
+              <div class="col-6" style="text-align: center;" *ngIf="this.data[0].selected_options[i+1]"><span class="dot"><p style="margin: 2px; color: white;">{{i+2}}</p></span>&nbsp;&nbsp; {{this.data[0].selected_options[i+1].fecha | date: 'dd/MM/yyyy'}} - {{this.data[0].selected_options[i+1].horario}} hs</div>
             </div>
           </div>
         </div>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer" style="padding: 25px;">
         <!-- <button type="button" class="btn btn-secondary" (click)="onClose();">Close</button> -->
         <button *ngIf="!successBanner" type="button" class="btn btn-primary" (click)="onConfirm();" style="margin: auto; border-radius: 20px; background-color: #43c89d; border-color: #43c89d;">Confirmar cronograma</button>
         <button *ngIf="successBanner" type="button" class="btn btn-primary" (click)="sendWsp();" style="margin: auto; border-radius: 20px; background-color: #43c89d; border-color: #43c89d;">Enviar Whatsapp <i class="fab fa-whatsapp"></i></button>
