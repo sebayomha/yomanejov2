@@ -34,6 +34,7 @@ import { ScheduleTooltipComponent } from './components/schedule-tooltip/schedule
 import { CustomModalComponent } from './components/custom-modal/custom-modal.component';
 import { LessonsComponent } from './components/lessons/lessons.component';
 import { SnackbarComponent } from './components/snackbar/snackbar/snackbar.component';
+import { PendingConfirmationSchedulesComponent } from './components/pending-confirmation-schedules/pending-confirmation-schedules.component';
 
 /* Services */
 import { LoaderService } from './services/loader/loader-service.service';
@@ -41,6 +42,7 @@ import { RequestInterceptorService } from './services/interceptor/request-interc
 
 /* Pipes */
 import { PhonePipe } from './pipes/address.model';
+import { CapitalizePipe } from './pipes/capitalize.pipe';
 registerLocaleData(localeEsAr);
 
 // import { BarRatingModule } from "ngx-bar-rating";
@@ -55,7 +57,9 @@ registerLocaleData(localeEsAr);
     ScheduleTooltipComponent,
     CustomModalComponent,
     LessonsComponent,
-    PhonePipe
+    PendingConfirmationSchedulesComponent,
+    PhonePipe,
+    CapitalizePipe    
   ],
   imports: [
     BrowserModule,

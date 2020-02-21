@@ -420,18 +420,58 @@
 
         function obtenerCronogramasPendientesDeConfirmar() {
             $status = "NO CONFIRMADO";
-            $state = $this->conn->prepare('SELECT alumno.nombre, alumno.telefono, clase.idClase, clase.idCronograma, clase.alumno, clase.auto, clase.fecha, clase.horaInicio, clase.idZona, clase.idDireccion, clase.status AS satusClase, cronograma.status AS cronogramaStatus FROM clase INNER JOIN cronograma ON cronograma.idCronograma = clase.idCronograma AND cronograma.status = ? INNER JOIN alumno ON clase.alumno = alumno.idAlumno ORDER BY cronograma.idCronograma DESC');
+            $state = $this->conn->prepare('SELECT 
+            d1.idDireccion AS id_DirPrincipal,
+            d1.calle AS calle_DirPrincipal, 
+            d1.calle_diag AS calle_diag_DirPrincipal, 
+            d1.calle_a AS calle_a_DirPrincipal,
+            d1.calle_a_diag AS calle_a_diag_DirPrincipal,
+            d1.calle_b AS calle_b_DirPrincipal,
+            d1.calle_b_diag AS calle_b_diag_DirPrincipal,
+            d1.numero AS numero_DirPrincipal,
+            d1.ciudad AS ciudad_DirPrincipal,
+            d1.departamento AS departamento_DirPrincipal,
+            d1.floor_ AS floor_DirPrincipal,
+            d1.observaciones AS observaciones_DirPrincipal,
+            d2.idDireccion AS id_DirAlternativa,
+            d2.calle AS calle_DirAlternativa,
+            d2.calle_diag AS calle_diag_DirAlternativa, 
+            d2.calle_a AS calle_a_DirAlternativa,
+            d2.calle_a_diag AS calle_a_diag_DirAlternativa,
+            d2.calle_b AS calle_b_DirAlternativa,
+            d2.calle_b_diag AS calle_b_diag_DirAlternativa,
+            d2.numero AS numero_DirAlternativa,
+            d2.ciudad AS ciudad_DirAlternativa,
+            d2.departamento AS departamento_DirAlternativa,
+            d2.floor_ AS floor_DirAlternativa,
+            d2.observaciones AS observaciones_DirAlternativa,
+            alumno.nombre, alumno.telefono, clase.idClase, clase.idCronograma, clase.alumno, clase.auto, clase.fecha, clase.horaInicio, clase.idZona, clase.idDireccion, clase.status AS satusClase, cronograma.status AS cronogramaStatus FROM clase INNER JOIN cronograma ON cronograma.idCronograma = clase.idCronograma AND cronograma.status = ? INNER JOIN alumno ON clase.alumno = alumno.idAlumno INNER JOIN direccion AS d1 ON d1.idDireccion = alumno.idDireccion LEFT JOIN direccion AS d2 ON d2.idDireccion = alumno.idDireccionAlt ORDER BY cronograma.idCronograma DESC');
             $state->bind_param('s', $status);
 
             $cronogramas = array();
             if ($state->execute()) { //si la consulta fue exitosa
                 $result = $state->get_result();
                 while($row = $result->fetch_assoc()) {
+                    $dirAlternativa = null;
+                    if ($row['id_DirAlternativa'] != null) {
+                        $dirAlternativa = $this->obtenerDireccionParaMostrar($row['calle_DirAlternativa'], filter_var($row['calle_diag_DirAlternativa'], FILTER_VALIDATE_BOOLEAN), $row['calle_a_DirAlternativa'], filter_var($row['calle_a_diag_DirAlternativa'], FILTER_VALIDATE_BOOLEAN), $row['calle_b_DirAlternativa'], filter_var($row['calle_b_diag_DirAlternativa'], FILTER_VALIDATE_BOOLEAN), $row['numero_DirAlternativa'], $row['ciudad_DirAlternativa'], $row['floor_DirAlternativa'], $row['departamento_DirAlternativa']);
+                    }
+
+                    if ($row['idDireccion'] == $row['id_DirAlternativa']) {
+                        $row['usandoDirAlternativa'] = true;
+                        $row['direccionClaseFormateada'] = $this->obtenerDireccionParaMostrar($row['calle_DirAlternativa'], filter_var($row['calle_diag_DirAlternativa'], FILTER_VALIDATE_BOOLEAN), $row['calle_a_DirAlternativa'], filter_var($row['calle_a_diag_DirAlternativa'], FILTER_VALIDATE_BOOLEAN), $row['calle_b_DirAlternativa'], filter_var($row['calle_b_diag_DirAlternativa'], FILTER_VALIDATE_BOOLEAN), $row['numero_DirAlternativa'], $row['ciudad_DirAlternativa'], $row['floor_DirAlternativa'], $row['departamento_DirAlternativa']);
+                    } else {
+                        $row['usandoDirAlternativa'] = false;
+                        $row['direccionClaseFormateada'] = $this->obtenerDireccionParaMostrar($row['calle_DirPrincipal'], filter_var($row['calle_diag_DirPrincipal'], FILTER_VALIDATE_BOOLEAN), $row['calle_a_DirPrincipal'], filter_var($row['calle_a_diag_DirPrincipal'], FILTER_VALIDATE_BOOLEAN), $row['calle_b_DirPrincipal'], filter_var($row['calle_b_diag_DirPrincipal'], FILTER_VALIDATE_BOOLEAN), $row['numero_DirPrincipal'], $row['ciudad_DirPrincipal'], $row['floor_DirPrincipal'], $row['departamento_DirPrincipal']);
+                    }
+
                     $cronogramaObject = (object) [
                         'idCronograma' => $row['idCronograma'],
                         'alumno' => $row['alumno'],
                         'nombreAlumno' => $row['nombre'],
                         'telefonoAlumno' => $row['telefono'],
+                        'direccionPrincipalFormateada' => $this->obtenerDireccionParaMostrar($row['calle_DirPrincipal'], filter_var($row['calle_diag_DirPrincipal'], FILTER_VALIDATE_BOOLEAN), $row['calle_a_DirPrincipal'], filter_var($row['calle_a_diag_DirPrincipal'], FILTER_VALIDATE_BOOLEAN), $row['calle_b_DirPrincipal'], filter_var($row['calle_b_diag_DirPrincipal'], FILTER_VALIDATE_BOOLEAN), $row['numero_DirPrincipal'], $row['ciudad_DirPrincipal'], $row['floor_DirPrincipal'], $row['departamento_DirPrincipal']),
+                        'direccionAlternativaFormateada' => $dirAlternativa,
                         'clases' => array($row)
                     ];
                     $found = false;
@@ -439,6 +479,7 @@
                         if ($cronograma->idCronograma == $row['idCronograma']) {
                             $found = true;
                             array_push($cronograma->clases, $row);
+                            usort($cronograma->clases, array($this, 'date_compare'));
                             break;
                         }
                     }
@@ -455,6 +496,12 @@
         //deprecated
         function sortAutosPorID($a, $b) {
             return strcmp($a->idAuto, $b->idAuto);
+        }
+
+        function date_compare($a, $b) {
+            $t1 = strtotime($a['fecha']);
+            $t2 = strtotime($b['fecha']);
+            return $t1 - $t2;
         }
 
         function sortHorariosPorHora($a, $b) {
@@ -764,7 +811,7 @@
             $direccionStringFormateada;
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
-                    $direccionStringFormateada = $this->obtenerDireccionParaMostrar($row['calle'], $row['calle_diag'], $row['calle_a'], $row['calle_a_diag'], $row['calle_b'], $row['calle_b_diag'], $row['numero'], $row['ciudad']);
+                    $direccionStringFormateada = $this->obtenerDireccionParaMostrar($row['calle'], $row['calle_diag'], $row['calle_a'], $row['calle_a_diag'], $row['calle_b'], $row['calle_b_diag'], $row['numero'], $row['ciudad'], $row['floor_'], $row['departamento']);
                 }
                 return $direccionStringFormateada;
             } else {
@@ -772,10 +819,10 @@
             }
         }
 
-        function obtenerDireccionParaMostrar($calle, $calle_diag, $calle_a, $calle_a_diag, $calle_b, $calle_b_diag, $numero, $ciudad) {
+        function obtenerDireccionParaMostrar($calle, $calle_diag, $calle_a, $calle_a_diag, $calle_b, $calle_b_diag, $numero, $ciudad, $floor, $departamento) {
             $stringDireccion = "";
 
-            if($calle_diag) {
+            if($calle_diag == true) {
                 $stringDireccion .= "Diagonal ".$calle;
             } else {
                 $stringDireccion .= "Calle ".$calle;
@@ -821,7 +868,13 @@
                 }
             }
 
-            $stringDireccion .= ', '.$ciudad;
+            if ($floor != '') {
+                $stringDireccion .= ' Dpto: '.$floor.$departamento.' , '.$ciudad;
+            } else {
+                $stringDireccion .= ', '.$ciudad;
+            }
+
+            
 
             return $stringDireccion;
         }
