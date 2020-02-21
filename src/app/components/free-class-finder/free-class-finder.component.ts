@@ -42,6 +42,8 @@ export class FreeClassFinderComponent {
   constructor(private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private datePipe: DatePipe, private _snackBar: MatSnackBar) { }
 
   ngOnInit() {
+    this.addresses = [];
+    this.addresses_alt = [];
     let dates_times = new Array<DatesTimes>();
     for (let i = 0; i <=6; i++) {
       let option = new Option('', '', this.predefinedHours, [], null, false);

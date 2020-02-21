@@ -1,6 +1,6 @@
 <div class="container">
   <div class="row">
-    <mat-card *ngFor="let cronograma of cronogramas" class="col-10 offset-1" style="margin-top: 10px;"> 
+    <mat-card *ngFor="let cronograma of cronogramas" class="col-12 col-md-10 offset-md-1" style="margin-top: 10px;"> 
       <mat-card-header>
         <div mat-card-avatar class="avatar"><!--{{inicialesNombreAlumno(cronograma.nombreAlumno)}}-->#{{cronograma.idCronograma}}</div>
         <mat-card-title><span style="margin-right: 10px; font-weight: 500; font-size: 16px;">{{ cronograma.nombreAlumno | capitalize}}</span> <span class="spanLink" style="margin-left: 3px;" (click)="sendWsp(cronograma.telefonoAlumno);" title="Enviar Whatsapp">{{cronograma.telefonoAlumno | phone}}<i style="margin-left: 7px; color: #43c89d;" class="fab fa-whatsapp"></i></span></mat-card-title>

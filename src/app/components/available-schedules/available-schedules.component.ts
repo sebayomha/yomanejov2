@@ -170,6 +170,7 @@ export class AvailableSchedulesComponent {
         if (response.code == 0) {
           this.showSuccessBanner = true;
         } else {
+          this.customModal.onClose();
           this.showSuccessBanner = false;
           this._snackBar.openFromComponent(SnackbarComponent, {
             duration: this.durationInSeconds * 1100,

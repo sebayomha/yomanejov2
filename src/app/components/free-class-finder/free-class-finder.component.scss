@@ -54,3 +54,18 @@
   input::-webkit-inner-spin-button {
     -webkit-appearance: none;
   }
+
+  .confirmButtonCalcular {
+    color: #43c89d;
+    margin-bottom: 10px;
+  }
+
+  .confirmButtonCalcular:hover {
+    background: #43c89d;
+    color: white;
+  }
+
+  .confirmButtonCalcular:disabled {
+    background: none;
+    color: rgba(0,0,0,.26);
+  }
