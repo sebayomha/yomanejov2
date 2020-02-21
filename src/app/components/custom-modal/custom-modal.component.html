@@ -21,7 +21,7 @@
       </div>
       <div class="modal-body" [ngClass]="{'height-290': this.data[0].selected_options.length > 10}" style="height: 185px; overflow-y: auto;" *ngIf="component == 'availableSchedules' && data.length && successBanner">
         <div>
-          <div *ngFor="let clase of this.data[0].selected_options; let i = index">
+          <div *ngFor="let clase of this.data[0].selected_options; let i = index" style="margin-top: 10px;">
             <div class="row" *ngIf="i % 2 == 0" style="margin-bottom: 10px;">
               <div class="col-6" style="text-align: center;" *ngIf="this.data[0].selected_options[i]"><span class="dot"><p style="margin: 1px; color: white;">{{i+1}}</p></span>&nbsp;&nbsp; {{this.data[0].selected_options[i].fecha | date: 'dd/MM/yyyy'}} - {{this.data[0].selected_options[i].horario}} hs</div>
               <div class="col-6" style="text-align: center;" *ngIf="this.data[0].selected_options[i+1]"><span class="dot"><p style="margin: 1px; color: white;">{{i+2}}</p></span>&nbsp;&nbsp; {{this.data[0].selected_options[i+1].fecha | date: 'dd/MM/yyyy'}} - {{this.data[0].selected_options[i+1].horario}} hs</div>
