@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { CronogramaService } from 'src/app/services/cronograma/cronograma.service';
 import { Response } from '../../models/response';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -14,6 +14,10 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
 
   cronogramas: Array<any>;
   displayedColumns: string[] = ['noClase', 'fecha', 'hora', 'direccion', 'auto'];
+  showSuccessBanner: boolean = false;
+  dataToConfirm: any;
+  @Output() finish = new EventEmitter<any>();
+  @ViewChild('customModal') customModal;
 
   ngOnInit() {
     this.cronogramaService.obtenerCronogramasPendientesDeConfirmar().subscribe( (response: Response) => {
@@ -45,5 +49,17 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
       window.open("https://web.whatsapp.com/send?phone=+54"+numeroTelefono, "_blank");
     } 
     console.log("SENDWSP")
+  }
+
+  onConfirmSchedule(idCronograma, nombreAlumno) {
+    this.dataToConfirm = {
+      'idCronograma': idCronograma,
+      'nombreAlumno': nombreAlumno
+    };
+
+    this.customModal.open();
+   /*  this.cronogramaService.confirmarCronogramaPendiente(idCronograma).subscribe( (response: Response) => {
+      console.log(response);
+    }) */
   }
 }
