@@ -101,6 +101,7 @@ export class AvailableSchedulesComponent {
         'index': '',
         'cant': null,
         'fecha': fecha,
+        'fecha_orden': new Date(fecha),
         'horario': event.option.value.horaInicio,
         'id_auto': event.option.value.idAuto,
         'da': event.option.value.usandoDirAlt,
@@ -139,6 +140,7 @@ export class AvailableSchedulesComponent {
       this.classes.forEach(element => {
         this.cantSelectedClasses = this.cantSelectedClasses + element.cant;
         if (element.cant == 1) {
+          element.fecha_orden.setDate(element.fecha_orden.getDate() - 1);
           this.classes_send.push(element);
         }
       });
@@ -150,8 +152,8 @@ export class AvailableSchedulesComponent {
     saveOptions(){
       this.dataToConfirm = [];
       //Ordeno los dias
-      // this.classes_send.sort(function(a, b){return a.fecha - b.fecha});
-      // console.log(this.classes_send)
+      this.classes_send.sort(function(a, b){return a.fecha_orden - b.fecha_orden});
+      console.log(this.classes_send)
       this.dataToConfirm.push({'selected_options' : this.classes_send});
       this.dataToConfirm.push({'student_name' : this.student_name});
       this.dataToConfirm.push({'student_phone' : this.student_phone.replace(/\s/g, "").replace('-', "")});
