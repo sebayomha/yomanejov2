@@ -37,14 +37,14 @@
           </div>
         </div>
       </div>
-      <div class="modal-body" *ngIf="data && !successBanner && component == 'pendingConfirmationSchedules'">
+      <div class="modal-body" [style.height]="(operation != 'Confirmar') ? '185px' : null" *ngIf="data && !successBanner && component == 'pendingConfirmationSchedules'">
         <form>
           <span>¿Está seguro que desea {{ (operation == 'Confirmar') ? 'confirmar': 'eliminar'}} el cronograma </span>
           <span style="font-weight: 500; color: #43c89d;">{{data.idCronograma}}</span>
           para
           <span style="font-weight: 500; color: #43c89d;">{{data.nombreAlumno | capitalize}}</span>?
 
-          <app-direccion-fisica #direccionFisica [data]="data"></app-direccion-fisica>
+          <app-direccion-fisica *ngIf="operation == 'Confirmar'" #direccionFisica [data]="data"></app-direccion-fisica>
         </form>
       </div>
       <div class="modal-footer" style="padding: 25px;">
