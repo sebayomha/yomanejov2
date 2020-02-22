@@ -475,7 +475,9 @@
                         'nombreAlumno' => $row['nombre'],
                         'telefonoAlumno' => $row['telefono'],
                         'direccionPrincipalFormateada' => $this->obtenerDireccionParaMostrar($row['calle_DirPrincipal'], filter_var($row['calle_diag_DirPrincipal'], FILTER_VALIDATE_BOOLEAN), $row['calle_a_DirPrincipal'], filter_var($row['calle_a_diag_DirPrincipal'], FILTER_VALIDATE_BOOLEAN), $row['calle_b_DirPrincipal'], filter_var($row['calle_b_diag_DirPrincipal'], FILTER_VALIDATE_BOOLEAN), $row['numero_DirPrincipal'], $row['ciudad_DirPrincipal'], $row['floor_DirPrincipal'], $row['departamento_DirPrincipal']),
+                        'idDireccionPrincipal' => $row['id_DirPrincipal'],
                         'direccionAlternativaFormateada' => $dirAlternativa,
+                        'idDireccionAlternativa' => $row['id_DirAlternativa'],
                         'clases' => array($row)
                     ];
                     $found = false;

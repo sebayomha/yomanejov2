@@ -1,5 +1,6 @@
-<div id="confirmModal" class="modal" tabindex="-1" role="dialog" #modalMensaje>
-  <div class="modal-dialog" role="document">
+<div id="modalContainer" class="col-12">
+  <div id="confirmModal" style="padding-right: 0px;" class="modal" tabindex="-1" role="dialog" #modalMensaje>
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content" >
       <div class="modal-header" style="background: #43c89d; color: white; padding: 18px;">
         <h5 class="modal-title" *ngIf="!successBanner">
@@ -36,17 +37,19 @@
           </div>
         </div>
       </div>
-      <div class="modal-body" style="height: 185px; margin-top: 10px;" *ngIf="data && !successBanner && component == 'pendingConfirmationSchedules'">
-        <div>
+      <div class="modal-body" *ngIf="data && !successBanner && component == 'pendingConfirmationSchedules'">
+        <form>
           <span>¿Está seguro que desea {{ (operation == 'Confirmar') ? 'confirmar': 'eliminar'}} el cronograma </span>
           <span style="font-weight: 500; color: #43c89d;">{{data.idCronograma}}</span>
           para
           <span style="font-weight: 500; color: #43c89d;">{{data.nombreAlumno | capitalize}}</span>?
-        </div>
+
+          <app-direccion-fisica #direccionFisica [data]="data"></app-direccion-fisica>
+        </form>
       </div>
       <div class="modal-footer" style="padding: 25px;">
         <!-- <button type="button" class="btn btn-secondary" (click)="onClose();">Close</button> -->
-        <button *ngIf="!successBanner" type="button" class="btn btn-primary confirmCustomModal" [ngClass]="classConfirmBtn()" (click)="onConfirm();">
+        <button [disabled]="checkDisabledConditions()" *ngIf="!successBanner" type="button" class="btn btn-primary confirmCustomModal" [ngClass]="classConfirmBtn()" (click)="onConfirm();">
           <span *ngIf="component == 'pendingConfirmationSchedules'">
             {{ (operation == 'Confirmar') ? 'Confirmar cronograma': 'Eliminar cronograma'}}
           </span>
@@ -58,4 +61,5 @@
       </div>
     </div>
   </div>
+</div>
 </div>

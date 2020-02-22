@@ -55,11 +55,29 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
     console.log("SENDWSP")
   }
 
-  onConfirmSchedule(idCronograma, nombreAlumno, idAlumno) {
+  onConfirmSchedule(idCronograma, nombreAlumno, idAlumno, direccionPrincipal, direccionAlternativa, direccionPrincipalFormated, direccionAlternativaFormated) {
+    let addressesAlumno = [];
+
+    let direccionObject = {
+      'idDireccion': direccionPrincipal,
+      'direccionFormated': direccionPrincipalFormated
+    }
+    addressesAlumno.push(direccionObject);
+
+    let direccionObjectCopy = Object.assign({}, direccionObject);
+
+    if (direccionAlternativa != null) {
+      direccionObjectCopy.idDireccion = direccionAlternativa;
+      direccionObjectCopy.direccionFormated = direccionAlternativaFormated;
+  
+      addressesAlumno.push(direccionObjectCopy);
+    }
+
     this.dataToConfirm = {
       'idCronograma': idCronograma,
       'nombreAlumno': nombreAlumno,
-      'idAlumno': idAlumno
+      'idAlumno': idAlumno,
+      'addressesAlumno': addressesAlumno
     };
     this.operation = 'Confirmar';
     this.customModal.open();
@@ -67,7 +85,7 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
 
   confirmSchedule($event) {
     if (this.operation == 'Confirmar') {
-      this.confirmarCronograma($event.idCronograma, $event.idAlumno);
+      this.confirmarCronograma($event.idCronograma, $event.idAlumno, $event.direccionFisicaInformation);
     } else {
       this.eliminarCronograma($event.idCronograma, $event.idAlumno);
     }
@@ -77,8 +95,8 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
     this.customModal.onClose();
   }
 
-  confirmarCronograma(idCronograma, idAlumno) {
-    this.cronogramaService.confirmarCronogramaPendiente(idCronograma, idAlumno).subscribe( (response: Response) => {
+  confirmarCronograma(idCronograma, idAlumno, direccionFisicaInformation) {
+    this.cronogramaService.confirmarCronogramaPendiente(idCronograma, idAlumno, direccionFisicaInformation).subscribe( (response: Response) => {
       this.showSuccessBanner = false;
       this.customModal.onClose();
       this._snackBar.openFromComponent(SnackbarComponent, {

@@ -1,0 +1,98 @@
+<div style="margin-top: 15px;">
+  <label style="font-weight: 500;">
+  Seleccione la dirección del alumno:
+</label>
+</div>
+
+<mat-selection-list style="padding-top: 0px;" #addressesAlumnoSelection (selectionChange)="onAddressSelection($event);">
+  <mat-list-option [value]="data" checkboxPosition="before" *ngFor="let data of data.addressesAlumno">
+    {{data.direccionFormated}}
+  </mat-list-option>
+</mat-selection-list>
+
+<div id="nuevaDireccionCheckbox" style="margin-top: 10px;">
+<mat-checkbox (click)="addressesAlumnoSelection.deselectAll();" style="font-weight: 500;" name="nuevaDireccion"
+[(ngModel)]="nuevaDireccion">Nueva dirección</mat-checkbox>
+</div>
+<div id="nuevaDireccionContainer" *ngIf="nuevaDireccion">
+<form #newDireccionForm="ngForm">
+<div style="font-size: 13px; margin-top: 15px; margin-bottom: 10px;" class="text-muted">Recuerde que debe ingresar
+la calle y un número para continuar</div>
+<div class="row">
+<div class="col-12 col-lg-4">
+  <mat-form-field style="width: 100%;">
+      <mat-label>Localidad</mat-label>
+      <mat-select [(ngModel)]="direccion.city" name="city">
+          <mat-option *ngFor="let city of locations" [value]="city">
+            {{city}}
+          </mat-option>
+      </mat-select>
+  </mat-form-field>
+</div>
+</div>
+<div class="row">
+<div class="col-12 col-lg-5">
+  <mat-checkbox style="margin-right: 15px; width: 30%;" name="street_diag"
+      [(ngModel)]="direccion.diag">Diag</mat-checkbox>
+  <mat-form-field style="width: 70%;">
+      <input matInput placeholder="Calle" name="street"
+          [(ngModel)]="direccion.street" #street="ngModel" required>
+  </mat-form-field>
+  <div *ngIf="street.errors?.required && street.touched"
+      style="color: #f44336; font-size: 12px; margin-bottom: 10px; margin-top: -10px;">
+      Debe ingresar una calle para continuar
+  </div>
+</div>
+<div class="col-12 col-lg-3">
+  <mat-form-field style="width: 100%;">
+      <input matInput placeholder="Número" name="altitud"
+          [(ngModel)]="direccion.altitud" #altitud="ngModel" required>
+  </mat-form-field>
+  <div *ngIf="altitud.errors?.required && altitud.touched"
+    style="color: #f44336; font-size: 12px; margin-bottom: 10px; margin-top: -10px;">
+    Debe ingresar un número para continuar
+  </div>
+</div>
+<div class="col-12 col-lg-2">
+  <mat-form-field style="width: 100%;">
+      <input matInput placeholder="Piso" name="piso"
+          [(ngModel)]="direccion.floor" #piso="ngModel">
+  </mat-form-field>
+</div>
+<div class="col-12 col-lg-2">
+  <mat-form-field style="width: 100%;">
+      <input matInput placeholder="Depto" name="depto"
+          [(ngModel)]="direccion.department" #depto="ngModel">
+  </mat-form-field>
+</div>
+</div>
+<div><label>Entre:</label></div>
+<div class="row">
+<div class="col-12 col-lg-6">
+  <mat-checkbox style="margin-right: 15px;" name="street_a_diag"
+      [(ngModel)]="direccion.diag_a">Diag</mat-checkbox>
+  <mat-form-field style="width: 77%;">
+      <input matInput placeholder="Calle" name="street_a"
+          [(ngModel)]="direccion.street_a">
+  </mat-form-field>
+</div>
+<!-- <div class="col-sm-1" style="margin: auto;"></div> -->
+<div class="col-12 col-lg-6">
+  <mat-checkbox style="margin-right: 15px;" name="street_b_diag"
+      [(ngModel)]="direccion.diag_b">Diag</mat-checkbox>
+  <mat-form-field style="width: 77%;">
+      <input matInput placeholder="Calle" name="street_b"
+          [(ngModel)]="direccion.street_b">
+  </mat-form-field>
+</div>
+</div>
+<div class="row" style="margin-bottom:15px;">
+<div class="col-12 col-lg-6">
+  <mat-form-field style="width: 100%;">
+      <input matInput placeholder="Observaciones" name="obser"
+          [(ngModel)]="direccion.observations" #obser="ngModel">
+  </mat-form-field>
+</div>
+</div>
+</form>
+</div>

@@ -1,0 +1,50 @@
+
+
+  ::ng-deep .mat-checkbox-layout{
+    margin: auto !important;
+  }
+
+  ::ng-deep .mat-expansion-indicator::after {
+    color:white;
+  }
+
+  ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background, ::ng-deep .mat-pseudo-checkbox-checked {
+    background-color:#43c89d;
+  }
+
+  ::ng-deep .mat-list-item-content {
+      padding-left: 0px !important;
+  }
+  
+  ::ng-deep .mat-checkbox-label {
+      padding-left: 8px;
+  }
+
+  .btnHover:hover {
+    border-radius: 25px;
+  }
+
+  .btnHover:focus {
+    outline: none !important;
+  }
+
+  .circle-color-primary {
+    color:#43c89d;
+  }
+
+  .circle-color-primary-disabled {
+    color:#43c89d7d
+  }
+  
+  input[type='number'] {
+    -moz-appearance:textfield;
+  }
+
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+
+  ::ng-deep .cdk-global-overlay-wrapper, ::ng-deep .cdk-overlay-container {
+    z-index: 99999 !important;
+ }
