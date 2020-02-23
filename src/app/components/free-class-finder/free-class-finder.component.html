@@ -13,7 +13,7 @@
                     <div class="row" style="margin-top: 30px;">
                         <div class="col-sm-12 col-md-4">
                             <mat-form-field style="width: 100%;">
-                                <input #student_name="ngModel" matInput placeholder="Nombre del alumno" name="student_name" [(ngModel)]="search.student_name"
+                                <input #student_name="ngModel" maxlength="60" matInput placeholder="Nombre del alumno" name="student_name" [(ngModel)]="search.student_name"
                                   required autofocus>
                             </mat-form-field>
                             <div *ngIf="student_name.errors?.required && student_name.touched"
@@ -24,12 +24,16 @@
 
                         <div class="col-sm-12 col-md-4">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" #student_phone="ngModel" matInput placeholder="Teléfono del alumno" name="student_phone" (ngModelChange)="search.student_phone = $event" [ngModel]="search.student_phone | phone"
-                                  required autofocus>
+                                <input type="text" #student_phone="ngModel" maxlength="14" matInput placeholder="Teléfono del alumno" name="student_phone" (ngModelChange)="search.student_phone = $event" [ngModel]="search.student_phone | phone"
+                                  required (keypress)="preventLetters($event)" autofocus>
                             </mat-form-field>
                             <div *ngIf="student_phone.errors?.required && student_phone.touched"
                                 style="color: #f44336; font-size: 12px; margin-bottom: 10px; margin-top: -10px;">
                                 Debe ingresar el teléfono para continuar
+                            </div>
+                            <div *ngIf="student_phone.errors?.maxlength && student_phone.touched"
+                                style="color: #f44336; font-size: 12px; margin-bottom: 10px; margin-top: -10px;">
+                                El teléfono no puede tener más de 10 dígitos.
                             </div>
                         </div>
                     </div>
@@ -46,8 +50,8 @@
                             </div>
                             <div class="col-6 col-sm-6 col-md-6 col-lg-4">
                                 <mat-form-field class="example-full-width">
-                                    <input matInput placeholder="N° de clases" name="lessons"
-                                        [(ngModel)]="search.lessons" #lessons="ngModel">
+                                    <input maxlength="2" matInput placeholder="N° de clases" name="lessons"
+                                        [(ngModel)]="search.lessons" #lessons="ngModel" (keypress)="preventLetters($event)">
                                 </mat-form-field>
                             </div>
                         </div>

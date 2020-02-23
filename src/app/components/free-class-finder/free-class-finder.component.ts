@@ -401,4 +401,11 @@ export class FreeClassFinderComponent {
     }
   }
 
+  preventLetters($event) {
+    var reg = /^[0-9]+$/i;
+    if (!reg.test($event.key)) {
+      $event.preventDefault();
+    }
+  }
+
 }
