@@ -5,6 +5,7 @@ import { DatePipe, registerLocaleData } from '@angular/common';
 import { LOCALE_ID } from '@angular/core';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import localeEsAr from '@angular/common/locales/es-AR';
+import { app_routing } from "./app.routes";
 
 /* Material Components */
 import { MatCardModule } from '@angular/material/card';
@@ -35,6 +36,8 @@ import { CustomModalComponent } from './components/custom-modal/custom-modal.com
 import { LessonsComponent } from './components/lessons/lessons.component';
 import { SnackbarComponent } from './components/snackbar/snackbar/snackbar.component';
 import { PendingConfirmationSchedulesComponent } from './components/pending-confirmation-schedules/pending-confirmation-schedules.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+
 
 /* Services */
 import { LoaderService } from './services/loader/loader-service.service';
@@ -59,7 +62,8 @@ registerLocaleData(localeEsAr);
     LessonsComponent,
     PendingConfirmationSchedulesComponent,
     PhonePipe,
-    CapitalizePipe    
+    CapitalizePipe,
+    NavbarComponent 
   ],
   imports: [
     BrowserModule,
@@ -79,7 +83,8 @@ registerLocaleData(localeEsAr);
     MatSnackBarModule,
     MatRadioModule,
     MatListModule,
-    MatTableModule
+    MatTableModule,
+    app_routing
     
     // BarRatingModule
   ],
