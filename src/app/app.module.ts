@@ -46,6 +46,7 @@ import { RequestInterceptorService } from './services/interceptor/request-interc
 /* Pipes */
 import { PhonePipe } from './pipes/address.model';
 import { CapitalizePipe } from './pipes/capitalize.pipe';
+import { DireccionFisicaComponent } from './components/direccion-fisica/direccion-fisica.component';
 registerLocaleData(localeEsAr);
 
 // import { BarRatingModule } from "ngx-bar-rating";
@@ -63,7 +64,8 @@ registerLocaleData(localeEsAr);
     PendingConfirmationSchedulesComponent,
     PhonePipe,
     CapitalizePipe,
-    NavbarComponent 
+    NavbarComponent,
+    DireccionFisicaComponent    
   ],
   imports: [
     BrowserModule,

@@ -31,10 +31,11 @@ export class CronogramaService {
     return this.http.get('api/calcularCronograma/cronogramasPendientes');
   }
 
-  confirmarCronogramaPendiente(idCronograma, idAlumno) {
+  confirmarCronogramaPendiente(idCronograma, idAlumno, direccionFisicaInformation) {
     let data = {
       idCronograma: idCronograma,
-      idAlumno: idAlumno
+      idAlumno: idAlumno,
+      direccionFisicaInformation: direccionFisicaInformation
     }
     return this.http.post('api/calcularCronograma/confirmarCronograma', {params: data});
   }

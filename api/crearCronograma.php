@@ -128,7 +128,7 @@
 		$cronograma = new Cronograma();
 		$resultCronogramaUpdate = $cronograma->confirmarCronograma($idCronograma, $idAlumno);
 		if ($resultCronogramaUpdate) {
-			echo json_encode($GLOBALS['utils']->getResponse(0, 'El cronograma ha sido confirmado exitosamente'));	
+			echo json_encode($GLOBALS['utils']->getResponse(0, 'El cronograma '.$idCronograma.' ha sido confirmado exitosamente'));	
 		} else {
 			echo json_encode($GLOBALS['utils']->getResponse(1, 'Lo lamentamos, ha ocurrido un error'));
 		}
