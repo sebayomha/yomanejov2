@@ -19,6 +19,7 @@ export class DireccionFisicaComponent implements OnInit {
     'street_b': '',
     'diag_b': false,
     'city': 'La Plata',
+    'altitud': '',
     'department': '',
     'floor': '',
     'observations': ''

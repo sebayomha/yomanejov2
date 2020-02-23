@@ -499,13 +499,13 @@
             return $cronogramas;
         }
 
-        function confirmarCronograma($idCronograma, $idAlumno, $direccionFisica, $clases, $documento) {
+        function confirmarCronograma($idCronograma, $idAlumno, $direccionFisica, $clases, $documento) { 
             $clasesExistentes = [];
-            $cronograma = [];
             foreach ($clases as $key=>$clase) {
+                $status = "CONFIRMADO";
                 /* SE VERIFICA SI LAS CLASES AUN ESTAN DISPONIBLES */
-                $state = $this->conn->prepare('SELECT clase.idClase FROM clase WHERE clase.fecha = ? AND clase.horaInicio = ? AND clase.auto = ?');
-                $state->bind_param('ssi', $clase->fecha, $clase->horaInicio, $clase->auto);
+                $state = $this->conn->prepare('SELECT clase.idClase FROM clase WHERE clase.fecha = ? AND clase.horaInicio = ? AND clase.auto = ? AND clase.status = ?');
+                $state->bind_param('ssis', $clase->fecha, $clase->horaInicio, $clase->auto, $status);
                 $state->execute();
 
                 $result = $state->get_result();
@@ -514,7 +514,7 @@
                     array_push($clasesExistentes, $key + 1);
                 }   
             }
-            
+
             if (empty($clasesExistentes)) {
                 $status = "CONFIRMADO";
                 $state = $this->conn->prepare('UPDATE clase SET status = ? WHERE clase.idCronograma = ?');
@@ -525,8 +525,24 @@
                 $state->execute();
                 $confirmado = 'true'; //INDICA QUE EL ALUMNO YA ES UN ALUMNO FIJO
                 $today = date('Y-m-d');
-                $state = $this->conn->prepare('UPDATE alumno SET confirmado = ?, activo = ?, fechaConfirmacion = ? WHERE alumno.idAlumno = ?');
-                $state->bind_param('sssi', $confirmado, $confirmado, $today, $idAlumno);
+
+                $idDireccionFisica;
+                if (!$direccionFisica->nuevaDireccion) {
+                    $idDireccionFisica = $direccionFisica->idDireccionSeleccionada;
+                } else {
+                    $state = $this->conn->prepare('INSERT INTO direccion (calle, calle_diag, calle_a, calle_a_diag, calle_b, calle_b_diag, numero, ciudad, departamento, floor_, observaciones) VALUES (?,?,?,?,?,?,?,?,?,?,?)');
+                    $address_diag_string = var_export($direccionFisica->direccion->diag, true);
+                    $address_a_diag_string = var_export($direccionFisica->direccion->diag_a, true);
+                    $address_b_diag_string = var_export($direccionFisica->direccion->diag_b, true);
+        
+                    $state->bind_param('sssssssssss', $direccionFisica->direccion->street, $address_diag_string, $direccionFisica->direccion->street_a, $address_a_diag_string, $direccionFisica->direccion->street_b, $address_b_diag_string, $direccionFisica->direccion->altitud, $direccionFisica->direccion->city, $direccionFisica->direccion->department, $direccionFisica->direccion->floor, $direccionFisica->direccion->observations);
+                    $state->execute();
+                    $idDireccionFisica = $this->conn->insert_id;
+                }
+
+
+                $state = $this->conn->prepare('UPDATE alumno SET confirmado = ?, activo = ?, fechaConfirmacion = ?, documento = ?, idDireccionFisica = ? WHERE alumno.idAlumno = ?');
+                $state->bind_param('ssssii', $confirmado, $confirmado, $today, $documento, $idDireccionFisica, $idAlumno);
     
                 if ($state->execute()) {
                     return true;
