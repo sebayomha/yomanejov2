@@ -4,10 +4,10 @@ import { PendingConfirmationSchedulesComponent } from './components/pending-conf
 
 
 const app_routes: Routes = [
-  { path: 'buscarclase', component: FreeClassFinderComponent},
+  { path: 'busqueda', component: FreeClassFinderComponent},
   { path: 'pendientes', component: PendingConfirmationSchedulesComponent},
-  { path: '', pathMatch: 'full', redirectTo: 'buscarclase' },
-  { path: '**', pathMatch: 'full', redirectTo: 'buscarclase' }
+  { path: '', pathMatch: 'full', redirectTo: 'busqueda' },
+  { path: '**', pathMatch: 'full', redirectTo: 'busqueda' }
 ];
 
 export const app_routing = RouterModule.forRoot(app_routes);
