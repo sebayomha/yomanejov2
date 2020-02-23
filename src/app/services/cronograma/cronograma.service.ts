@@ -13,14 +13,22 @@ export class CronogramaService {
   constructor(private http: HttpClient, private datePipe: DatePipe) { }
 
   getCronograma(searchParameters: Search, excepciones: Array<Excepcion>) {
+    const data = {
+      cantClases: searchParameters.lessons.toString(),
+      fechaInicio: this.datePipe.transform(searchParameters.date, 'yyyy-MM-dd'),
+      disponibilidad: JSON.stringify(searchParameters.dates_times),
+      direccion: JSON.stringify(searchParameters.address),
+      direccion_alt: JSON.stringify(searchParameters.address_alternative),
+      excepciones: JSON.stringify(excepciones)
+    }/* 
     const params = new HttpParams()
     .set('cantClases', searchParameters.lessons.toString())
     .set('fechaInicio', this.datePipe.transform(searchParameters.date, 'yyyy-MM-dd'))
     .set('disponibilidad', JSON.stringify(searchParameters.dates_times))
     .set('direccion', JSON.stringify(searchParameters.address))
     .set('direccion_alt', JSON.stringify(searchParameters.address_alternative))
-    .set('excepciones', JSON.stringify(excepciones))
-    return this.http.get('api/calcularCronograma/', {params: params});
+    .set('excepciones', JSON.stringify(excepciones)) */
+    return this.http.post('api/calcularCronograma/', {params: data});
   }
 
   guardarCronograma(cronograma) {

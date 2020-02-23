@@ -50,7 +50,7 @@
                             </div>
                             <div class="col-6 col-sm-6 col-md-6 col-lg-4">
                                 <mat-form-field class="example-full-width">
-                                    <input maxlength="2" matInput placeholder="N° de clases" name="lessons"
+                                    <input type="number" maxlength="2" matInput placeholder="N° de clases" name="lessons"
                                         [(ngModel)]="search.lessons" #lessons="ngModel" (keypress)="preventLetters($event)">
                                 </mat-form-field>
                             </div>
@@ -225,7 +225,7 @@
                                 <i class="far fa-check-circle" *ngIf="(day.option[0].hour_start != '' && day.option[0].hour_start != null) || day.all_day == true" style="margin-right: 5px;color: #43c89d;font-size: 16px;"></i>
                                 <span>{{day.name_day}}</span>
                             </ng-template>
-                            <div class="container" (swipeleft)="onSwipeLeft(tabulator)"
+                            <div class="container" style="margin-left: 0px;" (swipeleft)="onSwipeLeft(tabulator)"
                             (swiperight)="onSwipeRight(tabulator)" style="overflow-y: hidden;">
                                 <div *ngIf="!search.dates_times[i].all_day">
                                     <div class="row margin-top-30"

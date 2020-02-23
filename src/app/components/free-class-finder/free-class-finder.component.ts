@@ -76,7 +76,7 @@ export class FreeClassFinderComponent {
 
     var tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    this.search = new Search(this.student_name, dates_times, this.addresses, this.addresses_alt, 1, tomorrow);
+    this.search = new Search(this.student_name, dates_times, this.addresses, this.addresses_alt, 8, tomorrow);
     this.search.address[4].city = "La Plata";
     this.search.address_alternative[4].city = "La Plata";
     console.log(this.search);
@@ -159,7 +159,6 @@ export class FreeClassFinderComponent {
           });
         }
         break;
-
       }
     });
   }

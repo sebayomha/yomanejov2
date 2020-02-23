@@ -15,13 +15,15 @@
 
 	//Defino todas las funciones que voy a utilizar
 	function calcularCronograma(){
+		$post = json_decode(file_get_contents('php://input'));
 
-		$cantClases = (int) $_GET['cantClases'];
-		$fechaInicio = $_GET['fechaInicio'];
-		$direccion = json_decode($_GET['direccion'], true);
-		$direccion_alt = json_decode($_GET['direccion_alt'], true);
-		$disponibilidad = json_decode($_GET['disponibilidad'], true);
-		$excepciones = json_decode($_GET['excepciones'], true);
+		$post = $post->params;
+		$cantClases = (int) $post->cantClases;
+		$fechaInicio = $post->fechaInicio;
+		$direccion = json_decode($post->direccion, true);
+		$direccion_alt = json_decode($post->direccion_alt, true);
+		$disponibilidad = json_decode($post->disponibilidad, true);
+		$excepciones = json_decode($post->excepciones, true);
 
 		$resDisponibilidad = [];
 		$hayDireccionAlternativa = false;
@@ -155,9 +157,6 @@
 		case 'GET': {
 		  	//Obtengo la URL Final para saber cual accion ejecutar.
 		  	switch ($requestMethod){
-				case '/calcularCronograma':
-					calcularCronograma();
-					break;
 				case '/calcularCronograma/cronogramasPendientes':
 					obtenerCronogramasPendientesDeConfirmar();
 					break;
@@ -171,6 +170,9 @@
 		case 'POST': {
 			//Obtengo la URL Final para saber cual accion ejecutar.
 			switch ($requestMethod){
+				case '/calcularCronograma':
+					calcularCronograma();
+					break;
 				case '/calcularCronograma/guardar':
 					guardarCronograma();
 					break;

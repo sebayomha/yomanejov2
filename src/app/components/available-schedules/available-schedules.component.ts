@@ -1,4 +1,4 @@
-import { Component, Input, ViewChildren, QueryList, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, Input, ViewChildren, QueryList, ViewChild, Output, EventEmitter, ɵConsole } from '@angular/core';
 import { MatSelectionList } from '@angular/material';
 import { trigger,animate,transition,style } from '@angular/animations';
 import { CronogramaService } from 'src/app/services/cronograma/cronograma.service';
@@ -89,7 +89,7 @@ export class AvailableSchedulesComponent {
       this.step--;
     }
 
-    totalClassesSelected(selectedOptions, fecha, index, event){
+    totalClassesSelected(selectedOptions, fecha, index, event, dia){
       if (event.option.selected) {
         event.source.deselectAll();
         event.option._setSelected(true);
@@ -101,6 +101,7 @@ export class AvailableSchedulesComponent {
         'index': '',
         'cant': null,
         'fecha': fecha,
+        'dia': dia,
         'fecha_orden': new Date(fecha),
         'horario': event.option.value.horaInicio,
         'id_auto': event.option.value.idAuto,
