@@ -11,7 +11,7 @@
 </mat-selection-list>
 
 <div id="nuevaDireccionCheckbox" style="margin-top: 10px;">
-<mat-checkbox (click)="addressesAlumnoSelection.deselectAll();" style="font-weight: 500;" name="nuevaDireccion"
+<mat-checkbox (click)="addressesAlumnoSelection.deselectAll(); idDireccionSeleccionada = null;" style="font-weight: 500;" name="nuevaDireccion"
 [(ngModel)]="nuevaDireccion">Nueva dirección</mat-checkbox>
 </div>
 <div id="nuevaDireccionContainer" *ngIf="nuevaDireccion">

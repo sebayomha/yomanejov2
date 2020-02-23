@@ -72,8 +72,4 @@ export class DireccionFisicaComponent implements OnInit {
       }
     }
   }
-
-  log(alla) {
-    console.log(alla);
-  }
 }

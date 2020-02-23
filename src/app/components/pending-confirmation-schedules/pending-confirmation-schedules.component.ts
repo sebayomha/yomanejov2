@@ -77,7 +77,8 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
       'idCronograma': idCronograma,
       'nombreAlumno': nombreAlumno,
       'idAlumno': idAlumno,
-      'addressesAlumno': addressesAlumno
+      'addressesAlumno': addressesAlumno,
+      'documento': ''
     };
     this.operation = 'Confirmar';
     this.customModal.open();

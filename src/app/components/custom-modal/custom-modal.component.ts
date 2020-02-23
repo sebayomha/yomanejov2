@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild, ChangeDetectorRef, ViewChildren } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { DireccionFisicaComponent } from '../direccion-fisica/direccion-fisica.component';
 declare var $:any;
@@ -19,6 +19,7 @@ export class CustomModalComponent {
   @Input() operation: string;
 
   @ViewChild('direccionFisica') direccionFisica: DireccionFisicaComponent;
+  @ViewChildren('input') vc;
   schedule : any;
 
   buttonDisabled;
@@ -29,6 +30,10 @@ export class CustomModalComponent {
   ngAfterContentChecked() {
     this.cd.detectChanges();
     this.checkDisabledConditions();
+  }
+
+  ngAfterViewInit() {
+    this.vc.first.nativeElement.focus();
   }
   
   open() {
@@ -85,11 +90,18 @@ export class CustomModalComponent {
       return false;
     } else {
       if (this.component == 'pendingConfirmationSchedules' && this.operation == 'Confirmar') {
-        return (this.direccionFisica == undefined) ? false : !this.direccionFisica.validateForm();
+        return (this.direccionFisica == undefined) ? false : !(this.direccionFisica.validateForm() && this.data.documento.length == 10);
       }
       else {
         return false;
       }
+    }
+  }
+
+  preventLetters($event) {
+    var reg = /^[0-9]+$/i;
+    if (!reg.test($event.key)) {
+      $event.preventDefault();
     }
   }
 

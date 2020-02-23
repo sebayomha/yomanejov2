@@ -37,7 +37,7 @@ import { LessonsComponent } from './components/lessons/lessons.component';
 import { SnackbarComponent } from './components/snackbar/snackbar/snackbar.component';
 import { PendingConfirmationSchedulesComponent } from './components/pending-confirmation-schedules/pending-confirmation-schedules.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-
+import { DireccionFisicaComponent } from './components/direccion-fisica/direccion-fisica.component';
 
 /* Services */
 import { LoaderService } from './services/loader/loader-service.service';
@@ -46,7 +46,8 @@ import { RequestInterceptorService } from './services/interceptor/request-interc
 /* Pipes */
 import { PhonePipe } from './pipes/address.model';
 import { CapitalizePipe } from './pipes/capitalize.pipe';
-import { DireccionFisicaComponent } from './components/direccion-fisica/direccion-fisica.component';
+import { DocumentoPipe } from './pipes/documento.pipe';
+
 registerLocaleData(localeEsAr);
 
 // import { BarRatingModule } from "ngx-bar-rating";
@@ -64,6 +65,7 @@ registerLocaleData(localeEsAr);
     PendingConfirmationSchedulesComponent,
     PhonePipe,
     CapitalizePipe,
+    DocumentoPipe,
     NavbarComponent,
     DireccionFisicaComponent    
   ],
