@@ -55,7 +55,7 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
     console.log("SENDWSP")
   }
 
-  onConfirmSchedule(idCronograma, nombreAlumno, idAlumno, direccionPrincipal, direccionAlternativa, direccionPrincipalFormated, direccionAlternativaFormated) {
+  onConfirmSchedule(clases, idCronograma, nombreAlumno, idAlumno, direccionPrincipal, direccionAlternativa, direccionPrincipalFormated, direccionAlternativaFormated) {
     let addressesAlumno = [];
 
     let direccionObject = {
@@ -74,6 +74,7 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
     }
 
     this.dataToConfirm = {
+      'clases': clases,
       'idCronograma': idCronograma,
       'nombreAlumno': nombreAlumno,
       'idAlumno': idAlumno,
@@ -86,7 +87,7 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
 
   confirmSchedule($event) {
     if (this.operation == 'Confirmar') {
-      this.confirmarCronograma($event.idCronograma, $event.idAlumno, $event.direccionFisicaInformation);
+      this.confirmarCronograma($event.idCronograma, $event.idAlumno, $event.direccionFisicaInformation, $event.documento, $event.clases);
     } else {
       this.eliminarCronograma($event.idCronograma, $event.idAlumno);
     }
@@ -96,8 +97,11 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
     this.customModal.onClose();
   }
 
-  confirmarCronograma(idCronograma, idAlumno, direccionFisicaInformation) {
-    this.cronogramaService.confirmarCronogramaPendiente(idCronograma, idAlumno, direccionFisicaInformation).subscribe( (response: Response) => {
+  confirmarCronograma(idCronograma, idAlumno, direccionFisicaInformation, documento, clases) {
+    this.cronogramaService.confirmarCronogramaPendiente(idCronograma, idAlumno, direccionFisicaInformation, documento, clases).subscribe( (response: Response) => { 
+      if (response.code == 2) {
+        response.data = "Para poder confirmar el cronograma debe modificar las siguientes clases ya que alguno de sus datos fue confirmado previamente: " + response.data.join(', ');
+      }
       this.showSuccessBanner = false;
       this.customModal.onClose();
       this._snackBar.openFromComponent(SnackbarComponent, {

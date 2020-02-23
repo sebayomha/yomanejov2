@@ -55,7 +55,7 @@
       <mat-card-actions align="end">
         <button mat-button class="deleteButton" (click)="onCancelSchedule(cronograma.idCronograma, cronograma.nombreAlumno, cronograma.alumno);">ELIMINAR</button>
         <div fxFlex></div>
-        <button mat-button class="confirmButton" (click)="onConfirmSchedule(cronograma.idCronograma, cronograma.nombreAlumno, cronograma.alumno, cronograma.idDireccionPrincipal, cronograma.idDireccionAlternativa, cronograma.direccionPrincipalFormateada, cronograma.direccionAlternativaFormateada);">CONFIRMAR</button>
+        <button mat-button class="confirmButton" (click)="onConfirmSchedule(cronograma.clases, cronograma.idCronograma, cronograma.nombreAlumno, cronograma.alumno, cronograma.idDireccionPrincipal, cronograma.idDireccionAlternativa, cronograma.direccionPrincipalFormateada, cronograma.direccionAlternativaFormateada);">CONFIRMAR</button>
       </mat-card-actions>
     </mat-card>
   </div>

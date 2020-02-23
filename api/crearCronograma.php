@@ -127,12 +127,20 @@
 		$post = json_decode(file_get_contents('php://input'));
 		$idCronograma = $post->params->idCronograma;
 		$idAlumno = $post->params->idAlumno;
+		$clases = $post->params->clases;
+		$documento = $post->params->documento;
+		$direccionFisica = $post->params->direccionFisicaInformation;
+
 		$cronograma = new Cronograma();
-		$resultCronogramaUpdate = $cronograma->confirmarCronograma($idCronograma, $idAlumno);
-		if ($resultCronogramaUpdate) {
-			echo json_encode($GLOBALS['utils']->getResponse(0, 'El cronograma '.$idCronograma.' ha sido confirmado exitosamente'));	
+		$resultCronogramaUpdate = $cronograma->confirmarCronograma($idCronograma, $idAlumno, $direccionFisica, $clases, $documento);
+		if (!is_array($resultCronogramaUpdate)) {
+			if ($resultCronogramaUpdate) {
+				echo json_encode($GLOBALS['utils']->getResponse(0, 'El cronograma '.$idCronograma.' ha sido confirmado exitosamente'));	
+			} else {
+				echo json_encode($GLOBALS['utils']->getResponse(1, 'Lo lamentamos, ha ocurrido un error'));
+			}
 		} else {
-			echo json_encode($GLOBALS['utils']->getResponse(1, 'Lo lamentamos, ha ocurrido un error'));
+			echo json_encode($GLOBALS['utils']->getResponse(2, $resultCronogramaUpdate));
 		}
 	}
 

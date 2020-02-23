@@ -499,23 +499,42 @@
             return $cronogramas;
         }
 
-        function confirmarCronograma($idCronograma, $idAlumno) {
-            $status = "CONFIRMADO";
-            $state = $this->conn->prepare('UPDATE clase SET status = ? WHERE clase.idCronograma = ?');
-            $state->bind_param('si', $status, $idCronograma);
-            $state->execute();
-            $state = $this->conn->prepare('UPDATE cronograma SET status = ? WHERE cronograma.idCronograma = ?');
-            $state->bind_param('si', $status, $idCronograma);
-            $state->execute();
-            $confirmado = 'true'; //INDICA QUE EL ALUMNO YA ES UN ALUMNO FIJO
-            $today = date('Y-m-d');
-            $state = $this->conn->prepare('UPDATE alumno SET confirmado = ?, activo = ?, fechaConfirmacion = ? WHERE alumno.idAlumno = ?');
-            $state->bind_param('sssi', $confirmado, $confirmado, $today, $idAlumno);
+        function confirmarCronograma($idCronograma, $idAlumno, $direccionFisica, $clases, $documento) {
+            $clasesExistentes = [];
+            $cronograma = [];
+            foreach ($clases as $key=>$clase) {
+                /* SE VERIFICA SI LAS CLASES AUN ESTAN DISPONIBLES */
+                $state = $this->conn->prepare('SELECT clase.idClase FROM clase WHERE clase.fecha = ? AND clase.horaInicio = ? AND clase.auto = ?');
+                $state->bind_param('ssi', $clase->fecha, $clase->horaInicio, $clase->auto);
+                $state->execute();
 
-            if ($state->execute()) {
-                return true;
+                $result = $state->get_result();
+
+                if ($result->num_rows > 0) {
+                    array_push($clasesExistentes, $key + 1);
+                }   
+            }
+            
+            if (empty($clasesExistentes)) {
+                $status = "CONFIRMADO";
+                $state = $this->conn->prepare('UPDATE clase SET status = ? WHERE clase.idCronograma = ?');
+                $state->bind_param('si', $status, $idCronograma);
+                $state->execute();
+                $state = $this->conn->prepare('UPDATE cronograma SET status = ? WHERE cronograma.idCronograma = ?');
+                $state->bind_param('si', $status, $idCronograma);
+                $state->execute();
+                $confirmado = 'true'; //INDICA QUE EL ALUMNO YA ES UN ALUMNO FIJO
+                $today = date('Y-m-d');
+                $state = $this->conn->prepare('UPDATE alumno SET confirmado = ?, activo = ?, fechaConfirmacion = ? WHERE alumno.idAlumno = ?');
+                $state->bind_param('sssi', $confirmado, $confirmado, $today, $idAlumno);
+    
+                if ($state->execute()) {
+                    return true;
+                } else {
+                    return false;
+                }
             } else {
-                return false;
+                return $clasesExistentes;
             }
         }
 
