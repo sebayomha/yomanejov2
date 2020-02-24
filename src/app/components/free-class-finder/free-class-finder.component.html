@@ -332,7 +332,7 @@
                                         </div>
                                         <div class="col-4 col-sm-1"
                                             *ngIf="(search.dates_times[i].option[j].scheduleSend != null) && flag_address_alt" style="text-align: center; margin: auto;">
-                                            <mat-checkbox name="check_da_{{j}}" [(ngModel)]="search.dates_times[i].option[j].dir_alt">DA
+                                            <mat-checkbox name="check_da_{{i}}{{j}}" [(ngModel)]="search.dates_times[i].option[j].dir_alt">DA
                                             </mat-checkbox>
                                         </div>
                                         <div class="col-4 col-sm-1" *ngIf="!(search.dates_times[i].option.length - 1 > j)">
