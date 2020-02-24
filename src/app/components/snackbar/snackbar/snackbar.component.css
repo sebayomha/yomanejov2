@@ -6,17 +6,21 @@
 }
 
 .message {
-    position: relative;
-    bottom: 6px;
-    left: 11px;
+    margin-bottom: 0px;
+}
+
+.margin-left-10 {
+    margin-left: 10px;
 }
 
 .infoIcon {
     color: #ea1010;
-    position: relative;
-    left: 7px;
+    font-size: 30px;
+    margin-left: 3px;
 }
 
 .successIcon {
     color: #43c89d;
+    font-size: 30px;
+    margin-left: 3px;
 }

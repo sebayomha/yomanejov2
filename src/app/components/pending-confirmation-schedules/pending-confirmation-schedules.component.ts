@@ -18,7 +18,7 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
   displayedColumns: string[] = ['noClase', 'fecha', 'hora', 'direccion', 'auto'];
   showSuccessBanner: boolean = false;
   dataToConfirm: any;
-  durationInSeconds: number = 3;
+  durationInSeconds: number = 5000000000;
   operation: string;
   @Output() finish = new EventEmitter<any>();
   @ViewChild('customModal') customModal;
@@ -105,7 +105,7 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
       this.showSuccessBanner = false;
       this.customModal.onClose();
       this._snackBar.openFromComponent(SnackbarComponent, {
-        duration: this.durationInSeconds * 1100,
+        duration: this.durationInSeconds * 1,
         data: response
       });
       this.ngOnInit();
@@ -118,7 +118,7 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
       this.showSuccessBanner = false;
       this.customModal.onClose();
       this._snackBar.openFromComponent(SnackbarComponent, {
-        duration: this.durationInSeconds * 1100,
+        duration: this.durationInSeconds * 1100000000000,
         data: response
       });
       this.ngOnInit();
