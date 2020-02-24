@@ -248,7 +248,7 @@ export class FreeClassFinderComponent {
 
           if (this.search.dates_times[index].option.length > 1) {
             let length = this.search.dates_times[index].option.length;
-            this.search.dates_times[index].option.splice( 1, length );      
+            this.search.dates_times[index].option.splice( 1, length );
           }
 
           this.search.dates_times[index].option[0].hour_start = '';
@@ -295,11 +295,11 @@ export class FreeClassFinderComponent {
           }
         });
       });
-    } 
+    }
   }
 
 
-  addDateTime(day) {    
+  addDateTime(day) {
       let index = this.search.dates_times.findIndex(element => { return element.name_day == day });
 
       if (index != -1) {
@@ -356,7 +356,7 @@ export class FreeClassFinderComponent {
     option.hour_finish = hour;
     this.control_flag_empty = false;
     option.scheduleSend = [];
-    
+
     //Armo el array final a enviar.
     option.scheduleFrom.forEach( (h:string) => {
       if (h >= option.hour_start && h <= option.hour_finish) {
