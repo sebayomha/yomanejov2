@@ -157,6 +157,11 @@
 		}
 	}
 
+	function obtenerClasesPorFecha() {
+		$cronograma = new Cronograma();
+		echo json_encode($GLOBALS['utils']->getResponse(0, $cronograma->obtenerClasesPorFecha($_GET['fecha'])));
+	}
+
 	function containsOnlyNull($input) {
 		return empty(array_filter($input, function ($a) { return $a !== null;}));
 	}
@@ -167,6 +172,9 @@
 		  	switch ($requestMethod){
 				case '/calcularCronograma/cronogramasPendientes':
 					obtenerCronogramasPendientesDeConfirmar();
+					break;
+				case '/calcularCronograma/obtenerClasesPorFecha':
+					obtenerClasesPorFecha();
 					break;
 			  	default:
 					echo "podriamos agregar otra consulta mas";

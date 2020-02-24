@@ -554,6 +554,26 @@
             }
         }
 
+        function obtenerClasesPorFecha($fecha) {
+            $fechaString = $fecha;
+            $state = $this->conn->prepare('SELECT * FROM clase INNER JOIN alumno ON clase.alumno = alumno.idAlumno INNER JOIN direccion ON clase.idDireccion = direccion.idDireccion WHERE clase.fecha = ? AND clase.status = ? ORDER BY clase.horaInicio');
+            $status = 'CONFIRMADO';
+            $state->bind_param('ss', $fechaString, $status);
+            $state->execute();
+            $result = $state->get_result();
+
+            $cronograma = (array) [];
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    $row['direccionFormateada'] = $this->obtenerDireccionParaMostrar($row['calle'], filter_var($row['calle_diag'], FILTER_VALIDATE_BOOLEAN), $row['calle_a'], filter_var($row['calle_a_diag'], FILTER_VALIDATE_BOOLEAN), $row['calle_b'], filter_var($row['calle_b_diag'], FILTER_VALIDATE_BOOLEAN), $row['numero'], $row['ciudad'], $row['floor_'], $row['departamento']);
+                    $cronograma[$row['auto']][] = $row;
+                }
+            } else {
+                return [];
+            }
+            return $cronograma;          
+        }
+
         function cancelarCronograma($idCronograma, $idAlumno) {
             $state = $this->conn->prepare('DELETE FROM clase WHERE clase.idCronograma = ?');
             $state->bind_param('i', $idCronograma);

@@ -58,4 +58,9 @@ export class CronogramaService {
     return this.http.post('api/calcularCronograma/cancelarCronograma', {params: data});
   }
 
+  obtenerClasesPorFecha(fecha: string) {
+    const params = new HttpParams().set('fecha', fecha);
+    return this.http.get('api/calcularCronograma/obtenerClasesPorFecha', {params: params});
+  }
+
 }

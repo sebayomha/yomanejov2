@@ -1,5 +1,7 @@
-import { Component, Input, ElementRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { CronogramaService } from 'src/app/services/cronograma/cronograma.service';
+import { Response } from '../../models/response';
 
 @Component({
   selector: 'lessons',
@@ -9,32 +11,67 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 
 export class  LessonsComponent {
 
-  constructor(private breakpointObserver: BreakpointObserver) { }
+  constructor(private breakpointObserver: BreakpointObserver, private cronogramaService: CronogramaService) { }
 
-  ELEMENT_DATA = [
-    {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-    {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-    {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-    {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-    {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-    {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-    {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-    {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-    {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-    {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-  ];
-
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = this.ELEMENT_DATA;
-
+  displayedColumns: string[] = ['No', 'hora', 'direccion', 'alumno'];
   select_day : Date;
-  
 
-    ngOnInit() {
+  autos;
+  ngOnInit() {
+    console.log(this.formatDate());
+    this.cronogramaService.obtenerClasesPorFecha(this.formatDate()).subscribe( (response: Response) => {
+      this.autos = Object.entries(response.data);
+      this.obtenerClasesPorRealizarse(this.autos);
+      this.obtenerClasesRealizadas(this.autos);
+      console.log(this.autos);
+    })
+  }
 
-    }
+  isMobile() {
+    return this.breakpointObserver.isMatched('(max-width: 767px)');
+  }
 
-    isMobile() {
-      return this.breakpointObserver.isMatched('(max-width: 767px)');
-    }
+  formatDate() {
+    var d = new Date(),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+  }
+
+  obtenerClasesRealizadas(autos) {
+    const today = new Date();
+    autos.forEach( auto => {
+      auto.clasesRealizadas = auto[1].filter( clase => {
+        var horaInicioDate = new Date(clase.fecha.replace('-', '/'));
+        horaInicioDate.setHours(clase.horaInicio.split(':')[0],clase.horaInicio.split(':')[1],0);
+        if (today >= horaInicioDate) {
+          return true;
+        }
+        return false;
+      })
+    })
+  }
+
+  obtenerClasesPorRealizarse(autos) {
+    const today = new Date();
+    autos.forEach( auto => {
+      auto.clasesPorRealizarse = auto[1].filter( clase => {
+        var horaInicioDate = new Date(clase.fecha.replace('-', '/'));
+        horaInicioDate.setHours(clase.horaInicio.split(':')[0],clase.horaInicio.split(':')[1],0);
+        console.log(today);
+        console.log(horaInicioDate);
+        if (today < horaInicioDate) {
+          return true;
+        }
+        return false;
+      })
+    })
+  }
 }
