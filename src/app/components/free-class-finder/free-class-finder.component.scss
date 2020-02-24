@@ -28,6 +28,10 @@
   ::ng-deep .freeClassFinder .mat-checkbox-inner-container {
     height: 15px !important;
     width: 15px !important;
+  }´
+
+  ::ng-deep .freeClassFinder .mat-expansion-panel-content {
+    padding-left: 15px;
   }
 
   .btnHover:hover {
