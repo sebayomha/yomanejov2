@@ -410,7 +410,7 @@
                 return false;
             }
 
-            return true;
+            return $idCronograma;
         }
 
         function hayDireccionAlternativa($selectedOptions) {

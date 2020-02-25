@@ -106,8 +106,8 @@
 
 		$cronograma = new Cronograma();
 		$resultGuardarCronograma = $cronograma->guardarCronograma($selectedOptions, $studentName, $student_phone, $address, $address_alt, $disponibilidad, $excepciones);
-		if ($resultGuardarCronograma) {
-			echo json_encode($GLOBALS['utils']->getResponse(0, 'Registros guardados exitosamente'));
+		if ($resultGuardarCronograma != false) {
+			echo json_encode($GLOBALS['utils']->getResponse(0, $resultGuardarCronograma));
 		} else {
 			echo json_encode($GLOBALS['utils']->getResponse(1, "Ocurrió un error al guardar algún registro, vuelva a intentar más tarde."));
 		}
