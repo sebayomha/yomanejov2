@@ -93,6 +93,7 @@ export class FreeClassFinderComponent {
     this.selectedAlumno = null;
     this.alumnoService.obtenerAlumnos().subscribe( (response: Response) => {
       this.alumnos = response.data;
+      console.log(this.alumnos)
     })
 
   }

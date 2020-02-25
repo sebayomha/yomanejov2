@@ -297,7 +297,7 @@
 
             if ($state->execute()) { //el insert de la direccion fue exitoso
                 $idDireccionPrincipal = $this->conn->insert_id; //Me quedo con el id de la direccion para luego asignarselo al alumno
-                
+
                 /* SE INSERTA LA DIRECCION ALTERNATIVA SI ES QUE POSEE */
                 if ($this->hayDireccionAlternativa($selectedOptions)) {
                     /* SE INSERTA LA DIRECCION ALTERNATIVA */            
@@ -1018,7 +1018,7 @@
             }
 
             if ($floor != '') {
-                $stringDireccion .= ' Dpto: '.$floor.$departamento.' , '.$ciudad;
+                $stringDireccion .= ' Dpto: '.$floor.$departamento.', '.$ciudad;
             } else {
                 $stringDireccion .= ', '.$ciudad;
             }

@@ -14,7 +14,7 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
 
   constructor(private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private _snackBar: MatSnackBar) { }
 
-  cronogramas: Array<any>;
+  cronogramas: Array<any> = [];
   displayedColumns: string[] = ['noClase', 'fecha', 'hora', 'direccion', 'auto'];
   showSuccessBanner: boolean = false;
   dataToConfirm: any;
