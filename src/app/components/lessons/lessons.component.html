@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" style="margin-top: 60px;">
   <br>
   <div class="col-6 col-sm-6 col-md-6 col-lg-4">
     <mat-form-field class="example-full-width">
@@ -9,8 +9,7 @@
         <mat-datepicker [touchUi]="isMobile()" #picker></mat-datepicker>
     </mat-form-field>
 </div>
-  <br>
-  <mat-expansion-panel *ngFor="let auto of autos" [expanded]="control_collapse_search == true" (opened)="control_collapse_search = true" style="margin-top: 30px;">
+  <mat-expansion-panel *ngFor="let auto of autos" [expanded]="control_collapse_search == true" (opened)="control_collapse_search = true" style="margin-top: 15px;">
     <mat-expansion-panel-header style="background-color:#43c89d;">
         <mat-panel-title style="color:white;">
             <i style="margin-top: 3px; margin-right: 20px;" class="fas fa-car"></i><span>AUTO {{auto[0] == 4 ? 'AT' : auto[0]}} </span>
@@ -19,7 +18,7 @@
         </mat-panel-description>
     </mat-expansion-panel-header>
     <!-- clases por realizarse -->
-    <div style="margin-top: 15px;"> 
+    <div class="col-12" style="margin-top: 15px;"> 
       <label>Clases por realizarse</label>
       <table mat-table [dataSource]="auto.clasesPorRealizarse" class="mat-elevation-z0">
   
@@ -55,7 +54,7 @@
       </table>
     </div>
     <br>
-    <div style="margin-top: 15px;">
+    <div class="col-12" style="margin-top: 15px;">
       <label>Clases realizadas</label>
       <table mat-table [dataSource]="auto.clasesRealizadas" class="mat-elevation-z0">
 
