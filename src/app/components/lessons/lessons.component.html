@@ -10,11 +10,11 @@
     </mat-form-field>
 </div>
   <div class="row" style="margin-bottom: 30px;">
-    <div class="col-12 col-md-6"  *ngFor="let auto of autos; let i = index">
+    <div class="col-12 col-md-6" *ngFor="let auto of autos; let i = index">
       <mat-expansion-panel id="lessonsExpansion" [expanded]="(i == 0 || i == 1) ? true: false" style="margin-top: 30px;">
         <mat-expansion-panel-header style="background-color:#43c89d;">
             <mat-panel-title style="color:white;">
-                <i style="margin-top: 3px; margin-right: 20px;" class="fas fa-car"></i><span>AUTO {{auto[0] == 4 ? 'AT' : auto[0]}} </span>
+                <i style="margin-top: 3px; margin-right: 20px;" class="fas fa-car"></i><span>AUTO {{auto[0] == 4 ? 'AT' : auto[0]}} </span> <span *ngIf="auto.clasesPorRealizarse.length == 0 && auto.clasesRealizadas.length == 0">&nbsp;- No posee clases</span>
             </mat-panel-title>
             <mat-panel-description style="color:white;">
             </mat-panel-description>
