@@ -3,7 +3,6 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { CronogramaService } from 'src/app/services/cronograma/cronograma.service';
 import { Response } from '../../models/response';
 import { trigger,animate,transition,style } from '@angular/animations';
-import { MatTableDataSource } from '@angular/material';
 
 @Component({
   selector: 'lessons',
@@ -27,19 +26,24 @@ export class  LessonsComponent {
   constructor(private breakpointObserver: BreakpointObserver, private cronogramaService: CronogramaService) { }
 
   displayedColumns: string[] = ['No', 'hora', 'direccion', 'alumno'];
-  select_day : Date;
-
+  select_day : Date = new Date();
+  minDate = new Date();
   autos;
 
   ngOnInit() {
     console.log(this.formatDate());
     this.cronogramaService.obtenerClasesPorFecha(this.formatDate()).subscribe( (response: Response) => {
       this.autos = Object.entries(response.data);
- 
-      console.log(this.autos);
       this.obtenerClasesPorRealizarse(this.autos);
       this.obtenerClasesRealizadas(this.autos);
-      console.log(this.autos);
+    })
+  }
+
+  buscarClases($event) {
+    this.cronogramaService.obtenerClasesPorFecha(this.formatDateWithDate($event.value)).subscribe( (response: Response) => {
+      this.autos = Object.entries(response.data);
+      this.obtenerClasesPorRealizarse(this.autos);
+      this.obtenerClasesRealizadas(this.autos);
     })
   }
 
@@ -65,6 +69,20 @@ export class  LessonsComponent {
 
   formatDate() {
     var d = new Date(),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+  }
+
+  formatDateWithDate(date: Date) {
+    var d = date,
         month = '' + (d.getMonth() + 1),
         day = '' + d.getDate(),
         year = d.getFullYear();

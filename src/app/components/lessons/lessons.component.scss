@@ -2,7 +2,7 @@ table {
     width: 100%;
   }
 
-::ng-deep .mat-expansion-panel-body {
+::ng-deep #lessonsExpansion .mat-expansion-panel-body {
     padding: 0px !important;
 }
 
@@ -24,4 +24,10 @@ table {
   width: 95%;
   padding-left: 0px;
   border-bottom: 0px !important;
+}
+
+.emptyMessageTable {
+  color: #d40808;
+  text-align: center;
+  margin-top: 10px;
 }
