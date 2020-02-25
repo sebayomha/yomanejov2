@@ -9,7 +9,7 @@
         <mat-datepicker [touchUi]="isMobile()" #picker></mat-datepicker>
     </mat-form-field>
 </div>
-  <div class="row">
+  <div class="row" style="margin-bottom: 30px;">
     <div class="col-12 col-md-6"  *ngFor="let auto of autos; let i = index">
       <mat-expansion-panel id="lessonsExpansion" [expanded]="(i == 0 || i == 1) ? true: false" style="margin-top: 30px;">
         <mat-expansion-panel-header style="background-color:#43c89d;">
@@ -70,7 +70,9 @@
         
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+            <ng-container *ngIf="auto.clasesPorRealizarseAll.length > 4">
+              <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+            </ng-container>
           </table>
 
           <div class="emptyMessageTable" *ngIf="auto.clasesPorRealizarse.length === 0">No posee clases</div>
@@ -133,7 +135,9 @@
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+            <ng-container  *ngIf="auto.clasesRealizadasAll.length > 4">
+              <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+            </ng-container>
           </table>
 
           <div class="emptyMessageTable" *ngIf="auto.clasesRealizadas.length === 0">No posee clases</div>

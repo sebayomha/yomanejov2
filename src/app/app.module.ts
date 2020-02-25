@@ -51,6 +51,14 @@ import { DocumentoPipe } from './pipes/documento.pipe';
 registerLocaleData(localeEsAr);
 
 // import { BarRatingModule } from "ngx-bar-rating";
+import { HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
+// ...
+export class MyHammerConfig extends HammerGestureConfig {
+    overrides = <any> {
+        'pinch': { enabled: false },
+        'rotate': { enabled: false }
+    }
+}
 
 @NgModule({
   declarations: [
@@ -92,7 +100,10 @@ registerLocaleData(localeEsAr);
     
     // BarRatingModule
   ],
-  providers:[DatePipe, {provide: LOCALE_ID, useValue: "es-AR"}, LoaderService, { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptorService, multi: true }],
+  providers:[DatePipe, {provide: LOCALE_ID, useValue: "es-AR"}, LoaderService, { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptorService, multi: true }, {
+    provide: HAMMER_GESTURE_CONFIG,
+    useClass: MyHammerConfig
+}],
   bootstrap: [AppComponent],
   entryComponents: [
     SnackbarComponent
