@@ -53,6 +53,7 @@ registerLocaleData(localeEsAr);
 
 // import { BarRatingModule } from "ngx-bar-rating";
 import { HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
+import { StudentsComponent } from './components/students/students.component';
 // ...
 export class MyHammerConfig extends HammerGestureConfig {
     overrides = <any> {
@@ -76,7 +77,8 @@ export class MyHammerConfig extends HammerGestureConfig {
     CapitalizePipe,
     DocumentoPipe,
     NavbarComponent,
-    DireccionFisicaComponent    
+    DireccionFisicaComponent,
+    StudentsComponent    
   ],
   imports: [
     BrowserModule,
