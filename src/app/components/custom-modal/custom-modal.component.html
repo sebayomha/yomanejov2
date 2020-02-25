@@ -22,7 +22,7 @@
       <div class="modal-body" style="max-height: 330px; overflow-y: auto;" *ngIf="component == 'availableSchedules' && data.length && !successBanner">
         <div>
           Clases:
-          <div *ngFor="let clase of this.data[0].selected_options; let i = index">
+          <div *ngFor="let clase of this.data[0].selected_options; let i = index" style="text-align: center;">
             <p>{{i+1}}°- Dia: {{clase.fecha | date: 'dd/MM/yyyy'}} - Hora: {{clase.horario}} hs</p>
           </div>
         </div>
@@ -40,24 +40,24 @@
             </span>
           </div>
           <div id="horariosContainer">
-            <div *ngFor="let clase of this.data[0].selected_options; let i = index" style="margin-top: 10px;">
-              <div class="row" *ngIf="i % 2 == 0" style="margin-bottom: 10px;">
-                <div class="col-6" style="text-align: center;" *ngIf="this.data[0].selected_options[i]">
+            <div *ngFor="let clase of this.data[0].selected_options; let i = index">
+              <div class="row" *ngIf="i % 2 == 0">
+                <div class="col-12 col-lg-6" *ngIf="this.data[0].selected_options[i]" style="margin-top: 10px; margin-bottom: 10px;">
                   <div>
-                    <span style="float: left;" class="dot">
-                    <p style="margin: 1px; color: white;">{{i+1}}</p>
+                    <span class="dot margin-left-10-porc">
+                    <p style="margin: 1px; color: white; margin-left: 8px;">{{i+1}}</p>
                   </span>
-                  <span style="float: left; width: 50%; text-align: left;">&nbsp;&nbsp; {{this.data[0].selected_options[i].dia}} {{this.data[0].selected_options[i].fecha | date: 'mediumDate'}}</span> 
-                  <span style="float: left;">-&nbsp;&nbsp;{{this.data[0].selected_options[i].horario}} hs</span>
+                  <span>&nbsp;&nbsp; {{this.data[0].selected_options[i].dia}} {{this.data[0].selected_options[i].fecha | date: 'mediumDate'}}&nbsp;&nbsp;</span> 
+                  <span>-&nbsp;&nbsp;{{this.data[0].selected_options[i].horario}} hs</span>
                   </div>
                 </div>
-                <div class="col-6" style="text-align: center;" *ngIf="this.data[0].selected_options[i+1]">
-                  <span style="float: left;" class="dot">
-                    <p style="margin: 1px; color: white;">{{i+2}}
+                <div class="col-12 col-lg-6" *ngIf="this.data[0].selected_options[i+1]" style="margin-top: 10px; margin-bottom: 10px;">
+                  <span class="dot margin-left-10-porc">
+                    <p style="margin: 1px; color: white; margin-left: 8px;">{{i+2}}
                     </p>
                   </span>
-                  <span style="float: left; width: 50%; text-align: left;"> &nbsp;&nbsp; {{this.data[0].selected_options[i+1].dia}} {{this.data[0].selected_options[i+1].fecha | date: 'mediumDate'}}</span> 
-                  <span style="float: left;">-&nbsp;&nbsp;{{this.data[0].selected_options[i+1].horario}} hs</span>
+                  <span> &nbsp;&nbsp; {{this.data[0].selected_options[i+1].dia}} {{this.data[0].selected_options[i+1].fecha | date: 'mediumDate'}}&nbsp;&nbsp;</span> 
+                  <span>-&nbsp;&nbsp;{{this.data[0].selected_options[i+1].horario}} hs</span>
                 </div>
               </div>
             </div>
