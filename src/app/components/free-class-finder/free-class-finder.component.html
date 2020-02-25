@@ -411,8 +411,8 @@
                             <div *ngFor="let excepcion of excepciones; let j = index; let firstItem = first;" style="margin-bottom:15px" class="excepcion">
                                 <mat-divider *ngIf="!firstItem"></mat-divider>
                                 <div class="row" style="padding: 0px;">
-                                    <div class="col-9" style="text-align: left; line-height: 41px;">Filtro {{j + 1}}:</div>
-                                    <div class="col-3">
+                                    <div class="col-11" style="text-align: left; line-height: 41px;">Filtro {{j + 1}}:</div>
+                                    <div class="col-1">
                                         <!-- eliminar excepcion -->
                                         <div style="text-align: right;" *ngIf="excepciones.length">
                                             <button style="width: 100%; padding: 0px; margin-top:5px; text-align:right; min-width: 0px;" mat-button
