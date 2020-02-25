@@ -18,7 +18,7 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
   displayedColumns: string[] = ['noClase', 'fecha', 'hora', 'direccion', 'auto'];
   showSuccessBanner: boolean = false;
   dataToConfirm: any;
-  durationInSeconds: number = 5000000;
+  durationInSeconds: number = 3;
   operation: string;
   @Output() finish = new EventEmitter<any>();
   @ViewChild('customModal') customModal;

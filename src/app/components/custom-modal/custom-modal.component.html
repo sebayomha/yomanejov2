@@ -1,7 +1,7 @@
 <div id="modalContainer" class="col-12">
   <div id="confirmModal" style="padding-right: 0px;" class="modal" tabindex="-1" role="dialog" #modalMensaje>
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content" >
+  <div class="modal-dialog modal-lg" role="document" [ngClass]="{'max-width-500': component == 'availableSchedules' && data.length && !successBanner}">
+    <div class="modal-content">
       <div class="modal-header" style="background: #43c89d; color: white; padding: 18px;">
         <h5 class="modal-title" *ngIf="!successBanner">
           <span *ngIf="component == 'pendingConfirmationSchedules'">
