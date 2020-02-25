@@ -9,3 +9,19 @@ table {
 ::ng-deep .mat-expansion-indicator::after {
   color:white;
 }
+
+.showMoreBtn {
+  border: 0;
+  background: inherit;
+  color: rgb(67, 200, 157);
+  position: relative;
+  bottom: 7px;
+  font-weight: 500;
+}
+
+::ng-deep #lessonsTable td.mat-footer-cell {
+  position: absolute;
+  width: 95%;
+  padding-left: 0px;
+  border-bottom: 0px !important;
+}

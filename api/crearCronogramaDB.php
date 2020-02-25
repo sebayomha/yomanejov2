@@ -556,7 +556,7 @@
 
         function obtenerClasesPorFecha($fecha) {
             $fechaString = $fecha;
-            $state = $this->conn->prepare('SELECT * FROM clase INNER JOIN alumno ON clase.alumno = alumno.idAlumno INNER JOIN direccion ON clase.idDireccion = direccion.idDireccion WHERE clase.fecha = ? AND clase.status = ? ORDER BY clase.horaInicio');
+            $state = $this->conn->prepare('SELECT * FROM auto LEFT JOIN clase ON auto.idAuto = clase.auto AND clase.fecha = ? AND clase.status = ? LEFT JOIN alumno ON clase.alumno = alumno.idAlumno LEFT JOIN direccion ON clase.idDireccion = direccion.idDireccion ORDER BY clase.horaInicio');
             $status = 'CONFIRMADO';
             $state->bind_param('ss', $fechaString, $status);
             $state->execute();
@@ -566,7 +566,7 @@
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
                     $row['direccionFormateada'] = $this->obtenerDireccionParaMostrar($row['calle'], filter_var($row['calle_diag'], FILTER_VALIDATE_BOOLEAN), $row['calle_a'], filter_var($row['calle_a_diag'], FILTER_VALIDATE_BOOLEAN), $row['calle_b'], filter_var($row['calle_b_diag'], FILTER_VALIDATE_BOOLEAN), $row['numero'], $row['ciudad'], $row['floor_'], $row['departamento']);
-                    $cronograma[$row['auto']][] = $row;
+                    $cronograma[$row['idAuto']][] = $row;
                 }
             } else {
                 return [];

@@ -2,11 +2,24 @@ import { Component } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CronogramaService } from 'src/app/services/cronograma/cronograma.service';
 import { Response } from '../../models/response';
+import { trigger,animate,transition,style } from '@angular/animations';
+import { MatTableDataSource } from '@angular/material';
 
 @Component({
   selector: 'lessons',
   templateUrl: './lessons.component.html',
-  styleUrls: ['./lessons.component.scss']
+  styleUrls: ['./lessons.component.scss'],
+  animations: [
+    trigger('fadeIn', [
+      transition(':enter', [
+        style({ opacity: '0' }),
+        animate('.5s ease-out', style({ opacity: '1' })),
+      ]),
+      transition(':leave', [
+        style({ opacity: '1' }),
+        animate('.5s ease-out', style({ opacity: '0' })),
+      ])
+    ])]
 })
 
 export class  LessonsComponent {
@@ -17,14 +30,33 @@ export class  LessonsComponent {
   select_day : Date;
 
   autos;
+
   ngOnInit() {
     console.log(this.formatDate());
     this.cronogramaService.obtenerClasesPorFecha(this.formatDate()).subscribe( (response: Response) => {
       this.autos = Object.entries(response.data);
+ 
+      console.log(this.autos);
       this.obtenerClasesPorRealizarse(this.autos);
       this.obtenerClasesRealizadas(this.autos);
       console.log(this.autos);
     })
+  }
+
+  showMore(auto, operation) {
+    if (operation == 'clasesRealizadas') {
+      auto.clasesRealizadas = auto.clasesRealizadasAll;
+    } else {
+      auto.clasesPorRealizarse = auto.clasesPorRealizarseAll;
+    }
+  }
+
+  showLess(auto, operation) {
+    if (operation == 'clasesRealizadas') {
+      auto.clasesRealizadas = auto.clasesRealizadasAll.splice(0,4);
+    } else {
+      auto.clasesPorRealizarse = auto.clasesPorRealizarseAll.splice(0,4);
+    }
   }
 
   isMobile() {
@@ -47,8 +79,12 @@ export class  LessonsComponent {
 
   obtenerClasesRealizadas(autos) {
     const today = new Date();
+
     autos.forEach( auto => {
       auto.clasesRealizadas = auto[1].filter( clase => {
+        if (clase.idClase == null) {
+          return false;
+        }
         var horaInicioDate = new Date(clase.fecha.replace('-', '/'));
         horaInicioDate.setHours(clase.horaInicio.split(':')[0],clase.horaInicio.split(':')[1],0);
         if (today >= horaInicioDate) {
@@ -56,22 +92,27 @@ export class  LessonsComponent {
         }
         return false;
       })
+      auto.clasesRealizadasAll = auto.clasesRealizadas;
+      auto.clasesRealizadas = auto.clasesRealizadas.splice(0,4);
     })
   }
 
-  obtenerClasesPorRealizarse(autos) {
+  obtenerClasesPorRealizarse(autos) {  
     const today = new Date();
     autos.forEach( auto => {
       auto.clasesPorRealizarse = auto[1].filter( clase => {
+        if (clase.idClase == null) {
+          return false;
+        }
         var horaInicioDate = new Date(clase.fecha.replace('-', '/'));
         horaInicioDate.setHours(clase.horaInicio.split(':')[0],clase.horaInicio.split(':')[1],0);
-        console.log(today);
-        console.log(horaInicioDate);
         if (today < horaInicioDate) {
           return true;
         }
         return false;
       })
+      auto.clasesPorRealizarseAll = auto.clasesPorRealizarse;
+      auto.clasesPorRealizarse = auto.clasesPorRealizarse.splice(0,4);
     })
   }
 }
