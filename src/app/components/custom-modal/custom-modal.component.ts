@@ -17,6 +17,7 @@ export class CustomModalComponent {
   @Input() component: string;
   @Input() successBanner: boolean;
   @Input() operation: string;
+  @Input() idCronogramaGuardado: number;
 
   @ViewChild('direccionFisica') direccionFisica: DireccionFisicaComponent;
   @ViewChildren('input') vc;

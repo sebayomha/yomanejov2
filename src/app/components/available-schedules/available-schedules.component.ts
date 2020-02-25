@@ -51,6 +51,7 @@ export class AvailableSchedulesComponent {
     cantSelectedClasses: number;
     showSuccessBanner: boolean = false;
     durationInSeconds = 3;
+    idCronogramaGuardado: number;
 
     constructor(private cronogramaService: CronogramaService, private _snackBar: MatSnackBar) { }
 
@@ -170,7 +171,9 @@ export class AvailableSchedulesComponent {
         console.log(response);
         if (response.code == 0) {
           this.showSuccessBanner = true;
+          this.idCronogramaGuardado = response.data;
         } else {
+          this.idCronogramaGuardado = null;
           this.customModal.onClose();
           this.showSuccessBanner = false;
           this._snackBar.openFromComponent(SnackbarComponent, {

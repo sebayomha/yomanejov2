@@ -8,8 +8,36 @@
                 <mat-panel-description style="color:white;">
                 </mat-panel-description>
             </mat-expansion-panel-header>
-            <form (ngSubmit)="searchSchedules()" #forma="ngForm" novalidate="">
+            <form (ngSubmit)="searchSchedules()" #forma="ngForm" novalidate="" style="margin-top: 20px;">
                 <div class="form-group">
+                    <mat-radio-group
+                    [(ngModel)]="yaEsAlumno" name="yaEsAlumno">
+                        <mat-radio-button style="margin-right: 10px;" [value]="false">
+                            Nuevo alumno
+                        </mat-radio-button>
+                        <mat-radio-button [value]="true">
+                            Ya es alumno
+                        </mat-radio-button>
+                    </mat-radio-group>
+
+                    <!-- YA ES ALUMNO FORMULARIO -->
+                    <mat-form-field style="display: block; padding: 0px; margin-top: 10px;" class="col-12 col-md-6" *ngIf="yaEsAlumno">
+                        <input matInput
+                               placeholder="Seleccione un alumno"
+                               [matAutocomplete]="auto"
+                               [(ngModel)]="selectedAlumno"
+                               name="alumno">
+                        <mat-autocomplete #auto="matAutocomplete">
+                          <mat-option *ngFor="let alumno of alumnos" [value]="alumno">
+                            <span class="col-1">{{alumno.idAlumno}}</span> - 
+                            <span class="col-3">{{alumno.nombre}}</span> | 
+                            <span class="col-3">{{alumno.telefono | phone}}</span>
+                          </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+
+                    <!-- NUEVO ALUMNO FORMULARIO -->
+                    <!--  *ngIf="!yaEsAlumno" -->
                     <div class="row" style="margin-top: 30px;">
                         <div class="col-sm-12 col-md-4">
                             <mat-form-field style="width: 100%;">

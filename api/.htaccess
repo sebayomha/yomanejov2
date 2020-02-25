@@ -1,7 +1,8 @@
 ﻿RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
-
 RewriteRule ^calcularCronograma crearCronograma.php [QSA,L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^alumnos alumnos.php [QSA,L]
 
 # Clave utilizada para encriptar las contrasenias de los usuarios.
 SetEnv KEY sdjbfhb1y1n12jwnyasdyadhisdyswnmsjdh7812763912unkdsklsñxasdhqwydgyb213h1slasdkasjdu

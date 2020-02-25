@@ -23,7 +23,7 @@
         <div style="margin-top: 15px;"> 
           <label style="margin-left: 20px; font-weight: 500;
           color: rgba(0, 0, 0, 0.68);">Clases por realizarse</label>
-          <table mat-table [dataSource]="auto.clasesPorRealizarse" class="mat-elevation-z0">
+          <table mat-table id="lessonsTable" [dataSource]="auto.clasesPorRealizarse" class="mat-elevation-z0">
         
             <!-- Position Column -->
             <ng-container matColumnDef="No">

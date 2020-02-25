@@ -73,3 +73,11 @@
     background: none;
     color: rgba(0,0,0,.26);
   }
+
+  ::ng-deep .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+    border-color: #43c89d !important;
+  }
+
+  ::ng-deep .mat-radio-button.mat-accent .mat-radio-inner-circle {
+    background-color: #43c89d !important;
+  }

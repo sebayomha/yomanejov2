@@ -24,6 +24,7 @@ import 'hammerjs';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatListModule} from '@angular/material/list';
 import {MatTableModule} from '@angular/material/table';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 /* Components */
 import { AppComponent } from './app.component';
@@ -96,8 +97,8 @@ export class MyHammerConfig extends HammerGestureConfig {
     MatRadioModule,
     MatListModule,
     MatTableModule,
+    MatAutocompleteModule,
     app_routing
-    
     // BarRatingModule
   ],
   providers:[DatePipe, {provide: LOCALE_ID, useValue: "es-AR"}, LoaderService, { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptorService, multi: true }, {

@@ -3,6 +3,7 @@ import { Search } from '../../models/free-class-finder.model';
 import { DatesTimes } from '../../models/dates-times';
 import { Option } from '../../models/option';
 import { CronogramaService } from '../../services/cronograma/cronograma.service';
+import { AlumnosService } from '../../services/alumnos/alumnos.service';
 import { Response } from '../../models/response';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Address } from '../../models/address.model';
@@ -39,7 +40,14 @@ export class FreeClassFinderComponent {
   flag_address_alt:boolean = false;
   numberOfClasses: Number = 0;
 
-  constructor(private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private datePipe: DatePipe, private _snackBar: MatSnackBar) { }
+
+  //ALUMNOS VARIABLES
+  alumnos: Array<any>;
+  selectedAlumno; 
+  yaEsAlumno: boolean;
+
+
+  constructor(private alumnoService: AlumnosService, private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private datePipe: DatePipe, private _snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.addresses = [];
@@ -81,11 +89,13 @@ export class FreeClassFinderComponent {
     this.search.address_alternative[4].city = "La Plata";
     console.log(this.search);
 
-    // this.excepciones.forEach(excep => {
-    //   excep.date = tomorrow;
-    // });
-  }
+    this.yaEsAlumno = false;
+    this.selectedAlumno = null;
+    this.alumnoService.obtenerAlumnos().subscribe( (response: Response) => {
+      this.alumnos = response.data;
+    })
 
+  }
 
   getDay(i: number) {
     switch (i) {
@@ -168,6 +178,7 @@ export class FreeClassFinderComponent {
     this.control_collapse_search = true;
     this.excepciones = [];
     this.formaSearch.resetForm();
+    this.yaEsAlumno = false;
     this.ngOnInit();
   }
 
