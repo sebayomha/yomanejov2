@@ -23,10 +23,11 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
   @Output() finish = new EventEmitter<any>();
   @ViewChild('customModal') customModal;
 
+  isLoaded = false;
   ngOnInit() {
     this.cronogramaService.obtenerCronogramasPendientesDeConfirmar().subscribe( (response: Response) => {
       this.cronogramas = response.data;
-      console.log(response);
+      this.isLoaded = true;
     })
   }
 
