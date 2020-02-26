@@ -1,0 +1,9 @@
+#studentsTabGroup table {
+    margin: 0 auto;
+    margin-bottom: 10px;
+    width: 98%;
+}
+
+#studentsTabGroup table tr {
+    cursor: pointer;
+}

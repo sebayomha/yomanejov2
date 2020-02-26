@@ -25,6 +25,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatListModule} from '@angular/material/list';
 import {MatTableModule} from '@angular/material/table';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatSidenavModule} from '@angular/material/sidenav';
 
 /* Components */
 import { AppComponent } from './app.component';
@@ -54,6 +55,7 @@ registerLocaleData(localeEsAr);
 // import { BarRatingModule } from "ngx-bar-rating";
 import { HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
 import { StudentsComponent } from './components/students/students.component';
+import { StudentsDetailsComponent } from './components/students-details/students-details.component';
 // ...
 export class MyHammerConfig extends HammerGestureConfig {
     overrides = <any> {
@@ -78,7 +80,8 @@ export class MyHammerConfig extends HammerGestureConfig {
     DocumentoPipe,
     NavbarComponent,
     DireccionFisicaComponent,
-    StudentsComponent    
+    StudentsComponent,
+    StudentsDetailsComponent    
   ],
   imports: [
     BrowserModule,
@@ -87,6 +90,7 @@ export class MyHammerConfig extends HammerGestureConfig {
     MatCardModule,
     MatInputModule,
     FormsModule,
+    MatSidenavModule,
     MatTabsModule,
     MatDatepickerModule,
     MatNativeDateModule,

@@ -1,0 +1,22 @@
+<mat-sidenav-container [hidden]="!alumno"
+    class="example-container" (backdropClick)="close()">
+  <mat-sidenav [mode]="'over'" [autoFocus]="false" style="width: 40%;" #sidenav (keydown.escape)="close()" disableClose>
+    <div id="matSideNavContainer">
+      <div id="topSideNav">
+        <div id="imageContainer">
+          <img src="assets/img/logo.png" alt="No hay resultados" height="100" width="100">
+        </div>
+      </div>
+
+      <div id="bottomSideNav">
+        <div id="headerName">{{alumno.nombre}}</div>
+        <div id="alumnoContentDetail"></div>
+      </div>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <p><button mat-button (click)="sidenav.open()">Open</button></p>
+    <p>Closed due to: {{reason}}</p>
+  </mat-sidenav-content>
+</mat-sidenav-container>
