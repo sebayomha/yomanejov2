@@ -26,6 +26,8 @@ import {MatListModule} from '@angular/material/list';
 import {MatTableModule} from '@angular/material/table';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatIconModule} from '@angular/material/icon';
+import {MatStepperModule} from '@angular/material/stepper';
 
 /* Components */
 import { AppComponent } from './app.component';
@@ -96,8 +98,10 @@ export class MyHammerConfig extends HammerGestureConfig {
     MatNativeDateModule,
     MatCheckboxModule,
     MatSelectModule,
+    MatStepperModule,
     MatButtonModule,
     MatExpansionModule,
+    MatIconModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatRadioModule,

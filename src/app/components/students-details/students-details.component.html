@@ -8,9 +8,156 @@
         </div>
       </div>
 
-      <div id="bottomSideNav">
+      <div id="bottomSideNav" *ngIf="alumno">
         <div id="headerName">{{alumno.nombre}}</div>
-        <div id="alumnoContentDetail"></div>
+        <div id="alumnoContentDetail" style="margin-top: 10px;">
+          <mat-card-subtitle>
+            <mat-list>
+              <mat-list-item style="height: 30px;">
+                <mat-icon mat-list-icon>home</mat-icon>
+                <mat-card-subtitle mat-line style="text-align: left; position: relative;
+                top: 2px; font-size: 15px;"><span style="padding: 0;" class="col-12 col-md-3">Dirección principal:</span> <span style="font-weight: 500;" class="col-12 col-md-3">{{alumno.dirPrincipalFormateada}}</span></mat-card-subtitle>
+              </mat-list-item>
+
+              <mat-list-item style="height: 30px;">
+                <mat-icon mat-list-icon>home</mat-icon>
+                <mat-card-subtitle mat-line style="text-align: left; position: relative;
+                top: 2px; font-size: 15px;"><span style="padding: 0;" class="col-12 col-md-3">Dirección alternativa:</span> <span class="col-12 col-md-3">{{alumno.dirAlternativaFormateada || 'No posee'}}</span></mat-card-subtitle>
+              </mat-list-item>
+
+              <mat-list-item style="height: 30px;">
+                <mat-icon mat-list-icon>update</mat-icon>
+                <mat-card-subtitle mat-line style="text-align: left; position: relative;
+                top: 2px; font-size: 15px;"><span style="padding: 0;" class="col-12 col-md-3">Fecha de alta:</span> <span class="col-12 col-md-3">{{alumno.fechaAlta | date}}</span></mat-card-subtitle>
+              </mat-list-item>
+            </mat-list>
+          </mat-card-subtitle>
+
+          <div style="margin-top: 15px;
+          text-align: left;
+          padding-left: 26px; font-size: 17px;">Disponibilidad horaria</div>
+          <mat-vertical-stepper [linear]="true" #stepper>
+            <mat-step [stepControl]="firstFormGroup" [completed]="true">
+              <ng-template matStepLabel>Lunes <span style="margin-left: 15px; color: #43c89d;" *ngIf="alumno.disponibilidades.Monday.todoElDia">Puede todo el día</span></ng-template>
+              <div *ngIf="!alumno.disponibilidades.Monday.todoElDia">
+                <mat-list>
+                  <mat-list-item style="height: 30px;" *ngFor="let tramoHorario of alumno.disponibilidades.Monday.tramosHorarios; let i = index">
+                    <mat-icon mat-list-icon>home</mat-icon>
+                    <mat-card-subtitle mat-line style="text-align: left; position: relative;
+                    top: 2px; font-size: 15px;">
+                      <span style="padding: 0;" class="col-12 col-md-3 dot">{{i + 1}}</span>
+                      <span style="padding: 0;" class="col-12 col-md-3">De <span style="color:#43c89d !important">{{tramoHorario.horarios[0]}}</span> a <span style="color:#43c89d !important">{{tramoHorario.horarios[tramoHorario.horarios.length - 1]}}</span> en </span> 
+                      <span style="padding: 0; font-weight: 500;" class="col-12 col-md-3">{{tramoHorario.direccionUtilizadaFormateada}}</span>
+                    </mat-card-subtitle>
+                  </mat-list-item>
+                </mat-list>
+                <div style="font-size: 16px; color: #ce1111;" *ngIf="!alumno.disponibilidades.Monday.tramosHorarios.length">Los Lunes no está disponible</div>
+              </div>
+            </mat-step>
+            <mat-step [stepControl]="secondFormGroup">
+              <ng-template matStepLabel>Martes <span style="margin-left: 15px; color: #43c89d;" *ngIf="alumno.disponibilidades.Tuesday.todoElDia">Puede todo el día</span></ng-template>
+              <div *ngIf="!alumno.disponibilidades.Tuesday.todoElDia">
+                <mat-list>
+                  <mat-list-item style="height: 30px;" *ngFor="let tramoHorario of alumno.disponibilidades.Tuesday.tramosHorarios; let i = index">
+                    <mat-icon mat-list-icon>home</mat-icon>
+                    <mat-card-subtitle mat-line style="text-align: left; position: relative;
+                    top: 2px; font-size: 15px;">
+                      <span style="padding: 0;" class="col-12 col-md-3 dot">{{i + 1}}</span>
+                      <span style="padding: 0;" class="col-12 col-md-3">De <span style="color:#43c89d !important">{{tramoHorario.horarios[0]}}</span> a <span style="color:#43c89d !important">{{tramoHorario.horarios[tramoHorario.horarios.length - 1]}}</span> en </span> 
+                      <span style="padding: 0; font-weight: 500;" class="col-12 col-md-3">{{tramoHorario.direccionUtilizadaFormateada}}</span>
+                    </mat-card-subtitle>
+                  </mat-list-item>
+                </mat-list>
+                <div style="font-size: 16px; color: #ce1111;" *ngIf="!alumno.disponibilidades.Tuesday.tramosHorarios.length">Los Martes no está disponible</div>
+              </div>
+            </mat-step>
+            <mat-step [stepControl]="thirdFormGroup">
+              <ng-template matStepLabel>Miércoles <span style="margin-left: 15px; color: #43c89d;" *ngIf="alumno.disponibilidades.Wednesday.todoElDia">Puede todo el día</span></ng-template>
+              <div *ngIf="!alumno.disponibilidades.Wednesday.todoElDia">
+                <mat-list>
+                  <mat-list-item style="height: 30px;" *ngFor="let tramoHorario of alumno.disponibilidades.Wednesday.tramosHorarios; let i = index">
+                    <mat-icon mat-list-icon>home</mat-icon>
+                    <mat-card-subtitle mat-line style="text-align: left; position: relative;
+                    top: 2px; font-size: 15px;">
+                      <span style="padding: 0;" class="col-12 col-md-3 dot">{{i + 1}}</span>
+                      <span style="padding: 0;" class="col-12 col-md-3">De <span style="color:#43c89d !important">{{tramoHorario.horarios[0]}}</span> a <span style="color:#43c89d !important">{{tramoHorario.horarios[tramoHorario.horarios.length - 1]}}</span> en </span> 
+                      <span style="padding: 0; font-weight: 500;" class="col-12 col-md-3">{{tramoHorario.direccionUtilizadaFormateada}}</span>
+                    </mat-card-subtitle>
+                  </mat-list-item>
+                </mat-list>
+                <div style="font-size: 16px; color: #ce1111;" *ngIf="!alumno.disponibilidades.Wednesday.tramosHorarios.length">Los Miércoles no está disponible</div>
+              </div>
+            </mat-step>
+            <mat-step [stepControl]="fourthFormGroup">
+              <ng-template matStepLabel>Jueves <span style="margin-left: 15px; color: #43c89d;" *ngIf="alumno.disponibilidades.Thursday.todoElDia">Puede todo el día</span></ng-template>
+              <div *ngIf="!alumno.disponibilidades.Thursday.todoElDia">
+                <mat-list>
+                  <mat-list-item style="height: 30px;" *ngFor="let tramoHorario of alumno.disponibilidades.Thursday.tramosHorarios; let i = index">
+                    <mat-icon mat-list-icon>home</mat-icon>
+                    <mat-card-subtitle mat-line style="text-align: left; position: relative;
+                    top: 2px; font-size: 15px;">
+                      <span style="padding: 0;" class="col-12 col-md-3 dot">{{i + 1}}</span>
+                      <span style="padding: 0;" class="col-12 col-md-3">De <span style="color:#43c89d !important">{{tramoHorario.horarios[0]}}</span> a <span style="color:#43c89d !important">{{tramoHorario.horarios[tramoHorario.horarios.length - 1]}}</span> en </span> 
+                      <span style="padding: 0; font-weight: 500;" class="col-12 col-md-3">{{tramoHorario.direccionUtilizadaFormateada}}</span>
+                    </mat-card-subtitle>
+                  </mat-list-item>
+                </mat-list>
+                <div style="font-size: 16px; color: #ce1111;" *ngIf="!alumno.disponibilidades.Thursday.tramosHorarios.length">Los Jueves no está disponible</div>
+              </div>
+            </mat-step>
+            <mat-step [stepControl]="fifthFormGroup">
+              <ng-template matStepLabel>Viernes <span style="margin-left: 15px; color: #43c89d;" *ngIf="alumno.disponibilidades.Friday.todoElDia">Puede todo el día</span></ng-template>
+              <div *ngIf="!alumno.disponibilidades.Friday.todoElDia">
+                <mat-list>
+                  <mat-list-item style="height: 30px;" *ngFor="let tramoHorario of alumno.disponibilidades.Friday.tramosHorarios; let i = index">
+                    <mat-icon mat-list-icon>home</mat-icon>
+                    <mat-card-subtitle mat-line style="text-align: left; position: relative;
+                    top: 2px; font-size: 15px;">
+                      <span style="padding: 0;" class="col-12 col-md-3 dot">{{i + 1}}</span>
+                      <span style="padding: 0;" class="col-12 col-md-3">De <span style="color:#43c89d !important">{{tramoHorario.horarios[0]}}</span> a <span style="color:#43c89d !important">{{tramoHorario.horarios[tramoHorario.horarios.length - 1]}}</span> en </span> 
+                      <span style="padding: 0; font-weight: 500;" class="col-12 col-md-3">{{tramoHorario.direccionUtilizadaFormateada}}</span>
+                    </mat-card-subtitle>
+                  </mat-list-item>
+                </mat-list>
+                <div style="font-size: 16px; color: #ce1111;" *ngIf="!alumno.disponibilidades.Friday.tramosHorarios.length">Los Viernes no está disponible</div>
+              </div>
+            </mat-step>
+            <mat-step [stepControl]="sixthFormGroup">
+              <ng-template matStepLabel>Sábado <span style="margin-left: 15px; color: #43c89d;" *ngIf="alumno.disponibilidades.Saturday.todoElDia">Puede todo el día</span></ng-template>
+              <div *ngIf="!alumno.disponibilidades.Saturday.todoElDia">
+                <mat-list>
+                  <mat-list-item style="height: 30px;" *ngFor="let tramoHorario of alumno.disponibilidades.Saturday.tramosHorarios; let i = index">
+                    <mat-icon mat-list-icon>home</mat-icon>
+                    <mat-card-subtitle mat-line style="text-align: left; position: relative;
+                    top: 2px; font-size: 15px;">
+                      <span style="padding: 0;" class="col-12 col-md-3 dot">{{i + 1}}</span>
+                      <span style="padding: 0;" class="col-12 col-md-3">De <span style="color:#43c89d !important">{{tramoHorario.horarios[0]}}</span> a <span style="color:#43c89d !important">{{tramoHorario.horarios[tramoHorario.horarios.length - 1]}}</span> en </span> 
+                      <span style="padding: 0; font-weight: 500;" class="col-12 col-md-3">{{tramoHorario.direccionUtilizadaFormateada}}</span>
+                    </mat-card-subtitle>
+                  </mat-list-item>
+                </mat-list>
+                <div style="font-size: 16px; color: #ce1111;" *ngIf="!alumno.disponibilidades.Saturday.tramosHorarios.length">Los Sábados no está disponible</div>
+              </div>
+            </mat-step>
+            <mat-step [stepControl]="seventhFormGroup">
+              <ng-template matStepLabel>Domingo <span style="margin-left: 15px; color: #43c89d;" *ngIf="alumno.disponibilidades.Sunday.todoElDia">Puede todo el día</span></ng-template>
+              <div *ngIf="!alumno.disponibilidades.Sunday.todoElDia">
+                <mat-list>
+                  <mat-list-item style="height: 30px;" *ngFor="let tramoHorario of alumno.disponibilidades.Sunday.tramosHorarios; let i = index">
+                    <mat-icon mat-list-icon>home</mat-icon>
+                    <mat-card-subtitle mat-line style="text-align: left; position: relative;
+                    top: 2px; font-size: 15px;">
+                      <span style="padding: 0;" class="col-12 col-md-3 dot">{{i + 1}}</span>
+                      <span style="padding: 0;" class="col-12 col-md-3">De <span style="color:#43c89d !important">{{tramoHorario.horarios[0]}}</span> a <span style="color:#43c89d !important">{{tramoHorario.horarios[tramoHorario.horarios.length - 1]}}</span> en </span> 
+                      <span style="padding: 0; font-weight: 500;" class="col-12 col-md-3">{{tramoHorario.direccionUtilizadaFormateada}}</span>
+                    </mat-card-subtitle>
+                  </mat-list-item>
+                </mat-list>
+                <div style="font-size: 16px; color: #ce1111;" *ngIf="!alumno.disponibilidades.Sunday.tramosHorarios.length">Los Domingos no está disponible</div>
+              </div>
+            </mat-step>
+          </mat-vertical-stepper>
+        </div>
       </div>
     </div>
   </mat-sidenav>

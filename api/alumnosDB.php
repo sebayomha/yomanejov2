@@ -56,11 +56,14 @@
             d3.floor_ AS floor_DirFisica,
             d3.observaciones AS observaciones_DirFisica,
             alumno.nombre, alumno.telefono, alumno.idAlumno, alumno.fecha_nacimiento, alumno.fechaAlta, alumno.activo,
-            alumno.documento
+            alumno.documento,
+            alumno.idDisponibilidad,
+            disponibilidad.Monday, disponibilidad.Tuesday, disponibilidad.Wednesday, disponibilidad.Thursday, disponibilidad.Friday, disponibilidad.Saturday, disponibilidad.Sunday
             FROM alumno 
             INNER JOIN direccion AS d3 ON d3.idDireccion = alumno.idDireccionFisica
             INNER JOIN direccion AS d1 ON d1.idDireccion = alumno.idDireccion
             LEFT JOIN direccion AS d2 ON d2.idDireccion = alumno.idDireccionAlt
+            INNER JOIN disponibilidad ON disponibilidad.idDisponibilidad = alumno.idDisponibilidad
             ORDER BY alumno.idAlumno DESC');
             $state->execute();
             $result = $state->get_result();
@@ -71,8 +74,21 @@
                     if ($row['id_DirAlternativa'] != null) {
                         $row['dirAlternativaFormateada'] = $this->obtenerDireccionParaMostrar($row['calle_DirAlternativa'], filter_var($row['calle_diag_DirAlternativa'], FILTER_VALIDATE_BOOLEAN), $row['calle_a_DirAlternativa'], filter_var($row['calle_a_diag_DirAlternativa'], FILTER_VALIDATE_BOOLEAN), $row['calle_b_DirAlternativa'], filter_var($row['calle_b_diag_DirAlternativa'], FILTER_VALIDATE_BOOLEAN), $row['numero_DirAlternativa'], $row['ciudad_DirAlternativa'], $row['floor_DirAlternativa'], $row['departamento_DirAlternativa']);
                     }
+
                     $row['dirPrincipalFormateada'] = $this->obtenerDireccionParaMostrar($row['calle_DirPrincipal'], filter_var($row['calle_diag_DirPrincipal'], FILTER_VALIDATE_BOOLEAN), $row['calle_a_DirPrincipal'], filter_var($row['calle_a_diag_DirPrincipal'], FILTER_VALIDATE_BOOLEAN), $row['calle_b_DirPrincipal'], filter_var($row['calle_b_diag_DirPrincipal'], FILTER_VALIDATE_BOOLEAN), $row['numero_DirPrincipal'], $row['ciudad_DirPrincipal'], $row['floor_DirPrincipal'], $row['departamento_DirPrincipal']);
                     $row['dirFisicaFormateada'] = $this->obtenerDireccionParaMostrar($row['calle_DirFisica'], filter_var($row['calle_diag_DirFisica'], FILTER_VALIDATE_BOOLEAN), $row['calle_a_DirFisica'], filter_var($row['calle_a_diag_DirFisica'], FILTER_VALIDATE_BOOLEAN), $row['calle_b_DirFisica'], filter_var($row['calle_b_diag_DirFisica'], FILTER_VALIDATE_BOOLEAN), $row['numero_DirFisica'], $row['ciudad_DirFisica'], $row['floor_DirFisica'], $row['departamento_DirFisica']);
+                    $disponibilidades = (object) [
+                        'Monday' => $this->verificarSiEsTodoElDia($row['Monday'],$row['id_DirPrincipal'],$row['id_DirAlternativa'], $row['dirPrincipalFormateada'], $row['dirAlternativaFormateada']),
+                        'Tuesday' => $this->verificarSiEsTodoElDia($row['Tuesday'],$row['id_DirPrincipal'],$row['id_DirAlternativa'], $row['dirPrincipalFormateada'], $row['dirAlternativaFormateada']),
+                        'Wednesday' => $this->verificarSiEsTodoElDia($row['Wednesday'],$row['id_DirPrincipal'],$row['id_DirAlternativa'], $row['dirPrincipalFormateada'], $row['dirAlternativaFormateada']),
+                        'Thursday' => $this->verificarSiEsTodoElDia($row['Thursday'],$row['id_DirPrincipal'],$row['id_DirAlternativa'], $row['dirPrincipalFormateada'], $row['dirAlternativaFormateada']),
+                        'Friday' => $this->verificarSiEsTodoElDia($row['Friday'],$row['id_DirPrincipal'],$row['id_DirAlternativa'], $row['dirPrincipalFormateada'], $row['dirAlternativaFormateada']),
+                        'Saturday' => $this->verificarSiEsTodoElDia($row['Saturday'],$row['id_DirPrincipal'],$row['id_DirAlternativa'], $row['dirPrincipalFormateada'], $row['dirAlternativaFormateada']),
+                        'Sunday' => $this->verificarSiEsTodoElDia($row['Sunday'],$row['id_DirPrincipal'],$row['id_DirAlternativa'], $row['dirPrincipalFormateada'], $row['dirAlternativaFormateada'])
+                    ];
+
+                    $row['disponibilidades'] = $disponibilidades;
+
                     array_push($alumnos, $row);
                 }
             } else {
@@ -139,6 +155,74 @@
             
 
             return $stringDireccion;
+        }
+
+        function verificarSiEsTodoElDia($diaString, $direccionPrincipal, $direccionAlternativa, $direccionPrincipalFormateada, $direccionAlternativaFormateada) {
+            $diaInformacion = (object) [
+                'todoElDia' => false,
+                'direccionUtilizada' => null,
+                'direccionUtilizadaFormateada' => null,
+                'tramosHorarios' => []
+            ];
+
+            $diaEntero = ['08:00', '09:00', '10:00', '11:15', '12:15', '13:15', '14:30', '15:30', '16:30', '17:45', '18:45', '19:45'];
+        
+            if (substr_count($diaString, "|") == 1) { //es solo un tramo y es todo el dia (disponibleTodoElDia)
+                $diaInformacion->todoElDia = true;
+                //valido que direccion esta usando para todo el dia
+                if ($direccionAlternativa == null) { //nunca cargo una direccion alternativa asi que debe ser la principal
+                    $diaInformacion->direccionUtilizada = $direccionPrincipal;
+                    $diaInformacion->direccionUtilizadaFormateada = $direccionPrincipalFormateada;
+                } else { //puede ser una direccion alternativa o una principal
+                    if (strpos($diaString, 'true') !== false) { //es la direccion alternativa
+                        $diaInformacion->direccionUtilizada = $direccionAlternativa;
+                        $diaInformacion->direccionUtilizadaFormateada = $direccionAlternativaFormateada;
+                    } else { //es la direccion principal
+                        $diaInformacion->direccionUtilizada = $direccionPrincipal;
+                        $diaInformacion->direccionUtilizadaFormateada = $direccionPrincipalFormateada;
+                    }
+                }
+            } else { //posee mas de 1 tramo, y no es (disponibleTodoElDia)
+                $cantidadDeTramos = substr_count($diaString, "|"); //cantidadDeTramos
+                $tramos = [];
+                $diaStringCopy = $diaString;
+                for ($i=0; $i < $cantidadDeTramos; $i++) {
+
+                    $tramoHorario = (object) [
+                        'horarios' => null,
+                        'direccionUtilizada' => null,
+                        'direccionUtilizadaFormateada' => null
+                    ];
+
+                    $tramo = rtrim(strtok($diaStringCopy,  '|'), ", ");
+                    $tramo = trim(strtok($diaStringCopy,  '|'), ", ");
+                    
+
+                    $tramoSize = strlen($tramo);
+                    $indexToF = $tramoSize + 3;
+                    
+
+                    $lastIndexOfToF;
+                    if(substr($diaStringCopy, $indexToF, 1) == 't') { //es una direccion alternativa para ese tramo
+                        $tramoHorario->horarios = explode(",",$tramo);
+                        $tramoHorario->direccionUtilizada = $direccionAlternativa;
+                        $tramoHorario->direccionUtilizadaFormateada = $direccionAlternativaFormateada;
+                        $lastIndexOfToF = $indexToF + 4;
+                    } else { //es la direccion principal para este tramo
+                        $tramoHorario->horarios = explode(",",$tramo); 
+                        $tramoHorario->direccionUtilizada = $direccionPrincipal;
+                        $tramoHorario->direccionUtilizadaFormateada = $direccionPrincipalFormateada;
+                        $lastIndexOfToF = $indexToF + 5;
+                    }
+                    
+                    array_push($diaInformacion->tramosHorarios, $tramoHorario);
+
+                    $diaStringCopy = substr($diaStringCopy, $lastIndexOfToF);
+                }
+            }
+
+            return $diaInformacion;
+
         }
 
     }
