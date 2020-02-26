@@ -3,7 +3,11 @@
     <mat-card *ngFor="let cronograma of cronogramas" class="col-12 col-md-10 offset-md-1" style="margin-top: 20px;"> 
       <mat-card-header>
         <div mat-card-avatar class="avatar" style="margin-top: 5px;"><!--{{inicialesNombreAlumno(cronograma.nombreAlumno)}}-->{{cronograma.idCronograma}}</div>
-        <mat-card-title><span style="margin-right: 10px; font-weight: 500; font-size: 16px;">{{ cronograma.nombreAlumno | capitalize}}</span> <span class="spanLink" style="margin-left: 3px;" (click)="sendWsp(cronograma.telefonoAlumno);" title="Enviar Whatsapp">{{cronograma.telefonoAlumno | phone}}<i style="margin-left: 7px; color: #43c89d;" class="fab fa-whatsapp"></i></span></mat-card-title>
+        <mat-card-title>
+          <span style="margin-right: 10px; font-weight: 500; font-size: 16px;">{{ cronograma.nombreAlumno | capitalize}}</span> 
+          <span class="spanLink" style="margin-left: 3px;" (click)="sendWsp(cronograma.telefonoAlumno);" title="Enviar Whatsapp">{{cronograma.telefonoAlumno | phone}}<i style="margin-left: 7px; color: #43c89d;" class="fab fa-whatsapp"></i></span>
+          <span style="margin-left: 30px; color: rgba(0,0,0,.54);"><i class="fas fa-history" style="margin-right: 5px;"></i>{{getHourAndMinutes(cronograma)}}</span>
+        </mat-card-title>
         <mat-card-subtitle>
           <div id="direccionPrincipal">
             <span></span><span style="font-weight: 500;">{{cronograma.direccionPrincipalFormateada}}</span>

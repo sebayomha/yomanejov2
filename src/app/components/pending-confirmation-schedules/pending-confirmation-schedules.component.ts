@@ -27,6 +27,7 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
   ngOnInit() {
     this.cronogramaService.obtenerCronogramasPendientesDeConfirmar().subscribe( (response: Response) => {
       this.cronogramas = response.data;
+      console.log("cronogramas", this.cronogramas);
       this.isLoaded = true;
     })
   }
@@ -41,6 +42,16 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
     return iniciales;
   }
 
+  getHourAndMinutes(cronograma) {
+    let endDate = new Date(cronograma.fechaHoraGuardado);
+    let purchaseDate = new Date();
+    let diffMs = Math.abs((purchaseDate.getTime() - endDate.getTime())); // milliseconds
+    let diffDays = Math.floor(diffMs / 86400000); // days
+    let diffHrs = Math.floor((diffMs % 86400000) / 3600000); // hours
+    let diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
+    return diffHrs + " horas " + diffMins + " minutos";
+  }
+
   isMobile() {
     return this.breakpointObserver.isMatched('(max-width: 767px)');
   }
@@ -53,7 +64,6 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
     else {
       window.open("https://web.whatsapp.com/send?phone=+54"+numeroTelefono, "_blank");
     } 
-    console.log("SENDWSP")
   }
 
   onConfirmSchedule(clases, idCronograma, nombreAlumno, idAlumno, direccionPrincipal, direccionAlternativa, direccionPrincipalFormated, direccionAlternativaFormated) {

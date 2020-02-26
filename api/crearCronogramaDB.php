@@ -387,9 +387,10 @@
                 }
                 
                 /* SE CREA UN NUEVO CRONOGRAMA */
-                $state = $this->conn->prepare('INSERT INTO cronograma (status, idAlumno) VALUES (?,?)');
+                $state = $this->conn->prepare('INSERT INTO cronograma (status, idAlumno, timestampGuardado) VALUES (?,?,?)');
                 $status = "NO CONFIRMADO";
-                $state->bind_param('si', $status, $idAlumno);
+                $datetime = date('m/d/Y h:i:s a', time());
+                $state->bind_param('sis', $status, $idAlumno, $datetime);
                 if ($state->execute()) { //el insert del alumno fue exitoso
                     $idCronograma = $this->conn->insert_id;
                 } else {
@@ -449,6 +450,7 @@
             d2.departamento AS departamento_DirAlternativa,
             d2.floor_ AS floor_DirAlternativa,
             d2.observaciones AS observaciones_DirAlternativa,
+            cronograma.timestampGuardado,
             alumno.nombre, alumno.telefono, clase.idClase, clase.idCronograma, clase.alumno, clase.auto, clase.fecha, clase.horaInicio, clase.idZona, clase.idDireccion, clase.status AS satusClase, cronograma.status AS cronogramaStatus FROM clase INNER JOIN cronograma ON cronograma.idCronograma = clase.idCronograma AND cronograma.status = ? INNER JOIN alumno ON clase.alumno = alumno.idAlumno INNER JOIN direccion AS d1 ON d1.idDireccion = alumno.idDireccion LEFT JOIN direccion AS d2 ON d2.idDireccion = alumno.idDireccionAlt ORDER BY cronograma.idCronograma DESC');
             $state->bind_param('s', $status);
 
@@ -476,6 +478,7 @@
                         'telefonoAlumno' => $row['telefono'],
                         'direccionPrincipalFormateada' => $this->obtenerDireccionParaMostrar($row['calle_DirPrincipal'], filter_var($row['calle_diag_DirPrincipal'], FILTER_VALIDATE_BOOLEAN), $row['calle_a_DirPrincipal'], filter_var($row['calle_a_diag_DirPrincipal'], FILTER_VALIDATE_BOOLEAN), $row['calle_b_DirPrincipal'], filter_var($row['calle_b_diag_DirPrincipal'], FILTER_VALIDATE_BOOLEAN), $row['numero_DirPrincipal'], $row['ciudad_DirPrincipal'], $row['floor_DirPrincipal'], $row['departamento_DirPrincipal']),
                         'idDireccionPrincipal' => $row['id_DirPrincipal'],
+                        'fechaHoraGuardado' => $row['timestampGuardado'],
                         'direccionAlternativaFormateada' => $dirAlternativa,
                         'idDireccionAlternativa' => $row['id_DirAlternativa'],
                         'clases' => array($row)
