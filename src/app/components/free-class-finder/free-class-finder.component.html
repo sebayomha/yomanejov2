@@ -431,7 +431,7 @@
                                             <mat-form-field class="example-full-width">
                                                 <input matInput readonly [matDatepicker]="pickerExcepcion" (click)="pickerExcepcion.open()"
                                                     (focus)="pickerExcepcion.open()" placeholder="Fecha"
-                                                    [min]="minDate" [(ngModel)]="excepcion.date" name="excepcionDate">
+                                                    [min]="minDate" [(ngModel)]="excepcion.date" name="excepcionDate_{{j}}">
                                                 <mat-datepicker-toggle matSuffix [for]="pickerExcepcion"></mat-datepicker-toggle>
                                                 <mat-datepicker [touchUi]="isMobile()" #pickerExcepcion></mat-datepicker>
                                             </mat-form-field>
