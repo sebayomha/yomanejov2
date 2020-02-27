@@ -1,11 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { SharedService } from '../../services/sharedService/shared-service';
 import { Router } from '@angular/router';
+import { slideInAnimation } from '../../animations';
 
 @Component({
   selector: 'app-editar-alumno',
   templateUrl: './editar-alumno.component.html',
-  styleUrls: ['./editar-alumno.component.css']
+  styleUrls: ['./editar-alumno.component.css'],
+  animations: [
+    slideInAnimation
+    // animation triggers go here
+  ]
 })
 export class EditarAlumnoComponent implements OnInit {
 

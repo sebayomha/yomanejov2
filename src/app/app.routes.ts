@@ -9,8 +9,8 @@ const app_routes: Routes = [
   { path: 'busqueda', component: FreeClassFinderComponent},
   { path: 'pendientes', component: PendingConfirmationSchedulesComponent},
   { path: 'clases', component: LessonsComponent},
-  { path: 'alumnos', component: StudentsComponent},
-  { path: 'alumnos/editar/:id', component: EditarAlumnoComponent},
+  { path: 'alumnos', component: StudentsComponent, data: {animation: 'StudentsPage'}},
+  { path: 'alumnos/editar/:id', component: EditarAlumnoComponent, data: {animation: 'EditingStudentPage'}},
   { path: '', pathMatch: 'full', redirectTo: 'busqueda' },
   { path: '**', pathMatch: 'full', redirectTo: 'busqueda' }
 ];
