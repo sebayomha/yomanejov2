@@ -5,7 +5,7 @@
 </div>
 
 <mat-selection-list style="padding-top: 0px;" #addressesAlumnoSelection (selectionChange)="onAddressSelection($event);">
-  <mat-list-option [value]="data" checkboxPosition="before" *ngFor="let data of data.addressesAlumno">
+  <mat-list-option [selected]="data.selected" [value]="data" checkboxPosition="before" *ngFor="let data of data.addressesAlumno">
     {{data.direccionFormated}}
   </mat-list-option>
 </mat-selection-list>

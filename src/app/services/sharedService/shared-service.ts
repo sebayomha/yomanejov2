@@ -4,20 +4,16 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
-export class AlumnosService {
+export class SharedService {
 
   constructor(private http: HttpClient) { }
 
-  alumno;
-  obtenerAlumnos() {
-    return this.http.get('api/alumnos');
-  }
+  data;
+  setData(data) {
+    this.data = data;
+   }
 
-  setAlumno(alumno) {
-    this.alumno = alumno;
-  }
-
-  getAlumno() {
-    return this.alumno;
+  getData() {
+    return this.data
   }
 }

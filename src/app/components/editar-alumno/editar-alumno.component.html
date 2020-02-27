@@ -1,0 +1,80 @@
+<div class="container" style="margin-top: 105px;">
+  <div class="row">
+    <div class="col-10 offset-1">
+      <div>
+        <span (click)="volverAlumnos();"><- Volver</span>
+      </div>
+      <div id="titleEditing">
+        <span>Editar</span> <span>{{alumnoInformation.nombre}}</span>
+      </div>
+      
+      <div id="infoMessage">
+        <div class="alert alert-info" role="alert">
+          <i class="fas fa-exclamation" style="margin-right: 5px;"></i>Podrá modificar los datos <span style="font-weight: 500;">personales</span> del alumno.
+        </div>
+      </div>
+
+      <div id="warningMessage">
+        <div class="alert alert-info" role="alert">
+          <i class="fas fa-exclamation" style="margin-right: 5px;"></i>
+          <span>Si modifica la disponibilidad o las direcciones deberá rehacer el calculo del cronograma <span style="font-weight: 500;">{{alumnoInformation.idCronograma}}</span> asociado al alumno</span> 
+        </div>
+      </div>
+
+      <div id="formularioContainer">
+        <form>
+
+          <!-- NOMBRE DEL ALUMNO -->
+          <div style="padding: 0px;" class="col-sm-12 col-md-4">
+            <mat-form-field style="width: 100%;">
+                <input #student_name="ngModel" maxlength="60" matInput placeholder="Nombre del alumno" name="student_name" [(ngModel)]="alumnoInformation.nombre"
+                  required autofocus>
+            </mat-form-field>
+            <div *ngIf="student_name.errors?.required && student_name.touched"
+                style="color: #f44336; font-size: 12px; margin-bottom: 10px; margin-top: -10px;">
+                Debe ingresar el nombre del alumno para continuar
+            </div>
+        </div>
+
+        <!-- TELEFONO -->
+        <div style="padding: 0px;" class="col-sm-12 col-md-4">
+          <mat-form-field style="width: 100%;">
+              <input type="text" #student_phone="ngModel" maxlength="14" matInput placeholder="Teléfono del alumno" name="student_phone" (ngModelChange)="alumnoInformation.telefono = $event" [ngModel]="alumnoInformation.telefono | phone"
+                required (keypress)="preventLetters($event)" autofocus>
+          </mat-form-field>
+          <div *ngIf="student_phone.errors?.required && student_phone.touched"
+              style="color: #f44336; font-size: 12px; margin-bottom: 10px; margin-top: -10px;">
+              Debe ingresar el teléfono para continuar
+          </div>
+          <div *ngIf="student_phone.errors?.maxlength && student_phone.touched"
+              style="color: #f44336; font-size: 12px; margin-bottom: 10px; margin-top: -10px;">
+              El teléfono no puede tener más de 10 dígitos.
+          </div>
+        </div>
+
+        <!-- DOCUMENTO -->
+        <div>
+          <mat-form-field class="col-12 col-md-4" style="padding: 0px; margin-top: 10px; display: block;">
+            <input autofocus minlength="10" maxlength="10" matInput placeholder="Documento" name="documento"
+            (ngModelChange)="alumnoInformation.documento = $event" [ngModel]="alumnoInformation.documento | document" #documento="ngModel" (keypress)="preventLetters($event)">
+          
+            <mat-error *ngIf="documento.errors?.required && documento.touched"
+            style="color: #f44336; font-size: 12px;">
+              Debe ingresar el documento para continuar
+            </mat-error>
+            <mat-error *ngIf="documento.errors?.minlength && documento.touched"
+                style="color: #f44336; font-size: 12px;">
+                El documento debe tener 8 dígitos
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- DIRECCION FÍSICA -->
+        <app-direccion-fisica #direccionFisica [data]="alumnoInformation"></app-direccion-fisica>
+
+        </form>
+      </div>
+    </div>  
+  </div>
+</div>
+

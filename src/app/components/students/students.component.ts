@@ -1,7 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AlumnosService } from '../../services/alumnos/alumnos.service';
 import { Response } from '../../models/response';
-import {MatTableDataSource} from '@angular/material/table';
+import { MatTableDataSource} from '@angular/material/table';
+import { Router } from '@angular/router';
+import { SharedService } from '../../services/sharedService/shared-service';
 
 @Component({
   selector: 'app-students',
@@ -12,14 +14,15 @@ export class StudentsComponent implements OnInit {
 
   alumnosActivos;
   alumnosInactivos;
-  displayedColumns: string[] = ['No', 'nombre', 'direccion', 'telefono', 'documento'];
+  displayedColumns: string[] = ['No', 'nombre', 'direccion', 'telefono', 'documento', 'accion'];
   busquedaAlumnoActivo: string = '';
   busquedaAlumnoInctivos: string = '';
 
+  
   detailedAlumno;
   @ViewChild('studentDetail') studentDetail;
 
-  constructor(private alumnoService: AlumnosService) { }
+  constructor(private alumnoService: AlumnosService, private router: Router, private sharedService:SharedService) { }
 
   ngOnInit() {
     this.alumnoService.obtenerAlumnos().subscribe( (response: Response) => {
@@ -64,6 +67,18 @@ export class StudentsComponent implements OnInit {
   
   closedStudentDetail($event) {
     this.detailedAlumno = null;
+  }
+
+  editarAlumno(alumno, $event) {
+    this.sharedService.setData(alumno)
+    this.router.navigate(['alumnos/editar/', alumno.idAlumno]);
+    $event.stopPropagation()
+    console.log("EDITAR")
+  }
+
+  eliminarAlumno(element, $event) {
+    $event.stopPropagation()
+    console.log("ELIMINAR")
   }
 
 }

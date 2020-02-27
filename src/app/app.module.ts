@@ -28,6 +28,7 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatIconModule} from '@angular/material/icon';
 import {MatStepperModule} from '@angular/material/stepper';
+import {ReactiveFormsModule} from '@angular/forms';
 
 /* Components */
 import { AppComponent } from './app.component';
@@ -58,7 +59,10 @@ registerLocaleData(localeEsAr);
 import { HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
 import { StudentsComponent } from './components/students/students.component';
 import { StudentsDetailsComponent } from './components/students-details/students-details.component';
-// ...
+import { EditarAlumnoComponent } from './components/editar-alumno/editar-alumno.component';
+
+import { SharedService } from './services/sharedService/shared-service';
+
 export class MyHammerConfig extends HammerGestureConfig {
     overrides = <any> {
         'pinch': { enabled: false },
@@ -83,14 +87,17 @@ export class MyHammerConfig extends HammerGestureConfig {
     NavbarComponent,
     DireccionFisicaComponent,
     StudentsComponent,
-    StudentsDetailsComponent    
+    StudentsDetailsComponent,
+    EditarAlumnoComponent    
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     BrowserAnimationsModule,
     MatCardModule,
-    MatInputModule,
+    MatInputModule,    
+    FormsModule,
+    ReactiveFormsModule,
     FormsModule,
     MatSidenavModule,
     MatTabsModule,
@@ -114,7 +121,7 @@ export class MyHammerConfig extends HammerGestureConfig {
   providers:[DatePipe, {provide: LOCALE_ID, useValue: "es-AR"}, LoaderService, { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptorService, multi: true }, {
     provide: HAMMER_GESTURE_CONFIG,
     useClass: MyHammerConfig
-}],
+}, SharedService],
   bootstrap: [AppComponent],
   entryComponents: [
     SnackbarComponent
