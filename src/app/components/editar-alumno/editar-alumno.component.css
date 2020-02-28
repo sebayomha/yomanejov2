@@ -1,0 +1,36 @@
+.volverButton {
+    background: none!important;
+    border: none;
+    padding: 0!important;
+    /*optional*/
+    font-family: arial, sans-serif;
+    /*input has OS specific font-family*/
+    color: #069;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#titleEditing {
+    margin-top: 15px;
+    font-size: 25px;
+    color: #999999;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.confirmButton {
+    color: #43c89d;
+}
+
+.confirmButton:hover {
+    background: #43c89d;
+    color: white;
+}
+
+/* ::ng-deep #editingAlumnoVS mat-step-header {
+    padding: 0px;
+}
+
+::ng-deep #editingAlumnoVS mat-step-header + div {
+    margin-left: 11px;
+} */

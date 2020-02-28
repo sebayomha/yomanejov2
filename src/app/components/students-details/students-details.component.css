@@ -35,21 +35,21 @@
     color: rgba(0,0,0,.54);
 }
 
-::ng-deep .mat-vertical-stepper-content { 
+::ng-deep #studentsDetailsVS .mat-vertical-stepper-content { 
     visibility: visible !important; 
     height: 100% !important; 
 }
 
-::ng-deep .mat-vertical-stepper-header{
+::ng-deep #studentsDetailsVS .mat-vertical-stepper-header{
     pointer-events: none !important;
 }
 
-::ng-deep .mat-step-icon-not-touched{
+::ng-deep #studentsDetailsVS .mat-step-icon-not-touched {
     background-color: #3f51b5 !important;
     color: #fff !important;
 }
 
-::ng-deep .mat-step-header .mat-step-label, .mat-step-header .mat-step-optional {
+::ng-deep #studentsDetailsVS .mat-step-header .mat-step-label, .mat-step-header .mat-step-optional {
     color: rgba(0,0,0,.87);
     font-weight: 500;
 }

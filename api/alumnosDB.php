@@ -163,6 +163,7 @@
             $diaInformacion = (object) [
                 'todoElDia' => false,
                 'direccionUtilizada' => null,
+                'usandoDirAlternativa' => false,
                 'direccionUtilizadaFormateada' => null,
                 'tramosHorarios' => []
             ];
@@ -175,13 +176,16 @@
                 if ($direccionAlternativa == null) { //nunca cargo una direccion alternativa asi que debe ser la principal
                     $diaInformacion->direccionUtilizada = $direccionPrincipal;
                     $diaInformacion->direccionUtilizadaFormateada = $direccionPrincipalFormateada;
+                    $diaInformacion->usandoDirAlternativa = false;
                 } else { //puede ser una direccion alternativa o una principal
                     if (strpos($diaString, 'true') !== false) { //es la direccion alternativa
                         $diaInformacion->direccionUtilizada = $direccionAlternativa;
                         $diaInformacion->direccionUtilizadaFormateada = $direccionAlternativaFormateada;
+                        $diaInformacion->usandoDirAlternativa = true;
                     } else { //es la direccion principal
                         $diaInformacion->direccionUtilizada = $direccionPrincipal;
                         $diaInformacion->direccionUtilizadaFormateada = $direccionPrincipalFormateada;
+                        $diaInformacion->usandoDirAlternativa = false;
                     }
                 }
             } else { //posee mas de 1 tramo, y no es (disponibleTodoElDia)
@@ -193,6 +197,7 @@
                     $tramoHorario = (object) [
                         'horarios' => null,
                         'direccionUtilizada' => null,
+                        'usandoDirAlternativa' => false,
                         'direccionUtilizadaFormateada' => null
                     ];
 
@@ -209,11 +214,13 @@
                         $tramoHorario->horarios = explode(",",$tramo);
                         $tramoHorario->direccionUtilizada = $direccionAlternativa;
                         $tramoHorario->direccionUtilizadaFormateada = $direccionAlternativaFormateada;
+                        $tramoHorario->usandoDirAlternativa = false;
                         $lastIndexOfToF = $indexToF + 4;
                     } else { //es la direccion principal para este tramo
                         $tramoHorario->horarios = explode(",",$tramo); 
                         $tramoHorario->direccionUtilizada = $direccionPrincipal;
                         $tramoHorario->direccionUtilizadaFormateada = $direccionPrincipalFormateada;
+                        $tramoHorario->usandoDirAlternativa = true;
                         $lastIndexOfToF = $indexToF + 5;
                     }
                     
