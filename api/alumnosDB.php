@@ -214,13 +214,13 @@
                         $tramoHorario->horarios = explode(",",$tramo);
                         $tramoHorario->direccionUtilizada = $direccionAlternativa;
                         $tramoHorario->direccionUtilizadaFormateada = $direccionAlternativaFormateada;
-                        $tramoHorario->usandoDirAlternativa = false;
+                        $tramoHorario->usandoDirAlternativa = true;
                         $lastIndexOfToF = $indexToF + 4;
                     } else { //es la direccion principal para este tramo
                         $tramoHorario->horarios = explode(",",$tramo); 
                         $tramoHorario->direccionUtilizada = $direccionPrincipal;
                         $tramoHorario->direccionUtilizadaFormateada = $direccionPrincipalFormateada;
-                        $tramoHorario->usandoDirAlternativa = true;
+                        $tramoHorario->usandoDirAlternativa = false;
                         $lastIndexOfToF = $indexToF + 5;
                     }
                     

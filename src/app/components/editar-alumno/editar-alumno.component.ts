@@ -28,6 +28,7 @@ export class EditarAlumnoComponent implements OnInit {
 
   search: Search;
   control_flag_empty:boolean = false;
+  flag_address_alt:boolean = false;
   schedule_send_null:boolean = true;
 
   constructor(private sharedService:SharedService, private router: Router) { }
@@ -163,31 +164,32 @@ export class EditarAlumnoComponent implements OnInit {
     });
 
     //direccion principal del cronograma
-    let street = new Address('',false);
-    let street_a = new Address(undefined, false, '');
-    let street_b = new Address(undefined,false, undefined, '');
-    let altitud = new Address(undefined,false, undefined, undefined, '');
-    let city = new Address(undefined,false, undefined, undefined, undefined, '');
-    let floor =  new Address(undefined,false, undefined, undefined, undefined, '', '');
-    let department = new Address(undefined,false, undefined, undefined, undefined, '', '', '');
-    let obser = new Address(undefined,false, undefined, undefined, undefined, '', '', '', '');
+    let street = new Address(this.alumnoInformation.calle_DirPrincipal, (this.alumnoInformation.calle_diag_DirPrincipal == 'true'));
+    let street_a = new Address('', (this.alumnoInformation.calle_a_diag_DirPrincipal == 'true'), this.alumnoInformation.calle_a_DirPrincipal);
+    let street_b = new Address(undefined,(this.alumnoInformation.calle_b_diag_DirPrincipal == 'true'), '', this.alumnoInformation.calle_b_DirPrincipal);
+    let altitud = new Address(undefined,false, undefined, undefined, this.alumnoInformation.numero_DirPrincipal);
+    let city = new Address(undefined,false, undefined, undefined, undefined, this.alumnoInformation.ciudad_DirPrincipal);
+    let floor =  new Address(undefined,false, undefined, undefined, undefined, '', this.alumnoInformation.floor_DirPrincipal);
+    let department = new Address(undefined,false, undefined, undefined, undefined, '', '', this.alumnoInformation.departamento_DirPrincipal);
+    let obser = new Address(undefined,false, undefined, undefined, undefined, '', '', '', this.alumnoInformation.observaciones_DirPrincipal);
     this.addresses.push(street, street_a, street_b, altitud, city, floor, department, obser);
 
     //direccion alternativa del cronograma
     if (this.alumnoInformation.id_DirAlternativa != null) {
-      let street_alt = new Address('',false);
-      let street_a_alt = new Address(undefined, false, '');
-      let street_b_alt = new Address(undefined,false, undefined, '');
-      let altitud_alt = new Address(undefined,false, undefined, undefined, '');
-      let city_alt = new Address(undefined,false, undefined, undefined, undefined, '');
-      let floor_alt =  new Address(undefined,false, undefined, undefined, undefined, '', '');
-      let department_alt = new Address(undefined,false, undefined, undefined, undefined, '', '', '');
-      let obser_alt = new Address(undefined,false, undefined, undefined, undefined, '', '', '', '');
+      this.flag_address_alt = true;
+      //direccion principal del cronograma
+      let street_alt = new Address(this.alumnoInformation.calle_DirAlternativa, (this.alumnoInformation.calle_diag_DirAlternativa == 'true'));
+      let street_a_alt = new Address('', (this.alumnoInformation.calle_a_diag_DirAlternativa == 'true'), this.alumnoInformation.calle_a_DirAlternativa);
+      let street_b_alt = new Address(undefined,(this.alumnoInformation.calle_b_diag_DirAlternativa == 'true'), '', this.alumnoInformation.calle_b_DirAlternativa);
+      let altitud_alt = new Address(undefined,false, undefined, undefined, this.alumnoInformation.numero_DirAlternativa);
+      let city_alt = new Address(undefined,false, undefined, undefined, undefined, this.alumnoInformation.ciudad_DirAlternativa);
+      let floor_alt =  new Address(undefined,false, undefined, undefined, undefined, '', this.alumnoInformation.floor_DirAlternativa);
+      let department_alt = new Address(undefined,false, undefined, undefined, undefined, '', '', this.alumnoInformation.departamento_DirAlternativa);
+      let obser_alt = new Address(undefined,false, undefined, undefined, undefined, '', '', '', this.alumnoInformation.observaciones_DirAlternativa);
       this.addresses_alt.push(street_alt, street_a_alt, street_b_alt, altitud_alt, city_alt, floor_alt, department_alt, obser_alt);
     }
 
     this.search = new Search(this.alumnoInformation.nombre, dates_times, this.addresses, this.addresses_alt, 8, new Date());
-    this.search.address[4].city = "La Plata";
 
     if (this.alumnoInformation.id_DirAlternativa != null) {
       this.search.address_alternative[4].city = "La Plata";
