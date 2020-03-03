@@ -57,6 +57,8 @@
       </mat-card-content>
 
       <mat-card-actions align="end">
+        <button mat-button class="editButton" (click)="onEditSchedule();">EDITAR</button>
+        <div fxFlex></div>
         <button mat-button class="deleteButton" (click)="onCancelSchedule(cronograma.idCronograma, cronograma.nombreAlumno, cronograma.alumno);">ELIMINAR</button>
         <div fxFlex></div>
         <button mat-button class="confirmButton" (click)="onConfirmSchedule(cronograma.clases, cronograma.idCronograma, cronograma.nombreAlumno, cronograma.alumno, cronograma.idDireccionPrincipal, cronograma.idDireccionAlternativa, cronograma.direccionPrincipalFormateada, cronograma.direccionAlternativaFormateada);">CONFIRMAR</button>
@@ -78,4 +80,5 @@
   </div>
 </div>
 
+<edit-pending-conf-schedules *ngIf="show_edit"></edit-pending-conf-schedules>
 <custom-modal #customModal (close)="onCustomModalClose($event);" (confirmation)="confirmSchedule($event);" [data]="dataToConfirm" [component]="'pendingConfirmationSchedules'" [successBanner]="showSuccessBanner" [operation]="operation"></custom-modal>

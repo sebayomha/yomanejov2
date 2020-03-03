@@ -43,6 +43,8 @@ import { SnackbarComponent } from './components/snackbar/snackbar/snackbar.compo
 import { PendingConfirmationSchedulesComponent } from './components/pending-confirmation-schedules/pending-confirmation-schedules.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { DireccionFisicaComponent } from './components/direccion-fisica/direccion-fisica.component';
+import { EditPendingConfSchedulesComponent } from './components/edit-pending-conf-schedules/edit-pending-conf-schedules.component';
+
 
 /* Services */
 import { LoaderService } from './services/loader/loader-service.service';
@@ -88,7 +90,8 @@ export class MyHammerConfig extends HammerGestureConfig {
     DireccionFisicaComponent,
     StudentsComponent,
     StudentsDetailsComponent,
-    EditarAlumnoComponent    
+    EditarAlumnoComponent,
+    EditPendingConfSchedulesComponent  
   ],
   imports: [
     BrowserModule,

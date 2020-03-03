@@ -20,6 +20,7 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
   dataToConfirm: any;
   durationInSeconds: number = 3;
   operation: string;
+  show_edit:boolean = false;
   @Output() finish = new EventEmitter<any>();
   @ViewChild('customModal') customModal;
 
@@ -145,5 +146,9 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
     };
     this.operation = 'Cancelar';
     this.customModal.open();
+  }
+
+  onEditSchedule(){
+    this.show_edit = true;
   }
 }

@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./edit-pending-conf-schedules.component.scss']
 })
 
-export class EditPendingConfSchedules {
+export class EditPendingConfSchedulesComponent {
 
   constructor() { }
 

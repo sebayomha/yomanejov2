@@ -9,7 +9,185 @@
                 </mat-panel-description>
             </mat-expansion-panel-header>
             <form (ngSubmit)="searchSchedules()" #forma="ngForm" novalidate="" style="margin-top: 20px;">
-                
+                <div class="form-group">
+                    <div>
+                        <div class="row" style="margin-top: 15px;">
+                            <div class="col-6 col-sm-6 col-md-6 col-lg-4">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput readonly [matDatepicker]="picker" (click)="picker.open()"
+                                        (focus)="picker.open()" placeholder="Desde" [(ngModel)]="search.date"
+                                        [ngModelOptions]="{standalone: true}" [min]="minDate">
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-datepicker [touchUi]="isMobile()" #picker></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-6 col-sm-6 col-md-6 col-lg-4">
+                                <mat-form-field class="example-full-width">
+                                    <input type="number" maxlength="2" matInput placeholder="N° de clases" name="lessons"
+                                        [(ngModel)]="search.lessons" #lessons="ngModel" (keypress)="preventLetters($event)">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div style="margin-top: 20px;"><label
+                                style="font-weight: 500; font-size: 17px;">Dirección:</label></div>
+                        <div style="font-size: 13px; margin-bottom: 15px;" class="text-muted">Recuerde que debe ingresar
+                            al menos una intersección o un número para realizar la búsqueda</div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6 col-lg-4">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Localidad</mat-label>
+                                    <mat-select [(ngModel)]="search.address[4].city" name="city"
+                                        (selectionChange)="selectionCity($event.value)">
+                                        <mat-option *ngFor="let city of locations" [value]="city">
+                                            {{city}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9 col-sm-7 col-md-6 col-lg-4">
+                                <mat-checkbox style="margin-right: 15px;" name="street_diag"
+                                    [(ngModel)]="search.address[0].diag">Diag</mat-checkbox>
+                                <mat-form-field style="width: 125px;">
+                                    <input matInput placeholder="Calle" name="street"
+                                        [(ngModel)]="search.address[0].street" #street="ngModel" required>
+                                </mat-form-field>
+                                <div *ngIf="street.errors?.required && street.touched"
+                                    style="color: #f44336; font-size: 12px; margin-bottom: 10px; margin-top: -10px;">
+                                    Debe ingresar una calle para continuar
+                                </div>
+                            </div>
+                            <div class="col-3 col-sm-5 col-md-6 col-lg-2">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Número" name="altitud"
+                                        [(ngModel)]="search.address[3].altitud" #altitud="ngModel">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-6 col-md-6 col-lg-1">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Piso" name="piso"
+                                        [(ngModel)]="search.address[5].floor" #piso="ngModel">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-6 col-md-6 col-lg-1">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Depto" name="depto"
+                                        [(ngModel)]="search.address[6].department" #depto="ngModel">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div><label>Entre:</label></div>
+                        <div class="row">
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                                <mat-checkbox style="margin-right: 15px;" name="street_a_diag"
+                                    [(ngModel)]="search.address[1].diag">Diag</mat-checkbox>
+                                <mat-form-field style="width: 125px;">
+                                    <input matInput placeholder="Calle" name="street_a"
+                                        [(ngModel)]="search.address[1].street_a">
+                                </mat-form-field>
+                            </div>
+                            <!-- <div class="col-sm-1" style="margin: auto;"></div> -->
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                                <mat-checkbox style="margin-right: 15px;" name="street_b_diag"
+                                    [(ngModel)]="search.address[2].diag">Diag</mat-checkbox>
+                                <mat-form-field style="width: 125px;">
+                                    <input matInput placeholder="Calle" name="street_b"
+                                        [(ngModel)]="search.address[2].street_b">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-bottom:15px;">
+                            <div class="col-6 col-md-6 col-lg-4">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Observaciones" name="obser"
+                                        [(ngModel)]="search.address[7].observations" #obser="ngModel">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <mat-checkbox style="margin-right: 15px; font-weight: 500;" name="flag_address_alt"
+                        [(ngModel)]="flag_address_alt" (change)="quitDA()">Agregar dirección alternativa</mat-checkbox>
+                        <div *ngIf="flag_address_alt">
+                            <div style="margin-top: 20px;"><label
+                                style="font-weight: 500; font-size: 17px;">Dirección Alternativa:</label></div>
+                            <div style="font-size: 13px; margin-bottom: 15px;" class="text-muted">Recuerde que debe ingresar
+                                al menos una intersección o un número para realizar la búsqueda</div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-6 col-lg-4">
+                                    <mat-form-field class="example-full-width">
+                                        <mat-label>Localidad</mat-label>
+                                        <mat-select [(ngModel)]="search.address_alternative[4].city" name="city_alt"
+                                            (selectionChange)="selectionCityAlt($event.value)">
+                                            <mat-option *ngFor="let city of locations" [value]="city">
+                                                {{city}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-9 col-sm-7 col-md-6 col-lg-4">
+                                    <mat-checkbox style="margin-right: 15px;" name="street_diag_alt"
+                                        [(ngModel)]="search.address_alternative[0].diag">Diag</mat-checkbox>
+                                    <mat-form-field style="width: 125px;">
+                                        <input matInput placeholder="Calle" name="street_alt"
+                                            [(ngModel)]="search.address_alternative[0].street" #street_alt="ngModel" required>
+                                    </mat-form-field>
+                                    <div *ngIf="street_alt.errors?.required && street_alt.touched"
+                                        style="color: #f44336; font-size: 12px; margin-bottom: 10px; margin-top: -10px;">
+                                        Debe ingresar una calle para continuar
+                                    </div>
+                                </div>
+                                <div class="col-3 col-sm-5 col-md-6 col-lg-2">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Número" name="altitud_alt"
+                                            [(ngModel)]="search.address_alternative[3].altitud" #altitud_alt="ngModel">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-6 col-md-6 col-lg-1">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Piso" name="piso_alt"
+                                            [(ngModel)]="search.address_alternative[5].floor" #piso_alt="ngModel">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-6 col-md-6 col-lg-1">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Depto" name="depto_alt"
+                                            [(ngModel)]="search.address_alternative[6].department" #depto_alt="ngModel">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div><label>Entre:</label></div>
+                            <div class="row">
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                                    <mat-checkbox style="margin-right: 15px;" name="street_a_diag_alt"
+                                        [(ngModel)]="search.address_alternative[1].diag">Diag</mat-checkbox>
+                                    <mat-form-field style="width: 125px;">
+                                        <input matInput placeholder="Calle" name="street_a_alt"
+                                            [(ngModel)]="search.address_alternative[1].street_a">
+                                    </mat-form-field>
+                                </div>
+                                <!-- <div class="col-sm-1" style="margin: auto;"></div> -->
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                                    <mat-checkbox style="margin-right: 15px;" name="street_b_diag_alt"
+                                        [(ngModel)]="search.address_alternative[2].diag">Diag</mat-checkbox>
+                                    <mat-form-field style="width: 125px;">
+                                        <input matInput placeholder="Calle" name="street_b_alt"
+                                            [(ngModel)]="search.address_alternative[2].street_b">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 col-md-6 col-lg-4">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Observaciones" name="obser_alt"
+                                            [(ngModel)]="search.address_alternative[7].observations" #obser_alt="ngModel">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div style="margin-top: 30px;"><label style="font-weight: 500; font-size: 17px;">Disponibilidad horaria:</label></div>
                 <div style="font-size: 13px; margin-bottom: 15px;" class="text-muted">Recuerde que debe ingresar
                     al menos un horario para realizar la búsqueda</div>
