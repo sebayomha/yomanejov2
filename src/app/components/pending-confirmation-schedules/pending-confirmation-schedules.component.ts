@@ -15,6 +15,7 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
   constructor(private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private _snackBar: MatSnackBar) { }
 
   cronogramas: Array<any> = [];
+  cronograma_edit = [];
   displayedColumns: string[] = ['noClase', 'fecha', 'hora', 'direccion', 'auto'];
   showSuccessBanner: boolean = false;
   dataToConfirm: any;
@@ -148,7 +149,8 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
     this.customModal.open();
   }
 
-  onEditSchedule(){
+  onEditSchedule(index){
     this.show_edit = true;
+    this.cronograma_edit = this.cronogramas[index];
   }
 }
