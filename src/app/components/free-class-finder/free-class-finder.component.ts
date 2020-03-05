@@ -110,15 +110,27 @@ export class FreeClassFinderComponent {
 
           if (clase.calle_DirPrincipal != null) {
             this.search.address[0].street = clase.calle_DirPrincipal;
-            this.search.address[0].diag = clase.calle_diag_DirPrincipal;
+            if (clase.calle_diag_DirPrincipal == 'false') {
+              this.search.address[0].diag = false;
+            } else {
+              this.search.address[0].diag = true;
+            }
           }
           if (clase.calle_a_DirPrincipal != null) {
             this.search.address[1].street_a = clase.calle_a_DirPrincipal;
-            this.search.address[1].diag = clase.calle_a_diag_DirPrincipal;
+            if (clase.calle_a_diag_DirPrincipal == 'false') {
+              this.search.address[1].diag = false;
+            } else {
+              this.search.address[1].diag = true;
+            }
           }
           if (clase.calle_b_DirPrincipal != null) {
             this.search.address[2].street_b = clase.calle_b_DirPrincipal;
-            this.search.address[2].diag = clase.calle_b_diag_DirPrincipal;
+            if (clase.calle_b_diag_DirPrincipal == 'false') {
+              this.search.address[2].diag = false;
+            } else {
+              this.search.address[2].diag = true;
+            }
           }
           if (clase.numero_DirPrincipal != null) {
             this.search.address[3].altitud = clase.numero_DirPrincipal;
@@ -144,15 +156,27 @@ export class FreeClassFinderComponent {
 
           if (clase.calle_DirAlternativa != null) {
             this.search.address_alternative[0].street = clase.calle_DirAlternativa;
-            this.search.address_alternative[0].diag = clase.calle_diag_DirAlternativa;
+            if (clase.calle_diag_DirAlternativa == 'false') {
+              this.search.address_alternative[0].diag = false;
+            } else {
+              this.search.address_alternative[0].diag = true;
+            }
           }
           if (clase.calle_a_DirAlternativa != null) {
             this.search.address_alternative[1].street_a = clase.calle_a_DirAlternativa;
-            this.search.address_alternative[1].diag = clase.calle_a_diag_DirAlternativa;
+            if (clase.calle_a_diag_DirAlternativa == 'false') {
+              this.search.address_alternative[1].diag = false;
+            } else {
+              this.search.address_alternative[1].diag = true;
+            }
           }
           if (clase.calle_b_DirAlternativa != null) {
             this.search.address_alternative[2].street_b = clase.calle_b_DirAlternativa;
-            this.search.address_alternative[2].diag = clase.calle_b_diag_DirAlternativa;
+            if (clase.calle_b_diag_DirAlternativa == 'false') {
+              this.search.address_alternative[2].diag = false;
+            } else {
+              this.search.address_alternative[2].diag = true;
+            }
           }
           if (clase.numero_DirAlternativa != null) {
             this.search.address_alternative[3].altitud = clase.numero_DirAlternativa;
