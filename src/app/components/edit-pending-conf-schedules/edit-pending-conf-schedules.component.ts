@@ -1,4 +1,8 @@
 import { Component, Input } from '@angular/core';
+import { Address } from '../../models/address.model';
+import { DatesTimes } from '../../models/dates-times';
+import { Option } from '../../models/option';
+
 
 @Component({
   selector: 'edit-pending-conf-schedules',
@@ -13,27 +17,6 @@ export class EditPendingConfSchedulesComponent {
 
   constructor() { }
 
-  ngOnInit() {
-    console.log('crono',this.cronograma);
-  }
-
-  getDay(i: number) {
-    switch (i) {
-      case 0:
-        return 'Lunes';
-      case 1:
-        return 'Martes';
-      case 2:
-        return 'Miércoles';
-      case 3:
-        return 'Jueves';
-      case 4:
-        return 'Viernes';
-      case 5:
-        return 'Sábado';
-      case 6:
-        return 'Domingo';
-    }
-  }
+  ngOnInit() { }
 
 }
