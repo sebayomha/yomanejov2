@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, Input } from '@angular/core';
 import { Search } from '../../models/free-class-finder.model';
 import { DatesTimes } from '../../models/dates-times';
 import { Option } from '../../models/option';
@@ -22,6 +22,8 @@ import { NgForm } from '@angular/forms';
 
 export class FreeClassFinderComponent {
 
+  @Input() edit_cronograma;
+
   @ViewChild('forma') formaSearch : NgForm;
 
   excepciones = Array<Excepcion>();
@@ -39,6 +41,9 @@ export class FreeClassFinderComponent {
   student_name = '';
   flag_address_alt:boolean = false;
   numberOfClasses: Number = 0;
+
+  edit_crono_dir_ppal:boolean = false;
+  edit_crono_da_ppal:boolean = false;
 
 
   //ALUMNOS VARIABLES
@@ -95,7 +100,107 @@ export class FreeClassFinderComponent {
       this.alumnos = response.data;
       console.log(this.alumnos)
     })
+    
+    //Cargo los datos del cronograma a editar para realizar la busqueda de las opciones.
+    if (this.edit_cronograma != '') {
+      this.edit_cronograma.clases.forEach(clase => {
 
+        //Armo la direccion principal
+        if (!this.edit_crono_dir_ppal) {
+
+          if (clase.calle_DirPrincipal != null) {
+            this.search.address[0].street = clase.calle_DirPrincipal;
+            if (clase.calle_diag_DirPrincipal == 'false') {
+              this.search.address[0].diag = false;
+            } else {
+              this.search.address[0].diag = true;
+            }
+          }
+          if (clase.calle_a_DirPrincipal != null) {
+            this.search.address[1].street_a = clase.calle_a_DirPrincipal;
+            if (clase.calle_a_diag_DirPrincipal == 'false') {
+              this.search.address[1].diag = false;
+            } else {
+              this.search.address[1].diag = true;
+            }
+          }
+          if (clase.calle_b_DirPrincipal != null) {
+            this.search.address[2].street_b = clase.calle_b_DirPrincipal;
+            if (clase.calle_b_diag_DirPrincipal == 'false') {
+              this.search.address[2].diag = false;
+            } else {
+              this.search.address[2].diag = true;
+            }
+          }
+          if (clase.numero_DirPrincipal != null) {
+            this.search.address[3].altitud = clase.numero_DirPrincipal;
+          }
+          if (clase.ciudad_DirPrincipal != null) {
+            this.search.address[4].city = clase.ciudad_DirPrincipal;
+          }
+          if (clase.departamento_DirPrincipal != null) {
+            this.search.address[6].department = clase.departamento_DirPrincipal;
+          }
+          if (clase.floor_DirPrincipal != null) {
+            this.search.address[5].floor = clase.floor_DirPrincipal;
+          }
+          if (clase.observaciones_DirPrincipal != null) {
+            this.search.address[7].observations = clase.observaciones_DirPrincipal;
+          }
+
+          this.edit_crono_dir_ppal = true;
+        }
+
+        //Armo la direccion alternativa
+        if (!this.edit_crono_dir_ppal) {
+
+          if (clase.calle_DirAlternativa != null) {
+            this.search.address_alternative[0].street = clase.calle_DirAlternativa;
+            if (clase.calle_diag_DirAlternativa == 'false') {
+              this.search.address_alternative[0].diag = false;
+            } else {
+              this.search.address_alternative[0].diag = true;
+            }
+          }
+          if (clase.calle_a_DirAlternativa != null) {
+            this.search.address_alternative[1].street_a = clase.calle_a_DirAlternativa;
+            if (clase.calle_a_diag_DirAlternativa == 'false') {
+              this.search.address_alternative[1].diag = false;
+            } else {
+              this.search.address_alternative[1].diag = true;
+            }
+          }
+          if (clase.calle_b_DirAlternativa != null) {
+            this.search.address_alternative[2].street_b = clase.calle_b_DirAlternativa;
+            if (clase.calle_b_diag_DirAlternativa == 'false') {
+              this.search.address_alternative[2].diag = false;
+            } else {
+              this.search.address_alternative[2].diag = true;
+            }
+          }
+          if (clase.numero_DirAlternativa != null) {
+            this.search.address_alternative[3].altitud = clase.numero_DirAlternativa;
+          }
+          if (clase.ciudad_DirAlternativa != null) {
+            this.search.address_alternative[4].city = clase.ciudad_DirAlternativa;
+          }
+          if (clase.departamento_DirAlternativa != null) {
+            this.search.address_alternative[6].department = clase.departamento_DirAlternativa;
+          }
+          if (clase.floor_DirAlternativa != null) {
+            this.search.address_alternative[5].floor = clase.floor_DirAlternativa;
+          }
+          if (clase.observaciones_DirAlternativa != null) {
+            this.search.address_alternative[7].observations = clase.observaciones_DirAlternativa;
+          }
+
+          this.edit_crono_dir_ppal = true;
+        }
+
+        console.log(this.search);
+
+      });
+    }
   }
 
   getDay(i: number) {
