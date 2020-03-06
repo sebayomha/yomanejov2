@@ -423,7 +423,7 @@
             return false;
         }
 
-        function obtenerCronogramasPendientesDeConfirmar() {
+        function obtenerCronogramasPendientesDeConfirmar() { 
             $status = "NO CONFIRMADO";
             $state = $this->conn->prepare('SELECT 
             d1.idDireccion AS id_DirPrincipal,
@@ -451,7 +451,19 @@
             d2.floor_ AS floor_DirAlternativa,
             d2.observaciones AS observaciones_DirAlternativa,
             cronograma.timestampGuardado,
-            alumno.nombre, alumno.telefono, clase.idClase, clase.idCronograma, clase.alumno, clase.auto, clase.fecha, clase.horaInicio, clase.idZona, clase.idDireccion, clase.status AS satusClase, cronograma.status AS cronogramaStatus FROM clase INNER JOIN cronograma ON cronograma.idCronograma = clase.idCronograma AND cronograma.status = ? INNER JOIN alumno ON clase.alumno = alumno.idAlumno INNER JOIN direccion AS d1 ON d1.idDireccion = alumno.idDireccion LEFT JOIN direccion AS d2 ON d2.idDireccion = alumno.idDireccionAlt ORDER BY cronograma.idCronograma DESC');
+            excepcion.idExcepcion, excepcion.fecha, excepcion.no_puede,
+            excepcionhorarios.dir_alt, excepcionhorarios.horarios,
+            disponibilidad.Monday, disponibilidad.Tuesday, disponibilidad.Wednesday, disponibilidad.Thursday, disponibilidad.Friday, disponibilidad.Saturday, disponibilidad.Sunday,
+            alumno.idAlumno, alumno.nombre, alumno.telefono, clase.idClase, clase.idCronograma, clase.alumno, clase.auto, clase.fecha, clase.horaInicio, clase.idZona, clase.idDireccion, clase.status AS satusClase, cronograma.status AS cronogramaStatus 
+            FROM clase 
+            INNER JOIN cronograma ON cronograma.idCronograma = clase.idCronograma AND cronograma.status = ? 
+            INNER JOIN alumno ON clase.alumno = alumno.idAlumno 
+            INNER JOIN direccion AS d1 ON d1.idDireccion = alumno.idDireccion 
+            LEFT JOIN direccion AS d2 ON d2.idDireccion = alumno.idDireccionAlt
+            INNER JOIN disponibilidad ON disponibilidad.idDisponibilidad = alumno.idDisponibilidad
+            LEFT JOIN excepcion ON excepcion.idAlumno = alumno.idAlumno
+            LEFT JOIN excepcionhorarios ON excepcion.idExcepcion = excepcionhorarios.idExcepcion
+            ORDER BY cronograma.idCronograma DESC');
             $state->bind_param('s', $status);
 
             $cronogramas = array();
@@ -471,23 +483,101 @@
                         $row['direccionClaseFormateada'] = $this->obtenerDireccionParaMostrar($row['calle_DirPrincipal'], filter_var($row['calle_diag_DirPrincipal'], FILTER_VALIDATE_BOOLEAN), $row['calle_a_DirPrincipal'], filter_var($row['calle_a_diag_DirPrincipal'], FILTER_VALIDATE_BOOLEAN), $row['calle_b_DirPrincipal'], filter_var($row['calle_b_diag_DirPrincipal'], FILTER_VALIDATE_BOOLEAN), $row['numero_DirPrincipal'], $row['ciudad_DirPrincipal'], $row['floor_DirPrincipal'], $row['departamento_DirPrincipal']);
                     }
 
+                    $direccionPrincipalFormateada = $this->obtenerDireccionParaMostrar($row['calle_DirPrincipal'], filter_var($row['calle_diag_DirPrincipal'], FILTER_VALIDATE_BOOLEAN), $row['calle_a_DirPrincipal'], filter_var($row['calle_a_diag_DirPrincipal'], FILTER_VALIDATE_BOOLEAN), $row['calle_b_DirPrincipal'], filter_var($row['calle_b_diag_DirPrincipal'], FILTER_VALIDATE_BOOLEAN), $row['numero_DirPrincipal'], $row['ciudad_DirPrincipal'], $row['floor_DirPrincipal'], $row['departamento_DirPrincipal']);
+                    $disponibilidades = (object) [
+                        'Monday' => $this->verificarSiEsTodoElDia($row['Monday'],$row['id_DirPrincipal'],$row['id_DirAlternativa'], $direccionPrincipalFormateada, $dirAlternativa),
+                        'Tuesday' => $this->verificarSiEsTodoElDia($row['Tuesday'],$row['id_DirPrincipal'],$row['id_DirAlternativa'], $direccionPrincipalFormateada, $dirAlternativa),
+                        'Wednesday' => $this->verificarSiEsTodoElDia($row['Wednesday'],$row['id_DirPrincipal'],$row['id_DirAlternativa'], $direccionPrincipalFormateada, $dirAlternativa),
+                        'Thursday' => $this->verificarSiEsTodoElDia($row['Thursday'],$row['id_DirPrincipal'],$row['id_DirAlternativa'], $direccionPrincipalFormateada, $dirAlternativa),
+                        'Friday' => $this->verificarSiEsTodoElDia($row['Friday'],$row['id_DirPrincipal'],$row['id_DirAlternativa'], $direccionPrincipalFormateada, $dirAlternativa),
+                        'Saturday' => $this->verificarSiEsTodoElDia($row['Saturday'],$row['id_DirPrincipal'],$row['id_DirAlternativa'], $direccionPrincipalFormateada, $dirAlternativa),
+                        'Sunday' => $this->verificarSiEsTodoElDia($row['Sunday'],$row['id_DirPrincipal'],$row['id_DirAlternativa'], $direccionPrincipalFormateada, $dirAlternativa)
+                    ];
+
+                    $excepciones = (array) [];
+                    $excepcion = (object) [
+                        'idExcepcion' => null,
+                        'fecha' => null,
+                        'no_puede' => null,
+                        'horarios' => []
+                    ];
+
+                    $horario = (object) [
+                        'tramoHorario' => '',
+                        'usandoDirAlt' => false
+                    ];
+
+                    if ($row['idExcepcion'] != null) { //tiene excepciones
+                        $excepcion = (object) [
+                            'idExcepcion' => $row['idExcepcion'],
+                            'fecha' => $row['fecha'],
+                            'no_puede' => filter_var($row['no_puede'], FILTER_VALIDATE_BOOLEAN),
+                            'horarios' => []
+                        ];
+
+                        if ($row['horarios'] != null) { //tiene horarios
+                            $horario->tramoHorario = $row['horarios'];
+                            $horario->usandoDirAlt = filter_var($row['dir_alt'], FILTER_VALIDATE_BOOLEAN);
+                            array_push($excepcion->horarios, $horario);
+                        }
+
+                        array_push($excepciones, $excepcion);
+                    }
+                    
                     $cronogramaObject = (object) [
                         'idCronograma' => $row['idCronograma'],
                         'alumno' => $row['alumno'],
                         'nombreAlumno' => $row['nombre'],
                         'telefonoAlumno' => $row['telefono'],
-                        'direccionPrincipalFormateada' => $this->obtenerDireccionParaMostrar($row['calle_DirPrincipal'], filter_var($row['calle_diag_DirPrincipal'], FILTER_VALIDATE_BOOLEAN), $row['calle_a_DirPrincipal'], filter_var($row['calle_a_diag_DirPrincipal'], FILTER_VALIDATE_BOOLEAN), $row['calle_b_DirPrincipal'], filter_var($row['calle_b_diag_DirPrincipal'], FILTER_VALIDATE_BOOLEAN), $row['numero_DirPrincipal'], $row['ciudad_DirPrincipal'], $row['floor_DirPrincipal'], $row['departamento_DirPrincipal']),
+                        'direccionPrincipalFormateada' => $direccionPrincipalFormateada,
                         'idDireccionPrincipal' => $row['id_DirPrincipal'],
                         'fechaHoraGuardado' => $row['timestampGuardado'],
                         'direccionAlternativaFormateada' => $dirAlternativa,
                         'idDireccionAlternativa' => $row['id_DirAlternativa'],
+                        'disponibilidades' => $disponibilidades,
+                        'excepciones' => $excepciones,
                         'clases' => array($row)
                     ];
+
                     $found = false;
                     foreach ($cronogramas as $cronograma) {
                         if ($cronograma->idCronograma == $row['idCronograma']) {
                             $found = true;
+
+                            $foundExcepcion = false;
+
+                            foreach ($cronograma->excepciones as $excepcionGuardada) {
+                                if ($excepcion->idExcepcion == $excepcionGuardada->idExcepcion) {
+                                    $foundExcepcion = true;
+                                    
+                                    $horarioFound = false;
+                                    foreach ($excepcionGuardada->horarios as $horario) {
+                                        if ($horario->tramoHorario == $row['horarios']) {
+                                            $horarioFound = true;
+                                            break;
+                                        }
+                                    }
+                                    
+                                    if (!$horarioFound) {
+                                        $horario = (object) [
+                                            'tramoHorario' => '',
+                                            'usandoDirAlt' => false
+                                        ];
+
+                                        $horario->tramoHorario = $row['horarios'];
+                                        $horario->usandoDirAlt = filter_var($row['dir_alt'], FILTER_VALIDATE_BOOLEAN);
+                                        array_push($excepcionGuardada->horarios, $horario);
+                                        usort($excepcionGuardada->horarios, array($this, 'excepciones_tramos_compare'));
+                                    }
+                                }
+                            }
+
+                            if (!$foundExcepcion) {
+                                array_push($cronograma->excepciones, $excepcion);
+                            }
+
                             array_push($cronograma->clases, $row);
+                            usort($cronograma->excepciones, array($this, 'excepciones_compare'));
                             usort($cronograma->clases, array($this, 'date_compare'));
                             break;
                         }
@@ -500,6 +590,81 @@
                 return 1;
             }
             return $cronogramas;
+        }
+
+        function verificarSiEsTodoElDia($diaString, $direccionPrincipal, $direccionAlternativa, $direccionPrincipalFormateada, $direccionAlternativaFormateada) {
+            $diaInformacion = (object) [
+                'todoElDia' => false,
+                'direccionUtilizada' => null,
+                'usandoDirAlternativa' => false,
+                'direccionUtilizadaFormateada' => null,
+                'tramosHorarios' => []
+            ];
+
+            $diaEntero = ['08:00', '09:00', '10:00', '11:15', '12:15', '13:15', '14:30', '15:30', '16:30', '17:45', '18:45', '19:45'];
+        
+            if (substr_count($diaString, "|") == 1) { //es solo un tramo y es todo el dia (disponibleTodoElDia)
+                $diaInformacion->todoElDia = true;
+                //valido que direccion esta usando para todo el dia
+                if ($direccionAlternativa == null) { //nunca cargo una direccion alternativa asi que debe ser la principal
+                    $diaInformacion->direccionUtilizada = $direccionPrincipal;
+                    $diaInformacion->direccionUtilizadaFormateada = $direccionPrincipalFormateada;
+                    $diaInformacion->usandoDirAlternativa = false;
+                } else { //puede ser una direccion alternativa o una principal
+                    if (strpos($diaString, 'true') !== false) { //es la direccion alternativa
+                        $diaInformacion->direccionUtilizada = $direccionAlternativa;
+                        $diaInformacion->direccionUtilizadaFormateada = $direccionAlternativaFormateada;
+                        $diaInformacion->usandoDirAlternativa = true;
+                    } else { //es la direccion principal
+                        $diaInformacion->direccionUtilizada = $direccionPrincipal;
+                        $diaInformacion->direccionUtilizadaFormateada = $direccionPrincipalFormateada;
+                        $diaInformacion->usandoDirAlternativa = false;
+                    }
+                }
+            } else { //posee mas de 1 tramo, y no es (disponibleTodoElDia)
+                $cantidadDeTramos = substr_count($diaString, "|"); //cantidadDeTramos
+                $tramos = [];
+                $diaStringCopy = $diaString;
+                for ($i=0; $i < $cantidadDeTramos; $i++) {
+
+                    $tramoHorario = (object) [
+                        'horarios' => null,
+                        'direccionUtilizada' => null,
+                        'usandoDirAlternativa' => false,
+                        'direccionUtilizadaFormateada' => null
+                    ];
+
+                    $tramo = rtrim(strtok($diaStringCopy,  '|'), ", ");
+                    $tramo = trim(strtok($diaStringCopy,  '|'), ", ");
+                    
+
+                    $tramoSize = strlen($tramo);
+                    $indexToF = $tramoSize + 3;
+                    
+
+                    $lastIndexOfToF;
+                    if(substr($diaStringCopy, $indexToF, 1) == 't') { //es una direccion alternativa para ese tramo
+                        $tramoHorario->horarios = explode(",",$tramo);
+                        $tramoHorario->direccionUtilizada = $direccionAlternativa;
+                        $tramoHorario->direccionUtilizadaFormateada = $direccionAlternativaFormateada;
+                        $tramoHorario->usandoDirAlternativa = true;
+                        $lastIndexOfToF = $indexToF + 4;
+                    } else { //es la direccion principal para este tramo
+                        $tramoHorario->horarios = explode(",",$tramo); 
+                        $tramoHorario->direccionUtilizada = $direccionPrincipal;
+                        $tramoHorario->direccionUtilizadaFormateada = $direccionPrincipalFormateada;
+                        $tramoHorario->usandoDirAlternativa = false;
+                        $lastIndexOfToF = $indexToF + 5;
+                    }
+                    
+                    array_push($diaInformacion->tramosHorarios, $tramoHorario);
+
+                    $diaStringCopy = substr($diaStringCopy, $lastIndexOfToF);
+                }
+            }
+
+            return $diaInformacion;
+
         }
 
         function confirmarCronograma($idCronograma, $idAlumno, $direccionFisica, $clases, $documento) { 
@@ -654,6 +819,20 @@
             $t1 = strtotime($a['fecha']);
             $t2 = strtotime($b['fecha']);
             return $t1 - $t2;
+        }
+
+        function excepciones_compare($a, $b) {
+            $t1 = $a->idExcepcion;
+            $t2 = $b->idExcepcion;
+            return $t1 > $t2;
+        }
+
+        function excepciones_tramos_compare($a, $b) {
+            $splitA = explode(',', $a->tramoHorario);
+            $splitB = explode(',', $b->tramoHorario);
+            $t1 = strtotime($splitA[0]);
+            $t2 = strtotime($splitB[sizeof($splitB) - 1]);
+            return $t1 > $t2;
         }
 
         function sortHorariosPorHora($a, $b) {

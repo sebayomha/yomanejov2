@@ -6,6 +6,7 @@ import { Address } from '../../models/address.model';
 import { Search } from '../../models/free-class-finder.model';
 import { DatesTimes } from '../../models/dates-times';
 import { Option } from '../../models/option';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-editar-alumno',
@@ -16,12 +17,14 @@ import { Option } from '../../models/option';
     // animation triggers go here
   ]
 })
+
 export class EditarAlumnoComponent implements OnInit {
 
   addressesAlumno = [];
   predefinedHours: Array<string> = ["08:00", "09:00", "10:00", "11:15", "12:15", "13:15", "14:30", "15:30", "16:30", "17:45", "18:45", "19:45"];
   locations = ["La Plata", "Berisso", "Ensenada"];
   alumnoInformation;
+  alumnoInformationCopyPersistData;
 
   addresses = Array<Address>();
   addresses_alt = Array<Address>();
@@ -31,9 +34,12 @@ export class EditarAlumnoComponent implements OnInit {
   flag_address_alt:boolean = false;
   schedule_send_null:boolean = true;
 
-  constructor(private sharedService:SharedService, private router: Router) { }
+  documento;
+
+  constructor(private breakpointObserver: BreakpointObserver, private sharedService:SharedService, private router: Router) { }
 
   @ViewChild('direccionFisica') direccionFisica;
+  @ViewChild('editingStudentForm') editingStudentForm;
 
   ngOnInit() {
     this.alumnoInformation = this.sharedService.getData(); //obtengo la informacion del servicio compartido
@@ -63,7 +69,8 @@ export class EditarAlumnoComponent implements OnInit {
     this.setInformationOnInit(); //método encargado de setear todas las disponibilidades y direcciones para el cronograma
   }
 
-  ngAfterViewChecked() {
+  ngAfterViewInit() {
+    console.log("viewCHecked");
     this.direccionFisica.setDireccionFisicaDefault();
   }
 
@@ -187,14 +194,188 @@ export class EditarAlumnoComponent implements OnInit {
       let department_alt = new Address(undefined,false, undefined, undefined, undefined, '', '', this.alumnoInformation.departamento_DirAlternativa);
       let obser_alt = new Address(undefined,false, undefined, undefined, undefined, '', '', '', this.alumnoInformation.observaciones_DirAlternativa);
       this.addresses_alt.push(street_alt, street_a_alt, street_b_alt, altitud_alt, city_alt, floor_alt, department_alt, obser_alt);
+      console.log("ad", this.addresses_alt);
+    } else { //no posee direccion alternativa asi que seteamos todo vacio
+      let street_alt = new Address('',false);
+      let street_a_alt = new Address(undefined, false, '');
+      let street_b_alt = new Address(undefined,false, undefined, '');
+      let altitud_alt = new Address(undefined,false, undefined, undefined, '');
+      let city_alt = new Address(undefined,false, undefined, undefined, undefined, 'La Plata');
+      let floor_alt =  new Address(undefined,false, undefined, undefined, undefined, '', '');
+      let department_alt = new Address(undefined,false, undefined, undefined, undefined, '', '', '');
+      let obser_alt = new Address(undefined,false, undefined, undefined, undefined, '', '', '', '');
+      this.addresses_alt.push(street_alt, street_a_alt, street_b_alt, altitud_alt, city_alt, floor_alt, department_alt, obser_alt);
     }
 
-    this.search = new Search(this.alumnoInformation.nombre, dates_times, this.addresses, this.addresses_alt, 8, new Date());
-
-    if (this.alumnoInformation.id_DirAlternativa != null) {
-      this.search.address_alternative[4].city = "La Plata";
-    }
+    this.search = new Search(this.alumnoInformation.nombre, dates_times, this.addresses, this.addresses_alt, 8, new Date(), this.alumnoInformation.telefono);
+    
+    this.documento = this.alumnoInformation.documento;
+    this.alumnoInformationCopyPersistData = JSON.parse(JSON.stringify(this.alumnoInformation));
     console.log(this.search);
-
   }
+
+  //validar los formularios
+  continueEditing() {
+    console.log(this.modificoDatosPersonales());
+    if (this.editingStudentForm.valid && this.direccionFisica.validateForm() && !this.schedule_send_null) 
+      return false;
+    return true;
+  }
+
+  preventLetters($event) {
+    var reg = /^[0-9]+$/i;
+    if (!reg.test($event.key)) {
+      $event.preventDefault();
+    }
+  }
+
+  modificoDatosPersonales() {
+    console.log("this.alumnoInformation: ", this.alumnoInformation)
+    console.log("this.alumnoInformationCopyPersistData: ", this.direccionFisica.getData())
+    
+    if ( (this.alumnoInformation.telefono.replace(/\s/g, "").replace('-', "")) == (this.search.student_phone.toString().replace(/\s/g, "").replace('-', "")) 
+    && this.alumnoInformation.documento == this.documento 
+    && this.alumnoInformation.nombre == this.search.student_name) {
+      //datos primarios personales continuan iguales, evaluo si la direccion fisica cambio. Solo evaluo los datos sensibles. (dpto y piso y obs no importan)
+      if (this.alumnoInformation.calle_DirFisica == this.alumnoInformationCopyPersistData.calle_DirFisica
+        && this.alumnoInformation.calle_diag_DirFisica == this.alumnoInformationCopyPersistData.calle_diag_DirFisica
+        && this.alumnoInformation.calle_a_DirFisica == this.alumnoInformationCopyPersistData.calle_a_DirFisica
+        && this.alumnoInformation.calle_a_diag_DirFisica == this.alumnoInformationCopyPersistData.calle_a_diag_DirFisica
+        && this.alumnoInformation.calle_b_DirFisica == this.alumnoInformationCopyPersistData.calle_b_DirFisica
+        && this.alumnoInformation.calle_b_diag_DirFisica == this.alumnoInformationCopyPersistData.calle_b_diag_DirFisica
+        && this.alumnoInformation.numero_DirFisica == this.alumnoInformationCopyPersistData.numero_DirFisica
+        && this.alumnoInformation.ciudad_DirFisica == this.alumnoInformationCopyPersistData.ciudad_DirFisica
+        ) { //los datos personales continuan igual
+          return false;
+        } else { //modifico datos personales de la direccion fisica
+          return true;
+        }
+    } else { //modifico datos personales
+      return true;
+    }
+  }
+
+  isMobile() {
+    return this.breakpointObserver.isMatched('(max-width: 767px)');
+  }
+
+
+  quitDA(){
+    //Esta funcion resetea todas las direcciones alternativas.
+    if (!this.flag_address_alt) {
+      for (let i = 0; i <=6; i++) {
+        this.search.dates_times[i].option.forEach(opt => {
+          if ( opt.dir_alt == true ) {
+            opt.dir_alt = false;
+          }
+        });
+      }
+    }
+  }
+
+  allDay(day) {
+
+    let index = this.search.dates_times.findIndex(element => { return element.name_day == day });
+
+    if (index != -1) {
+      if (this.search.dates_times[index].all_day == false ) {
+        this.search.dates_times[index].all_day = true;
+        this.schedule_send_null = false;
+
+        if (this.search.dates_times[index].option.length > 1) {
+          let length = this.search.dates_times[index].option.length;
+          this.search.dates_times[index].option.splice( 1, length );
+        }
+
+        this.search.dates_times[index].option[0].hour_start = '';
+        this.search.dates_times[index].option[0].hour_finish = '';
+        this.search.dates_times[index].option[0].scheduleFrom = ["08:00", "09:00", "10:00", "11:15", "12:15", "13:15", "14:30", "15:30", "16:30", "17:45", "18:45", "19:45"];
+        this.search.dates_times[index].option[0].scheduleTo = [];
+        this.search.dates_times[index].option[0].scheduleSend = ["08:00", "09:00", "10:00", "11:15", "12:15", "13:15", "14:30", "15:30", "16:30", "17:45", "18:45", "19:45"];
+        this.search.dates_times[index].option[0].dir_alt = false;
+
+      } else {
+        this.search.dates_times[index].all_day = false;
+        this.search.dates_times[index].option[0].scheduleSend = null;
+        this.search.dates_times[index].option[0].dir_alt = false;
+
+        this.schedule_send_null = true;
+        for (let i = 0; i <=6; i++) {
+          if (this.search.dates_times[i].all_day == false) {
+            if(this.search.dates_times[i].option[0].scheduleSend != null) {
+              this.schedule_send_null = false;
+            }
+          } else {
+            this.schedule_send_null = false;
+          }
+        }
+        this.control_flag_empty = false;
+      }
+    }
+  }
+
+  removeOption(index, day_options) {
+
+    if (day_options.length > 1) {
+    day_options.splice( index, 1 );
+    } else {
+      day_options[index].hour_start = '';
+      day_options[index].hour_finish = '';
+      day_options[index].scheduleTo = [];
+      day_options[index].scheduleSend = null;
+    }
+    this.control_flag_empty = false;
+    this.schedule_send_null = true;
+
+    for (let i = 0; i <=6; i++) {
+      if (this.search.dates_times[i].all_day == true) {
+        return this.schedule_send_null = false;
+      } else {
+        if(this.search.dates_times[i].option[0].scheduleSend != null) {
+          this.schedule_send_null = false;
+        }
+      }
+    }
+  }
+
+  addDateTime(day) {
+    let index = this.search.dates_times.findIndex(element => { return element.name_day == day });
+
+    if (index != -1) {
+      if(this.search.dates_times[index].option.length == 1 && this.search.dates_times[index].option[0].hour_start == '' && this.search.dates_times[index].option[0].hour_finish == ''){
+
+          this.search.dates_times[index].option[0].hour_start = null;
+          this.search.dates_times[index].option[0].hour_finish = null;
+          this.search.dates_times[index].option[0].scheduleFrom = ["08:00", "09:00", "10:00", "11:15", "12:15", "13:15", "14:30", "15:30", "16:30", "17:45", "18:45", "19:45"];
+          this.search.dates_times[index].option[0].scheduleTo = [];
+          this.search.dates_times[index].option[0].scheduleSend = null;
+
+      } else {
+        let option_length = this.search.dates_times[index].option.length;
+
+        let j = option_length - 1;
+
+        let hour_finish_selected = this.search.dates_times[index].option[j].hour_finish;
+
+        let new_schedule_from = [];
+
+        this.search.dates_times[index].option[j].scheduleFrom.forEach( (h:string) => {
+          if (h > hour_finish_selected ) {
+            new_schedule_from.push(h);
+          }
+        })
+
+        this.search.dates_times[index].option.push({
+          hour_start: null,
+          hour_finish: null,
+          scheduleFrom: new_schedule_from,
+          scheduleTo: [],
+          scheduleSend: null,
+          dir_alt: false
+        });
+      }
+    }
+    this.control_flag_empty = true;
+}
+
 }

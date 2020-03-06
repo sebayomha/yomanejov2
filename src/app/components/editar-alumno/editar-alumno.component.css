@@ -27,6 +27,26 @@
     color: white;
 }
 
+#datosRelacionadosAlCronogramaContainer {
+    margin-top: 15px;
+}
+
+.example-full-width {
+    width: 100%;
+}
+
+@media (max-width: 767px) {
+    ::ng-deep .mat-vertical-content-container {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    ::ng-deep .mat-vertical-content {
+        padding: 0 !important;
+    }
+}
+
+
 /* ::ng-deep #editingAlumnoVS mat-step-header {
     padding: 0px;
 }
