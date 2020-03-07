@@ -152,7 +152,7 @@ export class FreeClassFinderComponent {
         }
 
         //Armo la direccion alternativa
-        if (!this.edit_crono_dir_ppal) {
+        if (!this.edit_crono_da_ppal) {
 
           if (clase.calle_DirAlternativa != null) {
             this.search.address_alternative[0].street = clase.calle_DirAlternativa;
@@ -194,12 +194,37 @@ export class FreeClassFinderComponent {
             this.search.address_alternative[7].observations = clase.observaciones_DirAlternativa;
           }
 
-          this.edit_crono_dir_ppal = true;
+          this.edit_crono_da_ppal = true;
         }
 
         console.log(this.search);
 
       });
+
+      let index = 0;
+      //Recorro las disponibilidades horarias del usuario.
+      Object.values(this.edit_cronograma.disponibilidades).forEach(opc => {
+        if (opc.todoElDia || opc.tramosHorarios.length > 0) {
+          if (opc.todoElDia) {
+            this.search.dates_times[index].all_day = true;
+
+
+            if (opc.usandoDirAlternativa) {
+              this.search.dates_times[index].option[0].dir_alt = true;
+            }
+
+          } else {
+            let jindex = 0;
+            opc.tramosHorarios.forEach(tramo => {
+              this.search.dates_times[index].option[jindex].scheduleSend = tramo.horarios;
+              jindex += 1;
+            });
+
+          }
+        }
+        index += 1;
+      });
+      console.log(this.search);
     }
   }
 
