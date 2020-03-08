@@ -25,7 +25,7 @@ export class FreeClassFinderComponent {
   @Input() edit_cronograma;
 
   @ViewChild('forma') formaSearch : NgForm;
-
+  
   excepciones = Array<Excepcion>();
   addresses = Array<Address>();
   addresses_alt = Array<Address>();

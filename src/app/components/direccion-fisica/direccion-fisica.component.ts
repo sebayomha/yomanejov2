@@ -79,9 +79,11 @@ export class DireccionFisicaComponent implements OnInit {
     setTimeout( () => {
       if (this.data.id_DirFisica == this.data.id_DirPrincipal) { //la direccion fisica es la principal
         this.data.addressesAlumno[0].selected = true;
+        this.idDireccionSeleccionada = this.data.id_DirPrincipal;
       } else {
         if (this.data.id_DirFisica == this.data.id_DirAlternativa) { //la direccion fisica es la alternativa
           this.data.addressesAlumno[1].selected = true;
+          this.idDireccionSeleccionada = this.data.id_DirAlternativa;
         } else { //la direccion fisica es una distinta
           this.nuevaDireccion = true;
           this.direccion.street = this.data.calle_DirFisica;
