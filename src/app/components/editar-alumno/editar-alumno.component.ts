@@ -42,7 +42,8 @@ export class EditarAlumnoComponent implements OnInit {
   durationInSeconds = 3;
   available_schedules;
   numberOfClasses: number;
-
+  excepciones: Array<any> =[];
+  
   constructor(private _snackBar: MatSnackBar, private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private sharedService:SharedService, private router: Router) { }
 
   @ViewChild('direccionFisica') direccionFisica;
