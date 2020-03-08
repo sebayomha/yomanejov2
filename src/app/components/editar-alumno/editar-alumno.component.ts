@@ -7,6 +7,10 @@ import { Search } from '../../models/free-class-finder.model';
 import { DatesTimes } from '../../models/dates-times';
 import { Option } from '../../models/option';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { CronogramaService } from 'src/app/services/cronograma/cronograma.service';
+import { Response } from '../../models/response';
+import { SnackbarComponent } from '../snackbar/snackbar/snackbar.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-editar-alumno',
@@ -35,8 +39,10 @@ export class EditarAlumnoComponent implements OnInit {
   schedule_send_null:boolean = true;
 
   documento;
+  durationInSeconds = 3;
+  available_schedules
 
-  constructor(private breakpointObserver: BreakpointObserver, private sharedService:SharedService, private router: Router) { }
+  constructor(private _snackBar: MatSnackBar, private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private sharedService:SharedService, private router: Router) { }
 
   @ViewChild('direccionFisica') direccionFisica;
   @ViewChild('editingStudentForm') editingStudentForm;
@@ -70,7 +76,6 @@ export class EditarAlumnoComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    console.log("viewCHecked");
     this.direccionFisica.setDireccionFisicaDefault();
   }
 
@@ -133,7 +138,7 @@ export class EditarAlumnoComponent implements OnInit {
 
     Object.values(this.alumnoInformation.disponibilidades).forEach( (disponibilidad:any, index) => {
       if (disponibilidad.todoElDia) { //si es todo el dia
-        let option = new Option('', '', this.predefinedHours, [], null, false);
+        let option = new Option('', '', this.predefinedHours, [], this.predefinedHours, false);
         let options = new Array(option);
         let dateTime = new DatesTimes(this.showNameDay(index), true, options);
         dates_times.push(dateTime);
@@ -208,9 +213,57 @@ export class EditarAlumnoComponent implements OnInit {
   //validar los formularios
   continueEditing() {
     console.log(this.modificoDatosPersonales());
-    if (this.editingStudentForm.valid && this.direccionFisica.validateForm() && !this.schedule_send_null) 
-      return false;
-    return true;
+    if (this.editingStudentForm.valid && this.direccionFisica.validateForm() && !this.schedule_send_null)
+     return false;
+    
+    let object = JSON.parse(JSON.stringify(this.search));
+    
+    //Transformo los nombres de los dias en ingles
+    for (let i = 0; i <=6; i++) {
+      switch (i) {
+        case 0:
+          object.dates_times[i].name_day = 'Monday';
+          break;
+        case 1:
+          object.dates_times[i].name_day = 'Tuesday';
+          break;
+        case 2:
+          object.dates_times[i].name_day = 'Wednesday';
+          break;
+        case 3:
+          object.dates_times[i].name_day = 'Thursday';
+          break;
+        case 4:
+          object.dates_times[i].name_day = 'Friday';
+          break;
+        case 5:
+          object.dates_times[i].name_day = 'Saturday';
+          break;
+        case 6:
+          object.dates_times[i].name_day = 'Sunday';
+          break;
+      }
+    }
+
+    console.log(this.search);
+    this.cronogramaService.getCronograma(object, []).subscribe( (response: Response) => {
+      console.log(response)
+      switch (response.code) {
+        case 0:
+          this.available_schedules = Object.values(response.data);
+          this._snackBar.dismiss();
+          break;
+        case 2:
+        case 3:{
+          this.available_schedules = null;
+          this._snackBar.openFromComponent(SnackbarComponent, {
+            duration: this.durationInSeconds * 1100,
+            data: response
+          });
+        }
+        break;
+      }
+    });
   }
 
   preventLetters($event) {
@@ -247,7 +300,6 @@ export class EditarAlumnoComponent implements OnInit {
           return true;
         }
       }
-
     } else { //modifico datos personales
       return true;
     }
@@ -256,7 +308,6 @@ export class EditarAlumnoComponent implements OnInit {
   isMobile() {
     return this.breakpointObserver.isMatched('(max-width: 767px)');
   }
-
 
   quitDA(){
     //Esta funcion resetea todas las direcciones alternativas.

@@ -12,7 +12,7 @@ export class CronogramaService {
 
   constructor(private http: HttpClient, private datePipe: DatePipe) { }
 
-  getCronograma(searchParameters: Search, excepciones: Array<Excepcion>) {
+  getCronograma(searchParameters: Search, excepciones?: Array<Excepcion>) {
     const data = {
       cantClases: searchParameters.lessons.toString(),
       fechaInicio: this.datePipe.transform(searchParameters.date, 'yyyy-MM-dd'),

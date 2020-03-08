@@ -363,5 +363,8 @@
       </div>
     </div>  
   </div>
+
+  <available-schedules *ngIf="available_schedules" (finish)="onAvailableSchedulesFinish($event);" [excepciones]="excepciones" [disponibilidad]="search.dates_times" [student_name]="search.student_name" [student_phone]="search.student_phone" [address]="search.address" [address_alternative]="search.address_alternative" [number_of_classes]="numberOfClasses" [data]="available_schedules"></available-schedules>
+
 </div>
 
