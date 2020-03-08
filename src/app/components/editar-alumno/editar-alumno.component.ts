@@ -6,7 +6,11 @@ import { Address } from '../../models/address.model';
 import { Search } from '../../models/free-class-finder.model';
 import { DatesTimes } from '../../models/dates-times';
 import { Option } from '../../models/option';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { CronogramaService } from 'src/app/services/cronograma/cronograma.service';
+import { Response } from '../../models/response';
+import { SnackbarComponent } from '../snackbar/snackbar/snackbar.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-editar-alumno',
@@ -35,8 +39,10 @@ export class EditarAlumnoComponent implements OnInit {
   schedule_send_null:boolean = true;
 
   documento;
+  durationInSeconds = 3;
+  available_schedules
 
-  constructor(private breakpointObserver: BreakpointObserver, private sharedService:SharedService, private router: Router) { }
+  constructor(private _snackBar: MatSnackBar, private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private sharedService:SharedService, private router: Router) { }
 
   @ViewChild('direccionFisica') direccionFisica;
   @ViewChild('editingStudentForm') editingStudentForm;
@@ -70,7 +76,6 @@ export class EditarAlumnoComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    console.log("viewCHecked");
     this.direccionFisica.setDireccionFisicaDefault();
   }
 
@@ -130,17 +135,10 @@ export class EditarAlumnoComponent implements OnInit {
     this.addresses = [];
     this.addresses_alt = [];
     let dates_times = new Array<DatesTimes>();
-/*     for (let i = 0; i <= Object.values(this.alumnoInformation.disponibilidades).length; i++) {
-      
-      let option = new Option(this.alumnoInformation.disponibilidades[i].tramosHorarios[0], this.alumnoInformation.disponibilidades[i].tramosHorarios[this.alumnoInformation.disponibilidades[i].tramosHorarios.length], this.predefinedHours, this.alumnoInformation.disponibilidades[i].tramosHorarios.slice(1), this.alumnoInformation.disponibilidades[i].tramosHorarios, this.alumnoInformation.disponibilidades[i].tramosHorarios);
-      let options = new Array(option);
-      let dateTime = new DatesTimes(this.showNameDay(i), false, options);
-      dates_times.push(dateTime);
-    } */
 
     Object.values(this.alumnoInformation.disponibilidades).forEach( (disponibilidad:any, index) => {
       if (disponibilidad.todoElDia) { //si es todo el dia
-        let option = new Option('', '', this.predefinedHours, [], null, false);
+        let option = new Option('', '', this.predefinedHours, [], this.predefinedHours, false);
         let options = new Array(option);
         let dateTime = new DatesTimes(this.showNameDay(index), true, options);
         dates_times.push(dateTime);
@@ -194,7 +192,6 @@ export class EditarAlumnoComponent implements OnInit {
       let department_alt = new Address(undefined,false, undefined, undefined, undefined, '', '', this.alumnoInformation.departamento_DirAlternativa);
       let obser_alt = new Address(undefined,false, undefined, undefined, undefined, '', '', '', this.alumnoInformation.observaciones_DirAlternativa);
       this.addresses_alt.push(street_alt, street_a_alt, street_b_alt, altitud_alt, city_alt, floor_alt, department_alt, obser_alt);
-      console.log("ad", this.addresses_alt);
     } else { //no posee direccion alternativa asi que seteamos todo vacio
       let street_alt = new Address('',false);
       let street_a_alt = new Address(undefined, false, '');
@@ -211,15 +208,62 @@ export class EditarAlumnoComponent implements OnInit {
     
     this.documento = this.alumnoInformation.documento;
     this.alumnoInformationCopyPersistData = JSON.parse(JSON.stringify(this.alumnoInformation));
-    console.log(this.search);
   }
 
   //validar los formularios
   continueEditing() {
     console.log(this.modificoDatosPersonales());
-    if (this.editingStudentForm.valid && this.direccionFisica.validateForm() && !this.schedule_send_null) 
-      return false;
-    return true;
+    if (this.editingStudentForm.valid && this.direccionFisica.validateForm() && !this.schedule_send_null)
+     return false;
+    
+    let object = JSON.parse(JSON.stringify(this.search));
+    
+    //Transformo los nombres de los dias en ingles
+    for (let i = 0; i <=6; i++) {
+      switch (i) {
+        case 0:
+          object.dates_times[i].name_day = 'Monday';
+          break;
+        case 1:
+          object.dates_times[i].name_day = 'Tuesday';
+          break;
+        case 2:
+          object.dates_times[i].name_day = 'Wednesday';
+          break;
+        case 3:
+          object.dates_times[i].name_day = 'Thursday';
+          break;
+        case 4:
+          object.dates_times[i].name_day = 'Friday';
+          break;
+        case 5:
+          object.dates_times[i].name_day = 'Saturday';
+          break;
+        case 6:
+          object.dates_times[i].name_day = 'Sunday';
+          break;
+      }
+    }
+
+    console.log(this.search);
+    this.cronogramaService.getCronograma(object, []).subscribe( (response: Response) => {
+      console.log(response)
+      switch (response.code) {
+        case 0:
+          this.available_schedules = Object.values(response.data);
+          this._snackBar.dismiss();
+          break;
+        case 2:
+        case 3:{
+          this.available_schedules = null;
+          this._snackBar.openFromComponent(SnackbarComponent, {
+            duration: this.durationInSeconds * 1100,
+            data: response
+          });
+        }
+        break;
+      }
+    });
   }
 
   preventLetters($event) {
@@ -233,23 +277,29 @@ export class EditarAlumnoComponent implements OnInit {
     console.log("this.alumnoInformation: ", this.alumnoInformation)
     console.log("this.alumnoInformationCopyPersistData: ", this.direccionFisica.getData())
     
+    let direccionFisicaInformation = this.direccionFisica.getData();
+
     if ( (this.alumnoInformation.telefono.replace(/\s/g, "").replace('-', "")) == (this.search.student_phone.toString().replace(/\s/g, "").replace('-', "")) 
     && this.alumnoInformation.documento == this.documento 
     && this.alumnoInformation.nombre == this.search.student_name) {
-      //datos primarios personales continuan iguales, evaluo si la direccion fisica cambio. Solo evaluo los datos sensibles. (dpto y piso y obs no importan)
-      if (this.alumnoInformation.calle_DirFisica == this.alumnoInformationCopyPersistData.calle_DirFisica
-        && this.alumnoInformation.calle_diag_DirFisica == this.alumnoInformationCopyPersistData.calle_diag_DirFisica
-        && this.alumnoInformation.calle_a_DirFisica == this.alumnoInformationCopyPersistData.calle_a_DirFisica
-        && this.alumnoInformation.calle_a_diag_DirFisica == this.alumnoInformationCopyPersistData.calle_a_diag_DirFisica
-        && this.alumnoInformation.calle_b_DirFisica == this.alumnoInformationCopyPersistData.calle_b_DirFisica
-        && this.alumnoInformation.calle_b_diag_DirFisica == this.alumnoInformationCopyPersistData.calle_b_diag_DirFisica
-        && this.alumnoInformation.numero_DirFisica == this.alumnoInformationCopyPersistData.numero_DirFisica
-        && this.alumnoInformation.ciudad_DirFisica == this.alumnoInformationCopyPersistData.ciudad_DirFisica
-        ) { //los datos personales continuan igual
+
+      if (direccionFisicaInformation.nuevaDireccion) { //estamos sobre nueva direccion
+        //datos primarios personales continuan iguales, evaluo si la direccion fisica cambio. Solo evaluo los datos sensibles. (dpto y piso y obs no importan)
+        if (this.alumnoInformation.calle_DirFisica == direccionFisicaInformation.direccion.street
+          && this.alumnoInformation.ciudad_DirFisica == direccionFisicaInformation.direccion.city
+          && this.alumnoInformation.numero_DirFisica == direccionFisicaInformation.direccion.altitud
+          ) { //los datos personales continuan igual
+            return false;
+          } else { //modifico datos personales de la direccion fisica
+            return true;
+          }
+      } else { //es una direccion que ya existe entonces tengo que comparar los ids
+        if (direccionFisicaInformation.idDireccionSeleccionada == this.alumnoInformation.id_DirFisica) { //es la misma
           return false;
-        } else { //modifico datos personales de la direccion fisica
+        } else {
           return true;
         }
+      }
     } else { //modifico datos personales
       return true;
     }
@@ -258,7 +308,6 @@ export class EditarAlumnoComponent implements OnInit {
   isMobile() {
     return this.breakpointObserver.isMatched('(max-width: 767px)');
   }
-
 
   quitDA(){
     //Esta funcion resetea todas las direcciones alternativas.
@@ -376,6 +425,6 @@ export class EditarAlumnoComponent implements OnInit {
       }
     }
     this.control_flag_empty = true;
-}
+  }
 
 }

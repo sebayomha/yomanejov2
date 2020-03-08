@@ -10,14 +10,14 @@
       
       <div id="infoMessage">
         <div class="alert alert-info" role="alert">
-          <i class="fas fa-exclamation" style="margin-right: 5px;"></i>Podrá modificar los datos <span style="font-weight: 500;">personales</span> del alumno.
+          <i class="fas fa-exclamation" style="margin-right: 5px;"></i>Podrá modificar los datos <span style="font-weight: 500;">personales</span> del alumno sin rehacer el cronograma.
         </div>
       </div>
 
       <div id="warningMessage">
         <div class="alert alert-info" role="alert">
           <i class="fas fa-exclamation" style="margin-right: 5px;"></i>
-          <span>Si modifica la disponibilidad o las direcciones deberá rehacer el calculo del cronograma <span style="font-weight: 500;">{{alumnoInformation.idCronograma}}</span> asociado al alumno</span> 
+          <span>Si modifica los datos relacionados al cronograma deberá rehacer el calculo del cronograma <span style="font-weight: 500;">{{alumnoInformation.idCronograma}}</span> asociado al alumno</span> 
         </div>
       </div>
 
@@ -363,5 +363,8 @@
       </div>
     </div>  
   </div>
+
+  <available-schedules *ngIf="available_schedules" (finish)="onAvailableSchedulesFinish($event);" [excepciones]="excepciones" [disponibilidad]="search.dates_times" [student_name]="search.student_name" [student_phone]="search.student_phone" [address]="search.address" [address_alternative]="search.address_alternative" [number_of_classes]="numberOfClasses" [data]="available_schedules"></available-schedules>
+
 </div>
 

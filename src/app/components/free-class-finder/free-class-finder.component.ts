@@ -25,7 +25,7 @@ export class FreeClassFinderComponent {
   @Input() edit_cronograma;
 
   @ViewChild('forma') formaSearch : NgForm;
-
+  
   excepciones = Array<Excepcion>();
   addresses = Array<Address>();
   addresses_alt = Array<Address>();
@@ -208,7 +208,7 @@ export class FreeClassFinderComponent {
 
       let index = 0;
       //Recorro las disponibilidades horarias del usuario.
-      Object.values(this.edit_cronograma.disponibilidades).forEach(opc => {
+      Object.values(this.edit_cronograma.disponibilidades).forEach( (opc:any) => {
         if (opc.todoElDia || opc.tramosHorarios.length > 0) {
           if (opc.todoElDia) {
             this.search.dates_times[index].all_day = true;
