@@ -208,19 +208,31 @@
 
                                 /* ANALIZO SI DEBO AGREGAR EL HORARIO O NO PARA SER RETORNADO */
                                 if ($horarioTieneDireccionAlternativa == false) {
-                                    if ($idAuto == $idAutoMaster) { //si es el auto master entonces siempre lo agrego
-                                        array_push($horariosLibresDataGeneral, $horarioData);
-                                    } else {
-                                        if ($horarioData->ratingGeneral > 6) { //no es el auto master pero tiene clases cercanas
+                                    if ($horarioData->tieneEldiaLibre) {
+                                        if ($idAuto == $idAutoMaster) { //si es el auto master entonces siempre lo agrego
                                             array_push($horariosLibresDataGeneral, $horarioData);
                                         }
-                                    }
-                                } else {
-                                    if ($idAuto == $idAutoMaster_alt) { //si es el auto master entonces siempre lo agrego
-                                        array_push($horariosLibresDataGeneral, $horarioData);
                                     } else {
-                                        if ($ratingZonaMasCerca != null && $ratingZonaMasCerca > 6) { //no es el auto master pero tiene clases cercanas
+                                        if ($idAuto == $idAutoMaster) { //si es el auto master entonces siempre lo agrego
                                             array_push($horariosLibresDataGeneral, $horarioData);
+                                        } else {
+                                            if ($horarioData->ratingGeneral > 6) { //no es el auto master pero tiene clases cercanas
+                                                array_push($horariosLibresDataGeneral, $horarioData);
+                                            }
+                                        }
+                                    }                                    
+                                } else {
+                                    if ($horarioData->tieneEldiaLibre) {
+                                        if ($idAuto == $idAutoMaster_alt) {
+                                            array_push($horariosLibresDataGeneral, $horarioData);
+                                        }
+                                    } else {
+                                        if ($idAuto == $idAutoMaster_alt) { //si es el auto master entonces siempre lo agrego
+                                            array_push($horariosLibresDataGeneral, $horarioData);
+                                        } else {
+                                            if ($ratingZonaMasCerca != null && $ratingZonaMasCerca > 6 && !$horarioData->tieneEldiaLibre) { //no es el auto master pero tiene clases cercanas
+                                                array_push($horariosLibresDataGeneral, $horarioData);
+                                            }
                                         }
                                     }
                                 }
