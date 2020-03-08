@@ -334,7 +334,8 @@
                                                 <mat-label>Desde</mat-label>
                                                 <mat-select
                                                     (selectionChange)="doScheduleTo(day.name_day,$event.value,j)"
-                                                    [disabled]="search.dates_times[i].option.length - 1 > j">
+                                                    [disabled]="search.dates_times[i].option.length - 1 > j"
+                                                    [(value)]="search.dates_times[i].option[j].hour_start">
                                                     <mat-option
                                                         *ngFor="let hour of search.dates_times[i].option[j].scheduleFrom"
                                                         [value]="hour">
@@ -349,7 +350,8 @@
                                                 <mat-label>Hasta</mat-label>
                                                 <mat-select
                                                     (selectionChange)="setHourFinish(search.dates_times[i].option[j],$event.value)"
-                                                    [disabled]="search.dates_times[i].option.length - 1 > j">
+                                                    [disabled]="search.dates_times[i].option.length - 1 > j"
+                                                    [(value)]="search.dates_times[i].option[j].hour_finish">
                                                     <mat-option
                                                         *ngFor="let hour of search.dates_times[i].option[j].scheduleTo"
                                                         [value]="hour">

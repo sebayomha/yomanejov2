@@ -229,10 +229,10 @@ export class FreeClassFinderComponent {
                 this.search.dates_times[index].option[jindex].hour_start = tramo.horarios[0];
                 let ultimo = tramo.horarios.length;
                 ultimo = ultimo - 1
-                this.search.dates_times[index].option[jindex].hour_finish = tramo.horarios[ultimo];
+                this.search.dates_times[index].option[jindex].hour_finish = tramo.horarios[ultimo].trim();
 
                 this.search.dates_times[index].option[jindex].scheduleFrom.forEach( h => {
-                  if (h > tramo.horarios[ultimo].trim()) {
+                  if (h > tramo.horarios[0].trim()) {
                     this.search.dates_times[index].option[jindex].scheduleTo.push(h);
                   }
                 })
@@ -248,7 +248,7 @@ export class FreeClassFinderComponent {
                 //Creo nueva opcion dento del array de opciones.
                 this.search.dates_times[index].option.push({
                   hour_start: tramo.horarios[0],
-                  hour_finish: tramo.horarios[ultimo],
+                  hour_finish: tramo.horarios[ultimo].trim(),
                   scheduleFrom: [],
                   scheduleTo: [],
                   scheduleSend: tramo.horarios,
@@ -256,13 +256,13 @@ export class FreeClassFinderComponent {
                 });
 
                 all_horarios.forEach( (h:string) => {
-                  if (h > horario_finish_actual) {
+                  if (h > horario_finish_actual.trim()) {
                     this.search.dates_times[index].option[jindex].scheduleFrom.push(h);
                   }
                 })
 
                 this.search.dates_times[index].option[jindex].scheduleFrom.forEach( (h:string) => {
-                  if (h > tramo.horarios[0]) {
+                  if (h > tramo.horarios[0].trim()) {
                     this.search.dates_times[index].option[jindex].scheduleTo.push(h);
                   }
                 })
@@ -536,6 +536,7 @@ export class FreeClassFinderComponent {
     this.search.dates_times.forEach(element => {
       if (element.name_day == day) {
         element.option[index].hour_start = hour;
+        element.option[index].scheduleTo = [];
         element.option[index].scheduleFrom.forEach( (h:string) => {
           if (h > hour) {
             element.option[index].scheduleTo.push(h);
