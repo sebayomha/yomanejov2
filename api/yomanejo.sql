@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 27, 2020 at 11:45 PM
+-- Generation Time: Mar 08, 2020 at 04:16 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -57,7 +57,31 @@ INSERT INTO `alumno` (`idAlumno`, `idDireccion`, `idDireccionAlt`, `fechaAlta`, 
 (110, 155, NULL, '2020-02-26', 'false', 'Sebastian Yomha', '0000-00-00', '2216754337', 'false', '0000-00-00', 120, NULL, NULL),
 (111, 156, NULL, '2020-02-26', 'true', 'Martin Marconi', '0000-00-00', '2216754337', 'true', '2020-02-26', 121, 156, '36.068.223'),
 (112, 157, '158', '2020-02-26', 'true', 'Marcos Peña', '0000-00-00', '2216754337', 'true', '2020-02-27', 122, 157, '36.068.223'),
-(113, 159, '160', '2020-02-27', 'true', 'Juan topo', '0000-00-00', '2216754337', 'true', '2020-02-27', 123, 160, '36.068.223');
+(113, 159, '160', '2020-02-27', 'true', 'Juan topo', '0000-00-00', '2216754337', 'true', '2020-02-27', 123, 160, '36.068.223'),
+(114, 161, '162', '2020-03-06', 'false', 'Sebastian Yomha', '0000-00-00', '2216754337', 'false', '0000-00-00', 124, NULL, NULL),
+(115, 163, NULL, '2020-03-06', 'false', 'Juan Pedro', '0000-00-00', '2216754337', 'false', '0000-00-00', 125, NULL, NULL),
+(116, 164, NULL, '2020-03-08', 'true', 'Sebastian Yomha', '0000-00-00', '2216754337', 'true', '2020-03-08', 126, 164, '36.068.223');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `alumnocronogramaclasestomadas`
+--
+
+CREATE TABLE `alumnocronogramaclasestomadas` (
+  `idAlumnoCronograma` int(11) NOT NULL,
+  `idAlumno` int(11) NOT NULL,
+  `idCronograma` int(11) NOT NULL,
+  `cantClasesTomadas` int(11) NOT NULL,
+  `cantClasesTotales` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `alumnocronogramaclasestomadas`
+--
+
+INSERT INTO `alumnocronogramaclasestomadas` (`idAlumnoCronograma`, `idAlumno`, `idCronograma`, `cantClasesTomadas`, `cantClasesTotales`) VALUES
+(1, 116, 109, 0, 3);
 
 -- --------------------------------------------------------
 
@@ -155,7 +179,20 @@ INSERT INTO `clase` (`idClase`, `alumno`, `auto`, `fecha`, `horaInicio`, `idZona
 (568, 112, 2, '2020-03-16', '15:30', 23, 157, 105, 'CONFIRMADO'),
 (569, 112, 2, '2020-03-18', '10:00', 17, 158, 105, 'CONFIRMADO'),
 (570, 112, 2, '2020-03-20', '09:00', 23, 157, 105, 'CONFIRMADO'),
-(571, 113, 1, '2020-03-02', '11:15', 23, 160, 106, 'CONFIRMADO');
+(571, 113, 1, '2020-03-02', '11:15', 23, 160, 106, 'CONFIRMADO'),
+(572, 114, 1, '2020-03-09', '18:45', 24, 161, 107, 'NO CONFIRMADO'),
+(573, 114, 3, '2020-03-11', '14:30', 41, 162, 107, 'NO CONFIRMADO'),
+(574, 114, 3, '2020-03-13', '17:45', 41, 162, 107, 'NO CONFIRMADO'),
+(575, 115, 1, '2020-03-11', '11:15', 24, 163, 108, 'NO CONFIRMADO'),
+(576, 115, 1, '2020-03-16', '11:15', 24, 163, 108, 'NO CONFIRMADO'),
+(577, 116, 1, '2020-03-09', '18:45', 24, 164, 109, 'CONFIRMADO'),
+(578, 116, 1, '2020-03-16', '08:00', 24, 164, 109, 'CONFIRMADO'),
+(579, 116, 1, '2020-03-23', '09:00', 24, 164, 109, 'CONFIRMADO'),
+(580, 116, 1, '2020-03-30', '09:00', 24, 164, 109, 'CONFIRMADO'),
+(581, 116, 1, '2020-04-06', '09:00', 24, 164, 109, 'CONFIRMADO'),
+(582, 116, 1, '2020-04-13', '09:00', 24, 164, 109, 'CONFIRMADO'),
+(583, 116, 1, '2020-04-20', '09:00', 24, 164, 109, 'CONFIRMADO'),
+(584, 116, 1, '2020-04-27', '09:00', 24, 164, 109, 'CONFIRMADO');
 
 -- --------------------------------------------------------
 
@@ -183,7 +220,10 @@ INSERT INTO `cronograma` (`idCronograma`, `status`, `idAlumno`, `timestampGuarda
 (103, 'NO CONFIRMADO', 110, '02/26/2020 07:55:58 pm'),
 (104, 'CONFIRMADO', 111, '02/26/2020 07:57:02 pm'),
 (105, 'CONFIRMADO', 112, '02/26/2020 08:25:07 pm'),
-(106, 'CONFIRMADO', 113, '02/27/2020 03:35:28 pm');
+(106, 'CONFIRMADO', 113, '02/27/2020 03:35:28 pm'),
+(107, 'NO CONFIRMADO', 114, '03/06/2020 10:03:00 am'),
+(108, 'NO CONFIRMADO', 115, '03/06/2020 10:54:39 am'),
+(109, 'CONFIRMADO', 116, '03/08/2020 12:05:36 am');
 
 -- --------------------------------------------------------
 
@@ -223,7 +263,11 @@ INSERT INTO `direccion` (`idDireccion`, `calle`, `calle_diag`, `calle_a`, `calle
 (157, '80', 'true', '5', 'false', '', 'false', '', 'La Plata', '', '', ''),
 (158, '43', 'false', '', 'false', '', 'false', '501', 'La Plata', '', '', ''),
 (159, '123', 'false', '', 'false', '', 'false', '755', 'Ensenada', '', '', ''),
-(160, '80', 'true', '5', 'false', '', 'false', '', 'La Plata', '', '', '');
+(160, '80', 'true', '5', 'false', '', 'false', '', 'La Plata', '', '', ''),
+(161, '123', 'false', '', 'false', '', 'false', '755', 'Ensenada', '', '', ''),
+(162, '80', 'false', '5', 'false', '', 'false', '', 'La Plata', '', '', ''),
+(163, '123', 'false', '', 'false', '', 'false', '755', 'Ensenada', '', '', ''),
+(164, '123', 'false', '', 'false', '', 'false', '755', 'Ensenada', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -255,7 +299,10 @@ INSERT INTO `disponibilidad` (`idDisponibilidad`, `Monday`, `Tuesday`, `Wednesda
 (120, NULL, NULL, NULL, NULL, '08:00, 09:00, 10:00, 11:15, 12:15, 13:15, 14:30, 15:30, 16:30, 17:45, 18:45, 19:45|false', NULL, NULL),
 (121, NULL, NULL, NULL, NULL, '08:00, 09:00, 10:00, 11:15, 12:15, 13:15, 14:30, 15:30, 16:30, 17:45, 18:45, 19:45|false', NULL, NULL),
 (122, '08:00, 09:00, 10:00, 11:15, 12:15, 13:15, 14:30, 15:30, 16:30, 17:45, 18:45, 19:45|false', NULL, '08:00, 09:00, 10:00, 11:15, 12:15, 13:15, 14:30, 15:30, 16:30, 17:45, 18:45, 19:45|true', NULL, '08:00, 09:00, 10:00, |false', NULL, NULL),
-(123, '08:00, 09:00, 10:00, 11:15, 12:15, 13:15, 14:30, 15:30, 16:30, 17:45, 18:45, 19:45|true', NULL, NULL, NULL, NULL, NULL, NULL);
+(123, '08:00, 09:00, 10:00, 11:15, 12:15, 13:15, 14:30, 15:30, 16:30, 17:45, 18:45, 19:45|true', NULL, NULL, NULL, NULL, NULL, NULL),
+(124, '08:00, 09:00, 10:00, 11:15, 12:15, 13:15, 14:30, 15:30, 16:30, 17:45, 18:45, 19:45|false', NULL, '08:00, 09:00, 10:00, 11:15, 12:15, 13:15, 14:30, |true', NULL, '12:15, 13:15, 14:30, 15:30, 16:30, |false, 17:45, 18:45, 19:45, |true', NULL, NULL),
+(125, '08:00, 09:00, 10:00, 11:15, 12:15, 13:15, 14:30, 15:30, 16:30, 17:45, 18:45, 19:45|false', NULL, '08:00, 09:00, 10:00, 11:15, 12:15, 13:15, 14:30, 15:30, 16:30, 17:45, 18:45, 19:45|true', NULL, NULL, NULL, NULL),
+(126, '08:00, 09:00, 10:00, 11:15, 12:15, 13:15, 14:30, 15:30, 16:30, 17:45, 18:45, 19:45|false', NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -277,7 +324,10 @@ CREATE TABLE `excepcion` (
 INSERT INTO `excepcion` (`idExcepcion`, `fecha`, `no_puede`, `idAlumno`) VALUES
 (29, '2020-02-28', 'false', 110),
 (30, '2020-02-28', 'true', 112),
-(31, '2020-03-02', 'false', 112);
+(31, '2020-03-02', 'false', 112),
+(32, '2020-03-09', 'true', 115),
+(33, '2020-03-11', 'false', 115),
+(34, '2020-03-16', 'false', 115);
 
 -- --------------------------------------------------------
 
@@ -299,7 +349,12 @@ CREATE TABLE `excepcionhorarios` (
 INSERT INTO `excepcionhorarios` (`idExcepcionHorario`, `dir_alt`, `horarios`, `idExcepcion`) VALUES
 (37, 'false', '', 29),
 (38, 'false', '', 30),
-(39, 'true', '08:00, 09:00, 10:00', 31);
+(39, 'true', '08:00, 09:00, 10:00', 31),
+(40, 'false', '', 32),
+(41, 'true', '08:00, 09:00, 10:00', 33),
+(42, 'false', '11:15, 12:15, 13:15, 14:30, 15:30', 33),
+(43, 'true', '16:30, 17:45, 18:45, 19:45', 33),
+(44, 'false', '11:15, 12:15, 13:15, 14:30, 15:30, 16:30, 17:45', 34);
 
 -- --------------------------------------------------------
 
@@ -583,6 +638,12 @@ ALTER TABLE `alumno`
   ADD PRIMARY KEY (`idAlumno`);
 
 --
+-- Indexes for table `alumnocronogramaclasestomadas`
+--
+ALTER TABLE `alumnocronogramaclasestomadas`
+  ADD PRIMARY KEY (`idAlumnoCronograma`);
+
+--
 -- Indexes for table `auto`
 --
 ALTER TABLE `auto`
@@ -662,7 +723,13 @@ ALTER TABLE `zonasvecinas`
 -- AUTO_INCREMENT for table `alumno`
 --
 ALTER TABLE `alumno`
-  MODIFY `idAlumno` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=114;
+  MODIFY `idAlumno` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=117;
+
+--
+-- AUTO_INCREMENT for table `alumnocronogramaclasestomadas`
+--
+ALTER TABLE `alumnocronogramaclasestomadas`
+  MODIFY `idAlumnoCronograma` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `auto`
@@ -674,37 +741,37 @@ ALTER TABLE `auto`
 -- AUTO_INCREMENT for table `clase`
 --
 ALTER TABLE `clase`
-  MODIFY `idClase` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=572;
+  MODIFY `idClase` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=585;
 
 --
 -- AUTO_INCREMENT for table `cronograma`
 --
 ALTER TABLE `cronograma`
-  MODIFY `idCronograma` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
+  MODIFY `idCronograma` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=110;
 
 --
 -- AUTO_INCREMENT for table `direccion`
 --
 ALTER TABLE `direccion`
-  MODIFY `idDireccion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=161;
+  MODIFY `idDireccion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=165;
 
 --
 -- AUTO_INCREMENT for table `disponibilidad`
 --
 ALTER TABLE `disponibilidad`
-  MODIFY `idDisponibilidad` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=124;
+  MODIFY `idDisponibilidad` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=127;
 
 --
 -- AUTO_INCREMENT for table `excepcion`
 --
 ALTER TABLE `excepcion`
-  MODIFY `idExcepcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `idExcepcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `excepcionhorarios`
 --
 ALTER TABLE `excepcionhorarios`
-  MODIFY `idExcepcionHorario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `idExcepcionHorario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `instructor`

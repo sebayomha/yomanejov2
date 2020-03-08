@@ -19,6 +19,7 @@
 
         //Funcion principal que se encargara de armar el cronograma
         function calcularCronograma($cantClases, $disponibilidad, $direccion, $fechaInicio, $excepciones, $direccion_alt, $hayDireccionAlternativa, $resOptions, $resExcepcionesOptions){
+
             $horariosTentativos = array(); //arreglo que se va a retornar con el cronograma
 
             $fechaBusqueda = DateTime::createFromFormat("Y-m-d", $fechaInicio);
@@ -693,6 +694,12 @@
                 $state->execute();
                 $confirmado = 'true'; //INDICA QUE EL ALUMNO YA ES UN ALUMNO FIJO
                 $today = date('Y-m-d');
+
+                //INSERT CANT CLASES TOMADAS
+                $state = $this->conn->prepare('INSERT INTO alumnocronogramaclasestomadas (idAlumno, idCronograma, cantClasesTomadas, cantClasesTotales) VALUES (?,?,?,?)');
+                $clasesTomadas = 0;
+                $state->bind_param('iiii', $idAlumno, $idCronograma, $clasesTomadas, sizeof($clases));
+                $state->execute();
 
                 $idDireccionFisica;
                 if (!$direccionFisica->nuevaDireccion) {

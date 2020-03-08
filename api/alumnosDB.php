@@ -59,6 +59,7 @@
             alumno.documento,
             alumno.idDisponibilidad,
             cronograma.idCronograma,
+            idAlumnoCronograma, cantClasesTomadas, cantClasesTotales,
             disponibilidad.Monday, disponibilidad.Tuesday, disponibilidad.Wednesday, disponibilidad.Thursday, disponibilidad.Friday, disponibilidad.Saturday, disponibilidad.Sunday
             FROM alumno 
             INNER JOIN direccion AS d3 ON d3.idDireccion = alumno.idDireccionFisica
@@ -66,6 +67,7 @@
             LEFT JOIN direccion AS d2 ON d2.idDireccion = alumno.idDireccionAlt
             INNER JOIN disponibilidad ON disponibilidad.idDisponibilidad = alumno.idDisponibilidad
             INNER JOIN cronograma ON cronograma.idAlumno = alumno.idAlumno
+            INNER JOIN alumnocronogramaclasestomadas ON alumnocronogramaclasestomadas.idAlumno = alumno.idAlumno AND alumnocronogramaclasestomadas.idCronograma = cronograma.idCronograma
             ORDER BY alumno.idAlumno DESC');
             $state->execute();
             $result = $state->get_result();
@@ -73,6 +75,7 @@
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
                     $row['dirAlternativaFormateada'] = null;
+                    $row['cantClasesParaRestantes'] = $row['cantClasesTotales'] - $row['cantClasesTomadas'];
                     if ($row['id_DirAlternativa'] != null) {
                         $row['dirAlternativaFormateada'] = $this->obtenerDireccionParaMostrar($row['calle_DirAlternativa'], filter_var($row['calle_diag_DirAlternativa'], FILTER_VALIDATE_BOOLEAN), $row['calle_a_DirAlternativa'], filter_var($row['calle_a_diag_DirAlternativa'], FILTER_VALIDATE_BOOLEAN), $row['calle_b_DirAlternativa'], filter_var($row['calle_b_diag_DirAlternativa'], FILTER_VALIDATE_BOOLEAN), $row['numero_DirAlternativa'], $row['ciudad_DirAlternativa'], $row['floor_DirAlternativa'], $row['departamento_DirAlternativa']);
                     }

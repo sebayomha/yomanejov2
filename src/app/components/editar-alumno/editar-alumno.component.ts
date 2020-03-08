@@ -40,7 +40,8 @@ export class EditarAlumnoComponent implements OnInit {
 
   documento;
   durationInSeconds = 3;
-  available_schedules
+  available_schedules;
+  numberOfClasses: number;
 
   constructor(private _snackBar: MatSnackBar, private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private sharedService:SharedService, private router: Router) { }
 
@@ -69,7 +70,7 @@ export class EditarAlumnoComponent implements OnInit {
     }
 
     this.alumnoInformation.addressesAlumno = this.addressesAlumno;
-
+    this.numberOfClasses = this.alumnoInformation.cantClasesParaRestantes;
     /* fin de genero el listado de direcciones posibles */
 
     this.setInformationOnInit(); //método encargado de setear todas las disponibilidades y direcciones para el cronograma
@@ -204,7 +205,7 @@ export class EditarAlumnoComponent implements OnInit {
       this.addresses_alt.push(street_alt, street_a_alt, street_b_alt, altitud_alt, city_alt, floor_alt, department_alt, obser_alt);
     }
 
-    this.search = new Search(this.alumnoInformation.nombre, dates_times, this.addresses, this.addresses_alt, 8, new Date(), this.alumnoInformation.telefono);
+    this.search = new Search(this.alumnoInformation.nombre, dates_times, this.addresses, this.addresses_alt, this.alumnoInformation.cantClasesParaRestantes, new Date(), this.alumnoInformation.telefono);
     
     this.documento = this.alumnoInformation.documento;
     this.alumnoInformationCopyPersistData = JSON.parse(JSON.stringify(this.alumnoInformation));
