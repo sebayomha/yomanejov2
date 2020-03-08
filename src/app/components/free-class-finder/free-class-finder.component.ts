@@ -232,7 +232,7 @@ export class FreeClassFinderComponent {
                 this.search.dates_times[index].option[jindex].hour_finish = tramo.horarios[ultimo];
 
                 this.search.dates_times[index].option[jindex].scheduleFrom.forEach( h => {
-                  if (h > tramo.horarios[ultimo]) {
+                  if (h > tramo.horarios[ultimo].trim()) {
                     this.search.dates_times[index].option[jindex].scheduleTo.push(h);
                   }
                 })
