@@ -102,7 +102,11 @@ export class FreeClassFinderComponent {
     })
     
     //Cargo los datos del cronograma a editar para realizar la busqueda de las opciones.
-    if (this.edit_cronograma != '') {
+    if (this.edit_cronograma) {
+
+      this.search.student_name = this.edit_cronograma.nombreAlumno;
+      this.search.student_phone = this.edit_cronograma.telefonoAlumno;
+
       this.edit_cronograma.clases.forEach(clase => {
 
         //Armo la direccion principal
@@ -171,6 +175,7 @@ export class FreeClassFinderComponent {
             }
           }
           if (clase.calle_b_DirAlternativa != null) {
+            this.flag_address_alt = true;
             this.search.address_alternative[2].street_b = clase.calle_b_DirAlternativa;
             if (clase.calle_b_diag_DirAlternativa == 'false') {
               this.search.address_alternative[2].diag = false;
@@ -207,7 +212,7 @@ export class FreeClassFinderComponent {
         if (opc.todoElDia || opc.tramosHorarios.length > 0) {
           if (opc.todoElDia) {
             this.search.dates_times[index].all_day = true;
-
+            this.search.dates_times[index].option[0].scheduleSend = ["08:00", "09:00", "10:00", "11:15", "12:15", "13:15", "14:30", "15:30", "16:30", "17:45", "18:45", "19:45"];
 
             if (opc.usandoDirAlternativa) {
               this.search.dates_times[index].option[0].dir_alt = true;
@@ -216,10 +221,56 @@ export class FreeClassFinderComponent {
           } else {
             let jindex = 0;
             opc.tramosHorarios.forEach(tramo => {
-              this.search.dates_times[index].option[jindex].scheduleSend = tramo.horarios;
+
+              if (jindex == 0) {
+
+                this.search.dates_times[index].option[jindex].scheduleFrom = ["08:00", "09:00", "10:00", "11:15", "12:15", "13:15", "14:30", "15:30", "16:30", "17:45", "18:45", "19:45"];
+                this.search.dates_times[index].option[jindex].scheduleSend = tramo.horarios;
+                this.search.dates_times[index].option[jindex].hour_start = tramo.horarios[0];
+                let ultimo = tramo.horarios.length;
+                ultimo = ultimo - 1
+                this.search.dates_times[index].option[jindex].hour_finish = tramo.horarios[ultimo];
+
+                this.search.dates_times[index].option[jindex].scheduleFrom.forEach( h => {
+                  if (h > tramo.horarios[ultimo]) {
+                    this.search.dates_times[index].option[jindex].scheduleTo.push(h);
+                  }
+                })
+
+              } else {
+
+                let ultimo = tramo.horarios.length;
+                ultimo = ultimo - 1
+                let horario_finish_anterior = jindex - 1;
+                let horario_finish_actual = this.search.dates_times[index].option[horario_finish_anterior].hour_finish;
+                let all_horarios = ["08:00", "09:00", "10:00", "11:15", "12:15", "13:15", "14:30", "15:30", "16:30", "17:45", "18:45", "19:45"];
+
+                //Creo nueva opcion dento del array de opciones.
+                this.search.dates_times[index].option.push({
+                  hour_start: tramo.horarios[0],
+                  hour_finish: tramo.horarios[ultimo],
+                  scheduleFrom: [],
+                  scheduleTo: [],
+                  scheduleSend: tramo.horarios,
+                  dir_alt: tramo.usandoDirAlternativa
+                });
+
+                all_horarios.forEach( (h:string) => {
+                  if (h > horario_finish_actual) {
+                    this.search.dates_times[index].option[jindex].scheduleFrom.push(h);
+                  }
+                })
+
+                this.search.dates_times[index].option[jindex].scheduleFrom.forEach( (h:string) => {
+                  if (h > tramo.horarios[0]) {
+                    this.search.dates_times[index].option[jindex].scheduleTo.push(h);
+                  }
+                })
+                
+              }
+
               jindex += 1;
             });
-
           }
         }
         index += 1;
