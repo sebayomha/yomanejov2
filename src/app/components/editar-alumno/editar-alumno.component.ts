@@ -81,8 +81,6 @@ export class EditarAlumnoComponent implements OnInit {
 
   ngAfterViewInit() {
     this.direccionFisica.setDireccionFisicaDefault();
-    
-    console.log( this.disabledForm)
   }
   
   ngAfterViewChecked() {
@@ -242,6 +240,8 @@ export class EditarAlumnoComponent implements OnInit {
             console.log("error");
           }
         })
+      } else { //mostrar errores en la direccion
+        this.direccionFisica.showInputErrors();
       }
       return false;
     }

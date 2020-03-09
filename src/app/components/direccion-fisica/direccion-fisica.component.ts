@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { NgForm, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-direccion-fisica',
@@ -8,7 +9,7 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 export class DireccionFisicaComponent implements OnInit {
 
   @Input() data: any;
-  @ViewChild('newDireccionForm') newDireccionForm;
+  @ViewChild('newDireccionForm') newDireccionForm: NgForm;
 
   locations: Array<string> = ["La Plata", "Berisso", "Ensenada"];
 
@@ -73,6 +74,13 @@ export class DireccionFisicaComponent implements OnInit {
         return false;
       }
     }
+  }
+
+  showInputErrors() {
+    Object.keys(this.newDireccionForm.form.controls).forEach(key => {
+      this.newDireccionForm.form.get(key).markAsDirty();
+      this.newDireccionForm.form.get(key).markAsTouched();
+    });
   }
 
   setDireccionFisicaDefault() {
