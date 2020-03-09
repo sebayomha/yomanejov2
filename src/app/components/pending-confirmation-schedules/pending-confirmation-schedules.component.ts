@@ -153,4 +153,9 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
     this.show_edit = true;
     this.cronograma_edit = this.cronogramas[index];
   }
+
+  //Cierro edicion
+  closeEditCrono(flag){
+    this.show_edit = flag;
+  }
 }

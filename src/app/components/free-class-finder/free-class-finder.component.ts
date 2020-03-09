@@ -1,4 +1,4 @@
-import { Component, ViewChild, Input } from '@angular/core';
+import { Component, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import { Search } from '../../models/free-class-finder.model';
 import { DatesTimes } from '../../models/dates-times';
 import { Option } from '../../models/option';
@@ -23,6 +23,7 @@ import { NgForm } from '@angular/forms';
 export class FreeClassFinderComponent {
 
   @Input() edit_cronograma;
+  @Output() show_edit = new EventEmitter<string>();
 
   @ViewChild('forma') formaSearch : NgForm;
   
@@ -103,6 +104,8 @@ export class FreeClassFinderComponent {
     
     //Cargo los datos del cronograma a editar para realizar la busqueda de las opciones.
     if (this.edit_cronograma) {
+
+      console.log(this.edit_cronograma);
 
       this.search.student_name = this.edit_cronograma.nombreAlumno;
       this.search.student_phone = this.edit_cronograma.telefonoAlumno;
@@ -605,4 +608,8 @@ export class FreeClassFinderComponent {
     }
   }
 
+  //Cierro edicion
+  verCronosPendientes(flag){
+    this.show_edit.emit(flag);
+  }
 }
