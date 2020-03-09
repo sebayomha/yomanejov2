@@ -1,4 +1,8 @@
 <div class="container" style="margin-top: 100px;">
+    <div *ngIf="edit_cronograma" style="text-align: center;">
+        <span style="float:left; font-size: 22px;" (click)="verCronosPendientes(false)"><i class="fas fa-arrow-left"></i></span>
+        <label style="font-weight: 500; font-size: 17px;">Editando cronograma número {{edit_cronograma.idCronograma}}</label>
+    </div>
     <div>
         <mat-expansion-panel [expanded]="control_collapse_search == true" (opened)="control_collapse_search = true" style="margin-top: 30px;">
             <mat-expansion-panel-header style="background-color:#43c89d;">
@@ -334,7 +338,8 @@
                                                 <mat-label>Desde</mat-label>
                                                 <mat-select
                                                     (selectionChange)="doScheduleTo(day.name_day,$event.value,j)"
-                                                    [disabled]="search.dates_times[i].option.length - 1 > j">
+                                                    [disabled]="search.dates_times[i].option.length - 1 > j"
+                                                    [(value)]="search.dates_times[i].option[j].hour_start">
                                                     <mat-option
                                                         *ngFor="let hour of search.dates_times[i].option[j].scheduleFrom"
                                                         [value]="hour">
@@ -349,7 +354,8 @@
                                                 <mat-label>Hasta</mat-label>
                                                 <mat-select
                                                     (selectionChange)="setHourFinish(search.dates_times[i].option[j],$event.value)"
-                                                    [disabled]="search.dates_times[i].option.length - 1 > j">
+                                                    [disabled]="search.dates_times[i].option.length - 1 > j"
+                                                    [(value)]="search.dates_times[i].option[j].hour_finish">
                                                     <mat-option
                                                         *ngFor="let hour of search.dates_times[i].option[j].scheduleTo"
                                                         [value]="hour">
@@ -385,7 +391,7 @@
                                     </div>
                                 </div>
                                 <div class="margin-top-30" style="text-align: center; margin-bottom: 30px;">
-                                    <mat-checkbox (change)="allDay(day.name_day,$event)" style="margin-right:15px">Disponible todo el día
+                                    <mat-checkbox [checked]="day.all_day" (change)="allDay(day.name_day,$event)" style="margin-right:15px">Disponible todo el día
                                     </mat-checkbox>
                                     <mat-checkbox *ngIf="day.all_day && flag_address_alt" name="{{i}}" [(ngModel)]="search.dates_times[i].option[0].dir_alt">DA
                                     </mat-checkbox>

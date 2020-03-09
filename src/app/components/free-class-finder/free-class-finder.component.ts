@@ -1,4 +1,4 @@
-import { Component, ViewChild, Input } from '@angular/core';
+import { Component, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import { Search } from '../../models/free-class-finder.model';
 import { DatesTimes } from '../../models/dates-times';
 import { Option } from '../../models/option';
@@ -23,6 +23,7 @@ import { NgForm } from '@angular/forms';
 export class FreeClassFinderComponent {
 
   @Input() edit_cronograma;
+  @Output() show_edit = new EventEmitter<string>();
 
   @ViewChild('forma') formaSearch : NgForm;
   
@@ -103,6 +104,8 @@ export class FreeClassFinderComponent {
     
     //Cargo los datos del cronograma a editar para realizar la busqueda de las opciones.
     if (this.edit_cronograma) {
+
+      console.log(this.edit_cronograma);
 
       this.search.student_name = this.edit_cronograma.nombreAlumno;
       this.search.student_phone = this.edit_cronograma.telefonoAlumno;
@@ -229,10 +232,10 @@ export class FreeClassFinderComponent {
                 this.search.dates_times[index].option[jindex].hour_start = tramo.horarios[0];
                 let ultimo = tramo.horarios.length;
                 ultimo = ultimo - 1
-                this.search.dates_times[index].option[jindex].hour_finish = tramo.horarios[ultimo];
+                this.search.dates_times[index].option[jindex].hour_finish = tramo.horarios[ultimo].trim();
 
                 this.search.dates_times[index].option[jindex].scheduleFrom.forEach( h => {
-                  if (h > tramo.horarios[ultimo]) {
+                  if (h > tramo.horarios[0].trim()) {
                     this.search.dates_times[index].option[jindex].scheduleTo.push(h);
                   }
                 })
@@ -248,7 +251,7 @@ export class FreeClassFinderComponent {
                 //Creo nueva opcion dento del array de opciones.
                 this.search.dates_times[index].option.push({
                   hour_start: tramo.horarios[0],
-                  hour_finish: tramo.horarios[ultimo],
+                  hour_finish: tramo.horarios[ultimo].trim(),
                   scheduleFrom: [],
                   scheduleTo: [],
                   scheduleSend: tramo.horarios,
@@ -256,13 +259,13 @@ export class FreeClassFinderComponent {
                 });
 
                 all_horarios.forEach( (h:string) => {
-                  if (h > horario_finish_actual) {
+                  if (h > horario_finish_actual.trim()) {
                     this.search.dates_times[index].option[jindex].scheduleFrom.push(h);
                   }
                 })
 
                 this.search.dates_times[index].option[jindex].scheduleFrom.forEach( (h:string) => {
-                  if (h > tramo.horarios[0]) {
+                  if (h > tramo.horarios[0].trim()) {
                     this.search.dates_times[index].option[jindex].scheduleTo.push(h);
                   }
                 })
@@ -276,6 +279,10 @@ export class FreeClassFinderComponent {
         index += 1;
       });
       console.log(this.search);
+      this.schedule_send_null = false;
+      this.search.lessons = this.edit_cronograma.clases.length;
+      this.search.date = new Date(this.edit_cronograma.fechaHoraGuardado);
+
     }
   }
 
@@ -536,6 +543,7 @@ export class FreeClassFinderComponent {
     this.search.dates_times.forEach(element => {
       if (element.name_day == day) {
         element.option[index].hour_start = hour;
+        element.option[index].scheduleTo = [];
         element.option[index].scheduleFrom.forEach( (h:string) => {
           if (h > hour) {
             element.option[index].scheduleTo.push(h);
@@ -600,4 +608,8 @@ export class FreeClassFinderComponent {
     }
   }
 
+  //Cierro edicion
+  verCronosPendientes(flag){
+    this.show_edit.emit(flag);
+  }
 }

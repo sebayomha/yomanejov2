@@ -710,7 +710,8 @@
                 //INSERT CANT CLASES TOMADAS
                 $state = $this->conn->prepare('INSERT INTO alumnocronogramaclasestomadas (idAlumno, idCronograma, cantClasesTomadas, cantClasesTotales) VALUES (?,?,?,?)');
                 $clasesTomadas = 0;
-                $state->bind_param('iiii', $idAlumno, $idCronograma, $clasesTomadas, sizeof($clases));
+                $totalClases = sizeof($clases);
+                $state->bind_param('iiii', $idAlumno, $idCronograma, $clasesTomadas, $totalClases);
                 $state->execute();
 
                 $idDireccionFisica;

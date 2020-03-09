@@ -80,5 +80,5 @@
   </div>
 </div>
 
-<edit-pending-conf-schedules [cronograma]="cronograma_edit" *ngIf="show_edit"></edit-pending-conf-schedules>
+<edit-pending-conf-schedules [cronograma]="cronograma_edit" (show_edit)="closeEditCrono($event)" *ngIf="show_edit"></edit-pending-conf-schedules>
 <custom-modal #customModal (close)="onCustomModalClose($event);" (confirmation)="confirmSchedule($event);" [data]="dataToConfirm" [component]="'pendingConfirmationSchedules'" [successBanner]="showSuccessBanner" [operation]="operation"></custom-modal>
