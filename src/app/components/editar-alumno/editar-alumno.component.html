@@ -1,23 +1,25 @@
 <div class="container" style="margin-top: 105px;">
   <div class="row">
     <div class="col-12">
-      <div id="titleEditing">
-        <span style="line-height: 24px; cursor: pointer; vertical-align: middle;" (click)="volverAlumnos();">
-          <i class="material-icons">
-          arrow_back
-          </i></span>
-        <span style="margin-right: 15px;">Editar</span> <span>{{alumnoInformation.nombre | capitalize}}</span>
-      </div>
 
       <div id="warningMessage">
-        <div class="alert alert-info" role="alert">
-          <i class="fas fa-exclamation" style="margin-right: 5px;"></i>
-          <span>Para editar los datos relacionados al cronograma deberá buscar el cronograma 
+        <div class="alert warning-custom" role="alert" style="padding-left: 10px !important;">
+          <i class="fas fa-exclamation-circle" style="margin-right: 12px; font-size: 25px;"></i>
+          <span style="position: relative; bottom: 4px;">Para editar los datos relacionados al cronograma deberá buscar el cronograma 
             <span style="font-weight: 500;">{{alumnoInformation.idCronograma}}</span> 
             en la pantalla de 
             <span style="font-weight: 500;">Cronogramas</span>
           </span>
         </div>
+      </div>
+
+
+      <div id="titleEditing">
+        <span class="returnArrow" (click)="volverAlumnos();">
+          <i class="material-icons" style="line-height: 40px;">
+          arrow_back
+          </i></span>
+        <span>{{alumnoInformation.nombre | capitalize}}</span>
       </div>
 
       <ng-template #stepOne>
@@ -74,9 +76,6 @@
 
           <!-- BOTONES DEL FORMULARIO -->
           <div id="buttonsContainer" style="float: right;" class="row">
-            <div>
-              <button mat-button class="btn btn-light">CANCELAR</button>
-            </div>
             <div>
               <button mat-button class="confirmButton" (click)="continueEditing();">CONTINUAR</button>
             </div>

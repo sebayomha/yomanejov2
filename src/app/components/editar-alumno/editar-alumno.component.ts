@@ -39,7 +39,7 @@ export class EditarAlumnoComponent implements OnInit {
   schedule_send_null:boolean = true;
 
   documento;
-  durationInSeconds = 3;
+  durationInSeconds = 1;
   available_schedules;
   numberOfClasses: number;
   excepciones: Array<any> =[];
@@ -94,7 +94,7 @@ export class EditarAlumnoComponent implements OnInit {
   }
 
   volverAlumnos() {
-    this.router.navigate(['alumnos']);
+    this.router.navigate(['/alumnos']);
   }
 
   showNameDay(i: number) {
@@ -258,13 +258,14 @@ export class EditarAlumnoComponent implements OnInit {
   }
 
   confirmEdicion($event) {
-    console.log($event);
     this.alumnosService.updateAlumno($event).subscribe( (response: Response) => {
-      if (response.code == 0) {
-        console.log("actuañizado");
-      } else {
-        console.log("error");
-      }
+      this.customModal.onClose();
+      this._snackBar.openFromComponent(SnackbarComponent, {
+        duration: this.durationInSeconds * 1100,
+        data: response
+      }).afterDismissed().subscribe( (afterDismiss) => {
+        this.router.navigate(['alumnos']);
+      })
     })
   }
 
@@ -275,10 +276,7 @@ export class EditarAlumnoComponent implements OnInit {
     }
   }
 
-  modificoDatosPersonales() {
-    console.log("this.alumnoInformation: ", this.alumnoInformation)
-    console.log("this.alumnoInformationCopyPersistData: ", this.direccionFisica.getData())
-    
+  modificoDatosPersonales() {   
     let direccionFisicaInformation = this.direccionFisica.getData();
 
     if ( (this.alumnoInformation.telefono.replace(/\s/g, "").replace('-', "")) == (this.search.student_phone.toString().replace(/\s/g, "").replace('-', "")) 

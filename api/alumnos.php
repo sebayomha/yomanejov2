@@ -31,7 +31,7 @@
 		$alumno = new Alumno();
 		$resultEditingAlumno = $alumno->updateAlumnoInformacionPersonal($idAlumno, $idDirFisica, $nuevoNombre, $nuevoTelefono, $nuevoDocumento, $direccionFisica);
 		if ($resultEditingAlumno == 0) {
-			echo json_encode($GLOBALS['utils']->getResponse(0, 'Datos actualizados correctamente'));	
+			echo json_encode($GLOBALS['utils']->getResponse(0, 'Alumno actualizado correctamente'));	
 		} else {
 			echo json_encode($GLOBALS['utils']->getResponse(1, 'Lo lamentamos, ha ocurrido un error'));
 		}
