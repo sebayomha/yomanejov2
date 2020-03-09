@@ -650,11 +650,11 @@
                     $tramo = rtrim(strtok($diaStringCopy,  '|'), ", ");
                     $tramo = trim(strtok($diaStringCopy,  '|'), ", ");
                     
+                    $diaStringCopy = trim($diaStringCopy, ", ");
 
                     $tramoSize = strlen($tramo);
                     $indexToF = $tramoSize + 3;
                     
-
                     $lastIndexOfToF;
                     if(substr($diaStringCopy, $indexToF, 1) == 't') { //es una direccion alternativa para ese tramo
                         $tramoHorario->horarios = explode(",",$tramo);

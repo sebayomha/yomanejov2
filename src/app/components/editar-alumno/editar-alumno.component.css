@@ -10,6 +10,14 @@
     cursor: pointer;
 }
 
+::ng-deep #formularioContainer mat-step-header {
+    padding-left: 0px;
+}
+
+::ng-deep #formularioContainer mat-step-header + .mat-vertical-content-container{
+    margin-left: 10px;
+}
+
 #titleEditing {
     margin-top: 15px;
     font-size: 25px;

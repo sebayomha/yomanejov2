@@ -13,6 +13,10 @@ export class AlumnosService {
     return this.http.get('api/alumnos');
   }
 
+  updateAlumno(alumno) {
+    return this.http.post('api/alumnos/update', alumno);
+  }
+
   setAlumno(alumno) {
     this.alumno = alumno;
   }

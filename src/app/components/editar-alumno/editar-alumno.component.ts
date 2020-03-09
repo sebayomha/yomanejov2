@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { SharedService } from '../../services/sharedService/shared-service';
 import { Router } from '@angular/router';
 import { slideInAnimation } from '../../animations';
@@ -7,7 +7,7 @@ import { Search } from '../../models/free-class-finder.model';
 import { DatesTimes } from '../../models/dates-times';
 import { Option } from '../../models/option';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { CronogramaService } from 'src/app/services/cronograma/cronograma.service';
+import { AlumnosService } from 'src/app/services/alumnos/alumnos.service';
 import { Response } from '../../models/response';
 import { SnackbarComponent } from '../snackbar/snackbar/snackbar.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -43,12 +43,14 @@ export class EditarAlumnoComponent implements OnInit {
   available_schedules;
   numberOfClasses: number;
   excepciones: Array<any> =[];
-  
-  constructor(private _snackBar: MatSnackBar, private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private sharedService:SharedService, private router: Router) { }
+
+  constructor(private cdr : ChangeDetectorRef, private _snackBar: MatSnackBar, private alumnosService: AlumnosService, private breakpointObserver: BreakpointObserver, private sharedService:SharedService, private router: Router) { }
 
   @ViewChild('direccionFisica') direccionFisica;
   @ViewChild('editingStudentForm') editingStudentForm;
-
+  @ViewChild('disabledForm') disabledForm;
+  @ViewChild('disabledTabulatorForm') disabledTabulatorForm;
+  
   ngOnInit() {
     this.alumnoInformation = this.sharedService.getData(); //obtengo la informacion del servicio compartido
     console.log(this.sharedService.getData())
@@ -79,6 +81,14 @@ export class EditarAlumnoComponent implements OnInit {
 
   ngAfterViewInit() {
     this.direccionFisica.setDireccionFisicaDefault();
+    
+    console.log( this.disabledForm)
+  }
+  
+  ngAfterViewChecked() {
+    this.disabledForm.form.disable();
+    this.disabledTabulatorForm.form.disable();
+    this.cdr.detectChanges();
   }
 
   volverAlumnos() {
@@ -214,58 +224,27 @@ export class EditarAlumnoComponent implements OnInit {
 
   //validar los formularios
   continueEditing() {
-    console.log(this.modificoDatosPersonales());
-    if (this.editingStudentForm.valid && this.direccionFisica.validateForm() && !this.schedule_send_null)
-     return false;
-    
-    let object = JSON.parse(JSON.stringify(this.search));
-    
-    //Transformo los nombres de los dias en ingles
-    for (let i = 0; i <=6; i++) {
-      switch (i) {
-        case 0:
-          object.dates_times[i].name_day = 'Monday';
-          break;
-        case 1:
-          object.dates_times[i].name_day = 'Tuesday';
-          break;
-        case 2:
-          object.dates_times[i].name_day = 'Wednesday';
-          break;
-        case 3:
-          object.dates_times[i].name_day = 'Thursday';
-          break;
-        case 4:
-          object.dates_times[i].name_day = 'Friday';
-          break;
-        case 5:
-          object.dates_times[i].name_day = 'Saturday';
-          break;
-        case 6:
-          object.dates_times[i].name_day = 'Sunday';
-          break;
+    if (!this.modificoDatosPersonales()) {
+      let response = {
+        'code': 1,
+        'data': 'Para continuar debe modificar alguno de los datos'
       }
+      this._snackBar.openFromComponent(SnackbarComponent, {
+        duration: this.durationInSeconds * 1100,
+        data: response
+      });
+    } else {
+      if (this.editingStudentForm.valid && this.direccionFisica.validateForm()) {
+        this.alumnosService.updateAlumno(this.alumnoInformation).subscribe( (response: Response) => {
+          if (response.code == 0) {
+            console.log("actuañizado");
+          } else {
+            console.log("error");
+          }
+        })
+      }
+      return false;
     }
-
-    console.log(this.search);
-    this.cronogramaService.getCronograma(object, []).subscribe( (response: Response) => {
-      console.log(response)
-      switch (response.code) {
-        case 0:
-          this.available_schedules = Object.values(response.data);
-          this._snackBar.dismiss();
-          break;
-        case 2:
-        case 3:{
-          this.available_schedules = null;
-          this._snackBar.openFromComponent(SnackbarComponent, {
-            duration: this.durationInSeconds * 1100,
-            data: response
-          });
-        }
-        break;
-      }
-    });
   }
 
   preventLetters($event) {
@@ -309,124 +288,6 @@ export class EditarAlumnoComponent implements OnInit {
 
   isMobile() {
     return this.breakpointObserver.isMatched('(max-width: 767px)');
-  }
-
-  quitDA(){
-    //Esta funcion resetea todas las direcciones alternativas.
-    if (!this.flag_address_alt) {
-      for (let i = 0; i <=6; i++) {
-        this.search.dates_times[i].option.forEach(opt => {
-          if ( opt.dir_alt == true ) {
-            opt.dir_alt = false;
-          }
-        });
-      }
-    }
-  }
-
-  allDay(day) {
-
-    let index = this.search.dates_times.findIndex(element => { return element.name_day == day });
-
-    if (index != -1) {
-      if (this.search.dates_times[index].all_day == false ) {
-        this.search.dates_times[index].all_day = true;
-        this.schedule_send_null = false;
-
-        if (this.search.dates_times[index].option.length > 1) {
-          let length = this.search.dates_times[index].option.length;
-          this.search.dates_times[index].option.splice( 1, length );
-        }
-
-        this.search.dates_times[index].option[0].hour_start = '';
-        this.search.dates_times[index].option[0].hour_finish = '';
-        this.search.dates_times[index].option[0].scheduleFrom = ["08:00", "09:00", "10:00", "11:15", "12:15", "13:15", "14:30", "15:30", "16:30", "17:45", "18:45", "19:45"];
-        this.search.dates_times[index].option[0].scheduleTo = [];
-        this.search.dates_times[index].option[0].scheduleSend = ["08:00", "09:00", "10:00", "11:15", "12:15", "13:15", "14:30", "15:30", "16:30", "17:45", "18:45", "19:45"];
-        this.search.dates_times[index].option[0].dir_alt = false;
-
-      } else {
-        this.search.dates_times[index].all_day = false;
-        this.search.dates_times[index].option[0].scheduleSend = null;
-        this.search.dates_times[index].option[0].dir_alt = false;
-
-        this.schedule_send_null = true;
-        for (let i = 0; i <=6; i++) {
-          if (this.search.dates_times[i].all_day == false) {
-            if(this.search.dates_times[i].option[0].scheduleSend != null) {
-              this.schedule_send_null = false;
-            }
-          } else {
-            this.schedule_send_null = false;
-          }
-        }
-        this.control_flag_empty = false;
-      }
-    }
-  }
-
-  removeOption(index, day_options) {
-
-    if (day_options.length > 1) {
-    day_options.splice( index, 1 );
-    } else {
-      day_options[index].hour_start = '';
-      day_options[index].hour_finish = '';
-      day_options[index].scheduleTo = [];
-      day_options[index].scheduleSend = null;
-    }
-    this.control_flag_empty = false;
-    this.schedule_send_null = true;
-
-    for (let i = 0; i <=6; i++) {
-      if (this.search.dates_times[i].all_day == true) {
-        return this.schedule_send_null = false;
-      } else {
-        if(this.search.dates_times[i].option[0].scheduleSend != null) {
-          this.schedule_send_null = false;
-        }
-      }
-    }
-  }
-
-  addDateTime(day) {
-    let index = this.search.dates_times.findIndex(element => { return element.name_day == day });
-
-    if (index != -1) {
-      if(this.search.dates_times[index].option.length == 1 && this.search.dates_times[index].option[0].hour_start == '' && this.search.dates_times[index].option[0].hour_finish == ''){
-
-          this.search.dates_times[index].option[0].hour_start = null;
-          this.search.dates_times[index].option[0].hour_finish = null;
-          this.search.dates_times[index].option[0].scheduleFrom = ["08:00", "09:00", "10:00", "11:15", "12:15", "13:15", "14:30", "15:30", "16:30", "17:45", "18:45", "19:45"];
-          this.search.dates_times[index].option[0].scheduleTo = [];
-          this.search.dates_times[index].option[0].scheduleSend = null;
-
-      } else {
-        let option_length = this.search.dates_times[index].option.length;
-
-        let j = option_length - 1;
-
-        let hour_finish_selected = this.search.dates_times[index].option[j].hour_finish;
-
-        let new_schedule_from = [];
-
-        this.search.dates_times[index].option[j].scheduleFrom.forEach( (h:string) => {
-          if (h > hour_finish_selected ) {
-            new_schedule_from.push(h);
-          }
-        })
-
-        this.search.dates_times[index].option.push({
-          hour_start: null,
-          hour_finish: null,
-          scheduleFrom: new_schedule_from,
-          scheduleTo: [],
-          scheduleSend: null,
-          dir_alt: false
-        });
-      }
-    }
-    this.control_flag_empty = true;
   }
 
 }
