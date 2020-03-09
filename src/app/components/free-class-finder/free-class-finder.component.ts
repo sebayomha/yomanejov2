@@ -276,6 +276,10 @@ export class FreeClassFinderComponent {
         index += 1;
       });
       console.log(this.search);
+      this.schedule_send_null = false;
+      this.search.lessons = this.edit_cronograma.clases.length;
+      this.search.date = new Date(this.edit_cronograma.fechaHoraGuardado);
+
     }
   }
 
