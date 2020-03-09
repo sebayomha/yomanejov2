@@ -239,6 +239,7 @@ export class FreeClassFinderComponent {
                     this.search.dates_times[index].option[jindex].scheduleTo.push(h);
                   }
                 })
+                this.search.dates_times[index].option[jindex].dir_alt = tramo.usandoDirAlternativa;
 
               } else {
 
@@ -278,6 +279,46 @@ export class FreeClassFinderComponent {
         }
         index += 1;
       });
+
+      Object.values(this.edit_cronograma.excepciones).forEach( (excep:any) => {
+
+        let date = new Date(excep.fecha);
+
+        if (excep.no_puede != true) {
+
+          excep.horarios.forEach( horario => {
+
+            let hour_start = horario.tramoHorario[0];
+            let size = horario.tramoHorario.length;
+            let hour_finish = horario.tramoHorario[size];
+
+            let array_horarios_hasta = [];
+            let array_horarios_desde = [];
+
+
+            this.predefinedHours.forEach( (h:string) => {
+              if (h > hour_finish.trim()) {
+                array_horarios_desde.push(h);
+              }
+            })
+
+            array_horarios_desde.forEach( (h:string) => {
+              if (h > hour_start) {
+                array_horarios_hasta.push(h);
+              }
+            })
+
+            //Creo la excepcion
+            let rowTime = new Array<ExcepcionRowTIme>({'hour_start': hour_start, 'hour_finish': hour_finish, 'horariosDesde': array_horarios_desde, 'horariosHasta': array_horarios_hasta, 'horariosTotales': horario.tramoHorario, 'dir_alt':false});
+            let newExcepcion = {'date': date, 'date_string': '', 'no_puede': excep.no_puede, 'horarios': rowTime};
+            this.excepciones.push(newExcepcion);
+
+          });
+
+        }
+
+      });
+
       console.log(this.search);
       this.schedule_send_null = false;
       this.search.lessons = this.edit_cronograma.clases.length;
