@@ -10,6 +10,9 @@
           <span *ngIf="component == 'availableSchedules'">
             Confirmar cronograma
           </span>
+          <span *ngIf="component == 'editarAlumno'">
+            Confirmar edición
+          </span>
         </h5>
         <h5 class="modal-title" *ngIf="successBanner" style="margin: auto; font-size: 90px; color: white;"><i class="fas fa-check-circle"></i></h5>
         <button *ngIf="!successBanner" type="button" class="close closeCross" (click)="onClose();" aria-label="Close">
@@ -90,6 +93,11 @@
           <app-direccion-fisica *ngIf="operation == 'Confirmar'" #direccionFisica [data]="data"></app-direccion-fisica>
         </form>
       </div>
+      <div class="modal-body" style="max-height: 330px; overflow-y: auto;" *ngIf="component == 'editarAlumno' && data && !successBanner">
+        <div>
+          <span>¿Está seguro que desea editar al alumno <span style="font-weight: 500; color: #43c89d;">{{data.idAlumno}}</span>?</span>
+        </div>
+      </div>
       <div class="modal-footer" style="padding: 25px;">
         <!-- <button type="button" class="btn btn-secondary" (click)="onClose();">Close</button> -->
         <button [disabled]="checkDisabledConditions()" *ngIf="!successBanner" type="button" class="btn btn-primary confirmCustomModal" [ngClass]="classConfirmBtn()" (click)="onConfirm();">
@@ -99,6 +107,7 @@
           <span *ngIf="component == 'availableSchedules'">
             Confirmar cronograma
           </span>
+          <span *ngIf="component == 'editarAlumno'">Confirmar</span>
         </button>
         <button *ngIf="successBanner" type="button" class="btn btn-primary" (click)="sendWsp();" style="margin: auto; border-radius: 20px; background-color: #43c89d; border-color: #43c89d;">Enviar Whatsapp <i class="fab fa-whatsapp"></i></button>
       </div>

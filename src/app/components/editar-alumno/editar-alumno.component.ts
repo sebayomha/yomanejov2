@@ -44,13 +44,17 @@ export class EditarAlumnoComponent implements OnInit {
   numberOfClasses: number;
   excepciones: Array<any> =[];
 
+  showSuccessBanner: boolean = false;
+  dataToConfirm: any = [];
+
   constructor(private cdr : ChangeDetectorRef, private _snackBar: MatSnackBar, private alumnosService: AlumnosService, private breakpointObserver: BreakpointObserver, private sharedService:SharedService, private router: Router) { }
 
   @ViewChild('direccionFisica') direccionFisica;
   @ViewChild('editingStudentForm') editingStudentForm;
   @ViewChild('disabledForm') disabledForm;
   @ViewChild('disabledTabulatorForm') disabledTabulatorForm;
-  
+  @ViewChild('customModal') customModal;
+
   ngOnInit() {
     this.alumnoInformation = this.sharedService.getData(); //obtengo la informacion del servicio compartido
     console.log(this.sharedService.getData())
@@ -148,7 +152,7 @@ export class EditarAlumnoComponent implements OnInit {
 
     Object.values(this.alumnoInformation.disponibilidades).forEach( (disponibilidad:any, index) => {
       if (disponibilidad.todoElDia) { //si es todo el dia
-        let option = new Option('', '', this.predefinedHours, [], this.predefinedHours, false);
+        let option = new Option('', '', this.predefinedHours, [], this.predefinedHours, disponibilidad.usandoDirAlternativa);
         let options = new Array(option);
         let dateTime = new DatesTimes(this.showNameDay(index), true, options);
         dates_times.push(dateTime);
@@ -216,6 +220,7 @@ export class EditarAlumnoComponent implements OnInit {
 
     this.search = new Search(this.alumnoInformation.nombre, dates_times, this.addresses, this.addresses_alt, this.alumnoInformation.cantClasesParaRestantes, new Date(), this.alumnoInformation.telefono);
     
+    console.log(this.search);
     this.documento = this.alumnoInformation.documento;
     this.alumnoInformationCopyPersistData = JSON.parse(JSON.stringify(this.alumnoInformation));
   }
@@ -233,18 +238,34 @@ export class EditarAlumnoComponent implements OnInit {
       });
     } else {
       if (this.editingStudentForm.valid && this.direccionFisica.validateForm()) {
-        this.alumnosService.updateAlumno(this.alumnoInformation).subscribe( (response: Response) => {
-          if (response.code == 0) {
-            console.log("actuañizado");
-          } else {
-            console.log("error");
-          }
-        })
+        let generateEditedInformation = {
+          idAlumno: this.alumnoInformation.idAlumno,
+          nuevoDocumento: this.documento,
+          nuevoNombre: this.search.student_name,
+          nuevoTelefono: this.search.student_phone,
+          idDirFisica: this.alumnoInformation.id_DirFisica,
+          direccionFisicaInformation: this.direccionFisica.getData()
+        }
+
+        this.showSuccessBanner = false;
+        this.dataToConfirm = generateEditedInformation;
+        this.customModal.open();
       } else { //mostrar errores en la direccion
         this.direccionFisica.showInputErrors();
       }
       return false;
     }
+  }
+
+  confirmEdicion($event) {
+    console.log($event);
+    this.alumnosService.updateAlumno($event).subscribe( (response: Response) => {
+      if (response.code == 0) {
+        console.log("actuañizado");
+      } else {
+        console.log("error");
+      }
+    })
   }
 
   preventLetters($event) {
@@ -265,10 +286,18 @@ export class EditarAlumnoComponent implements OnInit {
     && this.alumnoInformation.nombre == this.search.student_name) {
 
       if (direccionFisicaInformation.nuevaDireccion) { //estamos sobre nueva direccion
-        //datos primarios personales continuan iguales, evaluo si la direccion fisica cambio. Solo evaluo los datos sensibles. (dpto y piso y obs no importan)
+        //datos primarios personales continuan iguales, evaluo si la direccion fisica cambio.
         if (this.alumnoInformation.calle_DirFisica == direccionFisicaInformation.direccion.street
           && this.alumnoInformation.ciudad_DirFisica == direccionFisicaInformation.direccion.city
           && this.alumnoInformation.numero_DirFisica == direccionFisicaInformation.direccion.altitud
+          && (this.alumnoInformation.calle_diag_DirFisica == 'true') == direccionFisicaInformation.direccion.diag
+          && this.alumnoInformation.calle_a_DirFisica == direccionFisicaInformation.direccion.street_a
+          && (this.alumnoInformation.calle_a_diag_DirFisica == 'true') == direccionFisicaInformation.direccion.diag_a
+          && this.alumnoInformation.calle_b_DirFisica == direccionFisicaInformation.direccion.street_b
+          && (this.alumnoInformation.calle_b_diag_DirFisica == 'true') == direccionFisicaInformation.direccion.diag_b
+          && this.alumnoInformation.departamento_DirFisica == direccionFisicaInformation.direccion.department
+          && this.alumnoInformation.floor_DirFisica == direccionFisicaInformation.direccion.floor
+          && this.alumnoInformation.observaciones_DirFisica == direccionFisicaInformation.direccion.observations
           ) { //los datos personales continuan igual
             return false;
           } else { //modifico datos personales de la direccion fisica

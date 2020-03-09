@@ -207,6 +207,7 @@
                     $tramo = rtrim(strtok($diaStringCopy,  '|'), ", ");
                     $tramo = trim(strtok($diaStringCopy,  '|'), ", ");
                     
+                    $diaStringCopy = trim($diaStringCopy, ", ");
 
                     $tramoSize = strlen($tramo);
                     $indexToF = $tramoSize + 3;
@@ -235,6 +236,47 @@
 
             return $diaInformacion;
 
+        }
+
+        function updateAlumnoInformacionPersonal($idAlumno, $idDirFisica, $nuevoNombre, $nuevoTelefono, $nuevoDocumento, $direccionFisica) {
+            $idDireccionUpdate = null;
+            $direccionFisicaNueva = false;
+            $doInsert = false;
+
+            if ($direccionFisica->nuevaDireccion == true) { //es una direccion nueva, ahora hay que ver si cambio
+                $doInsert = true;
+            } else { //es una direccion ya seleccionada del listado.
+                $idDireccionUpdate = $direccionFisica->idDireccionSeleccionada;
+            }
+
+            $address_diag_string = var_export($direccionFisica->direccion->diag, true);
+            $address_a_diag_string = var_export($direccionFisica->direccion->diag_a, true);
+            $address_b_diag_string = var_export($direccionFisica->direccion->diag_b, true);
+
+            //Actualizo la direccion fisica
+            if ($doInsert) {
+                $state = $this->conn->prepare('INSERT INTO direccion (calle, calle_diag, calle_a, calle_a_diag, calle_b, calle_b_diag, numero, ciudad, departamento, floor_, observaciones) VALUES (?,?,?,?,?,?,?,?,?,?,?)');
+                $state->bind_param('sssssssssss', $direccionFisica->direccion->street, $address_diag_string, $direccionFisica->direccion->street_a, $address_a_diag_string, $direccionFisica->direccion->street_b, $address_b_diag_string, $direccionFisica->direccion->altitud, $direccionFisica->direccion->city, $direccionFisica->direccion->department, $direccionFisica->direccion->floor, $direccionFisica->direccion->observations);
+                $state->execute();
+                $idDireccionUpdate = $this->conn->insert_id;           
+            } else {
+/*                 $state = $this->conn->prepare('UPDATE direccion SET calle = ?, calle_diag = ?, calle_a = ?, calle_a_diag = ?, calle_b = ?, calle_b_diag = ?, numero = ?, ciudad = ?, departamento = ?, floor_ = ?, observaciones = ? WHERE direccion.idDireccion = ?');
+                $state->bind_param('ssssssssssss', $direccionFisica->direccion->street, $address_diag_string, $direccionFisica->direccion->street_a, $address_a_diag_string, $direccionFisica->direccion->street_b, $address_b_diag_string, $direccionFisica->direccion->altitud, $direccionFisica->direccion->city, $direccionFisica->direccion->department, $direccionFisica->direccion->floor, $direccionFisica->direccion->observations, $idDireccionUpdate);
+                $state->execute();  */   
+            }
+/*             
+                else {
+                    if ($idDirFisica != null) { //elimino la direccion fisica previa porque selecciono una del listado
+                        $state = $this->conn->prepare('DELETE FROM direccion WHERE direccion.idDireccion = ?');
+                        $state->bind_param('i', $idDirFisica);
+                        $state->execute();
+                    } */
+            
+            $state = $this->conn->prepare('UPDATE alumno SET nombre = ?, telefono = ?, documento = ?, idDireccionFisica = ? WHERE alumno.idAlumno = ?');
+            $state->bind_param('sssii', $nuevoNombre, $nuevoTelefono, $nuevoDocumento, $idDireccionUpdate, $idAlumno);
+            $state->execute();
+
+            return 0;
         }
 
     }

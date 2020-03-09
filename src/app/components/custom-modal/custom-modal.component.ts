@@ -82,7 +82,11 @@ export class CustomModalComponent {
         return 'confirmSchedule';
       }
       else {
-        return 'cancelSchedule';
+        if (this.component == 'pendingConfirmationSchedules' && this.operation != 'Confirmar') {
+          return 'cancelSchedule'
+        } else {
+          return 'confirmSchedule';
+        }
       }
     }
   }
