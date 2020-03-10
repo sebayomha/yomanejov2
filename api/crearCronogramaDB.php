@@ -482,6 +482,7 @@
             $cronogramas = array();
             if ($state->execute()) { //si la consulta fue exitosa
                 $result = $state->get_result();
+                //echo mysqli_num_rows($result);
                 while($row = $result->fetch_assoc()) {
                     $dirAlternativa = null;
                     if ($row['id_DirAlternativa'] != null) {
@@ -529,7 +530,7 @@
                         ];
 
                         if ($row['horarios'] != null) { //tiene horarios
-                            $horario->tramoHorario = $row['horarios'];
+                            $horario->tramoHorario = explode(",",$row['horarios']);
                             $horario->usandoDirAlt = filter_var($row['dir_alt'], FILTER_VALIDATE_BOOLEAN);
                             array_push($excepcion->horarios, $horario);
                         }
@@ -565,7 +566,7 @@
                                     
                                     $horarioFound = false;
                                     foreach ($excepcionGuardada->horarios as $horario) {
-                                        if ($horario->tramoHorario == $row['horarios']) {
+                                        if ($horario->tramoHorario == explode(",", $row['horarios'])) {
                                             $horarioFound = true;
                                             break;
                                         }
@@ -577,7 +578,7 @@
                                             'usandoDirAlt' => false
                                         ];
 
-                                        $horario->tramoHorario = $row['horarios'];
+                                        $horario->tramoHorario = explode(",",$row['horarios']);
                                         $horario->usandoDirAlt = filter_var($row['dir_alt'], FILTER_VALIDATE_BOOLEAN);
                                         array_push($excepcionGuardada->horarios, $horario);
                                         usort($excepcionGuardada->horarios, array($this, 'excepciones_tramos_compare'));
@@ -589,7 +590,18 @@
                                 array_push($cronograma->excepciones, $excepcion);
                             }
 
-                            array_push($cronograma->clases, $row);
+                            $claseFound = false;
+                            foreach ($cronograma->clases as $clase) {
+                                if ($clase['idClase'] == $row['idClase']) {
+                                    $claseFound = true;
+                                break;
+                                }
+                            }
+
+                            if (!$claseFound) {
+                                array_push($cronograma->clases, $row);
+                            }
+
                             usort($cronograma->excepciones, array($this, 'excepciones_compare'));
                             usort($cronograma->clases, array($this, 'date_compare'));
                             break;
@@ -848,8 +860,8 @@
         }
 
         function excepciones_tramos_compare($a, $b) {
-            $splitA = explode(',', $a->tramoHorario);
-            $splitB = explode(',', $b->tramoHorario);
+            $splitA = $a->tramoHorario;
+            $splitB = $b->tramoHorario;
             $t1 = strtotime($splitA[0]);
             $t2 = strtotime($splitB[sizeof($splitB) - 1]);
             return $t1 > $t2;
