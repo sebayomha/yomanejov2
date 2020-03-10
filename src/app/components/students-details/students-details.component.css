@@ -22,13 +22,14 @@
 }
 
 #matSideNavContainer {
-    height: 18%;
-    background-color: #43c89d
+    height: calc(100% - 130px);
+    overflow-y: auto;
+    /*background-color: #43c89d;*/
 }
 
 #bottomSideNav {
     position: relative;
-    top: 60px;
+    top: 10px;
     text-align: center;
     font-weight: 500;
     font-size: 20px;

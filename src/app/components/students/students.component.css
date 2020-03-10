@@ -7,3 +7,64 @@
 #studentsTabGroup table tr {
     cursor: pointer;
 }
+
+.example-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: calc(100% -70px);
+    margin-top: 70px;
+  }
+
+#imageContainer {
+    text-align: center;
+    background: rgba(0, 0, 0, 0.08);
+    border-radius: 50%;
+    height: 150px;
+    width: 150px;
+    margin: 0 auto;
+    vertical-align: middle;
+    line-height: 150px;
+    position: relative;
+    top: 50px;
+}
+
+#matSideNavContainer {
+    height: 100%;
+    overflow-y: auto;
+    /*background-color: #43c89d;*/
+}
+
+#bottomSideNav {
+    position: relative;
+    top: 10px;
+    text-align: center;
+    font-weight: 500;
+    font-size: 20px;
+    color: rgba(0,0,0,.54);
+}
+
+::ng-deep mat-sidenav-content {
+    background: white;
+}
+
+::ng-deep #studentsDetailsVS .mat-vertical-stepper-content { 
+    visibility: visible !important; 
+    height: 100% !important; 
+}
+
+::ng-deep #studentsDetailsVS .mat-vertical-stepper-header{
+    pointer-events: none !important;
+}
+
+::ng-deep #studentsDetailsVS .mat-step-icon-not-touched {
+    background-color: #3f51b5 !important;
+    color: #fff !important;
+}
+
+::ng-deep #studentsDetailsVS .mat-step-header .mat-step-label, .mat-step-header .mat-step-optional {
+    color: rgba(0,0,0,.87);
+    font-weight: 500;
+}

@@ -6,7 +6,9 @@
       <i *ngIf="data.code == 0" class="far fa-check-circle successIcon">
       </i>
     </div>
-    <div class="col-10" style="padding-right: 0px;">
+    <div class="col-10" style="padding-right: 0px;     padding-left: 0px;
+    position: relative;
+    bottom: 1px;">
       <p class="message" [ngClass]="{'margin-left-10': data.code == 0}">
         {{data.data}}
       </p>

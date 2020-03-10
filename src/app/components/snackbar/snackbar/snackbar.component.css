@@ -1,8 +1,11 @@
 .mat-snack-bar-container {
     margin-bottom: 10px !important;
     font-size: 15px !important;
-    border-radius: 50px !important;
-    padding: 14px !important;
+    padding: 8px !important;
+    width: 600px;
+    max-width: 100%;
+    margin: 10px !important;
+    border-radius: 50px;
 }
 
 .message {
@@ -15,12 +18,12 @@
 
 .infoIcon {
     color: #ea1010;
-    font-size: 30px;
+    font-size: 20px;
     margin-left: 3px;
 }
 
 .successIcon {
     color: #43c89d;
-    font-size: 30px;
+    font-size: 20px;
     margin-left: 3px;
 }

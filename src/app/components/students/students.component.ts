@@ -4,6 +4,7 @@ import { Response } from '../../models/response';
 import { MatTableDataSource} from '@angular/material/table';
 import { Router } from '@angular/router';
 import { SharedService } from '../../services/sharedService/shared-service';
+import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-students',
@@ -18,13 +19,15 @@ export class StudentsComponent implements OnInit {
   busquedaAlumnoActivo: string = '';
   busquedaAlumnoInctivos: string = '';
 
-  
-  detailedAlumno;
+  alumno;
+
   @ViewChild('studentDetail') studentDetail;
+  @ViewChild('sidenav') sidenav: MatSidenav;
 
   constructor(private alumnoService: AlumnosService, private router: Router, private sharedService:SharedService) { }
 
   ngOnInit() {
+    this.sharedService.destroyData();
     this.alumnoService.obtenerAlumnos().subscribe( (response: Response) => {
       this.alumnosActivos = new MatTableDataSource(this.obtenerAlumnosActivos(response.data));
       this.alumnosInactivos = new MatTableDataSource(this.obtenerAlumnosInactivos(response.data));
@@ -60,13 +63,13 @@ export class StudentsComponent implements OnInit {
   }
 
   openDetail(alumno) {
-    this.detailedAlumno = alumno;
-    console.log(this.studentDetail)
-    this.studentDetail.open();
+    this.alumno = alumno;
+    this.sidenav.open();
   }
   
-  closedStudentDetail($event) {
-    this.detailedAlumno = null;
+  closedStudentDetail() {
+    this.alumno = null;
+    this.sidenav.close();
   }
 
   editarAlumno(alumno, $event) {

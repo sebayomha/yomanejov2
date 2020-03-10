@@ -8,12 +8,15 @@ export class SharedService {
 
   constructor(private http: HttpClient) { }
 
-  data;
   setData(data) {
-    this.data = data;
+    sessionStorage.setItem("student",JSON.stringify(data));
    }
 
   getData() {
-    return this.data
+    return JSON.parse(sessionStorage.getItem("student"));
+  }
+
+  destroyData() {
+    sessionStorage.removeItem("student");
   }
 }
