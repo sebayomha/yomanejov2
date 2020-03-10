@@ -67,12 +67,12 @@
 }
 
 @media (max-width: 767px) {
-    ::ng-deep .mat-vertical-content-container {
+    ::ng-deep #formularioContainer .mat-vertical-content-container {
         padding: 0 !important;
         margin: 0 !important;
     }
 
-    ::ng-deep .mat-vertical-content {
+    ::ng-deep #formularioContainer .mat-vertical-content {
         padding: 0 !important;
     }
 }

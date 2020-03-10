@@ -4,12 +4,13 @@
 </label>
 </div>
 
+<div id="containerList">
 <mat-selection-list style="padding-top: 0px;" #addressesAlumnoSelection (selectionChange)="onAddressSelection($event);">
   <mat-list-option [selected]="data.selected" [value]="data" checkboxPosition="before" *ngFor="let data of data.addressesAlumno">
     {{data.direccionFormated}}
   </mat-list-option>
 </mat-selection-list>
-
+</div>
 <div id="nuevaDireccionCheckbox" style="margin-top: 10px; padding-left: 0px;">
 <mat-checkbox (click)="addressesAlumnoSelection.deselectAll(); idDireccionSeleccionada = null;" style="font-weight: 500;" name="nuevaDireccion"
 [(ngModel)]="nuevaDireccion">Nueva dirección</mat-checkbox>

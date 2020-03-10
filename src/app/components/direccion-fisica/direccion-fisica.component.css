@@ -12,7 +12,7 @@
     background-color:#43c89d;
   }
 
-  ::ng-deep .mat-list-item-content {
+  ::ng-deep #containerList .mat-list-item-content {
       padding-left: 0px !important;
   }
   
