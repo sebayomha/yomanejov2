@@ -40,7 +40,7 @@
           <div style="margin-top: 15px; text-align: left; padding-left: 26px; font-size: 17px;">Disponibilidad horaria</div>
           <mat-vertical-stepper id="studentsDetailsVS" [linear]="true" #stepper>
             <mat-step [stepControl]="firstFormGroup" [completed]="true">
-              <ng-template matStepLabel>Lunes <span style="margin-left: 15px; color: #43c89d;" *ngIf="alumno.disponibilidades.Monday.todoElDia">Puede todo el día</span></ng-template>
+              <ng-template matStepLabel>Lunes</ng-template>
               <div *ngIf="!alumno.disponibilidades.Monday.todoElDia">
                 <mat-list>
                   <mat-list-item style="height: 30px;" *ngFor="let tramoHorario of alumno.disponibilidades.Monday.tramosHorarios; let i = index">
@@ -53,10 +53,12 @@
                   </mat-list-item>
                 </mat-list>
                 <div style="font-size: 16px; color: #ce1111;" *ngIf="!alumno.disponibilidades.Monday.tramosHorarios.length">Los Lunes no está disponible</div>
+                <div style="font-size: 16px; color: #43c89d;" *ngIf="alumno.disponibilidades.Monday.todoElDia">Disponible todo el día</div>
               </div>
+              <div style="font-size: 16px; color: #43c89d;" *ngIf="alumno.disponibilidades.Monday.todoElDia">Disponible todo el día</div>
             </mat-step>
             <mat-step [stepControl]="secondFormGroup">
-              <ng-template matStepLabel>Martes <span style="margin-left: 15px; color: #43c89d;" *ngIf="alumno.disponibilidades.Tuesday.todoElDia">Puede todo el día</span></ng-template>
+              <ng-template matStepLabel>Martes</ng-template>
               <div *ngIf="!alumno.disponibilidades.Tuesday.todoElDia">
                 <mat-list>
                   <mat-list-item style="height: 30px;" *ngFor="let tramoHorario of alumno.disponibilidades.Tuesday.tramosHorarios; let i = index">
@@ -70,9 +72,10 @@
                 </mat-list>
                 <div style="font-size: 16px; color: #ce1111;" *ngIf="!alumno.disponibilidades.Tuesday.tramosHorarios.length">Los Martes no está disponible</div>
               </div>
+              <div style="font-size: 16px; color: #43c89d;" *ngIf="alumno.disponibilidades.Tuesday.todoElDia">Disponible todo el día</div>
             </mat-step>
             <mat-step [stepControl]="thirdFormGroup">
-              <ng-template matStepLabel>Miércoles <span style="margin-left: 15px; color: #43c89d;" *ngIf="alumno.disponibilidades.Wednesday.todoElDia">Puede todo el día</span></ng-template>
+              <ng-template matStepLabel>Miércoles</ng-template>
               <div *ngIf="!alumno.disponibilidades.Wednesday.todoElDia">
                 <mat-list>
                   <mat-list-item style="height: 30px;" *ngFor="let tramoHorario of alumno.disponibilidades.Wednesday.tramosHorarios; let i = index">
@@ -86,9 +89,10 @@
                 </mat-list>
                 <div style="font-size: 16px; color: #ce1111;" *ngIf="!alumno.disponibilidades.Wednesday.tramosHorarios.length">Los Miércoles no está disponible</div>
               </div>
+              <div style="font-size: 16px; color: #43c89d;" *ngIf="alumno.disponibilidades.Wednesday.todoElDia">Disponible todo el día</div>
             </mat-step>
             <mat-step [stepControl]="fourthFormGroup">
-              <ng-template matStepLabel>Jueves <span style="margin-left: 15px; color: #43c89d;" *ngIf="alumno.disponibilidades.Thursday.todoElDia">Puede todo el día</span></ng-template>
+              <ng-template matStepLabel>Jueves</ng-template>
               <div *ngIf="!alumno.disponibilidades.Thursday.todoElDia">
                 <mat-list>
                   <mat-list-item style="height: 30px;" *ngFor="let tramoHorario of alumno.disponibilidades.Thursday.tramosHorarios; let i = index">
@@ -102,9 +106,10 @@
                 </mat-list>
                 <div style="font-size: 16px; color: #ce1111;" *ngIf="!alumno.disponibilidades.Thursday.tramosHorarios.length">Los Jueves no está disponible</div>
               </div>
+              <div style="font-size: 16px; color: #43c89d;" *ngIf="alumno.disponibilidades.Thursday.todoElDia">Disponible todo el día</div>
             </mat-step>
             <mat-step [stepControl]="fifthFormGroup">
-              <ng-template matStepLabel>Viernes <span style="margin-left: 15px; color: #43c89d;" *ngIf="alumno.disponibilidades.Friday.todoElDia">Puede todo el día</span></ng-template>
+              <ng-template matStepLabel>Viernes</ng-template>
               <div *ngIf="!alumno.disponibilidades.Friday.todoElDia">
                 <mat-list>
                   <mat-list-item style="height: 30px;" *ngFor="let tramoHorario of alumno.disponibilidades.Friday.tramosHorarios; let i = index">
@@ -118,9 +123,10 @@
                 </mat-list>
                 <div style="font-size: 16px; color: #ce1111;" *ngIf="!alumno.disponibilidades.Friday.tramosHorarios.length">Los Viernes no está disponible</div>
               </div>
+              <div style="font-size: 16px; color: #43c89d;" *ngIf="alumno.disponibilidades.Friday.todoElDia">Disponible todo el día</div>
             </mat-step>
             <mat-step [stepControl]="sixthFormGroup">
-              <ng-template matStepLabel>Sábado <span style="margin-left: 15px; color: #43c89d;" *ngIf="alumno.disponibilidades.Saturday.todoElDia">Puede todo el día</span></ng-template>
+              <ng-template matStepLabel>Sábado</ng-template>
               <div *ngIf="!alumno.disponibilidades.Saturday.todoElDia">
                 <mat-list>
                   <mat-list-item style="height: 30px;" *ngFor="let tramoHorario of alumno.disponibilidades.Saturday.tramosHorarios; let i = index">
@@ -134,9 +140,10 @@
                 </mat-list>
                 <div style="font-size: 16px; color: #ce1111;" *ngIf="!alumno.disponibilidades.Saturday.tramosHorarios.length">Los Sábados no está disponible</div>
               </div>
+              <div style="font-size: 16px; color: #43c89d;" *ngIf="alumno.disponibilidades.Saturday.todoElDia">Disponible todo el día</div>
             </mat-step>
             <mat-step [stepControl]="seventhFormGroup">
-              <ng-template matStepLabel>Domingo <span style="margin-left: 15px; color: #43c89d;" *ngIf="alumno.disponibilidades.Sunday.todoElDia">Puede todo el día</span></ng-template>
+              <ng-template matStepLabel>Domingo</ng-template>
               <div *ngIf="!alumno.disponibilidades.Sunday.todoElDia">
                 <mat-list>
                   <mat-list-item style="height: 30px;" *ngFor="let tramoHorario of alumno.disponibilidades.Sunday.tramosHorarios; let i = index">
@@ -150,6 +157,7 @@
                 </mat-list>
                 <div style="font-size: 16px; color: #ce1111;" *ngIf="!alumno.disponibilidades.Sunday.tramosHorarios.length">Los Domingos no está disponible</div>
               </div>
+              <div style="font-size: 16px; color: #43c89d;" *ngIf="alumno.disponibilidades.Sunday.todoElDia">Disponible todo el día</div>
             </mat-step>
           </mat-vertical-stepper>
         </div>
@@ -223,16 +231,18 @@
           <ng-container matColumnDef="accion">
             <th mat-header-cell *matHeaderCellDef> Acción </th>
             <td mat-cell *matCellDef="let element">
-              <div (click)="editarAlumno(element, $event);">
-                <i style="color: blue;" class="material-icons" title="Editar">
-                  keyboard_arrow_up
-                </i>
-              </div>
+              <div>
+                <div style="display: inline-block;" (click)="editarAlumno(element, $event);">
+                  <i style="color: #3f51b5;" class="material-icons" title="Editar">
+                    edit
+                  </i>
+                </div>
     
-              <div (click)="eliminarAlumno(element, $event);">
-                <i style="color: red;" class="material-icons" title="Eliminar">
-                  keyboard_arrow_up
-                </i>
+                <div style="display: inline-block; padding-left: 10px;" (click)="eliminarAlumno(element, $event);">
+                  <i style="color: #d61c1c;" class="material-icons" title="Eliminar">
+                    delete
+                  </i>
+                </div>
               </div>
             </td>
             <td mat-footer-cell *matFooterCellDef></td>
