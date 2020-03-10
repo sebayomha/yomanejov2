@@ -4,7 +4,7 @@
     <div id="matSideNavContainer">
       <div id="bottomSideNav" *ngIf="alumno">
         <div id="headerName">
-          <span style="float: left; position: relative; left: 22px;">#{{alumno.idAlumno}}</span>{{alumno.nombre}}</div>
+          <span style="float: left; position: relative; left: 22px;">#{{alumno.idAlumno}}</span>{{alumno.nombre | capitalize}}</div>
         <div id="alumnoContentDetail" style="margin-top: 10px;">
           <mat-card-subtitle>
             <mat-list>
@@ -32,6 +32,27 @@
                 top: 2px; font-size: 15px;">
                   <span style="padding: 0; display: inline-block;" class="col-12 col-md-4">Fecha de alta:</span> 
                   <span class="col-12 col-md-3">{{alumno.fechaAlta | date}}</span>
+                </mat-card-subtitle>
+              </mat-list-item>
+
+              <mat-list-item style="height: 30px;">
+                <mat-icon mat-list-icon>assessment</mat-icon>
+                <mat-card-subtitle mat-line style="text-align: left; position: relative;
+                top: 2px; font-size: 15px;">
+                  <span style="padding: 0; display: inline-block;" class="col-12 col-md-4">Cronograma:</span> 
+                  <span class="col-12 col-md-3" style="font-weight: 500; color: rgb(67, 200, 157);">{{alumno.idCronograma}}</span>
+                </mat-card-subtitle>
+              </mat-list-item>
+
+              <mat-list-item style="height: 30px;">
+                <mat-icon mat-list-icon>done</mat-icon>
+                <mat-card-subtitle mat-line style="text-align: left; position: relative;
+                top: 2px; font-size: 15px;">
+                  <span style="padding: 0; display: inline-block;" class="col-12 col-md-4">Clases tomadas:</span> 
+                  <span class="col-12 col-md-3">
+                    <span style="color: rgb(67, 200, 157); font-weight: 100;">{{alumno.cantClasesTomadas}}/</span>
+                    <span style="font-weight: 500; color: rgb(67, 200, 157);">{{alumno.cantClasesTotales}}</span>
+                  </span>
                 </mat-card-subtitle>
               </mat-list-item>
             </mat-list>
@@ -233,13 +254,13 @@
             <td mat-cell *matCellDef="let element">
               <div>
                 <div style="display: inline-block;" (click)="editarAlumno(element, $event);">
-                  <i style="color: #3f51b5;" class="material-icons" matTooltip="Editar">
+                  <i style="color: #3f51b5;" class="material-icons icons" matTooltip="Editar">
                     edit
                   </i>
                 </div>
     
                 <div style="display: inline-block; padding-left: 10px;" (click)="eliminarAlumno(element, $event);">
-                  <i style="color: #d61c1c;" class="material-icons" matTooltip="Eliminar">
+                  <i style="color: #d61c1c;" class="material-icons icons" matTooltip="Eliminar">
                     delete
                   </i>
                 </div>
