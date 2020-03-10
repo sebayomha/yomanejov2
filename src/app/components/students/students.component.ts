@@ -84,4 +84,9 @@ export class StudentsComponent implements OnInit {
     console.log("ELIMINAR")
   }
 
+  goToCronograma(idCronograma) {
+    this.router.navigate(['pendientes', idCronograma]);
+    console.log(idCronograma);
+  }
+
 }

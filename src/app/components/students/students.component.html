@@ -40,7 +40,10 @@
                 <mat-card-subtitle mat-line style="text-align: left; position: relative;
                 top: 2px; font-size: 15px;">
                   <span style="padding: 0; display: inline-block;" class="col-12 col-md-4">Cronograma:</span> 
-                  <span class="col-12 col-md-3" style="font-weight: 500; color: rgb(67, 200, 157);">{{alumno.idCronograma}}</span>
+                  <span matTooltip="Ir al cronograma" (click)="goToCronograma(alumno.idCronograma)" class="col-12 col-md-3" style="font-weight: 500; color: rgb(67, 200, 157); cursor: pointer; text-decoration: underline;">{{alumno.idCronograma}}
+                    <span style="margin-left: 5px; font-size: 14px;"><i class="fas fa-link"></i>
+                    </span>
+                  </span>
                 </mat-card-subtitle>
               </mat-list-item>
 
@@ -187,11 +190,11 @@
   </mat-sidenav>
 
   <mat-sidenav-content>
-    <div class="col-12 col-md-10 offset-md-1">
+    <div id="studentsAllContainer" class="col-12 col-md-10 offset-md-1" style="padding: 0px;">
       <mat-tab-group id="studentsTabGroup" style="margin-top: 20px;" mat-stretch-tabs>
       <mat-tab label="Activos">
     
-        <mat-form-field style="width: 100%; margin-top: 20px; padding-left: 15px; padding-right: 15px;">
+        <mat-form-field class="buscarInput" style="width: 100%; margin-top: 20px;">
           <input (keyup)="applyFilter($event, 'AlumnosActivos')" matInput placeholder="Buscar alumno.." name="busquedaAlumno"
               [(ngModel)]="busquedaAlumnoActivo" #busquedaAlumno="ngModel">
         </mat-form-field>

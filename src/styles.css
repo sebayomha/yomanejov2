@@ -6,6 +6,7 @@ body { margin: 0; overflow-x:hidden; font-family: 'Roboto', sans-serif; }
 /* width */
 ::-webkit-scrollbar {
     width: 10px;
+    height: 8px;
 }
   
 /* Track */

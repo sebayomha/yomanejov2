@@ -4,6 +4,7 @@ import { Response } from '../../models/response';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackbarComponent } from '../snackbar/snackbar/snackbar.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-pending-confirmation-schedules',
@@ -12,7 +13,7 @@ import { SnackbarComponent } from '../snackbar/snackbar/snackbar.component';
 })
 export class PendingConfirmationSchedulesComponent implements OnInit {
 
-  constructor(private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private _snackBar: MatSnackBar) { }
+  constructor(private route: ActivatedRoute, private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private _snackBar: MatSnackBar) { }
 
   cronogramas: Array<any> = [];
   cronograma_edit = [];
@@ -26,12 +27,25 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
   @ViewChild('customModal') customModal;
 
   isLoaded = false;
+  idCronograma;
+  sub;
+
   ngOnInit() {
     this.cronogramaService.obtenerCronogramasPendientesDeConfirmar().subscribe( (response: Response) => {
       this.cronogramas = response.data;
       console.log("cronogramas", this.cronogramas);
       this.isLoaded = true;
     })
+
+    this.sub = this.route.params.subscribe(params => {
+      this.idCronograma = +params['idCronograma']; 
+      console.log("idCronograma::", this.idCronograma)
+      //ESTO VA A SER USADO PARA CUANDO SE PUEDAN FILTRAR LOS CRONOGRAMAS CON UN BUSCADOR ARRIBA
+   });
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 
   inicialesNombreAlumno(nombreAlumno: string) {

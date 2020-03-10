@@ -1,7 +1,7 @@
 #studentsTabGroup table {
     margin: 0 auto;
     margin-bottom: 10px;
-    width: 98%;
+    width: 99%;
 }
 
 #studentsTabGroup table tr {
@@ -47,7 +47,6 @@
 #matSideNavContainer {
     height: 100%;
     overflow-y: auto;
-    /*background-color: #43c89d;*/
 }
 
 #bottomSideNav {
@@ -80,4 +79,37 @@
 ::ng-deep #studentsDetailsVS .mat-step-header .mat-step-label, .mat-step-header .mat-step-optional {
     color: rgba(0,0,0,.87);
     font-weight: 500;
+}
+
+.buscarInput {
+    padding-left: 8px; 
+    padding-right: 8px;
+}
+
+@media(max-width: 767px) {
+
+    #studentsAllContainer .mat-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    #studentsTabGroup table {
+        width: 97%;
+    }
+
+    .buscarInput {
+        padding-left: 6px; 
+        padding-right: 6px;
+    }
+
+    .example-container mat-sidenav {
+        width: 70% !important;
+    }
+    
+}
+
+mat-tab-body > div {
+    padding-left: 10px;
+    padding-right: 10px;
 }
