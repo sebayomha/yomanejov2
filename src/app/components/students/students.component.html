@@ -233,13 +233,13 @@
             <td mat-cell *matCellDef="let element">
               <div>
                 <div style="display: inline-block;" (click)="editarAlumno(element, $event);">
-                  <i style="color: #3f51b5;" class="material-icons" title="Editar">
+                  <i style="color: #3f51b5;" class="material-icons" matTooltip="Editar">
                     edit
                   </i>
                 </div>
     
                 <div style="display: inline-block; padding-left: 10px;" (click)="eliminarAlumno(element, $event);">
-                  <i style="color: #d61c1c;" class="material-icons" title="Eliminar">
+                  <i style="color: #d61c1c;" class="material-icons" matTooltip="Eliminar">
                     delete
                   </i>
                 </div>

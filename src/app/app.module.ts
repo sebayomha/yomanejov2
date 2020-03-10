@@ -29,6 +29,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatIconModule} from '@angular/material/icon';
 import {MatStepperModule} from '@angular/material/stepper';
 import {ReactiveFormsModule} from '@angular/forms';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 /* Components */
 import { AppComponent } from './app.component';
@@ -100,6 +101,7 @@ export class MyHammerConfig extends HammerGestureConfig {
     MatCardModule,
     MatInputModule,    
     FormsModule,
+    MatTooltipModule,
     ReactiveFormsModule,
     FormsModule,
     MatSidenavModule,
