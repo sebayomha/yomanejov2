@@ -3,7 +3,8 @@
   <mat-sidenav [mode]="'over'" [autoFocus]="false" style="width: 40%;" #sidenav (keydown.escape)="closedStudentDetail()" disableClose>
     <div id="matSideNavContainer">
       <div id="bottomSideNav" *ngIf="alumno">
-        <div id="headerName">{{alumno.nombre}}</div>
+        <div id="headerName">
+          <span style="float: left; position: relative; left: 22px;">#{{alumno.idAlumno}}</span>{{alumno.nombre}}</div>
         <div id="alumnoContentDetail" style="margin-top: 10px;">
           <mat-card-subtitle>
             <mat-list>
@@ -43,10 +44,9 @@
               <div *ngIf="!alumno.disponibilidades.Monday.todoElDia">
                 <mat-list>
                   <mat-list-item style="height: 30px;" *ngFor="let tramoHorario of alumno.disponibilidades.Monday.tramosHorarios; let i = index">
-                    <mat-icon mat-list-icon>home</mat-icon>
+                    <mat-icon mat-list-icon>directions_car</mat-icon>
                     <mat-card-subtitle mat-line style="text-align: left; position: relative;
                     top: 2px; font-size: 15px;">
-                      <span style="padding: 0;" class="col-12 col-md-3 dot">{{i + 1}}</span>
                       <span style="padding: 0;" class="col-12 col-md-3">De <span style="color:#43c89d !important">{{tramoHorario.horarios[0]}}</span> a <span style="color:#43c89d !important">{{tramoHorario.horarios[tramoHorario.horarios.length - 1]}}</span> en </span> 
                       <span style="padding: 0; font-weight: 500;" class="col-12 col-md-3">{{tramoHorario.direccionUtilizadaFormateada}}</span>
                     </mat-card-subtitle>
@@ -60,10 +60,9 @@
               <div *ngIf="!alumno.disponibilidades.Tuesday.todoElDia">
                 <mat-list>
                   <mat-list-item style="height: 30px;" *ngFor="let tramoHorario of alumno.disponibilidades.Tuesday.tramosHorarios; let i = index">
-                    <mat-icon mat-list-icon>home</mat-icon>
+                    <mat-icon mat-list-icon>directions_car</mat-icon>
                     <mat-card-subtitle mat-line style="text-align: left; position: relative;
                     top: 2px; font-size: 15px;">
-                      <span style="padding: 0;" class="col-12 col-md-3 dot">{{i + 1}}</span>
                       <span style="padding: 0;" class="col-12 col-md-3">De <span style="color:#43c89d !important">{{tramoHorario.horarios[0]}}</span> a <span style="color:#43c89d !important">{{tramoHorario.horarios[tramoHorario.horarios.length - 1]}}</span> en </span> 
                       <span style="padding: 0; font-weight: 500;" class="col-12 col-md-3">{{tramoHorario.direccionUtilizadaFormateada}}</span>
                     </mat-card-subtitle>
@@ -77,10 +76,9 @@
               <div *ngIf="!alumno.disponibilidades.Wednesday.todoElDia">
                 <mat-list>
                   <mat-list-item style="height: 30px;" *ngFor="let tramoHorario of alumno.disponibilidades.Wednesday.tramosHorarios; let i = index">
-                    <mat-icon mat-list-icon>home</mat-icon>
+                    <mat-icon mat-list-icon>directions_car</mat-icon>
                     <mat-card-subtitle mat-line style="text-align: left; position: relative;
                     top: 2px; font-size: 15px;">
-                      <span style="padding: 0;" class="col-12 col-md-3 dot">{{i + 1}}</span>
                       <span style="padding: 0;" class="col-12 col-md-3">De <span style="color:#43c89d !important">{{tramoHorario.horarios[0]}}</span> a <span style="color:#43c89d !important">{{tramoHorario.horarios[tramoHorario.horarios.length - 1]}}</span> en </span> 
                       <span style="padding: 0; font-weight: 500;" class="col-12 col-md-3">{{tramoHorario.direccionUtilizadaFormateada}}</span>
                     </mat-card-subtitle>
@@ -94,10 +92,9 @@
               <div *ngIf="!alumno.disponibilidades.Thursday.todoElDia">
                 <mat-list>
                   <mat-list-item style="height: 30px;" *ngFor="let tramoHorario of alumno.disponibilidades.Thursday.tramosHorarios; let i = index">
-                    <mat-icon mat-list-icon>home</mat-icon>
+                    <mat-icon mat-list-icon>directions_car</mat-icon>
                     <mat-card-subtitle mat-line style="text-align: left; position: relative;
                     top: 2px; font-size: 15px;">
-                      <span style="padding: 0;" class="col-12 col-md-3 dot">{{i + 1}}</span>
                       <span style="padding: 0;" class="col-12 col-md-3">De <span style="color:#43c89d !important">{{tramoHorario.horarios[0]}}</span> a <span style="color:#43c89d !important">{{tramoHorario.horarios[tramoHorario.horarios.length - 1]}}</span> en </span> 
                       <span style="padding: 0; font-weight: 500;" class="col-12 col-md-3">{{tramoHorario.direccionUtilizadaFormateada}}</span>
                     </mat-card-subtitle>
@@ -111,10 +108,9 @@
               <div *ngIf="!alumno.disponibilidades.Friday.todoElDia">
                 <mat-list>
                   <mat-list-item style="height: 30px;" *ngFor="let tramoHorario of alumno.disponibilidades.Friday.tramosHorarios; let i = index">
-                    <mat-icon mat-list-icon>home</mat-icon>
+                    <mat-icon mat-list-icon>directions_car</mat-icon>
                     <mat-card-subtitle mat-line style="text-align: left; position: relative;
                     top: 2px; font-size: 15px;">
-                      <span style="padding: 0;" class="col-12 col-md-3 dot">{{i + 1}}</span>
                       <span style="padding: 0;" class="col-12 col-md-3">De <span style="color:#43c89d !important">{{tramoHorario.horarios[0]}}</span> a <span style="color:#43c89d !important">{{tramoHorario.horarios[tramoHorario.horarios.length - 1]}}</span> en </span> 
                       <span style="padding: 0; font-weight: 500;" class="col-12 col-md-3">{{tramoHorario.direccionUtilizadaFormateada}}</span>
                     </mat-card-subtitle>
@@ -128,10 +124,9 @@
               <div *ngIf="!alumno.disponibilidades.Saturday.todoElDia">
                 <mat-list>
                   <mat-list-item style="height: 30px;" *ngFor="let tramoHorario of alumno.disponibilidades.Saturday.tramosHorarios; let i = index">
-                    <mat-icon mat-list-icon>home</mat-icon>
+                    <mat-icon mat-list-icon>directions_car</mat-icon>
                     <mat-card-subtitle mat-line style="text-align: left; position: relative;
                     top: 2px; font-size: 15px;">
-                      <span style="padding: 0;" class="col-12 col-md-3 dot">{{i + 1}}</span>
                       <span style="padding: 0;" class="col-12 col-md-3">De <span style="color:#43c89d !important">{{tramoHorario.horarios[0]}}</span> a <span style="color:#43c89d !important">{{tramoHorario.horarios[tramoHorario.horarios.length - 1]}}</span> en </span> 
                       <span style="padding: 0; font-weight: 500;" class="col-12 col-md-3">{{tramoHorario.direccionUtilizadaFormateada}}</span>
                     </mat-card-subtitle>
@@ -145,10 +140,9 @@
               <div *ngIf="!alumno.disponibilidades.Sunday.todoElDia">
                 <mat-list>
                   <mat-list-item style="height: 30px;" *ngFor="let tramoHorario of alumno.disponibilidades.Sunday.tramosHorarios; let i = index">
-                    <mat-icon mat-list-icon>home</mat-icon>
+                    <mat-icon mat-list-icon>directions_car</mat-icon>
                     <mat-card-subtitle mat-line style="text-align: left; position: relative;
                     top: 2px; font-size: 15px;">
-                      <span style="padding: 0;" class="col-12 col-md-3 dot">{{i + 1}}</span>
                       <span style="padding: 0;" class="col-12 col-md-3">De <span style="color:#43c89d !important">{{tramoHorario.horarios[0]}}</span> a <span style="color:#43c89d !important">{{tramoHorario.horarios[tramoHorario.horarios.length - 1]}}</span> en </span> 
                       <span style="padding: 0; font-weight: 500;" class="col-12 col-md-3">{{tramoHorario.direccionUtilizadaFormateada}}</span>
                     </mat-card-subtitle>
