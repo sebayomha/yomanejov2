@@ -85,25 +85,27 @@ export class DireccionFisicaComponent implements OnInit {
 
   setDireccionFisicaDefault() {
     setTimeout( () => {
-      if (this.data.id_DirFisica == this.data.id_DirPrincipal) { //la direccion fisica es la principal
-        this.data.addressesAlumno[0].selected = true;
-        this.idDireccionSeleccionada = this.data.id_DirPrincipal;
-      } else {
-        if (this.data.id_DirFisica == this.data.id_DirAlternativa) { //la direccion fisica es la alternativa
-          this.data.addressesAlumno[1].selected = true;
-          this.idDireccionSeleccionada = this.data.id_DirAlternativa;
-        } else { //la direccion fisica es una distinta
-          this.nuevaDireccion = true;
-          this.direccion.street = this.data.calle_DirFisica;
-          this.direccion.diag = (this.data.calle_diag_DirFisica == 'true');
-          this.direccion.street_a = this.data.calle_a_DirFisica;
-          this.direccion.diag_a = (this.data.calle_a_diag_DirFisica == 'true');
-          this.direccion.street_b = this.data.calle_b_DirFisica;
-          this.direccion.diag_b = (this.data.calle_b_diag_DirFisica == 'true');
-          this.direccion.city = this.data.ciudad_DirFisica;
-          this.direccion.altitud = this.data.numero_DirFisica;
-          this.direccion.floor = this.data.floor_DirFisica;
-          this.direccion.observations = this.data.observaciones_DirFisica;
+      if (this.data.id_DirFisica != null) { //Posee direccion fisica
+        if (this.data.id_DirFisica == this.data.id_DirPrincipal) { //la direccion fisica es la principal
+          this.data.addressesAlumno[0].selected = true;
+          this.idDireccionSeleccionada = this.data.id_DirPrincipal;
+        } else {
+          if (this.data.id_DirFisica == this.data.id_DirAlternativa) { //la direccion fisica es la alternativa
+            this.data.addressesAlumno[1].selected = true;
+            this.idDireccionSeleccionada = this.data.id_DirAlternativa;
+          } else { //la direccion fisica es una distinta
+            this.nuevaDireccion = true;
+            this.direccion.street = this.data.calle_DirFisica;
+            this.direccion.diag = (this.data.calle_diag_DirFisica == 'true');
+            this.direccion.street_a = this.data.calle_a_DirFisica;
+            this.direccion.diag_a = (this.data.calle_a_diag_DirFisica == 'true');
+            this.direccion.street_b = this.data.calle_b_DirFisica;
+            this.direccion.diag_b = (this.data.calle_b_diag_DirFisica == 'true');
+            this.direccion.city = this.data.ciudad_DirFisica;
+            this.direccion.altitud = this.data.numero_DirFisica;
+            this.direccion.floor = this.data.floor_DirFisica;
+            this.direccion.observations = this.data.observaciones_DirFisica;
+          }
         }
       }
     },0)

@@ -530,7 +530,7 @@
                         ];
 
                         if ($row['horarios'] != null) { //tiene horarios
-                            $horario->tramoHorario = explode(",",$row['horarios']);
+                            $horario->tramoHorario = explode(",", str_replace(", ", ",", $row['horarios']));
                             $horario->usandoDirAlt = filter_var($row['dir_alt'], FILTER_VALIDATE_BOOLEAN);
                             array_push($excepcion->horarios, $horario);
                         }
@@ -566,7 +566,7 @@
                                     
                                     $horarioFound = false;
                                     foreach ($excepcionGuardada->horarios as $horario) {
-                                        if ($horario->tramoHorario == explode(",", $row['horarios'])) {
+                                        if ($horario->tramoHorario == explode(",", str_replace(", ", ",", $row['horarios']))) {
                                             $horarioFound = true;
                                             break;
                                         }
@@ -578,7 +578,7 @@
                                             'usandoDirAlt' => false
                                         ];
 
-                                        $horario->tramoHorario = explode(",",$row['horarios']);
+                                        $horario->tramoHorario = explode(",",str_replace(", ", ",", $row['horarios']));
                                         $horario->usandoDirAlt = filter_var($row['dir_alt'], FILTER_VALIDATE_BOOLEAN);
                                         array_push($excepcionGuardada->horarios, $horario);
                                         usort($excepcionGuardada->horarios, array($this, 'excepciones_tramos_compare'));

@@ -57,7 +57,7 @@
             <div class="col-sm-12 col-md-4">
               <mat-form-field style="width: 100%;">
                 <input (keypress)="preventLetters($event)" autofocus minlength="10" maxlength="10" matInput placeholder="Documento" #documentoName="ngModel" name="documentoName"
-                (ngModelChange)="documento = $event" [ngModel]="documento | document" #documentoName="ngModel" (keypress)="preventLetters($event)" required>
+                (ngModelChange)="documento = $event" [ngModel]="documento | documentEdit" #documentoName="ngModel" (keypress)="preventLetters($event)" required>
               
                 <mat-error *ngIf="documentoName.errors?.required && documentoName.touched"
                 style="color: #f44336; font-size: 12px;">

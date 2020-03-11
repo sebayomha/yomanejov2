@@ -58,16 +58,17 @@
             alumno.nombre, alumno.telefono, alumno.idAlumno, alumno.fecha_nacimiento, alumno.fechaAlta, alumno.activo,
             alumno.documento,
             alumno.idDisponibilidad,
+            alumno.confirmado,
             cronograma.idCronograma,
             idAlumnoCronograma, cantClasesTomadas, cantClasesTotales,
             disponibilidad.Monday, disponibilidad.Tuesday, disponibilidad.Wednesday, disponibilidad.Thursday, disponibilidad.Friday, disponibilidad.Saturday, disponibilidad.Sunday
             FROM alumno 
-            INNER JOIN direccion AS d3 ON d3.idDireccion = alumno.idDireccionFisica
+            LEFT JOIN direccion AS d3 ON d3.idDireccion = alumno.idDireccionFisica
             INNER JOIN direccion AS d1 ON d1.idDireccion = alumno.idDireccion
             LEFT JOIN direccion AS d2 ON d2.idDireccion = alumno.idDireccionAlt
             INNER JOIN disponibilidad ON disponibilidad.idDisponibilidad = alumno.idDisponibilidad
             INNER JOIN cronograma ON cronograma.idAlumno = alumno.idAlumno
-            INNER JOIN alumnocronogramaclasestomadas ON alumnocronogramaclasestomadas.idAlumno = alumno.idAlumno AND alumnocronogramaclasestomadas.idCronograma = cronograma.idCronograma
+            LEFT JOIN alumnocronogramaclasestomadas ON alumnocronogramaclasestomadas.idAlumno = alumno.idAlumno AND alumnocronogramaclasestomadas.idCronograma = cronograma.idCronograma
             ORDER BY alumno.idAlumno DESC');
             $state->execute();
             $result = $state->get_result();

@@ -13,6 +13,9 @@
           <span *ngIf="component == 'editarAlumno'">
             Confirmar edición
           </span>
+          <span *ngIf="component == 'eliminarAlumno'">
+            Dar de baja alumno
+          </span>
         </h5>
         <h5 class="modal-title" *ngIf="successBanner" style="margin: auto; font-size: 90px; color: white;"><i class="fas fa-check-circle"></i></h5>
         <button *ngIf="!successBanner" type="button" class="close closeCross" (click)="onClose();" aria-label="Close">
@@ -77,7 +80,7 @@
           <div>
             <mat-form-field class="col-12 col-md-4" style="padding: 0px; margin-top: 10px; display: block;" *ngIf="operation == 'Confirmar'">
               <input autofocus minlength="10" maxlength="10" matInput placeholder="Documento" name="documento"
-              (ngModelChange)="data.documento = $event" [ngModel]="data.documento | document" #documento="ngModel" (keypress)="preventLetters($event)">
+              (ngModelChange)="data.documento = $event" [ngModel]="data.documento | documentEdit" #documento="ngModel" (keypress)="preventLetters($event)">
             
               <mat-error *ngIf="documento.errors?.required && documento.touched"
               style="color: #f44336; font-size: 12px;">
@@ -98,8 +101,44 @@
           <span>¿Está seguro que desea editar al alumno <span style="font-weight: 500; color: #43c89d;">{{data.idAlumno}}</span>?</span>
         </div>
       </div>
+      <div class="modal-body" style="height: 280px;" *ngIf="component == 'eliminarAlumno' && data && !successBanner">
+        <div>
+          <span>¿Está seguro que desea dar de baja al alumno 
+            <span style="font-weight: 500; color: #43c89d;">#{{data.idAlumno}} {{data.nombre | capitalize}}</span>?
+          </span>
+          <div class="alert alert-info" role="alert" style="margin-top: 15px;">
+            <span style="font-weight: 500; font-size: 20px;"> 
+              <i class="material-icons" style="position: relative; bottom: -6px; left: -3px;">
+              info
+              </i> 
+              <span style="position: relative; left: -3px;">
+                Importante:
+              </span>
+            </span> 
+            <span>Si da de baja al alumno, el cronograma&nbsp;</span> 
+            <span style="font-weight: 500;">{{data.idCronograma}}</span> 
+            <span>&nbsp;será cancelado, cancelando todas las clases del alumno.</span>
+          </div>
+        </div>
+        <div class="row" style="margin-top: 10px;">
+          <div class="col-12">
+            <form #eliminarAlumnoForm="ngForm">
+              <mat-form-field style="width: 100%; margin-top: 20px;">
+                <mat-label>Motivo</mat-label>
+                <textarea autofocus cdkTextareaAutosize
+                cdkAutosizeMinRows="1"
+                cdkAutosizeMaxRows="5" matInput #motivoBaja="ngModel" required name="motivoDeBaja" [(ngModel)]="motivoDeBaja"></textarea>
+              </mat-form-field>
+
+              <mat-error *ngIf="motivoBaja.errors?.required && motivoBaja.touched"
+              style="color: #f44336; font-size: 12px; position: relative; bottom: 10px;">
+                Debe ingresar un motivo para continuar
+              </mat-error>
+            </form>
+          </div>
+      </div>
+      </div>
       <div class="modal-footer" style="padding: 25px;">
-        <!-- <button type="button" class="btn btn-secondary" (click)="onClose();">Close</button> -->
         <button [disabled]="checkDisabledConditions()" *ngIf="!successBanner" type="button" class="btn btn-primary confirmCustomModal" [ngClass]="classConfirmBtn()" (click)="onConfirm();">
           <span *ngIf="component == 'pendingConfirmationSchedules'">
             {{ (operation == 'Confirmar') ? 'Confirmar cronograma': 'Eliminar cronograma'}}
@@ -107,7 +146,7 @@
           <span *ngIf="component == 'availableSchedules'">
             Confirmar cronograma
           </span>
-          <span *ngIf="component == 'editarAlumno'">Confirmar</span>
+          <span *ngIf="component == 'editarAlumno' || component == 'eliminarAlumno'">Confirmar</span>
         </button>
         <button *ngIf="successBanner" type="button" class="btn btn-primary" (click)="sendWsp();" style="margin: auto; border-radius: 20px; background-color: #43c89d; border-color: #43c89d;">Enviar Whatsapp <i class="fab fa-whatsapp"></i></button>
       </div>
