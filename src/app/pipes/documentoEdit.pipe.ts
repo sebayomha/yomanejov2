@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({name: 'document'})
-export class DocumentoPipe implements PipeTransform {
+@Pipe({name: 'documentEdit'})
+export class DocumentoEditPipe implements PipeTransform {
   transform(value): string {
     if (value) {
       
@@ -30,6 +30,6 @@ export class DocumentoPipe implements PipeTransform {
         }
       }
     }
-    return 'No posee';
+    return '';
   }
 }

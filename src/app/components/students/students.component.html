@@ -4,7 +4,16 @@
     <div id="matSideNavContainer">
       <div id="bottomSideNav" *ngIf="alumno">
         <div id="headerName">
-          <span style="float: left; position: relative; left: 22px;">#{{alumno.idAlumno}}</span>{{alumno.nombre | capitalize}}</div>
+          <span style="float: left; position: relative; left: 22px;">#{{alumno.idAlumno}}</span>{{alumno.nombre | capitalize}}
+        </div>
+        <div id="warningMessage" *ngIf="alumno.confirmado == 'false'">
+          <div class="alert alert-warning" role="alert" style="padding: 6px !important;">
+            <i class="fas fa-exclamation-circle" style="margin-right: 12px; font-size: 20px;"></i>
+            <span style="position: relative; bottom: 1px;">
+              El alumno aún no ha confirmado 
+            </span>
+          </div>
+        </div>
         <div id="alumnoContentDetail" style="margin-top: 10px;">
           <mat-card-subtitle>
             <mat-list>
@@ -47,7 +56,7 @@
                 </mat-card-subtitle>
               </mat-list-item>
 
-              <mat-list-item style="height: 30px;">
+              <mat-list-item style="height: 30px;" *ngIf="alumno.cantClasesTotales">
                 <mat-icon mat-list-icon>done</mat-icon>
                 <mat-card-subtitle mat-line style="text-align: left; position: relative;
                 top: 2px; font-size: 15px;">
@@ -192,175 +201,262 @@
   <mat-sidenav-content>
     <div id="studentsAllContainer" class="col-12 col-md-10 offset-md-1" style="padding: 0px;">
       <mat-tab-group id="studentsTabGroup" style="margin-top: 20px;" mat-stretch-tabs>
-      <mat-tab label="Activos">
+      
+      <mat-tab label="({{alumnosActivosLength}}) Activos">
     
         <mat-form-field class="buscarInput" style="width: 100%; margin-top: 20px;">
           <input (keyup)="applyFilter($event, 'AlumnosActivos')" matInput placeholder="Buscar alumno.." name="busquedaAlumno"
               [(ngModel)]="busquedaAlumnoActivo" #busquedaAlumno="ngModel">
         </mat-form-field>
     
-        <table mat-table id="alumnosActivosTable" [dataSource]="alumnosActivos" class="mat-elevation-z8">
-                
-          <!-- Position Column -->
-          <ng-container matColumnDef="No">
-            <th mat-header-cell *matHeaderCellDef> Id </th>
-            <td mat-cell *matCellDef="let element"> {{element.idAlumno}} </td>
-            <td mat-footer-cell *matFooterCellDef>               
-              <div style="text-align: center; width: 100%;">
-                <div style="cursor: pointer; margin-top: 10px;" (click)="showMore(auto, 'clasesPorRealizarse')" *ngIf="alumnosActivos.length == 4 && alumnosActivos.length > 4">
-                  <i style="color: rgb(67, 200, 157);" class="material-icons">
-                    keyboard_arrow_down
-                    </i>
-                  <button class="showMoreBtn">VER MÁS</button>
+        <div class="tablesContainer">
+          <table mat-table id="alumnosActivosTable" [dataSource]="alumnosActivos" class="mat-elevation-z8">
+                  
+            <!-- Position Column -->
+            <ng-container matColumnDef="No">
+              <th mat-header-cell *matHeaderCellDef> Id </th>
+              <td mat-cell *matCellDef="let element"> {{element.idAlumno}} </td>
+              <td mat-footer-cell *matFooterCellDef>               
+                <div style="text-align: center; width: 100%;">
+                  <div style="cursor: pointer; margin-top: 10px;" (click)="showMore(auto, 'clasesPorRealizarse')" *ngIf="alumnosActivos.length == 4 && alumnosActivos.length > 4">
+                    <i style="color: rgb(67, 200, 157);" class="material-icons">
+                      keyboard_arrow_down
+                      </i>
+                    <button class="showMoreBtn">VER MÁS</button>
+                  </div>
+                  <div style="cursor: pointer; margin-top: 10px;" (click)="showLess(auto, 'clasesPorRealizarse')" *ngIf="alumnosActivos.length > 4">
+                    <i style="color: rgb(67, 200, 157);" class="material-icons">
+                      keyboard_arrow_up
+                      </i>
+                    <button class="showMoreBtn">VER MENOS</button>
+                  </div>
                 </div>
-                <div style="cursor: pointer; margin-top: 10px;" (click)="showLess(auto, 'clasesPorRealizarse')" *ngIf="alumnosActivos.length > 4">
-                  <i style="color: rgb(67, 200, 157);" class="material-icons">
-                    keyboard_arrow_up
+              </td>
+            </ng-container>
+      
+            <!-- Name Column -->
+            <ng-container matColumnDef="nombre">
+              <th mat-header-cell *matHeaderCellDef> Nombre </th>
+              <td mat-cell *matCellDef="let element"> {{element.nombre | capitalize}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+      
+            <!-- Weight Column -->
+            <ng-container matColumnDef="direccion">
+              <th mat-header-cell *matHeaderCellDef> Dirección del alumno </th>
+              <td mat-cell *matCellDef="let element"> {{ (element.id_DirFisica) ? element.dirFisicaFormateada: 'No posee'}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+      
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="telefono">
+              <th mat-header-cell *matHeaderCellDef> Teléfono </th>
+              <td mat-cell *matCellDef="let element"> {{element.telefono | phone}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+      
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="documento">
+              <th mat-header-cell *matHeaderCellDef> Documento </th>
+              <td mat-cell *matCellDef="let element"> {{element.documento | document}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+      
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="accion">
+              <th mat-header-cell *matHeaderCellDef> Acción </th>
+              <td mat-cell *matCellDef="let element">
+                <div>
+                  <div style="display: inline-block;" (click)="editarAlumno(element, $event);">
+                    <i style="color: #3f51b5;" class="material-icons icons" matTooltip="Editar">
+                      edit
                     </i>
-                  <button class="showMoreBtn">VER MENOS</button>
+                  </div>
+      
+                  <div style="display: inline-block; padding-left: 10px;" (click)="eliminarAlumno(element, $event);">
+                    <i style="color: #d61c1c;" class="material-icons icons" matTooltip="Eliminar">
+                      delete
+                    </i>
+                  </div>
                 </div>
-              </div>
-            </td>
-          </ng-container>
+              </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+      
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="openDetail(row)"></tr>
+            <ng-container *ngIf="alumnosActivos && alumnosActivos.length > 4">
+              <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+            </ng-container>
+          </table>
+        </div>
+      <div class="emptyMessageTable" *ngIf="alumnosActivos && alumnosActivos.length === 0">No se encontraron alumnos</div>
+      </mat-tab>
     
-          <!-- Name Column -->
-          <ng-container matColumnDef="nombre">
-            <th mat-header-cell *matHeaderCellDef> Nombre </th>
-            <td mat-cell *matCellDef="let element"> {{element.nombre | capitalize}} </td>
-            <td mat-footer-cell *matFooterCellDef></td>
-          </ng-container>
-    
-          <!-- Weight Column -->
-          <ng-container matColumnDef="direccion">
-            <th mat-header-cell *matHeaderCellDef> Dirección del alumno </th>
-            <td mat-cell *matCellDef="let element"> {{element.dirFisicaFormateada}} </td>
-            <td mat-footer-cell *matFooterCellDef></td>
-          </ng-container>
-    
-          <!-- Symbol Column -->
-          <ng-container matColumnDef="telefono">
-            <th mat-header-cell *matHeaderCellDef> Teléfono </th>
-            <td mat-cell *matCellDef="let element"> {{element.telefono | phone}} </td>
-            <td mat-footer-cell *matFooterCellDef></td>
-          </ng-container>
-    
-          <!-- Symbol Column -->
-          <ng-container matColumnDef="documento">
-            <th mat-header-cell *matHeaderCellDef> Documento </th>
-            <td mat-cell *matCellDef="let element"> {{element.documento | document}} </td>
-            <td mat-footer-cell *matFooterCellDef></td>
-          </ng-container>
-    
-          <!-- Symbol Column -->
-          <ng-container matColumnDef="accion">
-            <th mat-header-cell *matHeaderCellDef> Acción </th>
-            <td mat-cell *matCellDef="let element">
-              <div>
-                <div style="display: inline-block;" (click)="editarAlumno(element, $event);">
-                  <i style="color: #3f51b5;" class="material-icons icons" matTooltip="Editar">
+      <mat-tab label="({{alumnosPendientesLength}}) Pendientes">
+        <mat-form-field style="width: 100%; margin-top: 20px; padding-left: 15px;
+        padding-right: 15px;">
+          <input (keyup)="applyFilter($event, 'AlumnosPendientes')" matInput placeholder="Buscar alumno.." name="busquedaAlumno"
+              [(ngModel)]="busquedaAlumnoInctivos" #busquedaAlumno="ngModel">
+        </mat-form-field>
+        <div class="tablesContainer">
+          <table mat-table id="alumnosPendientesTable" [dataSource]="alumnosPendientes" class="mat-elevation-z8">     
+            <!-- Position Column -->
+            <ng-container matColumnDef="No">
+              <th mat-header-cell *matHeaderCellDef> Id </th>
+              <td mat-cell *matCellDef="let element"> {{element.idAlumno}} </td>
+              <td mat-footer-cell *matFooterCellDef>               
+                <div style="text-align: center; width: 100%;">
+                  <div style="cursor: pointer; margin-top: 10px;" (click)="showMore(auto, 'clasesPorRealizarse')" *ngIf="alumnosPendientes.length == 4 && alumnosPendientes.length > 4">
+                    <i style="color: rgb(67, 200, 157);" class="material-icons">
+                      keyboard_arrow_down
+                      </i>
+                    <button class="showMoreBtn">VER MÁS</button>
+                  </div>
+                  <div style="cursor: pointer; margin-top: 10px;" (click)="showLess(auto, 'clasesPorRealizarse')" *ngIf="alumnosPendientes.length > 4">
+                    <i style="color: rgb(67, 200, 157);" class="material-icons">
+                      keyboard_arrow_up
+                      </i>
+                    <button class="showMoreBtn">VER MENOS</button>
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+            
+            <!-- Name Column -->
+            <ng-container matColumnDef="nombre">
+              <th mat-header-cell *matHeaderCellDef> Nombre </th>
+              <td mat-cell *matCellDef="let element"> {{element.nombre | capitalize}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+          
+            <!-- Weight Column -->
+            <ng-container matColumnDef="direccion">
+              <th mat-header-cell *matHeaderCellDef> Dirección del alumno </th>
+              <td mat-cell *matCellDef="let element"> {{ (element.id_DirFisica) ? element.dirFisicaFormateada:'No posee'}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+          
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="telefono">
+              <th mat-header-cell *matHeaderCellDef> Teléfono </th>
+              <td mat-cell *matCellDef="let element"> {{element.telefono | phone}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+        
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="documento">
+              <th mat-header-cell *matHeaderCellDef> Documento </th>
+              <td mat-cell *matCellDef="let element"> {{ element.documento | document}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+          
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="accion">
+              <th mat-header-cell *matHeaderCellDef [style.display]="'none'"> Acción </th>
+              <td mat-cell *matCellDef="let element" [style.display]="'none'">    
+                <div (click)="editarAlumno(element, $event);">
+                  <i style="color: blue;" class="material-icons" title="Editar">
                     edit
                   </i>
-                </div>
-    
-                <div style="display: inline-block; padding-left: 10px;" (click)="eliminarAlumno(element, $event);">
-                  <i style="color: #d61c1c;" class="material-icons icons" matTooltip="Eliminar">
-                    delete
-                  </i>
-                </div>
-              </div>
-            </td>
-            <td mat-footer-cell *matFooterCellDef></td>
-          </ng-container>
-    
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="openDetail(row)"></tr>
-          <ng-container *ngIf="alumnosActivos && alumnosActivos.length > 4">
-            <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
-          </ng-container>
-        </table>
-      <div class="emptyMessageTable" *ngIf="alumnosActivos && alumnosActivos.length === 0">No se encontraron alumnos</div>
-    </mat-tab>
-    
-    <mat-tab label="Inactivos">
-    
-      <mat-form-field style="width: 100%; margin-top: 20px; padding-left: 15px;
-      padding-right: 15px;">
-        <input (keyup)="applyFilter($event, 'AlumnosInactivos')" matInput placeholder="Buscar alumno.." name="busquedaAlumno"
-            [(ngModel)]="busquedaAlumnoInctivos" #busquedaAlumno="ngModel">
-      </mat-form-field>
-    
-      <table mat-table id="alumnosInactivosTable" [dataSource]="alumnosInactivos" class="mat-elevation-z8">     
-        <!-- Position Column -->
-        <ng-container matColumnDef="No">
-          <th mat-header-cell *matHeaderCellDef> Id </th>
-          <td mat-cell *matCellDef="let element"> {{element.idAlumno}} </td>
-          <td mat-footer-cell *matFooterCellDef>               
-            <div style="text-align: center; width: 100%;">
-              <div style="cursor: pointer; margin-top: 10px;" (click)="showMore(auto, 'clasesPorRealizarse')" *ngIf="alumnosInactivos.length == 4 && alumnosInactivos.length > 4">
-                <i style="color: rgb(67, 200, 157);" class="material-icons">
-                  keyboard_arrow_down
-                  </i>
-                <button class="showMoreBtn">VER MÁS</button>
-              </div>
-              <div style="cursor: pointer; margin-top: 10px;" (click)="showLess(auto, 'clasesPorRealizarse')" *ngIf="alumnosInactivos.length > 4">
-                <i style="color: rgb(67, 200, 157);" class="material-icons">
-                  keyboard_arrow_up
-                  </i>
-                <button class="showMoreBtn">VER MENOS</button>
-              </div>
-            </div>
-          </td>
-        </ng-container>
+                </div> 
+              </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
         
-        <!-- Name Column -->
-        <ng-container matColumnDef="nombre">
-          <th mat-header-cell *matHeaderCellDef> Nombre </th>
-          <td mat-cell *matCellDef="let element"> {{element.nombre | capitalize}} </td>
-          <td mat-footer-cell *matFooterCellDef></td>
-        </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="openDetail(row)"></tr>
+            <ng-container *ngIf="alumnosPendientes && alumnosPendientes.length > 4">
+              <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+            </ng-container>
+          </table>
+        </div>
+        <div class="emptyMessageTable" *ngIf="alumnosPendientes && alumnosPendientes.length === 0">No se encontraron alumnos</div>
+      </mat-tab>
+
+      <mat-tab label="({{alumnosInactivosLength}}) Históricos">
       
-        <!-- Weight Column -->
-        <ng-container matColumnDef="direccion">
-          <th mat-header-cell *matHeaderCellDef> Dirección del alumno </th>
-          <td mat-cell *matCellDef="let element"> {{element.dirFisicaFormateada}} </td>
-          <td mat-footer-cell *matFooterCellDef></td>
-        </ng-container>
+        <mat-form-field style="width: 100%; margin-top: 20px; padding-left: 15px;
+        padding-right: 15px;">
+          <input (keyup)="applyFilter($event, 'AlumnosInactivos')" matInput placeholder="Buscar alumno.." name="busquedaAlumno"
+              [(ngModel)]="busquedaAlumnoInctivos" #busquedaAlumno="ngModel">
+        </mat-form-field>
       
-        <!-- Symbol Column -->
-        <ng-container matColumnDef="telefono">
-          <th mat-header-cell *matHeaderCellDef> Teléfono </th>
-          <td mat-cell *matCellDef="let element"> {{element.telefono | phone}} </td>
-          <td mat-footer-cell *matFooterCellDef></td>
-        </ng-container>
-    
-        <!-- Symbol Column -->
-        <ng-container matColumnDef="documento">
-          <th mat-header-cell *matHeaderCellDef> Documento </th>
-          <td mat-cell *matCellDef="let element"> {{element.documento | document}} </td>
-          <td mat-footer-cell *matFooterCellDef></td>
-        </ng-container>
-      
-        <!-- Symbol Column -->
-        <ng-container matColumnDef="accion">
-          <th mat-header-cell *matHeaderCellDef> Acción </th>
-          <td mat-cell *matCellDef="let element">    
-            <div (click)="editarAlumno(element, $event);">
-              <i style="color: blue;" class="material-icons" title="Editar">
-                keyboard_arrow_up
-              </i>
-            </div> 
-          </td>
-          <td mat-footer-cell *matFooterCellDef></td>
-        </ng-container>
-    
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        <ng-container *ngIf="alumnosInactivos && alumnosInactivos.length > 4">
-          <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
-        </ng-container>
-      </table>
-      <div class="emptyMessageTable" *ngIf="alumnosInactivos && alumnosInactivos.length === 0">No se encontraron alumnos</div>
-    </mat-tab>
+        <div class="tablesContainer">
+          <table mat-table id="alumnosInactivosTable" [dataSource]="alumnosInactivos" class="mat-elevation-z8">     
+            <!-- Position Column -->
+            <ng-container matColumnDef="No">
+              <th mat-header-cell *matHeaderCellDef> Id </th>
+              <td mat-cell *matCellDef="let element"> {{element.idAlumno}} </td>
+              <td mat-footer-cell *matFooterCellDef>               
+                <div style="text-align: center; width: 100%;">
+                  <div style="cursor: pointer; margin-top: 10px;" (click)="showMore(auto, 'clasesPorRealizarse')" *ngIf="alumnosInactivos.length == 4 && alumnosInactivos.length > 4">
+                    <i style="color: rgb(67, 200, 157);" class="material-icons">
+                      keyboard_arrow_down
+                      </i>
+                    <button class="showMoreBtn">VER MÁS</button>
+                  </div>
+                  <div style="cursor: pointer; margin-top: 10px;" (click)="showLess(auto, 'clasesPorRealizarse')" *ngIf="alumnosInactivos.length > 4">
+                    <i style="color: rgb(67, 200, 157);" class="material-icons">
+                      keyboard_arrow_up
+                      </i>
+                    <button class="showMoreBtn">VER MENOS</button>
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+            
+            <!-- Name Column -->
+            <ng-container matColumnDef="nombre">
+              <th mat-header-cell *matHeaderCellDef> Nombre </th>
+              <td mat-cell *matCellDef="let element"> {{element.nombre | capitalize}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+          
+            <!-- Weight Column -->
+            <ng-container matColumnDef="direccion">
+              <th mat-header-cell *matHeaderCellDef> Dirección del alumno </th>
+              <td mat-cell *matCellDef="let element"> {{element.dirFisicaFormateada}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+          
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="telefono">
+              <th mat-header-cell *matHeaderCellDef> Teléfono </th>
+              <td mat-cell *matCellDef="let element"> {{element.telefono | phone}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+        
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="documento">
+              <th mat-header-cell *matHeaderCellDef> Documento </th>
+              <td mat-cell *matCellDef="let element"> {{element.documento | document}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+          
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="accion">
+              <th mat-header-cell *matHeaderCellDef> Acción </th>
+              <td mat-cell *matCellDef="let element">    
+                <div (click)="editarAlumno(element, $event);">
+                  <i style="color: blue;" class="material-icons" title="Editar">
+                    keyboard_arrow_up
+                  </i>
+                </div> 
+              </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+        
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <ng-container *ngIf="alumnosInactivos && alumnosInactivos.length > 4">
+              <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+            </ng-container>
+          </table>
+        </div>
+        <div class="emptyMessageTable" *ngIf="alumnosInactivos && alumnosInactivos.length === 0">No se encontraron alumnos</div>
+      </mat-tab>
+
     </mat-tab-group>
     </div>
   </mat-sidenav-content>

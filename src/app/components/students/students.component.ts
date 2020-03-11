@@ -15,11 +15,16 @@ export class StudentsComponent implements OnInit {
 
   alumnosActivos;
   alumnosInactivos;
+  alumnosPendientes;
   displayedColumns: string[] = ['No', 'nombre', 'direccion', 'telefono', 'documento', 'accion'];
   busquedaAlumnoActivo: string = '';
   busquedaAlumnoInctivos: string = '';
 
   alumno;
+
+  alumnosActivosLength: number;
+  alumnosInactivosLength: number;
+  alumnosPendientesLength: number;
 
   @ViewChild('studentDetail') studentDetail;
   @ViewChild('sidenav') sidenav: MatSidenav;
@@ -29,16 +34,37 @@ export class StudentsComponent implements OnInit {
   ngOnInit() {
     this.sharedService.destroyData();
     this.alumnoService.obtenerAlumnos().subscribe( (response: Response) => {
+      console.log(response.data)
       this.alumnosActivos = new MatTableDataSource(this.obtenerAlumnosActivos(response.data));
       this.alumnosInactivos = new MatTableDataSource(this.obtenerAlumnosInactivos(response.data));
+      this.alumnosPendientes = new MatTableDataSource(this.obtenerAlumnosPendientes(response.data));
+      this.alumnosInactivosLength = this.alumnosInactivos.data.length;
+      this.alumnosActivosLength = this.alumnosActivos.data.length;
+      this.alumnosPendientesLength = this.alumnosPendientes.data.length;
+      console.log(this.alumnosPendientesLength)
       console.log(this.alumnosActivos)
       console.log(this.alumnosInactivos)
     })
   }
 
+  ngAfterViewChecked() {
+    console.log(this.alumnosActivos);
+    //this.alumnosActivosLength = this.alumnosActivos.length;
+    
+  }
+
   obtenerAlumnosActivos(alumnos: Array<any>) {
     return alumnos.filter( alumno => {
-      if (alumno.activo == 'true') {
+      if (alumno.activo == 'true' && alumno.confirmado == 'true') {
+        return true;
+      }
+      return false;
+    })
+  }
+
+  obtenerAlumnosPendientes(alumnos: Array<any>) {
+    return alumnos.filter( alumno => {
+      if (alumno.confirmado == 'false') {
         return true;
       }
       return false;
@@ -47,7 +73,7 @@ export class StudentsComponent implements OnInit {
 
   obtenerAlumnosInactivos(alumnos: Array<any>) {
     return alumnos.filter( alumno => {
-      if (alumno.activo == 'false') {
+      if (alumno.activo == 'false' && alumno.confirmado == 'true') {
         return true;
       }
       return false;
@@ -59,7 +85,10 @@ export class StudentsComponent implements OnInit {
     if (operation == 'AlumnosActivos')
     this.alumnosActivos.filter = filterValue.trim().toLowerCase();
     else
+    if (operation == 'AlumnosInactivos')
     this.alumnosInactivos.filter = filterValue.trim().toLowerCase();
+    else
+    this.alumnosPendientes.filter = filterValue.trim().toLowerCase();
   }
 
   openDetail(alumno) {

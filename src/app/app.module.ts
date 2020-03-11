@@ -55,6 +55,7 @@ import { RequestInterceptorService } from './services/interceptor/request-interc
 import { PhonePipe } from './pipes/address.model';
 import { CapitalizePipe } from './pipes/capitalize.pipe';
 import { DocumentoPipe } from './pipes/documento.pipe';
+import { DocumentoEditPipe } from './pipes/documentoEdit.pipe';
 
 registerLocaleData(localeEsAr);
 
@@ -87,6 +88,7 @@ export class MyHammerConfig extends HammerGestureConfig {
     PhonePipe,
     CapitalizePipe,
     DocumentoPipe,
+    DocumentoEditPipe,
     NavbarComponent,
     DireccionFisicaComponent,
     StudentsComponent,
