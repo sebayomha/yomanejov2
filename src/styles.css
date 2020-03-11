@@ -25,3 +25,7 @@ body { margin: 0; overflow-x:hidden; font-family: 'Roboto', sans-serif; }
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
+
+.mat-ink-bar {
+    background-color:#43c89d !important;  
+}
