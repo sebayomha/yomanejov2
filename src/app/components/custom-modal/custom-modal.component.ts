@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, ViewChild, ChangeDetectorRef, ViewChildren } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { DireccionFisicaComponent } from '../direccion-fisica/direccion-fisica.component';
+import { NgForm } from '@angular/forms';
 declare var $:any;
 
 @Component({
@@ -21,9 +22,13 @@ export class CustomModalComponent {
 
   @ViewChild('direccionFisica') direccionFisica: DireccionFisicaComponent;
   @ViewChildren('input') vc;
+  @ViewChild('eliminarAlumnoForm') eliminarAlumnoForm: NgForm;
+
   schedule : any;
 
   buttonDisabled;
+  motivoDeBaja: string;
+
   constructor(private breakpointObserver: BreakpointObserver, private cd: ChangeDetectorRef) { }
 
   ngOnInit() { }
@@ -43,11 +48,20 @@ export class CustomModalComponent {
 
   onConfirm() {
     if (this.component == 'pendingConfirmationSchedules' && this.operation == 'Confirmar') {
-      console.log("VALIDACION RESULTADO", this.direccionFisica.validateForm());
       this.data.direccionFisicaInformation = this.direccionFisica.getData();
       this.confirmation.emit(this.data);
     } else {
-      this.confirmation.emit(this.data);
+      if (this.component == 'eliminarAlumno') {
+        if (this.eliminarAlumnoForm.form.valid) {
+          this.data.motivoDeBaja = this.motivoDeBaja;
+          this.confirmation.emit(this.data);
+        } else {
+          this.eliminarAlumnoForm.form.get("motivoDeBaja").markAsTouched();
+          this.eliminarAlumnoForm.form.get("motivoDeBaja").markAsDirty();
+        }
+      } else {
+        this.confirmation.emit(this.data);
+      }
     }
   }
 

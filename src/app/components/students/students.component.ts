@@ -21,6 +21,8 @@ export class StudentsComponent implements OnInit {
   busquedaAlumnoInctivos: string = '';
 
   alumno;
+  dataToEliminarAlumno;
+  showSuccessBanner: boolean = false;
 
   alumnosActivosLength: number;
   alumnosInactivosLength: number;
@@ -28,6 +30,7 @@ export class StudentsComponent implements OnInit {
 
   @ViewChild('studentDetail') studentDetail;
   @ViewChild('sidenav') sidenav: MatSidenav;
+  @ViewChild('customModal') customModal;
 
   constructor(private alumnoService: AlumnosService, private router: Router, private sharedService:SharedService) { }
 
@@ -45,12 +48,6 @@ export class StudentsComponent implements OnInit {
       console.log(this.alumnosActivos)
       console.log(this.alumnosInactivos)
     })
-  }
-
-  ngAfterViewChecked() {
-    console.log(this.alumnosActivos);
-    //this.alumnosActivosLength = this.alumnosActivos.length;
-    
   }
 
   obtenerAlumnosActivos(alumnos: Array<any>) {
@@ -105,12 +102,17 @@ export class StudentsComponent implements OnInit {
     this.sharedService.setData(alumno)
     this.router.navigate(['alumnos/editar/', alumno.idAlumno]);
     $event.stopPropagation()
-    console.log("EDITAR")
   }
 
   eliminarAlumno(element, $event) {
     $event.stopPropagation()
+    this.dataToEliminarAlumno = element;
+    this.customModal.open();
     console.log("ELIMINAR")
+  }
+
+  confirmEliminarAlumno($event) {
+    console.log("confirmo la baja ", $event);
   }
 
   goToCronograma(idCronograma) {

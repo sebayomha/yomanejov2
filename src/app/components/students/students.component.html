@@ -274,8 +274,8 @@
                   </div>
       
                   <div style="display: inline-block; padding-left: 10px;" (click)="eliminarAlumno(element, $event);">
-                    <i style="color: #d61c1c;" class="material-icons icons" matTooltip="Eliminar">
-                      delete
+                    <i style="color: #d61c1c;" class="material-icons icons" matTooltip="Dar de baja">
+                      archive
                     </i>
                   </div>
                 </div>
@@ -459,5 +459,9 @@
 
     </mat-tab-group>
     </div>
+
+
   </mat-sidenav-content>
+
 </mat-sidenav-container>
+<custom-modal #customModal (close)="onCustomModalClose($event);" (confirmation)="confirmEliminarAlumno($event);" [data]="dataToEliminarAlumno" [component]="'eliminarAlumno'" [successBanner]="showSuccessBanner"></custom-modal>
