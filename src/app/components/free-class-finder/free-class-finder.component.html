@@ -462,7 +462,8 @@
                                                 <mat-form-field>
                                                     <mat-label>Desde</mat-label>
                                                     <mat-select #horariosDesde
-                                                        (selectionChange)="doExcepcionHours($event.value, j, h)">
+                                                        (selectionChange)="doExcepcionHours($event.value, j, h)"
+                                                        [(value)]="excepcionRowTIme.hour_start">
                                                         <mat-option *ngFor="let horario of excepcionRowTIme.horariosDesde; let i = index" [value]="i">
                                                             {{horario}}
                                                         </mat-option>
@@ -473,7 +474,8 @@
                                                 <!-- fecha hasta tramo -->
                                                 <mat-form-field>
                                                     <mat-label>Hasta</mat-label>
-                                                    <mat-select (selectionChange)="setExceptionHourFinish($event.value, j, h)">
+                                                    <mat-select (selectionChange)="setExceptionHourFinish($event.value, j, h)"
+                                                    [(value)]="excepcionRowTIme.hour_finish">
                                                         <mat-option *ngFor="let horario of excepcionRowTIme.horariosHasta; let i = index" [value]="i">
                                                             {{horario}}
                                                         </mat-option>
