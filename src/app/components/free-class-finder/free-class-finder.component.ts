@@ -487,8 +487,12 @@ export class FreeClassFinderComponent {
   }
 
   doExcepcionHours(rowTImeIndex, excepcionIndex, rowExcepcionIndex) {
-    this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].hour_start = this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].horariosDesde[rowTImeIndex];
-    this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].horariosHasta = this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].horariosDesde.slice(rowTImeIndex + 1);
+    this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].horariosHasta = [];
+    this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].horariosDesde.forEach( (h:string) => {
+      if (h > rowTImeIndex) {
+        this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].horariosHasta.push(h);
+      }
+    })
   }
 
   setExceptionHourFinish(rowTImeIndex, excepcionIndex, rowExcepcionIndex) {
