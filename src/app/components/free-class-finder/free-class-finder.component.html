@@ -488,7 +488,7 @@
                                                     <mat-label>Desde</mat-label>
                                                     <mat-select #horariosDesde
                                                         (selectionChange)="doExcepcionHours($event.value, j, h)"
-                                                        [disabled]="excepcionRowTIme.length - 1 > h"
+                                                        [disabled]="excepcion.horarios.length - 1 > h"
                                                         [(value)]="excepcion.horarios[h].hour_start">
                                                         <mat-option
                                                             *ngFor="let horario of excepcionRowTIme.horariosDesde; let i = index"
@@ -504,7 +504,7 @@
                                                     <mat-label>Hasta</mat-label>
                                                     <mat-select
                                                         (selectionChange)="setExceptionHourFinish($event.value, j, h)"
-                                                        [disabled]="excepcionRowTIme.length - 1 > h"
+                                                        [disabled]="excepcion.horarios.length - 1 > h"
                                                         [(value)]="excepcion.horarios[h].hour_finish">
                                                         <mat-option
                                                             *ngFor="let horario of excepcionRowTIme.horariosHasta; let i = index"
@@ -523,9 +523,9 @@
                                             <div class="col-4 col-sm-1">
                                                 <button *ngIf="h == (excepcion.horarios.length - 1)" type="button"
                                                     style="width: 100%; margin-top: 10px;" mat-button
-                                                    (click)="addNewRowTime(j)"><span style="font-size: 20px"><i
-                                                            class="fas fa-plus-circle"
-                                                            style="color: #43c89d"></i></span>
+                                                    (click)="addNewRowTime(j,h)"
+                                                    [disabled]="excepcion.horarios[h].horariosTotales.length == 0"><span style="font-size: 20px" 
+                                                    ><i class="fas fa-plus-circle" [ngClass]="{'circle-color-primary-disabled': excepcion.horarios[h].horariosTotales.length == 0, 'circle-color-primary': excepcion.horarios[h].horariosTotales.length != 0}"></i></span>
                                                 </button>
                                             </div>
                                             <div class="col-4 col-sm-2">
@@ -564,6 +564,6 @@
             [excepciones]="excepciones" [disponibilidad]="search.dates_times" [student_name]="search.student_name"
             [student_phone]="search.student_phone" [address]="search.address"
             [address_alternative]="search.address_alternative" [number_of_classes]="numberOfClasses"
-            [data]="available_schedules"></available-schedules>
+            [data]="available_schedules" [edit_cronograma]="edit_cronograma"></available-schedules>
     </div>
 </div>

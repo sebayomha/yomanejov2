@@ -36,6 +36,7 @@ export class AvailableSchedulesComponent {
     @Input() address: Array<any>;
     @Input() address_alternative: Array<any>;
     @Input() excepciones: Array<Excepcion>;
+    @Input() edit_cronograma;
 
     @Output() finish = new EventEmitter<any>();
     @ViewChildren(MatSelectionList) viewChildren !: QueryList<MatSelectionList>;
@@ -68,6 +69,28 @@ export class AvailableSchedulesComponent {
       this.cantSelectedClasses = 0;
       this.classes = [];        
       this.order_information = this.data;
+      console.log('RESULTADOS',this.edit_cronograma);
+
+      if (this.edit_cronograma) {
+        this.edit_cronograma.clases.forEach(clase => {
+          let fecha_clase = clase.fecha;
+          let hora_inicio = clase.horaInicio;
+          let auto = clase.auto;
+
+          this.data.forEach(opt => {
+            if (opt.fecha = fecha_clase) {
+              opt.horarios.forEach(opt_day => {
+                  if((opt_day.horaInicio = hora_inicio) && (opt_day.idAuto = auto)) {
+                    //FALTA TERMINAR
+                    console.log('EL DIA' + fecha_clase + 'ESTA DISPONIBLE');
+                    //TENER EN CUENTA QUE PUEDE OCURRIR QUE EL DIA YA HAYA PASADO, HAY QUE CHEQUEAR CON DIA ACTUAL
+                  }
+              });
+            }
+          });
+          
+        });
+      }
     }
 
     ngOnChanges() {
