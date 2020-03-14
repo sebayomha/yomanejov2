@@ -46,6 +46,8 @@ export class FreeClassFinderComponent {
   edit_crono_dir_ppal:boolean = false;
   edit_crono_da_ppal:boolean = false;
 
+  flag_excep_date_error:boolean = false;
+
 
   //ALUMNOS VARIABLES
   alumnos: Array<any>;
@@ -356,13 +358,59 @@ export class FreeClassFinderComponent {
   
         });
       }
+
+      this.excepciones.forEach ( (excep) => {
+        let dia_actual = new Date()
+        if (new Date(excep.date) < dia_actual) {
+           this.flag_excep_date_error = true;
+        }
+      })
       
       console.log(this.excepciones);
       console.log(this.search);
       this.schedule_send_null = false;
       this.search.lessons = this.edit_cronograma.clases.length;
-      this.search.date = new Date(this.edit_cronograma.fechaHoraGuardado);
 
+      let day_actual = new Date();
+      let dd = day_actual.getDate();
+      let mm = day_actual.getMonth()+1;
+      let yyyy = day_actual.getFullYear();
+      let format_day_actual = parseInt(yyyy+''+mm+''+dd);
+
+      let date_search = new Date(this.edit_cronograma.fechaHoraGuardado);
+      let dde = date_search.getDate();
+      let mme = date_search.getMonth()+1;
+      let yyyye = date_search.getFullYear();
+      let format_date_search = parseInt(yyyye+''+mme+''+dde);
+
+      if (format_date_search < format_day_actual) {
+        this.search.date = new Date();
+      } else {
+        this.search.date = new Date(this.edit_cronograma.fechaHoraGuardado);
+      }
+    }
+  }
+
+  checkDates() {
+    if (this.edit_cronograma) {
+      this.flag_excep_date_error = false;
+      this.excepciones.forEach ( (excep) => {
+        let day_actual = new Date();
+        let dd = day_actual.getDate();
+        let mm = day_actual.getMonth()+1;
+        let yyyy = day_actual.getFullYear();
+        let format_day_actual = parseInt(yyyy+''+mm+''+dd);
+
+        let excep_day = new Date(excep.date);
+        let dde = excep_day.getDate();
+        let mme = excep_day.getMonth()+1;
+        let yyyye = excep_day.getFullYear();
+        let format_excep_day = parseInt(yyyye+''+mme+''+dde);
+
+        if (format_excep_day < format_day_actual) {
+           this.flag_excep_date_error = true;
+        } 
+      });
     }
   }
 

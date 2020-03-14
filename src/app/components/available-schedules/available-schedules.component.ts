@@ -82,7 +82,22 @@ export class AvailableSchedulesComponent {
               opt.horarios.forEach(opt_day => {
                   if((opt_day.horaInicio = hora_inicio) && (opt_day.idAuto = auto)) {
                     //FALTA TERMINAR
-                    console.log('EL DIA' + fecha_clase + 'ESTA DISPONIBLE');
+                    let day_actual = new Date();
+                    let dd = day_actual.getDate();
+                    let mm = day_actual.getMonth()+1;
+                    let yyyy = day_actual.getFullYear();
+                    let format_day_actual = parseInt(yyyy+''+mm+''+dd);
+            
+                    let opt_day = new Date(opt.fecha);
+                    let dde = opt_day.getDate();
+                    let mme = opt_day.getMonth()+1;
+                    let yyyye = opt_day.getFullYear();
+                    let format_opt_day = parseInt(yyyye+''+mme+''+dde);
+                    if (format_opt_day < format_day_actual) {
+                      console.log('EL DIA YA PASO');
+                    } else {
+                      console.log('EL DIA' + fecha_clase + 'ESTA DISPONIBLE');
+                    }
                     //TENER EN CUENTA QUE PUEDE OCURRIR QUE EL DIA YA HAYA PASADO, HAY QUE CHEQUEAR CON DIA ACTUAL
                   }
               });
