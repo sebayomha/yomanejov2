@@ -46,6 +46,8 @@ export class FreeClassFinderComponent {
   edit_crono_dir_ppal:boolean = false;
   edit_crono_da_ppal:boolean = false;
 
+  flag_excep_date_error:boolean = false;
+
 
   //ALUMNOS VARIABLES
   alumnos: Array<any>;
@@ -280,50 +282,135 @@ export class FreeClassFinderComponent {
         index += 1;
       });
 
-      Object.values(this.edit_cronograma.excepciones).forEach( (excep:any) => {
+      let indexcep = 0;
+      if (this.edit_cronograma.excepciones[0].idExcepcion != null && this.edit_cronograma.excepciones[0].fecha != null ) {
+        Object.values(this.edit_cronograma.excepciones).forEach( (excep:any) => {
 
-        let date = new Date(excep.fecha);
-
-        if (excep.no_puede != true) {
-
-          excep.horarios.forEach( horario => {
-
-            let hour_start = horario.tramoHorario[0];
-            let size = horario.tramoHorario.length;
-            let hour_finish = horario.tramoHorario[size];
-
-            let array_horarios_hasta = [];
-            let array_horarios_desde = [];
-
-
-            this.predefinedHours.forEach( (h:string) => {
-              if (h > hour_finish.trim()) {
-                array_horarios_desde.push(h);
+          let date = new Date(excep.fecha);
+  
+          let rowTime = new Array<ExcepcionRowTIme>({'hour_start':'', 'hour_finish':'', 'horariosDesde': this.predefinedHours, 'horariosHasta': [], 'horariosTotales': [], 'dir_alt':false});
+          let newExcepcion = {'date': date, 'date_string': '', 'no_puede': excep.no_puede, 'horarios': rowTime};
+          this.excepciones.push(newExcepcion);
+  
+          if (excep.no_puede != true) {
+  
+            let indexhorario = 0;
+            excep.horarios.forEach( horario => {
+  
+              let hour_start = horario.tramoHorario[0];
+              let size = horario.tramoHorario.length - 1;
+              let hour_finish = horario.tramoHorario[size].trim();
+  
+              let array_horarios_hasta = [];
+              let array_horarios_desde = [];
+  
+              if (indexhorario == 0) {
+  
+                this.predefinedHours.forEach( h => {
+                  if (h > hour_start.trim()) {
+                    array_horarios_hasta.push(h);
+                  }
+                })
+  
+                this.excepciones[indexcep].horarios[indexhorario].hour_start = hour_start;
+                this.excepciones[indexcep].horarios[indexhorario].hour_finish = hour_finish;
+                this.excepciones[indexcep].horarios[indexhorario].horariosDesde = this.predefinedHours;
+                this.excepciones[indexcep].horarios[indexhorario].horariosHasta = array_horarios_hasta;
+                this.excepciones[indexcep].horarios[indexhorario].horariosTotales = horario.tramoHorario;
+                this.excepciones[indexcep].horarios[indexhorario].dir_alt = horario.usandoDirAlt;
+  
+              } else {
+  
+                let horario_finish_anterior = indexhorario - 1;
+                let sizeTramo = excep.horarios[horario_finish_anterior].tramoHorario.length - 1;
+                let horario_finish_actual = excep.horarios[horario_finish_anterior].tramoHorario[sizeTramo];
+  
+                this.predefinedHours.forEach( (h:string) => {
+                  if (h > horario_finish_actual.trim()) {
+                    array_horarios_desde.push(h);
+                  }
+                })
+    
+                array_horarios_desde.forEach( (h:string) => {
+                  if (h > hour_start) {
+                    array_horarios_hasta.push(h);
+                  }
+                })
+                
+                this.excepciones[indexcep].horarios.push({
+                  hour_start : hour_start,
+                  hour_finish : hour_finish,
+                  horariosDesde : array_horarios_desde,
+                  horariosHasta : array_horarios_hasta,
+                  horariosTotales : horario.tramoHorario,
+                  dir_alt : horario.usandoDirAlt
+                });
+  
               }
-            })
+  
+              indexhorario += 1;
+  
+            });
+  
+          }
+  
+          indexcep += 1;
+  
+        });
+      }
 
-            array_horarios_desde.forEach( (h:string) => {
-              if (h > hour_start) {
-                array_horarios_hasta.push(h);
-              }
-            })
-
-            //Creo la excepcion
-            let rowTime = new Array<ExcepcionRowTIme>({'hour_start': hour_start, 'hour_finish': hour_finish, 'horariosDesde': array_horarios_desde, 'horariosHasta': array_horarios_hasta, 'horariosTotales': horario.tramoHorario, 'dir_alt':false});
-            let newExcepcion = {'date': date, 'date_string': '', 'no_puede': excep.no_puede, 'horarios': rowTime};
-            this.excepciones.push(newExcepcion);
-
-          });
-
+      this.excepciones.forEach ( (excep) => {
+        let dia_actual = new Date()
+        if (new Date(excep.date) < dia_actual) {
+           this.flag_excep_date_error = true;
         }
-
-      });
-
+      })
+      
+      console.log(this.excepciones);
       console.log(this.search);
       this.schedule_send_null = false;
       this.search.lessons = this.edit_cronograma.clases.length;
-      this.search.date = new Date(this.edit_cronograma.fechaHoraGuardado);
 
+      let day_actual = new Date();
+      let dd = day_actual.getDate();
+      let mm = day_actual.getMonth()+1;
+      let yyyy = day_actual.getFullYear();
+      let format_day_actual = parseInt(yyyy+''+mm+''+dd);
+
+      let date_search = new Date(this.edit_cronograma.fechaHoraGuardado);
+      let dde = date_search.getDate();
+      let mme = date_search.getMonth()+1;
+      let yyyye = date_search.getFullYear();
+      let format_date_search = parseInt(yyyye+''+mme+''+dde);
+
+      if (format_date_search < format_day_actual) {
+        this.search.date = new Date();
+      } else {
+        this.search.date = new Date(this.edit_cronograma.fechaHoraGuardado);
+      }
+    }
+  }
+
+  checkDates() {
+    if (this.edit_cronograma) {
+      this.flag_excep_date_error = false;
+      this.excepciones.forEach ( (excep) => {
+        let day_actual = new Date();
+        let dd = day_actual.getDate();
+        let mm = day_actual.getMonth()+1;
+        let yyyy = day_actual.getFullYear();
+        let format_day_actual = parseInt(yyyy+''+mm+''+dd);
+
+        let excep_day = new Date(excep.date);
+        let dde = excep_day.getDate();
+        let mme = excep_day.getMonth()+1;
+        let yyyye = excep_day.getFullYear();
+        let format_excep_day = parseInt(yyyye+''+mme+''+dde);
+
+        if (format_excep_day < format_day_actual) {
+           this.flag_excep_date_error = true;
+        } 
+      });
     }
   }
 
@@ -432,15 +519,28 @@ export class FreeClassFinderComponent {
     let rowTime = new Array<ExcepcionRowTIme>({'hour_start':'', 'hour_finish':'', 'horariosDesde': this.predefinedHours, 'horariosHasta': [], 'horariosTotales': [], 'dir_alt':false});
     let newExcepcion = {'date': new Date(), 'date_string': '', 'no_puede': false, 'horarios': rowTime};
     this.excepciones.push(newExcepcion);
+    
+    console.log(this.excepciones);
   }
 
   removeExcepcion(excepcionIndex) {
     this.excepciones.splice(excepcionIndex, 1);
   }
 
-  addNewRowTime(excepcionIndex){
-    let rowTime: ExcepcionRowTIme = {'hour_start':'', 'hour_finish':'', 'horariosDesde': this.predefinedHours, 'horariosHasta': [], 'horariosTotales': [], 'dir_alt':false};
+  addNewRowTime(excepcionIndex, index){
+    let hour_finish_prev = this.excepciones[excepcionIndex].horarios[index].hour_finish;  
+    let new_array_options = [];
+
+    this.predefinedHours.forEach( (h:string) => {
+      if (h > hour_finish_prev.trim()) {
+        new_array_options.push(h);
+      }
+    })
+
+    let rowTime: ExcepcionRowTIme = {'hour_start':'', 'hour_finish':'', 'horariosDesde': new_array_options, 'horariosHasta': [], 'horariosTotales': [], 'dir_alt':false};
     this.excepciones[excepcionIndex].horarios.push(rowTime);
+
+    console.log(this.excepciones);
   }
 
   removeRowTime(excepcionIndex, rowRemove){
@@ -451,12 +551,26 @@ export class FreeClassFinderComponent {
   }
 
   doExcepcionHours(rowTImeIndex, excepcionIndex, rowExcepcionIndex) {
-    this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].hour_start = this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].horariosDesde[rowTImeIndex];
-    this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].horariosHasta = this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].horariosDesde.slice(rowTImeIndex + 1);
+    this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].horariosHasta = [];
+    this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].horariosDesde.forEach( (h:string) => {
+      if (h > rowTImeIndex) {
+        this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].horariosHasta.push(h);
+      }
+    })
   }
 
   setExceptionHourFinish(rowTImeIndex, excepcionIndex, rowExcepcionIndex) {
-    this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].hour_finish = this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].horariosHasta[rowTImeIndex];
+    let hour_start = this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].hour_start;
+    let hour_finish = this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].hour_finish;
+
+    //Armo el array final a enviar.
+    this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].horariosDesde.forEach( (h:string) => {
+      if (h >= hour_start && h <= hour_finish) {
+        this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].horariosTotales.push(h);
+      }
+    })
+
+    console.log(this.excepciones);
   }
 
   setExceptionHours() {
