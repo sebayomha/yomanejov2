@@ -464,7 +464,7 @@
             d2.floor_ AS floor_DirAlternativa,
             d2.observaciones AS observaciones_DirAlternativa,
             cronograma.timestampGuardado,
-            excepcion.idExcepcion, excepcion.fecha, excepcion.no_puede,
+            excepcion.idExcepcion, excepcion.fecha AS fechaExcepcion, excepcion.no_puede,
             excepcionhorarios.dir_alt, excepcionhorarios.horarios,
             disponibilidad.Monday, disponibilidad.Tuesday, disponibilidad.Wednesday, disponibilidad.Thursday, disponibilidad.Friday, disponibilidad.Saturday, disponibilidad.Sunday,
             alumno.idAlumno, alumno.nombre, alumno.telefono, clase.idClase, clase.idCronograma, clase.alumno, clase.auto, clase.fecha, clase.horaInicio, clase.idZona, clase.idDireccion, clase.status AS satusClase, cronograma.status AS cronogramaStatus 
@@ -524,7 +524,7 @@
                     if ($row['idExcepcion'] != null) { //tiene excepciones
                         $excepcion = (object) [
                             'idExcepcion' => $row['idExcepcion'],
-                            'fecha' => $row['fecha'],
+                            'fecha' => $row['fechaExcepcion'],
                             'no_puede' => filter_var($row['no_puede'], FILTER_VALIDATE_BOOLEAN),
                             'horarios' => []
                         ];
