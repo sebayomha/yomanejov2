@@ -78,9 +78,9 @@ export class AvailableSchedulesComponent {
           let auto = clase.auto;
 
           this.data.forEach(opt => {
-            if (opt.fecha = fecha_clase) {
+            if (opt.fecha == fecha_clase) {
               opt.horarios.forEach(opt_day => {
-                  if((opt_day.horaInicio = hora_inicio) && (opt_day.idAuto = auto)) {
+                  if((opt_day.horaInicio == hora_inicio) && (opt_day.idAuto == auto)) {
                     //FALTA TERMINAR
                     let day_actual = new Date();
                     let dd = day_actual.getDate();
@@ -96,9 +96,8 @@ export class AvailableSchedulesComponent {
                     if (format_opt_day < format_day_actual) {
                       console.log('EL DIA YA PASO');
                     } else {
-                      console.log('EL DIA' + fecha_clase + 'ESTA DISPONIBLE');
+                      // opt_day.selected = true;
                     }
-                    //TENER EN CUENTA QUE PUEDE OCURRIR QUE EL DIA YA HAYA PASADO, HAY QUE CHEQUEAR CON DIA ACTUAL
                   }
               });
             }
