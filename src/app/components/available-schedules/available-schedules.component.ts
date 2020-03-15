@@ -1,4 +1,4 @@
-import { Component, Input, ViewChildren, QueryList, ViewChild, Output, EventEmitter, ɵConsole } from '@angular/core';
+import { Component, ChangeDetectorRef, Input, ViewChildren, QueryList, ViewChild, Output, EventEmitter, ɵConsole } from '@angular/core';
 import { MatSelectionList } from '@angular/material';
 import { trigger,animate,transition,style } from '@angular/animations';
 import { CronogramaService } from 'src/app/services/cronograma/cronograma.service';
@@ -53,8 +53,72 @@ export class AvailableSchedulesComponent {
     showSuccessBanner: boolean = false;
     durationInSeconds = 3;
     idCronogramaGuardado: number;
+    not_available_classes = [];
+    fecha_no_disponible:boolean;
+    show_info_banner:boolean = false;
 
-    constructor(private cronogramaService: CronogramaService, private _snackBar: MatSnackBar) { }
+    constructor(private cdr : ChangeDetectorRef, private cronogramaService: CronogramaService, private _snackBar: MatSnackBar) { }
+
+    ngOnInit() {
+      this.step = 0;
+      this.cantSelectedClasses = 0;
+      this.classes = [];        
+      this.order_information = this.data;
+    }
+    
+    ngOnChanges() {
+      this.cantSelectedClasses = 0;
+      setTimeout( () => {
+        if (this.edit_cronograma) {
+          this.verificoClases();
+          this.cdr.detectChanges();
+        } 
+      }, 0)
+    }
+
+    ngAfterViewInit() {
+      $('[data-toggle="tooltip"]').tooltip();
+    }
+
+    // Editar cronograma:
+    // Tomo las clases que se habian seleccionado y chequeo que aun esten disponibles. Las que no lo esten apareceran en el banner.
+    verificoClases() {
+
+      this.not_available_classes = [];
+      let index_class = 0;
+      this.edit_cronograma.clases.forEach(clase => {
+        index_class += 1;
+        let fecha_clase = clase.fecha;
+        let hora_inicio = clase.horaInicio;
+        let auto = clase.auto;
+
+        this.data.forEach(opt => {
+          if (opt.fecha == fecha_clase) {
+            this.fecha_no_disponible = true;
+            opt.horarios.forEach(opt_day => {
+                if((opt_day.horaInicio == hora_inicio) && (opt_day.idAuto == auto)) {
+
+                  //Selecciono la clase dentro de las opciones de busqueda.
+                  this.fecha_no_disponible = false;
+                  opt_day.selected = true;
+                  this.cantSelectedClasses += 1;
+                }
+            });
+            if(this.fecha_no_disponible == true) {
+
+              //Armo array del banner
+              this.not_available_classes.push('La clase número '+index_class+' del día '+fecha_clase+' a las '+hora_inicio+' hs ya no se encuentra disponible.');
+              this.show_info_banner = true;
+            }
+          }
+        });
+        
+      });
+    }
+
+    cerrarBanner() {
+      this.show_info_banner = false;
+    }
 
     showMore(option) {
       option.showMoreHours = 20;
@@ -62,57 +126,6 @@ export class AvailableSchedulesComponent {
 
     showLess(option) {
       option.showMoreHours = 4;
-    }
-
-    ngOnInit() {
-      this.step = 0;
-      this.cantSelectedClasses = 0;
-      this.classes = [];        
-      this.order_information = this.data;
-      console.log('RESULTADOS',this.edit_cronograma);
-
-      if (this.edit_cronograma) {
-        this.edit_cronograma.clases.forEach(clase => {
-          let fecha_clase = clase.fecha;
-          let hora_inicio = clase.horaInicio;
-          let auto = clase.auto;
-
-          this.data.forEach(opt => {
-            if (opt.fecha == fecha_clase) {
-              opt.horarios.forEach(opt_day => {
-                  if((opt_day.horaInicio == hora_inicio) && (opt_day.idAuto == auto)) {
-                    //FALTA TERMINAR
-                    let day_actual = new Date();
-                    let dd = day_actual.getDate();
-                    let mm = day_actual.getMonth()+1;
-                    let yyyy = day_actual.getFullYear();
-                    let format_day_actual = parseInt(yyyy+''+mm+''+dd);
-            
-                    let opt_day = new Date(opt.fecha);
-                    let dde = opt_day.getDate();
-                    let mme = opt_day.getMonth()+1;
-                    let yyyye = opt_day.getFullYear();
-                    let format_opt_day = parseInt(yyyye+''+mme+''+dde);
-                    if (format_opt_day < format_day_actual) {
-                      console.log('EL DIA YA PASO');
-                    } else {
-                      // opt_day.selected = true;
-                    }
-                  }
-              });
-            }
-          });
-          
-        });
-      }
-    }
-
-    ngOnChanges() {
-      this.cantSelectedClasses = 0;
-    }
-
-    ngAfterViewInit() {
-      $('[data-toggle="tooltip"]').tooltip();
     }
 
     setStep(index: number) {
@@ -170,10 +183,7 @@ export class AvailableSchedulesComponent {
           this.classes[indexClass].fecha = option.fecha;
         }
       }
-      // this.cantSelectedClasses = 0;
-      // this.cantSelectedClasses = this.classes.reduce( (total, element) => {
-      //   return total + element.cant;
-      // }, 0)
+
       this.cantSelectedClasses = 0;
       this.classes_send = [];
       this.classes.forEach(element => {

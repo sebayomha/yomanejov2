@@ -1,3 +1,10 @@
+<div class="alert alert-warning" role="alert" *ngIf="show_info_banner">
+  <div class="row" *ngFor="let class of not_available_classes" >
+    <div class="col-10">{{class}}</div>
+    <div class="col-2"><span (click)="cerrarBanner()" style="float: right;"><i class="fas fa-times"></i></span></div>
+  </div>
+</div>
+
 <div class="col-12" style="margin-bottom: 15px; text-align: right;">
   <label style="font-size: 14px;">Clases seleccionadas : {{cantSelectedClasses}} / {{number_of_classes}}</label>
   <label *ngIf="cantSelectedClasses > number_of_classes" style="display: block; font-size: 14px; color: red;">No puede seleccionar más clases del límite establecido</label>
