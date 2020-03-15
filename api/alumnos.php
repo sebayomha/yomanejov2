@@ -19,6 +19,12 @@
 		echo json_encode($GLOBALS['utils']->getResponse(0, $resultAlumno));	
 	}
 
+	function getInformacionPersonal() {
+		$alumno = new Alumno();
+		$resultAlumno = $alumno->getInformacionPersonal($_GET['idAlumno']);
+		echo json_encode($GLOBALS['utils']->getResponse(0, $resultAlumno));	
+	}
+
 	function updateAlumnoInformacionPersonal() {
 		$post = json_decode(file_get_contents('php://input'));
 		$idAlumno = $post->idAlumno;
@@ -37,6 +43,22 @@
 		}
 	}
 
+	function eliminarAlumno() {
+		$post = json_decode(file_get_contents('php://input'));
+		$idAlumno = $post->idAlumno;
+		$idCronograma = $post->idCronograma;
+		$motivoBaja = $post->motivoDeBaja;
+
+		$alumno = new Alumno();
+		$resultDelete = $alumno->eliminarAlumno($idAlumno, $idCronograma, $motivoBaja);
+
+		if ($resultDelete == 0) {
+			echo json_encode($GLOBALS['utils']->getResponse(0, 'Alumno dado de baja correctamente'));	
+		} else {
+			echo json_encode($GLOBALS['utils']->getResponse(1, 'Lo lamentamos, ha ocurrido un error'));
+		}
+	}
+
 	switch ($method) {
 		case 'GET': {
 		  	//Obtengo la URL Final para saber cual accion ejecutar.
@@ -44,9 +66,9 @@
 				case '/alumnos':
 					obtenerAlumnos();
 					break;
-			  	default:
-					echo "podriamos agregar otra consulta mas";
-					break;
+				case '/alumnos/getInformacionPersonal':
+					getInformacionPersonal();
+				break;
 		  	}	    
 			break;	
 		}
@@ -56,6 +78,9 @@
 			switch ($requestMethod){
 				case '/alumnos/update':
 					updateAlumnoInformacionPersonal();
+				break;
+				case '/alumnos/eliminar':
+					eliminarAlumno();
 				break;
 			}
 			break;    	

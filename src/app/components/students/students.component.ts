@@ -5,6 +5,8 @@ import { MatTableDataSource} from '@angular/material/table';
 import { Router } from '@angular/router';
 import { SharedService } from '../../services/sharedService/shared-service';
 import { MatSidenav } from '@angular/material/sidenav';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackbarComponent } from '../snackbar/snackbar/snackbar.component';
 
 @Component({
   selector: 'app-students',
@@ -28,11 +30,13 @@ export class StudentsComponent implements OnInit {
   alumnosInactivosLength: number;
   alumnosPendientesLength: number;
 
+  durationInSeconds: number = 1;
+
   @ViewChild('studentDetail') studentDetail;
   @ViewChild('sidenav') sidenav: MatSidenav;
   @ViewChild('customModal') customModal;
 
-  constructor(private alumnoService: AlumnosService, private router: Router, private sharedService:SharedService) { }
+  constructor( private _snackBar: MatSnackBar, private alumnoService: AlumnosService, private router: Router, private sharedService:SharedService) { }
 
   ngOnInit() {
     this.sharedService.destroyData();
@@ -108,11 +112,19 @@ export class StudentsComponent implements OnInit {
     $event.stopPropagation()
     this.dataToEliminarAlumno = element;
     this.customModal.open();
-    console.log("ELIMINAR")
   }
 
   confirmEliminarAlumno($event) {
     console.log("confirmo la baja ", $event);
+    this.alumnoService.eliminarAlumno($event).subscribe( (response: Response) => {
+      this.customModal.onClose();
+      this._snackBar.openFromComponent(SnackbarComponent, {
+        duration: this.durationInSeconds * 1100,
+        data: response
+      }).afterDismissed().subscribe( (afterDismissed) => {
+        this.ngOnInit();
+      })
+    })
   }
 
   goToCronograma(idCronograma) {

@@ -217,20 +217,6 @@
               <th mat-header-cell *matHeaderCellDef> Id </th>
               <td mat-cell *matCellDef="let element"> {{element.idAlumno}} </td>
               <td mat-footer-cell *matFooterCellDef>               
-                <div style="text-align: center; width: 100%;">
-                  <div style="cursor: pointer; margin-top: 10px;" (click)="showMore(auto, 'clasesPorRealizarse')" *ngIf="alumnosActivos.length == 4 && alumnosActivos.length > 4">
-                    <i style="color: rgb(67, 200, 157);" class="material-icons">
-                      keyboard_arrow_down
-                      </i>
-                    <button class="showMoreBtn">VER MÁS</button>
-                  </div>
-                  <div style="cursor: pointer; margin-top: 10px;" (click)="showLess(auto, 'clasesPorRealizarse')" *ngIf="alumnosActivos.length > 4">
-                    <i style="color: rgb(67, 200, 157);" class="material-icons">
-                      keyboard_arrow_up
-                      </i>
-                    <button class="showMoreBtn">VER MENOS</button>
-                  </div>
-                </div>
               </td>
             </ng-container>
       
@@ -306,20 +292,6 @@
               <th mat-header-cell *matHeaderCellDef> Id </th>
               <td mat-cell *matCellDef="let element"> {{element.idAlumno}} </td>
               <td mat-footer-cell *matFooterCellDef>               
-                <div style="text-align: center; width: 100%;">
-                  <div style="cursor: pointer; margin-top: 10px;" (click)="showMore(auto, 'clasesPorRealizarse')" *ngIf="alumnosPendientes.length == 4 && alumnosPendientes.length > 4">
-                    <i style="color: rgb(67, 200, 157);" class="material-icons">
-                      keyboard_arrow_down
-                      </i>
-                    <button class="showMoreBtn">VER MÁS</button>
-                  </div>
-                  <div style="cursor: pointer; margin-top: 10px;" (click)="showLess(auto, 'clasesPorRealizarse')" *ngIf="alumnosPendientes.length > 4">
-                    <i style="color: rgb(67, 200, 157);" class="material-icons">
-                      keyboard_arrow_up
-                      </i>
-                    <button class="showMoreBtn">VER MENOS</button>
-                  </div>
-                </div>
               </td>
             </ng-container>
             
@@ -353,10 +325,10 @@
           
             <!-- Symbol Column -->
             <ng-container matColumnDef="accion">
-              <th mat-header-cell *matHeaderCellDef [style.display]="'none'"> Acción </th>
-              <td mat-cell *matCellDef="let element" [style.display]="'none'">    
+              <th mat-header-cell *matHeaderCellDef> Acción </th>
+              <td mat-cell *matCellDef="let element">    
                 <div (click)="editarAlumno(element, $event);">
-                  <i style="color: blue;" class="material-icons" title="Editar">
+                  <i style="color: blue;" class="material-icons" matTooltip="Editar">
                     edit
                   </i>
                 </div> 
@@ -389,20 +361,6 @@
               <th mat-header-cell *matHeaderCellDef> Id </th>
               <td mat-cell *matCellDef="let element"> {{element.idAlumno}} </td>
               <td mat-footer-cell *matFooterCellDef>               
-                <div style="text-align: center; width: 100%;">
-                  <div style="cursor: pointer; margin-top: 10px;" (click)="showMore(auto, 'clasesPorRealizarse')" *ngIf="alumnosInactivos.length == 4 && alumnosInactivos.length > 4">
-                    <i style="color: rgb(67, 200, 157);" class="material-icons">
-                      keyboard_arrow_down
-                      </i>
-                    <button class="showMoreBtn">VER MÁS</button>
-                  </div>
-                  <div style="cursor: pointer; margin-top: 10px;" (click)="showLess(auto, 'clasesPorRealizarse')" *ngIf="alumnosInactivos.length > 4">
-                    <i style="color: rgb(67, 200, 157);" class="material-icons">
-                      keyboard_arrow_up
-                      </i>
-                    <button class="showMoreBtn">VER MENOS</button>
-                  </div>
-                </div>
               </td>
             </ng-container>
             
@@ -439,8 +397,8 @@
               <th mat-header-cell *matHeaderCellDef> Acción </th>
               <td mat-cell *matCellDef="let element">    
                 <div (click)="editarAlumno(element, $event);">
-                  <i style="color: blue;" class="material-icons" title="Editar">
-                    keyboard_arrow_up
+                  <i style="color: blue;" class="material-icons" matTooltip="Editar">
+                    edit
                   </i>
                 </div> 
               </td>

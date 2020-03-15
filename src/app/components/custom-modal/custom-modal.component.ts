@@ -54,6 +54,9 @@ export class CustomModalComponent {
       if (this.component == 'eliminarAlumno') {
         if (this.eliminarAlumnoForm.form.valid) {
           this.data.motivoDeBaja = this.motivoDeBaja;
+          this.motivoDeBaja = '';
+          this.eliminarAlumnoForm.form.get("motivoDeBaja").markAsUntouched();
+          this.eliminarAlumnoForm.form.get("motivoDeBaja").markAsPristine();
           this.confirmation.emit(this.data);
         } else {
           this.eliminarAlumnoForm.form.get("motivoDeBaja").markAsTouched();
@@ -110,7 +113,7 @@ export class CustomModalComponent {
       return false;
     } else {
       if (this.component == 'pendingConfirmationSchedules' && this.operation == 'Confirmar') {
-        return (this.direccionFisica == undefined) ? false : !(this.direccionFisica.validateForm() && this.data.documento.length == 10);
+        return (this.direccionFisica == undefined) ? false : !(this.direccionFisica.validateForm() && this.data.documento && this.data.documento.length == 10);
       }
       else {
         return false;
@@ -123,6 +126,10 @@ export class CustomModalComponent {
     if (!reg.test($event.key)) {
       $event.preventDefault();
     }
+  }
+
+  setDireccionDefault() {
+    this.direccionFisica.setDireccionFisicaDefault();
   }
 
 }

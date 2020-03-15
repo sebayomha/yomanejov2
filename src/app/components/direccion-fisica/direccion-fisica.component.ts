@@ -104,6 +104,7 @@ export class DireccionFisicaComponent implements OnInit {
             this.direccion.city = this.data.ciudad_DirFisica;
             this.direccion.altitud = this.data.numero_DirFisica;
             this.direccion.floor = this.data.floor_DirFisica;
+            this.direccion.department = this.data.departamento_DirFisica;
             this.direccion.observations = this.data.observaciones_DirFisica;
           }
         }
