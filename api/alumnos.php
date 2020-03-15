@@ -19,6 +19,12 @@
 		echo json_encode($GLOBALS['utils']->getResponse(0, $resultAlumno));	
 	}
 
+	function getInformacionPersonal() {
+		$alumno = new Alumno();
+		$resultAlumno = $alumno->getInformacionPersonal($_GET['idAlumno']);
+		echo json_encode($GLOBALS['utils']->getResponse(0, $resultAlumno));	
+	}
+
 	function updateAlumnoInformacionPersonal() {
 		$post = json_decode(file_get_contents('php://input'));
 		$idAlumno = $post->idAlumno;
@@ -44,9 +50,8 @@
 				case '/alumnos':
 					obtenerAlumnos();
 					break;
-			  	default:
-					echo "podriamos agregar otra consulta mas";
-					break;
+				case '/alumnos/getInformacionPersonal':
+					getInformacionPersonal();
 		  	}	    
 			break;	
 		}

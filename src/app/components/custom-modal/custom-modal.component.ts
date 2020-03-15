@@ -19,6 +19,7 @@ export class CustomModalComponent {
   @Input() successBanner: boolean;
   @Input() operation: string;
   @Input() idCronogramaGuardado: number;
+  @Input() direccionDocumento: any;
 
   @ViewChild('direccionFisica') direccionFisica: DireccionFisicaComponent;
   @ViewChildren('input') vc;
@@ -110,7 +111,7 @@ export class CustomModalComponent {
       return false;
     } else {
       if (this.component == 'pendingConfirmationSchedules' && this.operation == 'Confirmar') {
-        return (this.direccionFisica == undefined) ? false : !(this.direccionFisica.validateForm() && this.data.documento.length == 10);
+        return (this.direccionFisica == undefined) ? false : !(this.direccionFisica.validateForm() && this.data.documento && this.data.documento.length == 10);
       }
       else {
         return false;
@@ -123,6 +124,10 @@ export class CustomModalComponent {
     if (!reg.test($event.key)) {
       $event.preventDefault();
     }
+  }
+
+  setDireccionDefault() {
+    this.direccionFisica.setDireccionFisicaDefault();
   }
 
 }

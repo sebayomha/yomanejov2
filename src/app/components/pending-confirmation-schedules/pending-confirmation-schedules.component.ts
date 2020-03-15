@@ -5,6 +5,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackbarComponent } from '../snackbar/snackbar/snackbar.component';
 import { ActivatedRoute } from '@angular/router';
+import { AlumnosService } from 'src/app/services/alumnos/alumnos.service';
 
 @Component({
   selector: 'app-pending-confirmation-schedules',
@@ -13,7 +14,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class PendingConfirmationSchedulesComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private _snackBar: MatSnackBar) { }
+  constructor(private alumnoService: AlumnosService, private route: ActivatedRoute, private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private _snackBar: MatSnackBar) { }
 
   cronogramas: Array<any> = [];
   cronograma_edit = [];
@@ -23,6 +24,11 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
   durationInSeconds: number = 3;
   operation: string;
   show_edit:boolean = false;
+  direccionDocumento: any = {
+    direccion: '',
+    documento: ''
+  };
+
   @Output() finish = new EventEmitter<any>();
   @ViewChild('customModal') customModal;
 
@@ -106,10 +112,49 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
       'nombreAlumno': nombreAlumno,
       'idAlumno': idAlumno,
       'addressesAlumno': addressesAlumno,
-      'documento': ''
+      'documento': '',
+      'id_DirFisica': '',
+      'id_DirPrincipal': '',
+      'id_DirAlternativa': '',
+      'calle_DirFisica': '',
+      'calle_diag_DirFisica': '',
+      'calle_a_DirFisica': '',
+      'calle_a_diag_DirFisica': '',
+      'calle_b_DirFisica': '',
+      'calle_b_diag_DirFisica': '',
+      'ciudad_DirFisica': '',
+      'numero_DirFisica': '',
+      'floor_DirFisica': '',
+      'observaciones_DirFisica': ''
     };
     this.operation = 'Confirmar';
-    this.customModal.open();
+
+    this.alumnoService.getInformacionPersonal(this.dataToConfirm.idAlumno).subscribe( (response:Response) => {
+      if (response.code == 0) {
+        this.direccionDocumento.direccion = response.data;
+        this.dataToConfirm.documento = response.data[0].documento;
+        this.setDireccionData(response.data[0]);
+        this.customModal.setDireccionDefault();
+        this.customModal.open();
+      } 
+    })
+  }
+
+  setDireccionData(responseData) {
+    this.dataToConfirm.id_DirFisica =responseData.id_DirFisica;
+    this.dataToConfirm.id_DirPrincipal = responseData.id_DirPrincipal;
+    this.dataToConfirm.id_DirAlternativa = responseData.id_DirAlternativa;
+    this.dataToConfirm.calle_DirFisica = responseData.calle_DirFisica;
+    this.dataToConfirm.calle_diag_DirFisica = responseData.calle_diag_DirFisica;
+    this.dataToConfirm.calle_a_DirFisica = responseData.calle_a_DirFisica;
+    this.dataToConfirm.calle_a_diag_DirFisica = responseData.calle_a_diag_DirFisica;
+    this.dataToConfirm.calle_b_DirFisica = responseData.calle_b_DirFisica;
+    this.dataToConfirm.calle_b_diag_DirFisica = responseData.calle_b_diag_DirFisica;
+    this.dataToConfirm.ciudad_DirFisica = responseData.ciudad_DirFisica;
+    this.dataToConfirm.floor_DirFisica = responseData.floor_DirFisica;
+    this.dataToConfirm.observaciones_DirFisica = responseData.observaciones_DirFisica;
+    this.dataToConfirm.numero_DirFisica = responseData.numero_DirFisica;
+    this.dataToConfirm.departamento_DirFisica = responseData.departamento_DirFisica;
   }
 
   confirmSchedule($event) {

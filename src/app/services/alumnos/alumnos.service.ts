@@ -8,7 +8,6 @@ export class AlumnosService {
 
   constructor(private http: HttpClient) { }
 
-  alumno;
   obtenerAlumnos() {
     return this.http.get('api/alumnos');
   }
@@ -17,11 +16,8 @@ export class AlumnosService {
     return this.http.post('api/alumnos/update', alumno);
   }
 
-  setAlumno(alumno) {
-    this.alumno = alumno;
-  }
-
-  getAlumno() {
-    return this.alumno;
+  getInformacionPersonal(idAlumno) {
+    const params = new HttpParams().set('idAlumno', idAlumno);
+    return this.http.get('api/alumnos/getInformacionPersonal', {params: params});
   }
 }
