@@ -39,7 +39,7 @@ export class EditarAlumnoComponent implements OnInit {
   schedule_send_null:boolean = true;
 
   documento;
-  durationInSeconds = 1.5;
+  durationInSeconds = 0.5;
   available_schedules;
   numberOfClasses: number;
   excepciones: Array<any> =[];

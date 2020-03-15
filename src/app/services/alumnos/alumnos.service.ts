@@ -20,4 +20,8 @@ export class AlumnosService {
     const params = new HttpParams().set('idAlumno', idAlumno);
     return this.http.get('api/alumnos/getInformacionPersonal', {params: params});
   }
+
+  eliminarAlumno(data) {
+    return this.http.post('api/alumnos/eliminar', data); 
+  }
 }

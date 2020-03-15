@@ -55,7 +55,7 @@
             d3.departamento AS departamento_DirFisica,
             d3.floor_ AS floor_DirFisica,
             d3.observaciones AS observaciones_DirFisica,
-            alumno.nombre, alumno.telefono, alumno.idAlumno, alumno.fecha_nacimiento, alumno.fechaAlta, alumno.activo,
+            alumno.nombre, alumno.telefono, alumno.idAlumno, alumno.fechaAlta, alumno.activo,
             alumno.documento,
             alumno.idDisponibilidad,
             alumno.confirmado,
@@ -345,6 +345,29 @@
                 return [];
             }
             return $alumnos;
+        }
+
+        function eliminarAlumno($idAlumno, $idCronograma, $motivoBaja) {
+            //Eliminar cronograma (LOGICAMENTE)
+            $status = "CANCELADO";
+            $state = $this->conn->prepare('UPDATE cronograma SET status = ? WHERE cronograma.idCronograma = ?');
+            $state->bind_param('si', $status, $idCronograma);
+            $state->execute();
+
+            //Eliminar clases (LOGICAMENTE)
+            $state = $this->conn->prepare('UPDATE clase SET status = ? WHERE clase.idCronograma = ?');
+            $state->bind_param('si', $status, $idCronograma);
+            $state->execute();
+            
+            //Eliminar alumno (LOGICAMENTE)
+            $activo = "false";
+            $now = date("Y-m-d");
+
+            $state = $this->conn->prepare('UPDATE alumno SET activo = ?, motivoBaja = ?, fechaBaja = ? WHERE alumno.idAlumno = ?');
+            $state->bind_param('sssi', $activo, $motivoBaja, $now, $idAlumno);
+            $state->execute();
+
+            return 0;
         }
 
     }

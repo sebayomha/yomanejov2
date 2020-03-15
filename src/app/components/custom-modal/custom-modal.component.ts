@@ -54,6 +54,9 @@ export class CustomModalComponent {
       if (this.component == 'eliminarAlumno') {
         if (this.eliminarAlumnoForm.form.valid) {
           this.data.motivoDeBaja = this.motivoDeBaja;
+          this.motivoDeBaja = '';
+          this.eliminarAlumnoForm.form.get("motivoDeBaja").markAsUntouched();
+          this.eliminarAlumnoForm.form.get("motivoDeBaja").markAsPristine();
           this.confirmation.emit(this.data);
         } else {
           this.eliminarAlumnoForm.form.get("motivoDeBaja").markAsTouched();
