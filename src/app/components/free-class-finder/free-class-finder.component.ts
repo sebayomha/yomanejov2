@@ -283,80 +283,83 @@ export class FreeClassFinderComponent {
       });
 
       let indexcep = 0;
-      if (this.edit_cronograma.excepciones[0].idExcepcion != null && this.edit_cronograma.excepciones[0].fecha != null ) {
-        Object.values(this.edit_cronograma.excepciones).forEach( (excep:any) => {
+      console.log("EDIT c", this.edit_cronograma)
+      if (this.edit_cronograma.excepciones.length > 0) {
+        if (this.edit_cronograma.excepciones[0].idExcepcion != null && this.edit_cronograma.excepciones[0].fecha != null ) {
+          Object.values(this.edit_cronograma.excepciones).forEach( (excep:any) => {
 
-          let date = new Date(excep.fecha);
-  
-          let rowTime = new Array<ExcepcionRowTIme>({'hour_start':'', 'hour_finish':'', 'horariosDesde': this.predefinedHours, 'horariosHasta': [], 'horariosTotales': [], 'dir_alt':false});
-          let newExcepcion = {'date': date, 'date_string': '', 'no_puede': excep.no_puede, 'horarios': rowTime};
-          this.excepciones.push(newExcepcion);
-  
-          if (excep.no_puede != true) {
-  
-            let indexhorario = 0;
-            excep.horarios.forEach( horario => {
-  
-              let hour_start = horario.tramoHorario[0];
-              let size = horario.tramoHorario.length - 1;
-              let hour_finish = horario.tramoHorario[size].trim();
-  
-              let array_horarios_hasta = [];
-              let array_horarios_desde = [];
-  
-              if (indexhorario == 0) {
-  
-                this.predefinedHours.forEach( h => {
-                  if (h > hour_start.trim()) {
-                    array_horarios_hasta.push(h);
-                  }
-                })
-  
-                this.excepciones[indexcep].horarios[indexhorario].hour_start = hour_start;
-                this.excepciones[indexcep].horarios[indexhorario].hour_finish = hour_finish;
-                this.excepciones[indexcep].horarios[indexhorario].horariosDesde = this.predefinedHours;
-                this.excepciones[indexcep].horarios[indexhorario].horariosHasta = array_horarios_hasta;
-                this.excepciones[indexcep].horarios[indexhorario].horariosTotales = horario.tramoHorario;
-                this.excepciones[indexcep].horarios[indexhorario].dir_alt = horario.usandoDirAlt;
-  
-              } else {
-  
-                let horario_finish_anterior = indexhorario - 1;
-                let sizeTramo = excep.horarios[horario_finish_anterior].tramoHorario.length - 1;
-                let horario_finish_actual = excep.horarios[horario_finish_anterior].tramoHorario[sizeTramo];
-  
-                this.predefinedHours.forEach( (h:string) => {
-                  if (h > horario_finish_actual.trim()) {
-                    array_horarios_desde.push(h);
-                  }
-                })
+            let date = new Date(excep.fecha);
     
-                array_horarios_desde.forEach( (h:string) => {
-                  if (h > hour_start) {
-                    array_horarios_hasta.push(h);
-                  }
-                })
-                
-                this.excepciones[indexcep].horarios.push({
-                  hour_start : hour_start,
-                  hour_finish : hour_finish,
-                  horariosDesde : array_horarios_desde,
-                  horariosHasta : array_horarios_hasta,
-                  horariosTotales : horario.tramoHorario,
-                  dir_alt : horario.usandoDirAlt
-                });
-  
-              }
-  
-              indexhorario += 1;
-  
-            });
-  
-          }
-  
-          indexcep += 1;
-  
-        });
+            let rowTime = new Array<ExcepcionRowTIme>({'hour_start':'', 'hour_finish':'', 'horariosDesde': this.predefinedHours, 'horariosHasta': [], 'horariosTotales': [], 'dir_alt':false});
+            let newExcepcion = {'date': date, 'date_string': '', 'no_puede': excep.no_puede, 'horarios': rowTime};
+            this.excepciones.push(newExcepcion);
+    
+            if (excep.no_puede != true) {
+    
+              let indexhorario = 0;
+              excep.horarios.forEach( horario => {
+    
+                let hour_start = horario.tramoHorario[0];
+                let size = horario.tramoHorario.length - 1;
+                let hour_finish = horario.tramoHorario[size].trim();
+    
+                let array_horarios_hasta = [];
+                let array_horarios_desde = [];
+    
+                if (indexhorario == 0) {
+    
+                  this.predefinedHours.forEach( h => {
+                    if (h > hour_start.trim()) {
+                      array_horarios_hasta.push(h);
+                    }
+                  })
+    
+                  this.excepciones[indexcep].horarios[indexhorario].hour_start = hour_start;
+                  this.excepciones[indexcep].horarios[indexhorario].hour_finish = hour_finish;
+                  this.excepciones[indexcep].horarios[indexhorario].horariosDesde = this.predefinedHours;
+                  this.excepciones[indexcep].horarios[indexhorario].horariosHasta = array_horarios_hasta;
+                  this.excepciones[indexcep].horarios[indexhorario].horariosTotales = horario.tramoHorario;
+                  this.excepciones[indexcep].horarios[indexhorario].dir_alt = horario.usandoDirAlt;
+    
+                } else {
+    
+                  let horario_finish_anterior = indexhorario - 1;
+                  let sizeTramo = excep.horarios[horario_finish_anterior].tramoHorario.length - 1;
+                  let horario_finish_actual = excep.horarios[horario_finish_anterior].tramoHorario[sizeTramo];
+    
+                  this.predefinedHours.forEach( (h:string) => {
+                    if (h > horario_finish_actual.trim()) {
+                      array_horarios_desde.push(h);
+                    }
+                  })
+      
+                  array_horarios_desde.forEach( (h:string) => {
+                    if (h > hour_start) {
+                      array_horarios_hasta.push(h);
+                    }
+                  })
+                  
+                  this.excepciones[indexcep].horarios.push({
+                    hour_start : hour_start,
+                    hour_finish : hour_finish,
+                    horariosDesde : array_horarios_desde,
+                    horariosHasta : array_horarios_hasta,
+                    horariosTotales : horario.tramoHorario,
+                    dir_alt : horario.usandoDirAlt
+                  });
+    
+                }
+    
+                indexhorario += 1;
+    
+              });
+    
+            }
+    
+            indexcep += 1;
+    
+          });
+        }
       }
 
       this.excepciones.forEach ( (excep) => {
