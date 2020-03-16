@@ -4,7 +4,7 @@ import { Response } from '../../models/response';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackbarComponent } from '../snackbar/snackbar/snackbar.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute,Router } from '@angular/router';
 import { AlumnosService } from 'src/app/services/alumnos/alumnos.service';
 
 @Component({
@@ -14,7 +14,7 @@ import { AlumnosService } from 'src/app/services/alumnos/alumnos.service';
 })
 export class PendingConfirmationSchedulesComponent implements OnInit {
 
-  constructor(private alumnoService: AlumnosService, private route: ActivatedRoute, private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private _snackBar: MatSnackBar) { }
+  constructor(private router: Router, private alumnoService: AlumnosService, private route: ActivatedRoute, private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private _snackBar: MatSnackBar) { }
 
   cronogramas: Array<any> = [];
   cronograma_edit = [];
@@ -34,6 +34,7 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
 
   isLoaded = false;
   idCronograma;
+  detailedCronograma;
   sub;
 
   ngOnInit() {
@@ -41,17 +42,35 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
       this.cronogramas = response.data;
       console.log("cronogramas", this.cronogramas);
       this.isLoaded = true;
-    })
 
-    this.sub = this.route.params.subscribe(params => {
-      this.idCronograma = +params['idCronograma']; 
-      console.log("idCronograma::", this.idCronograma)
-      //ESTO VA A SER USADO PARA CUANDO SE PUEDAN FILTRAR LOS CRONOGRAMAS CON UN BUSCADOR ARRIBA
-   });
+      
+      this.sub = this.route.params.subscribe(params => {
+        this.idCronograma = +params['idCronograma'];
+        this.detailedCronograma = this.getDetailedCronograma(this.idCronograma);
+        console.log("idCronograma::", this.idCronograma)
+        console.log("detailedCronograma:: ", this.detailedCronograma);
+        //ESTO VA A SER USADO PARA CUANDO SE PUEDAN FILTRAR LOS CRONOGRAMAS CON UN BUSCADOR ARRIBA
+    });
+    })
+  }
+
+  getDetailedCronograma(idCronograma) {
+    console.log("cronos: ", this.cronogramas)
+    return this.cronogramas.find( (cronograma) => {
+      if (cronograma.idCronograma == idCronograma) {
+        return true;
+      }
+    })
   }
 
   ngOnDestroy() {
     this.sub.unsubscribe();
+  }
+
+  verTodosCronogramas() {
+    this.detailedCronograma = null;
+    this.idCronograma = null;
+    this.router.navigate(['pendientes']);
   }
 
   inicialesNombreAlumno(nombreAlumno: string) {

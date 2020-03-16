@@ -36,7 +36,7 @@ export class StudentsComponent implements OnInit {
   @ViewChild('sidenav') sidenav: MatSidenav;
   @ViewChild('customModal') customModal;
 
-  constructor( private _snackBar: MatSnackBar, private alumnoService: AlumnosService, private router: Router, private sharedService:SharedService) { }
+  constructor(private _snackBar: MatSnackBar, private alumnoService: AlumnosService, private router: Router, private sharedService:SharedService) { }
 
   ngOnInit() {
     this.sharedService.destroyData();
@@ -115,7 +115,6 @@ export class StudentsComponent implements OnInit {
   }
 
   confirmEliminarAlumno($event) {
-    console.log("confirmo la baja ", $event);
     this.alumnoService.eliminarAlumno($event).subscribe( (response: Response) => {
       this.customModal.onClose();
       this._snackBar.openFromComponent(SnackbarComponent, {
