@@ -6,11 +6,21 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackbarComponent } from '../snackbar/snackbar/snackbar.component';
 import { ActivatedRoute,Router } from '@angular/router';
 import { AlumnosService } from 'src/app/services/alumnos/alumnos.service';
+import { trigger, transition, animate, style } from '@angular/animations';
 
 @Component({
   selector: 'app-pending-confirmation-schedules',
   templateUrl: './pending-confirmation-schedules.component.html',
-  styleUrls: ['./pending-confirmation-schedules.component.css']
+  styleUrls: ['./pending-confirmation-schedules.component.css'],
+  animations: [
+    trigger('slideInOut', [
+      transition(':enter', [style({ transform: 'translateX(-100%)' }), animate('.3s ease-out', style({ transform: 'translateX(0%)' }))]),
+      transition(':leave',[style({ transform: 'translateX(0%)' }), animate('.3s ease-out', style({ transform: 'translateX(100%)' }))])
+    ]),
+    trigger('slideIn', [
+      transition(':enter', [style({ transform: 'translateX(-100%)' }), animate('.3s ease-out', style({ transform: 'translateX(0%)' }))]),
+    ]),
+  ]
 })
 export class PendingConfirmationSchedulesComponent implements OnInit {
 

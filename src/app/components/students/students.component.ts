@@ -128,7 +128,6 @@ export class StudentsComponent implements OnInit {
 
   goToCronograma(idCronograma) {
     this.router.navigate(['pendientes', idCronograma]);
-    console.log(idCronograma);
   }
 
 }

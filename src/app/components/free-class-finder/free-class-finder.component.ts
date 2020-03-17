@@ -99,10 +99,13 @@ export class FreeClassFinderComponent {
 
     this.yaEsAlumno = false;
     this.selectedAlumno = null;
-    this.alumnoService.obtenerAlumnos().subscribe( (response: Response) => {
-      this.alumnos = response.data;
-      console.log(this.alumnos)
-    })
+
+    if (!this.edit_cronograma) {
+      this.alumnoService.obtenerAlumnos().subscribe( (response: Response) => {
+        this.alumnos = response.data;
+        console.log(this.alumnos)
+      })
+    }
     
     //Cargo los datos del cronograma a editar para realizar la busqueda de las opciones.
     if (this.edit_cronograma) {
