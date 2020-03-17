@@ -427,6 +427,153 @@
             return $idCronograma;
         }
 
+        //Funcion principal que se encargara de guardar el cronograma correspondiente PREVIO a la confirmacion
+        function actualizarCronogramaPendiente($selectedOptions, $studentName, $student_phone, $address, $address_alt, $disponibilidad, $excepciones, $idAddressPrincipal, $idAddressAlt, $idDisponibilidad, $idExcepcion, $idAlumno, $idCronograma) {
+            /*
+            SE HACE UN UPDATE DE:
+            -Direccion principal
+            -Direccion alternativa
+            -Disponibilidad del alumno
+            -El alumno
+            -Excepciones que el alumno posea
+            -El cronograma
+            -Las clases asociadas a dicho cronograma
+            */
+            
+            /* SE INSERTA LA DIRECCION PRINCIPAL */            
+            $state = $this->conn->prepare('INSERT INTO direccion (calle, calle_diag, calle_a, calle_a_diag, calle_b, calle_b_diag, numero, ciudad, departamento, floor_, observaciones) VALUES (?,?,?,?,?,?,?,?,?,?,?)');
+            $address_diag_string = var_export($address[0]->diag, true);
+            $address_a_diag_string = var_export($address[1]->diag, true);
+            $address_b_diag_string = var_export($address[2]->diag, true);
+
+            $state->bind_param('sssssssssss', $address[0]->street, $address_diag_string, $address[1]->street_a, $address_a_diag_string, $address[2]->street_b, $address_b_diag_string, $address[3]->altitud, $address[4]->city, $address[6]->department, $address[5]->floor, $address[7]->observations);
+            
+            $idDireccionPrincipal;
+            $idDireccionAlternativa = null;
+            $idDisponibilidad;
+            $idAlumno;
+            $idCronograma;
+            $idExcepcion;
+
+            if ($state->execute()) { //el insert de la direccion fue exitoso
+                $idDireccionPrincipal = $this->conn->insert_id; //Me quedo con el id de la direccion para luego asignarselo al alumno
+
+                /* SE INSERTA LA DIRECCION ALTERNATIVA SI ES QUE POSEE */
+                if ($this->hayDireccionAlternativa($selectedOptions)) {
+                    /* SE INSERTA LA DIRECCION ALTERNATIVA */            
+                    $state = $this->conn->prepare('INSERT INTO direccion (calle, calle_diag, calle_a, calle_a_diag, calle_b, calle_b_diag, numero, ciudad, departamento, floor_, observaciones) VALUES (?,?,?,?,?,?,?,?,?,?,?)');
+                    $address_diag_string = var_export($address_alt[0]->diag, true);
+                    $address_a_diag_string = var_export($address_alt[1]->diag, true);
+                    $address_b_diag_string = var_export($address_alt[2]->diag, true);
+
+                    $state->bind_param('sssssssssss', $address_alt[0]->street, $address_diag_string, $address_alt[1]->street_a, $address_a_diag_string, $address_alt[2]->street_b, $address_b_diag_string, $address_alt[3]->altitud, $address_alt[4]->city, $address_alt[6]->department, $address_alt[5]->floor, $address_alt[7]->observations);
+                    
+                    if ($state->execute()) { //el insert de la direccion alternativa fue exitoso
+                        $idDireccionAlternativa = $this->conn->insert_id;
+                    } else {
+                        return false;
+                    }
+                }
+
+                /* SE INSERTA LA DISPONIBILIDAD DEL ALUMNO */
+                /* SE INSERTARA LA DISPONIBILIDAD DEL ALUMNO CON EL SIGUIENTE FORMATO:
+                [DISPONIBILIDADES: STRING] | [DIRECCION_ALTERNATIVA: BOOLEAN]
+                SI EL TRAMO HORARIO ES EN LA DIRECCION ALTERNATIVA SE PONDRA EN TRUE, SI ES EN LA PRINCIPAL EN FALSE. 
+                    */
+                $disponibilidad_string = [];
+                foreach ($disponibilidad as $dia) {
+                    if ($dia->all_day) {
+                        $scheduleSend_string = implode (", ", $dia->option[0]->scheduleSend);
+                        $scheduleSend_string .= '|'.var_export($dia->option[0]->dir_alt, true);
+                        array_push($disponibilidad_string, $scheduleSend_string);
+                    } else {
+                        if ($dia->option[0]->scheduleSend != null) {
+                            $arrayTotal = [];
+                            foreach ($dia->option as $option) {
+                                $arrayTotal = array_merge($arrayTotal, $option->scheduleSend);
+                                $scheduleSend_string = '|'.var_export($option->dir_alt, true);
+                                array_push($arrayTotal, $scheduleSend_string);
+                            }       
+                            $scheduleSend_string = implode (", ", $arrayTotal);
+                            array_push($disponibilidad_string, $scheduleSend_string);
+                        } else {
+                            array_push($disponibilidad_string, null);
+                        }
+                    }
+                }                
+                $state = $this->conn->prepare('INSERT INTO disponibilidad (Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday) VALUES (?,?,?,?,?,?,?)');
+                $state->bind_param('sssssss', $disponibilidad_string[0], $disponibilidad_string[1], $disponibilidad_string[2], $disponibilidad_string[3], $disponibilidad_string[4], $disponibilidad_string[5], $disponibilidad_string[6]);
+                
+                if ($state->execute()) { //disponibilidad insertada con exito
+                    $idDisponibilidad = $this->conn->insert_id;
+                } else {
+                    return false;
+                }
+                
+                /* SE INSERTA AL ALUMNO */
+                $today = date('Y-m-d');
+                $activoYConfirmado = 'false';
+                $state = $this->conn->prepare('INSERT INTO alumno (idDireccion, idDireccionAlt, fechaAlta, activo, nombre, telefono, confirmado, idDisponibilidad) VALUES (?,?,?,?,?,?,?,?)');
+                $state->bind_param('iisssssi', $idDireccionPrincipal, $idDireccionAlternativa, $today, $activoYConfirmado, $studentName, $student_phone, $activoYConfirmado, $idDisponibilidad);
+                if ($state->execute()) { //el insert del alumno fue exitoso
+                    $idAlumno = $this->conn->insert_id;
+                } else {
+                    return false;
+                }
+
+                /* SE INSERTAN LAS EXCEPCIONES SI POSEE */
+                if (sizeof($excepciones) > 0) {
+                    foreach ($excepciones as $excepcion) {
+                        $no_puede = 'false';
+                        if ($excepcion->no_puede) {
+                            $no_puede = 'true';
+                        }
+                        $state = $this->conn->prepare('INSERT INTO excepcion (fecha, no_puede, idAlumno) VALUES (?,?,?)');
+                        $state->bind_param('ssi', $excepcion->date_string, $no_puede, $idAlumno);
+                        if ($state->execute()) {  //me guardo la excepcion
+                            $idExcepcion = $this->conn->insert_id;
+                        }
+
+                        if (sizeof($excepcion->horarios) > 0) { //si tiene horarios agregados, inserto los mismos
+                            foreach ($excepcion->horarios as $horarioRowTime) {
+                                $dir_alt_excepcion = var_export($horarioRowTime->dir_alt, true);
+                                $horariosTotales_string = implode (", ", $horarioRowTime->horariosTotales);
+                                $state = $this->conn->prepare('INSERT INTO excepcionHorarios (dir_alt, horarios, idExcepcion) VALUES (?,?,?)');
+                                $state->bind_param('ssi', $dir_alt_excepcion, $horariosTotales_string, $idExcepcion);
+                                $state->execute();
+                            }
+                        }
+                    }
+                }
+                
+                /* SE CREA UN NUEVO CRONOGRAMA */
+                $state = $this->conn->prepare('INSERT INTO cronograma (status, idAlumno, timestampGuardado) VALUES (?,?,?)');
+                $status = "NO CONFIRMADO";
+                $datetime = date('m/d/Y h:i:s a', time());
+                $state->bind_param('sis', $status, $idAlumno, $datetime);
+                if ($state->execute()) { //el insert del alumno fue exitoso
+                    $idCronograma = $this->conn->insert_id;
+                } else {
+                    return false;
+                }
+
+                /* SE CARGAN LAS CLASES SIN CONFIRMAR BAJO EL NUEVO CRONOGRAMA */
+                foreach ($selectedOptions as $option) {
+                    $state = $this->conn->prepare('INSERT INTO clase (alumno, auto, fecha, horaInicio, idZona, idDireccion, idCronograma, status) VALUES (?,?,?,?,?,?,?,?)');
+                    $direccionClase = $idDireccionPrincipal;
+                    if ($option->da) {
+                        $direccionClase = $idDireccionAlternativa;
+                    }
+                    $state->bind_param('iissiiis', $idAlumno, $option->id_auto, $option->fecha, $option->horario, $option->idZona, $direccionClase, $idCronograma, $status);
+                    $state->execute();
+                }
+            } else {
+                return false;
+            }
+
+            return $idCronograma;
+        }
+
         function hayDireccionAlternativa($selectedOptions) {
             foreach($selectedOptions as $option) {
                 if ($option->da) {
@@ -466,7 +613,7 @@
             cronograma.timestampGuardado,
             excepcion.idExcepcion, excepcion.fecha AS fechaExcepcion, excepcion.no_puede,
             excepcionhorarios.dir_alt, excepcionhorarios.horarios,
-            disponibilidad.Monday, disponibilidad.Tuesday, disponibilidad.Wednesday, disponibilidad.Thursday, disponibilidad.Friday, disponibilidad.Saturday, disponibilidad.Sunday,
+            disponibilidad.idDisponibilidad, disponibilidad.Monday, disponibilidad.Tuesday, disponibilidad.Wednesday, disponibilidad.Thursday, disponibilidad.Friday, disponibilidad.Saturday, disponibilidad.Sunday,
             alumno.idAlumno, alumno.nombre, alumno.telefono, clase.idClase, clase.idCronograma, clase.alumno, clase.auto, clase.fecha, clase.horaInicio, clase.idZona, clase.idDireccion, clase.status AS satusClase, cronograma.status AS cronogramaStatus 
             FROM clase 
             INNER JOIN cronograma ON cronograma.idCronograma = clase.idCronograma AND cronograma.status = ? 
@@ -541,6 +688,7 @@
                     $cronogramaObject = (object) [
                         'idCronograma' => $row['idCronograma'],
                         'alumno' => $row['alumno'],
+                        'idDisponibilidad' => $row['idDisponibilidad'],
                         'nombreAlumno' => $row['nombre'],
                         'telefonoAlumno' => $row['telefono'],
                         'direccionPrincipalFormateada' => $direccionPrincipalFormateada,

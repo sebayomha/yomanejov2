@@ -1,0 +1,67 @@
+<div class="tablesContainer">
+  <table mat-table id="alumnosActivosTable" [dataSource]="alumnosActivos" class="mat-elevation-z8">
+          
+    <!-- Position Column -->
+    <ng-container matColumnDef="Id">
+      <th mat-header-cell *matHeaderCellDef> Id </th>
+      <td mat-cell *matCellDef="let element"> {{element.idAuto}} </td>
+      <td mat-footer-cell *matFooterCellDef>               
+      </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="patente">
+      <th mat-header-cell *matHeaderCellDef> Patente </th>
+      <td mat-cell *matCellDef="let element"> {{element.patente}} </td>
+      <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="disponibilidad">
+      <th mat-header-cell *matHeaderCellDef> Dirección del alumno </th>
+      <td mat-cell *matCellDef="let element"> {{ (element.id_DirFisica) ? element.dirFisicaFormateada: 'No posee'}} </td>
+      <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="descripcion">
+      <th mat-header-cell *matHeaderCellDef> Teléfono </th>
+      <td mat-cell *matCellDef="let element"> {{element.telefono | phone}} </td>
+      <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="zonaMaster">
+      <th mat-header-cell *matHeaderCellDef> Documento </th>
+      <td mat-cell *matCellDef="let element"> {{element.documento | document}} </td>
+      <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="accion">
+      <th mat-header-cell *matHeaderCellDef style="text-align: center;"> Acción </th>
+      <td mat-cell *matCellDef="let element" style="text-align: center;">
+        <div>
+          <div style="display: inline-block;" (click)="editarAlumno(element, $event);">
+            <i style="color: #3f51b5;" class="material-icons icons" matTooltip="Editar">
+              edit
+            </i>
+          </div>
+
+          <div style="display: inline-block; padding-left: 10px;" (click)="eliminarAlumno(element, $event);">
+            <i style="color: #d61c1c;" class="material-icons icons" matTooltip="Dar de baja">
+              archive
+            </i>
+          </div>
+        </div>
+      </td>
+      <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="openDetail(row)"></tr>
+    <ng-container *ngIf="alumnosActivos && alumnosActivos.length > 4">
+      <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+    </ng-container>
+  </table>
+</div>

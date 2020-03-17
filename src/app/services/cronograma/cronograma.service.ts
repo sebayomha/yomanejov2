@@ -35,6 +35,10 @@ export class CronogramaService {
     return this.http.post('api/calcularCronograma/guardar', JSON.stringify(cronograma));
   }
 
+  actualizarCronogramaPendiente(cronograma) {
+    return this.http.post('api/calcularCronograma/actualizarCronogramaPendiente', JSON.stringify(cronograma));
+  }
+
   obtenerCronogramasPendientesDeConfirmar() {
     return this.http.get('api/calcularCronograma/cronogramasPendientes');
   }

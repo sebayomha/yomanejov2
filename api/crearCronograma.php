@@ -113,6 +113,32 @@
 		}
 	}
 
+	function actualizarCronogramaPendiente() {
+		$post = json_decode(file_get_contents('php://input'));
+		
+		$idCronograma = $post[0]->idCronograma;
+		$selectedOptions = $post[1]->selected_options;
+		$idAlumno = $post[2]->idAlumno;
+		$studentName = $post[3]->student_name;
+		$student_phone = $post[4]->student_phone;
+		$idDireccionPrincipal = $post[5]->idDireccionPrincipal;
+		$address = $post[6]->address;
+		$idDireccionPrincipal = $post[7]->idDireccionAlternativa;
+		$address_alt = $post[8]->address_alternative;
+		$idDisponibilidad = $post[9]->idDisponibilidad;
+		$disponibilidad = $post[10]->disponibilidad;
+		$idExcepciones = $post[11]->idExcepciones;
+		$excepciones = $post[12]->excepciones;
+
+		$cronograma = new Cronograma();
+		$resultActualizarCronogramaPendiente = $cronograma->actualizarCronogramaPendiente($selectedOptions, $studentName, $student_phone, $address, $address_alt, $disponibilidad, $excepciones);
+		if ($resultActualizarCronogramaPendiente != false) {
+			echo json_encode($GLOBALS['utils']->getResponse(0, $resultActualizarCronogramaPendiente));
+		} else {
+			echo json_encode($GLOBALS['utils']->getResponse(1, "Ocurrió un error al actualizar algún registro, vuelva a intentar más tarde."));
+		}	
+	}
+
 	function obtenerCronogramasPendientesDeConfirmar() {
 		$cronograma = new Cronograma();
 		$resultCronograma = $cronograma->obtenerCronogramasPendientesDeConfirmar();
@@ -197,6 +223,9 @@
 					break;
 				case '/calcularCronograma/cancelarCronograma':
 					cancelarCronograma();
+					break;
+				case '/calcularCronograma/actualizarCronogramaPendiente':
+					actualizarCronogramaPendiente();
 					break;
 				default:
 					echo "podriamos agregar otra consulta mas";
