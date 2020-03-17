@@ -23,7 +23,7 @@ import { NgForm } from '@angular/forms';
 export class FreeClassFinderComponent {
 
   @Input() edit_cronograma;
-  @Output() show_edit = new EventEmitter<string>();
+  @Output() show_edit = new EventEmitter<any>();
 
   @ViewChild('forma') formaSearch : NgForm;
   
@@ -283,7 +283,6 @@ export class FreeClassFinderComponent {
       });
 
       let indexcep = 0;
-      console.log("EDIT c", this.edit_cronograma)
       if (this.edit_cronograma.excepciones.length > 0) {
         if (this.edit_cronograma.excepciones[0].idExcepcion != null && this.edit_cronograma.excepciones[0].fecha != null ) {
           Object.values(this.edit_cronograma.excepciones).forEach( (excep:any) => {
@@ -369,8 +368,7 @@ export class FreeClassFinderComponent {
         }
       })
       
-      console.log(this.excepciones);
-      console.log(this.search);
+
       this.schedule_send_null = false;
       this.search.lessons = this.edit_cronograma.clases.length;
 
@@ -494,12 +492,16 @@ export class FreeClassFinderComponent {
   }
 
   onAvailableSchedulesFinish($event) {
-    this.available_schedules = null;
-    this.control_collapse_search = true;
-    this.excepciones = [];
-    this.formaSearch.resetForm();
-    this.yaEsAlumno = false;
-    this.ngOnInit();
+    if ($event == "GuardarCronograma") {
+      this.available_schedules = null;
+      this.control_collapse_search = true;
+      this.excepciones = [];
+      this.formaSearch.resetForm();
+      this.yaEsAlumno = false;
+      this.ngOnInit();
+    } else {
+      this.verCronosPendientes(false);
+    }
   }
 
   isMobile() {
@@ -522,8 +524,6 @@ export class FreeClassFinderComponent {
     let rowTime = new Array<ExcepcionRowTIme>({'hour_start':'', 'hour_finish':'', 'horariosDesde': this.predefinedHours, 'horariosHasta': [], 'horariosTotales': [], 'dir_alt':false});
     let newExcepcion = {'date': new Date(), 'date_string': '', 'no_puede': false, 'horarios': rowTime};
     this.excepciones.push(newExcepcion);
-    
-    console.log(this.excepciones);
   }
 
   removeExcepcion(excepcionIndex) {
@@ -542,8 +542,6 @@ export class FreeClassFinderComponent {
 
     let rowTime: ExcepcionRowTIme = {'hour_start':'', 'hour_finish':'', 'horariosDesde': new_array_options, 'horariosHasta': [], 'horariosTotales': [], 'dir_alt':false};
     this.excepciones[excepcionIndex].horarios.push(rowTime);
-
-    console.log(this.excepciones);
   }
 
   removeRowTime(excepcionIndex, rowRemove){
@@ -572,8 +570,6 @@ export class FreeClassFinderComponent {
         this.excepciones[excepcionIndex].horarios[rowExcepcionIndex].horariosTotales.push(h);
       }
     })
-
-    console.log(this.excepciones);
   }
 
   setExceptionHours() {

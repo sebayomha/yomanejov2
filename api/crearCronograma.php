@@ -96,13 +96,13 @@
 	function guardarCronograma() {
 		$post = json_decode(file_get_contents('php://input'));
 
-		$selectedOptions = $post[0]->selected_options;
-		$studentName = $post[1]->student_name;
-		$student_phone = $post[2]->student_phone;
-		$address = $post[3]->address;
-		$address_alt = $post[4]->address_alternative;
-		$disponibilidad = $post[5]->disponibilidad;
-		$excepciones = $post[6]->excepciones;
+		$selectedOptions = $post[1]->selected_options;
+		$studentName = $post[3]->student_name;
+		$student_phone = $post[4]->student_phone;
+		$address = $post[6]->address;
+		$address_alt = $post[8]->address_alternative;
+		$disponibilidad = $post[10]->disponibilidad;
+		$excepciones = $post[12]->excepciones;
 
 		$cronograma = new Cronograma();
 		$resultGuardarCronograma = $cronograma->guardarCronograma($selectedOptions, $studentName, $student_phone, $address, $address_alt, $disponibilidad, $excepciones);
@@ -123,7 +123,7 @@
 		$student_phone = $post[4]->student_phone;
 		$idDireccionPrincipal = $post[5]->idDireccionPrincipal;
 		$address = $post[6]->address;
-		$idDireccionPrincipal = $post[7]->idDireccionAlternativa;
+		$idDireccionAlternativa = $post[7]->idDireccionAlternativa;
 		$address_alt = $post[8]->address_alternative;
 		$idDisponibilidad = $post[9]->idDisponibilidad;
 		$disponibilidad = $post[10]->disponibilidad;
@@ -131,7 +131,7 @@
 		$excepciones = $post[12]->excepciones;
 
 		$cronograma = new Cronograma();
-		$resultActualizarCronogramaPendiente = $cronograma->actualizarCronogramaPendiente($selectedOptions, $studentName, $student_phone, $address, $address_alt, $disponibilidad, $excepciones);
+		$resultActualizarCronogramaPendiente = $cronograma->actualizarCronogramaPendiente($idCronograma, $selectedOptions, $idAlumno, $studentName, $student_phone, $idDireccionPrincipal, $address, $idDireccionAlternativa, $address_alt, $idDisponibilidad, $disponibilidad, $idExcepciones, $excepciones);
 		if ($resultActualizarCronogramaPendiente != false) {
 			echo json_encode($GLOBALS['utils']->getResponse(0, $resultActualizarCronogramaPendiente));
 		} else {

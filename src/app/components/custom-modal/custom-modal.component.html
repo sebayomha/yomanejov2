@@ -28,42 +28,42 @@
       <div class="modal-body" style="max-height: 330px; overflow-y: auto;" *ngIf="component == 'availableSchedules' && data.length && !successBanner">
         <div>
           Clases:
-          <div *ngFor="let clase of this.data[0].selected_options; let i = index" style="text-align: center;">
+          <div *ngFor="let clase of this.data[1].selected_options; let i = index" style="text-align: center;">
             <p>{{i+1}}°- Dia: {{clase.fecha | date: 'dd/MM/yyyy'}} - Hora: {{clase.horario}} hs</p>
           </div>
         </div>
       </div>
-      <div class="modal-body" [ngClass]="{'height-290': this.data[0].selected_options.length > 10}" style="max-height: 500px; overflow-y: auto;" *ngIf="component == 'availableSchedules' && data.length && successBanner">
+      <div class="modal-body" [ngClass]="{'height-290': this.data[1].selected_options.length > 10}" style="max-height: 500px; overflow-y: auto;" *ngIf="component == 'availableSchedules' && data.length && successBanner">
         <div>
           <div style="text-align: center;
           font-weight: 500;
-          font-size: 20px;">¡Cronograma guardado exitosamente!</div>
+          font-size: 20px;">¡Cronograma {{(operation == 'EditarCronograma' ? 'editado':'guardado')}} exitosamente!</div>
           <div style="    font-size: 14px;
           margin-top: 6px;
           margin-bottom: 20px;">
             <span style="color: rgba(0, 0, 0, 0.57);">
-              Se ha generado el cronograma <span style="color: #43c89d; font-weight: 500;">{{idCronogramaGuardado}}</span>. Recuerde que el cronograma quedará pendiente de confirmación. Puede encontrarlo en la pantalla de <span style="color: #43c89d; font-weight: 500;">Cronogramas</span>.
+              Se ha {{(operation == 'EditarCronograma' ? 'editado':'generado')}} el cronograma <span style="color: #43c89d; font-weight: 500;">{{idCronogramaGuardado}}</span>. Recuerde que el cronograma quedará pendiente de confirmación. Puede encontrarlo en la pantalla de <span style="color: #43c89d; font-weight: 500;">Cronogramas</span>.
             </span>
           </div>
           <div id="horariosContainer">
-            <div *ngFor="let clase of this.data[0].selected_options; let i = index">
+            <div *ngFor="let clase of this.data[1].selected_options; let i = index">
               <div class="row" *ngIf="i % 2 == 0">
-                <div class="col-12 col-lg-6" *ngIf="this.data[0].selected_options[i]" style="margin-top: 10px; margin-bottom: 10px;">
+                <div class="col-12 col-lg-6" *ngIf="this.data[1].selected_options[i]" style="margin-top: 10px; margin-bottom: 10px;">
                   <div>
                     <span class="dot margin-left-10-porc">
                     <p style="margin: 1px; color: white; margin-left: 8px;">{{i+1}}</p>
                   </span>
-                  <span>&nbsp;&nbsp; {{this.data[0].selected_options[i].dia}} {{this.data[0].selected_options[i].fecha | date: 'mediumDate'}}&nbsp;&nbsp;</span> 
-                  <span>-&nbsp;&nbsp;{{this.data[0].selected_options[i].horario}} hs</span>
+                  <span>&nbsp;&nbsp; {{this.data[1].selected_options[i].dia}} {{this.data[1].selected_options[i].fecha | date: 'mediumDate'}}&nbsp;&nbsp;</span> 
+                  <span>-&nbsp;&nbsp;{{this.data[1].selected_options[i].horario}} hs</span>
                   </div>
                 </div>
-                <div class="col-12 col-lg-6" *ngIf="this.data[0].selected_options[i+1]" style="margin-top: 10px; margin-bottom: 10px;">
+                <div class="col-12 col-lg-6" *ngIf="this.data[1].selected_options[i+1]" style="margin-top: 10px; margin-bottom: 10px;">
                   <span class="dot margin-left-10-porc">
                     <p style="margin: 1px; color: white; margin-left: 8px;">{{i+2}}
                     </p>
                   </span>
-                  <span> &nbsp;&nbsp; {{this.data[0].selected_options[i+1].dia}} {{this.data[0].selected_options[i+1].fecha | date: 'mediumDate'}}&nbsp;&nbsp;</span> 
-                  <span>-&nbsp;&nbsp;{{this.data[0].selected_options[i+1].horario}} hs</span>
+                  <span> &nbsp;&nbsp; {{this.data[1].selected_options[i+1].dia}} {{this.data[1].selected_options[i+1].fecha | date: 'mediumDate'}}&nbsp;&nbsp;</span> 
+                  <span>-&nbsp;&nbsp;{{this.data[1].selected_options[i+1].horario}} hs</span>
                 </div>
               </div>
             </div>

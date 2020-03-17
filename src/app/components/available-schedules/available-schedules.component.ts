@@ -56,7 +56,7 @@ export class AvailableSchedulesComponent {
     not_available_classes = [];
     fecha_no_disponible:boolean;
     show_info_banner:boolean = false;
-
+    operationCustomModal: string;
 
     /* variables para editar cronograma */
     idAlumno;
@@ -74,23 +74,19 @@ export class AvailableSchedulesComponent {
       this.classes = [];        
       this.order_information = this.data;
       if (this.edit_cronograma) {
+        this.idAlumno = this.edit_cronograma.alumno;
+        this.idCronograma = this.edit_cronograma.idCronograma;
+        this.idDireccionPrincipal = this.edit_cronograma.idDireccionPrincipal;
+        this.idDireccionAlternativa = this.edit_cronograma.idDireccionAlternativa;
+        this.idDisponibilidad = this.edit_cronograma.idDisponibilidad;
 
-      /* variables para editar cronograma */
-      console.log("EDITCRONOgRAMA::", this.edit_cronograma);
-      this.idAlumno = this.edit_cronograma.alumno;
-      this.idCronograma = this.edit_cronograma.idCronograma;
-      this.idDireccionPrincipal = this.edit_cronograma.idDireccionPrincipal;
-      this.idDireccionAlternativa = this.edit_cronograma.idDireccionAlternativa;
-      this.idDisponibilidad = this.edit_cronograma.idDisponibilidad;
-
-      if (this.edit_cronograma.excepciones[0].idExcepcion == null) {
-        this.idExcepciones = null;
-      } else {
-        this.edit_cronograma.excepciones.forEach( excepcion => {
-          this.idExcepciones.push(excepcion.idExcepcion);
-        })
-      }
-      
+        if (this.edit_cronograma.excepciones[0].idExcepcion == null) {
+          this.idExcepciones = null;
+        } else {
+          this.edit_cronograma.excepciones.forEach( excepcion => {
+            this.idExcepciones.push(excepcion.idExcepcion);
+          })
+        }
       }
     }
     
@@ -285,6 +281,7 @@ export class AvailableSchedulesComponent {
 
     confirmSchedule($event) {
       if (!this.edit_cronograma) {
+        this.operationCustomModal = "GuardarCronograma";
         this.cronogramaService.guardarCronograma($event).subscribe( (response: Response) => {
           console.log(response);
           if (response.code == 0) {
@@ -301,6 +298,7 @@ export class AvailableSchedulesComponent {
           }
         })
       } else {
+        this.operationCustomModal = "EditarCronograma";
         this.cronogramaService.actualizarCronogramaPendiente($event).subscribe( (response: Response) => {
           console.log(response);
           if (response.code == 0) {
@@ -322,7 +320,11 @@ export class AvailableSchedulesComponent {
     }
 
     onCustomModalClose($event) {
-      this.finish.emit($event);
+      if (this.edit_cronograma) {
+        this.finish.emit("EditarCronograma")
+      } else {
+        this.finish.emit("GuardarCronograma");
+      }
     }
 
 }

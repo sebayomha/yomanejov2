@@ -55,7 +55,6 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
   }
 
   getDetailedCronograma(idCronograma) {
-    console.log("cronos: ", this.cronogramas)
     return this.cronogramas.find( (cronograma) => {
       if (cronograma.idCronograma == idCronograma) {
         return true;
@@ -235,5 +234,6 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
   //Cierro edicion
   closeEditCrono(flag){
     this.show_edit = flag;
+    this.ngOnInit();
   }
 }
