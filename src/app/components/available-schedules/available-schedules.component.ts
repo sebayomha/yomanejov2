@@ -85,6 +85,7 @@ export class AvailableSchedulesComponent {
     verificoClases() {
 
       this.not_available_classes = [];
+      this.classes = [];
       let index_class = 0;
       this.edit_cronograma.clases.forEach(clase => {
         index_class += 1;
@@ -93,17 +94,37 @@ export class AvailableSchedulesComponent {
         let auto = clase.auto;
 
         this.data.forEach(opt => {
+
           if (opt.fecha == fecha_clase) {
             this.fecha_no_disponible = true;
+            let index_opt = 0;
             opt.horarios.forEach(opt_day => {
-                if((opt_day.horaInicio == hora_inicio) && (opt_day.idAuto == auto)) {
 
-                  //Selecciono la clase dentro de las opciones de busqueda.
-                  this.fecha_no_disponible = false;
-                  opt_day.selected = true;
-                  this.cantSelectedClasses += 1;
+              if((opt_day.horaInicio == hora_inicio) && (opt_day.idAuto == auto)) {
+
+                //Selecciono la clase dentro de las opciones de busqueda.
+                this.fecha_no_disponible = false;
+                this.cantSelectedClasses += 1;
+                opt_day.selected = true;
+
+                var option = {
+                  'index': index_opt,
+                  'cant': 1,
+                  'fecha': opt.fecha,
+                  'dia': opt.dia,
+                  'fecha_orden': new Date(opt.fecha),
+                  'horario': opt_day.horaInicio,
+                  'id_auto': opt_day.idAuto,
+                  'da': opt_day.usandoDirAlt,
+                  'idZona': opt_day.idZona
                 }
+
+                this.classes.push(option);
+
+              }
+              index_opt += 1;
             });
+            
             if(this.fecha_no_disponible == true) {
 
               //Armo array del banner
@@ -114,6 +135,15 @@ export class AvailableSchedulesComponent {
         });
         
       });
+
+      this.classes_send = [];
+      this.classes.forEach(element => {
+        if (element.cant == 1) {
+          element.fecha_orden.setDate(element.fecha_orden.getDate() - 1);
+          this.classes_send.push(element);
+        }
+      });
+
     }
 
     cerrarBanner() {
