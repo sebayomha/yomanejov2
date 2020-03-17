@@ -219,7 +219,8 @@ export class AvailableSchedulesComponent {
         'horario': event.option.value.horaInicio,
         'id_auto': event.option.value.idAuto,
         'da': event.option.value.usandoDirAlt,
-        'idZona': event.option.value.idZona
+        'idZona': event.option.value.idZona,
+        'idClase': null
       }
 
       if (selectedOptions._selection.size == 0) {
