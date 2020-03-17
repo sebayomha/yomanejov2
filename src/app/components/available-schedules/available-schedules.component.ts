@@ -111,6 +111,7 @@ export class AvailableSchedulesComponent {
       this.not_available_classes = [];
       this.classes = [];
       let index_class = 0;
+      let index_opt = 0;
       this.edit_cronograma.clases.forEach(clase => {
         index_class += 1;
         let fecha_clase = clase.fecha;
@@ -121,7 +122,7 @@ export class AvailableSchedulesComponent {
 
           if (opt.fecha == fecha_clase) {
             this.fecha_no_disponible = true;
-            let index_opt = 0;
+            
             opt.horarios.forEach(opt_day => {
 
               if((opt_day.horaInicio == hora_inicio) && (opt_day.idAuto == auto)) {
@@ -147,9 +148,10 @@ export class AvailableSchedulesComponent {
                 console.log("OPT:: ", opt);
                 console.log("CLASE ::", clase);
                 this.classes.push(option);
+                index_opt += 1;
 
               }
-              index_opt += 1;
+              
             });
             
             if(this.fecha_no_disponible == true) {

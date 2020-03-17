@@ -1,7 +1,7 @@
 <div class="alert alert-warning" role="alert" *ngIf="show_info_banner">
-  <div class="row" *ngFor="let class of not_available_classes" >
+  <div class="row" *ngFor="let class of not_available_classes; let c = index;" >
     <div class="col-10">{{class}}</div>
-    <div class="col-2"><span (click)="cerrarBanner()" style="float: right;"><i class="fas fa-times"></i></span></div>
+    <div class="col-2" *ngIf="c == 0"><span (click)="cerrarBanner()" style="float: right; cursor: pointer;"><i class="fas fa-times"></i></span></div>
   </div>
 </div>
 
