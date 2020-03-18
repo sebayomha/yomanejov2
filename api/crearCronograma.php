@@ -139,10 +139,10 @@
 		}	
 	}
 
-	function obtenerCronogramasPendientesDeConfirmar() {
+	function obtenerCronogramas() {
 		$cronograma = new Cronograma();
-		$resultCronograma = $cronograma->obtenerCronogramasPendientesDeConfirmar();
-		if ($resultCronograma == 1) {
+		$resultCronograma = $cronograma->obtenerCronogramas();
+		if (!is_object($resultCronograma)) {
 			echo json_encode($GLOBALS['utils']->getResponse(1, "Ocurrió un error al obtener los cronogramas, vuelva a intentar más tarde."));
 		} else {
 			echo json_encode($GLOBALS['utils']->getResponse(0, $resultCronograma));	
@@ -197,7 +197,7 @@
 		  	//Obtengo la URL Final para saber cual accion ejecutar.
 		  	switch ($requestMethod){
 				case '/calcularCronograma/cronogramasPendientes':
-					obtenerCronogramasPendientesDeConfirmar();
+					obtenerCronogramas();
 					break;
 				case '/calcularCronograma/obtenerClasesPorFecha':
 					obtenerClasesPorFecha();

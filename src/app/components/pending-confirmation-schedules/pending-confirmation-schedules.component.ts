@@ -27,6 +27,9 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
   constructor(private router: Router, private alumnoService: AlumnosService, private route: ActivatedRoute, private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private _snackBar: MatSnackBar) { }
 
   cronogramas: Array<any> = [];
+  cronogramasConfirmados: Array<any> = [];
+  cronogramasFinalizados: Array<any> = [];
+
   cronograma_edit = [];
   displayedColumns: string[] = ['noClase', 'fecha', 'hora', 'direccion', 'auto'];
   showSuccessBanner: boolean = false;
@@ -49,7 +52,9 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
 
   ngOnInit() {
     this.cronogramaService.obtenerCronogramasPendientesDeConfirmar().subscribe( (response: Response) => {
-      this.cronogramas = response.data;
+      this.cronogramas = response.data.cronogramasPendientes;
+      this.cronogramasConfirmados = response.data.cronogramasConfirmados;
+      this.cronogramasFinalizados = response.data.cronogramasFinalizados;
       console.log("cronogramas", this.cronogramas);
       this.isLoaded = true;
 
@@ -65,11 +70,25 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
   }
 
   getDetailedCronograma(idCronograma) {
-    return this.cronogramas.find( (cronograma) => {
+    let cronogramaPendiente = this.cronogramas.find( (cronograma) => {
       if (cronograma.idCronograma == idCronograma) {
         return true;
       }
     })
+    
+    let cronogramaConfirmado = this.cronogramasConfirmados.find( (cronograma) => {
+      if (cronograma.idCronograma == idCronograma) {
+        return true;
+      }
+    })
+
+    let cronogramaFinalizado = this.cronogramasFinalizados.find( (cronograma) => {
+      if (cronograma.idCronograma == idCronograma) {
+        return true;
+      }
+    })
+
+    return cronogramaPendiente || cronogramaConfirmado || cronogramaFinalizado;
   }
 
   ngOnDestroy() {

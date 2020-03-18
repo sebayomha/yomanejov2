@@ -95,7 +95,6 @@ export class FreeClassFinderComponent {
     this.search = new Search(this.student_name, dates_times, this.addresses, this.addresses_alt, 8, tomorrow);
     this.search.address[4].city = "La Plata";
     this.search.address_alternative[4].city = "La Plata";
-    console.log(this.search);
 
     this.yaEsAlumno = false;
     this.selectedAlumno = null;
@@ -290,7 +289,7 @@ export class FreeClassFinderComponent {
         if (this.edit_cronograma.excepciones[0].idExcepcion != null && this.edit_cronograma.excepciones[0].fecha != null ) {
           Object.values(this.edit_cronograma.excepciones).forEach( (excep:any) => {
 
-            let date = new Date(excep.fecha);
+            let date = new Date(excep.fecha.replace("-", "/"));
     
             let rowTime = new Array<ExcepcionRowTIme>({'hour_start':'', 'hour_finish':'', 'horariosDesde': this.predefinedHours, 'horariosHasta': [], 'horariosTotales': [], 'dir_alt':false});
             let newExcepcion = {'date': date, 'date_string': '', 'no_puede': excep.no_puede, 'horarios': rowTime};

@@ -60,7 +60,7 @@ export class AvailableSchedulesComponent {
 
     /* variables para editar cronograma */
     idAlumno;
-    idExcepciones;
+    idExcepciones = [];
     idCronograma;
     idDisponibilidad;
     idDireccionPrincipal;
