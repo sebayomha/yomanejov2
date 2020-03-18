@@ -554,7 +554,7 @@
 
                 </mat-expansion-panel>
                 <div class="form-group" style="text-align: right; margin-top:30px;">
-                    <span *ngIf="flag_excep_date_error" style="color: #f44336; font-size: 12px;">Existen excepciones con fechas pasadas.</span>
+                    <span *ngIf="flag_excep_date_error" style="color: #f44336; font-size: 12px;">Existen excepciones con fechas caducadas.</span>
                     <button class="confirmButtonCalcular" mat-button type="submit"
                         [disabled]="(!forma.valid || (!(search.address[3].altitud != '') && !(search.address[1].street_a != '') && !(search.address[2].street_b != '')) || flag_address_alt && (!(search.address_alternative[3].altitud != '') && !(search.address_alternative[1].street_a != '') && !(search.address_alternative[2].street_b != '')) || schedule_send_null || !(search.student_name != '') || !(search.student_phone != ''))">BUSCAR</button>
                 </div>

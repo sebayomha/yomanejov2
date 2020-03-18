@@ -107,7 +107,7 @@ export class AvailableSchedulesComponent {
     // Editar cronograma:
     // Tomo las clases que se habian seleccionado y chequeo que aun esten disponibles. Las que no lo esten apareceran en el banner.
     verificoClases() {
-
+      this.show_info_banner = false
       this.not_available_classes = [];
       this.classes = [];
       let index_class = 0;
