@@ -516,6 +516,21 @@
             
             /* SE INSERTAN LAS EXCEPCIONES SI POSEE */
             if (sizeof($excepciones) > 0) {
+                /* ELIMINO LAS EXCEPCIONES QUE YA POSEA */
+                if ($idExcepciones != null) {
+                    foreach ($idExcepciones as $idExcepcion) {
+                        /* SE ELIMINAN TODAS LAS EXCEPCIONES DEL ALUMNO*/
+                        $state = $this->conn->prepare('DELETE FROM excepcionHorarios WHERE excepcionHorarios.idExcepcion = ?');
+                        $state->bind_param('i', $idExcepcion);
+                        $state->execute(); 
+
+                        $state = $this->conn->prepare('DELETE FROM excepcion WHERE excepcion.idExcepcion = ?');
+                        $state->bind_param('i', $idExcepcion);
+                        $state->execute(); 
+                    }
+                }
+                
+                /* SE VUELVEN A AGREGAR O SE AGREGAN POR PRIMERA VEZ */
                 foreach ($excepciones as $excepcion) {
                     $no_puede = 'false';
                     if ($excepcion->no_puede) {
@@ -535,6 +550,19 @@
                             $state->bind_param('ssi', $dir_alt_excepcion, $horariosTotales_string, $idExcepcion);
                             $state->execute();
                         }
+                    }
+                }
+            } else { //no tiene nuevas excepciones, por lo que debo eliminar las que ya tenia, si es que tenia
+                if ($idExcepciones != null) {
+                    foreach ($idExcepciones as $idExcepcion) {
+                        /* SE ELIMINAN TODAS LAS EXCEPCIONES DEL ALUMNO*/
+                        $state = $this->conn->prepare('DELETE FROM excepcionHorarios WHERE excepcionHorarios.idExcepcion = ?');
+                        $state->bind_param('i', $idExcepcion);
+                        $state->execute(); 
+
+                        $state = $this->conn->prepare('DELETE FROM excepcion WHERE excepcion.idExcepcion = ?');
+                        $state->bind_param('i', $idExcepcion);
+                        $state->execute(); 
                     }
                 }
             }
