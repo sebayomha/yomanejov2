@@ -631,6 +631,10 @@
             d2.observaciones AS observaciones_DirAlternativa,
             cronograma.timestampGuardado,
             cronograma.status AS statusCronograma,
+            cronograma.timestampCancelado,
+            cronograma.timestampFinalizado,
+            alumnocronogramaclasestomadas.cantClasesTomadas,
+            alumnocronogramaclasestomadas.cantClasesTotales,
             excepcion.idExcepcion, excepcion.fecha AS fechaExcepcion, excepcion.no_puede,
             excepcionhorarios.dir_alt, excepcionhorarios.horarios,
             disponibilidad.idDisponibilidad, disponibilidad.Monday, disponibilidad.Tuesday, disponibilidad.Wednesday, disponibilidad.Thursday, disponibilidad.Friday, disponibilidad.Saturday, disponibilidad.Sunday,
@@ -643,6 +647,7 @@
             INNER JOIN disponibilidad ON disponibilidad.idDisponibilidad = alumno.idDisponibilidad
             LEFT JOIN excepcion ON excepcion.idAlumno = alumno.idAlumno
             LEFT JOIN excepcionhorarios ON excepcion.idExcepcion = excepcionhorarios.idExcepcion
+            LEFT JOIN alumnocronogramaclasestomadas ON alumnocronogramaclasestomadas.idCronograma = clase.idCronograma
             ORDER BY cronograma.idCronograma DESC');
 
             $cronogramas = array();
@@ -719,10 +724,15 @@
                         'alumno' => $row['alumno'],
                         'idDisponibilidad' => $row['idDisponibilidad'],
                         'nombreAlumno' => $row['nombre'],
+                        'cantClasesTomadas' => $row['cantClasesTomadas'],
+                        'cantClasesTotales' => $row['cantClasesTotales'],
+                        'cantClasesRestantes' => $row['cantClasesTotales'] - $row['cantClasesTomadas'],
                         'telefonoAlumno' => $row['telefono'],
                         'direccionPrincipalFormateada' => $direccionPrincipalFormateada,
                         'idDireccionPrincipal' => $row['id_DirPrincipal'],
                         'fechaHoraGuardado' => $row['timestampGuardado'],
+                        'timestampFinalizado' => $row['timestampFinalizado'],
+                        'timestampCancelado' => $row['timestampCancelado'],
                         'direccionAlternativaFormateada' => $dirAlternativa,
                         'idDireccionAlternativa' => $row['id_DirAlternativa'],
                         'disponibilidades' => $disponibilidades,

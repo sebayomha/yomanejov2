@@ -121,6 +121,26 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
     return diffHrs + " horas " + diffMins + " minutos";
   }
 
+  getHourDayAndMinutesActive(cronograma) {
+    let endDate = new Date(cronograma.fechaHoraGuardado);
+    let purchaseDate = new Date();
+    let diffMs = Math.abs((purchaseDate.getTime() - endDate.getTime())); // milliseconds
+    let diffDays = Math.floor(diffMs / 86400000); // days
+    let diffHrs = Math.floor((diffMs % 86400000) / 3600000); // hours
+    let diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
+    return diffDays + " días " + diffHrs + " horas " + diffMins + " minutos";
+  }
+
+  getHourDayAndMinutes(cronograma) {
+    let endDate = new Date(cronograma.timestampFinalizado);
+    let purchaseDate = new Date();
+    let diffMs = Math.abs((purchaseDate.getTime() - endDate.getTime())); // milliseconds
+    let diffDays = Math.floor(diffMs / 86400000); // days
+    let diffHrs = Math.floor((diffMs % 86400000) / 3600000); // hours
+    let diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
+    return diffDays + " días " + diffHrs + " horas " + diffMins + " minutos";
+  }
+
   isMobile() {
     return this.breakpointObserver.isMatched('(max-width: 767px)');
   }
