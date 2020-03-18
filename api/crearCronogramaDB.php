@@ -603,8 +603,7 @@
             return false;
         }
 
-        function obtenerCronogramasPendientesDeConfirmar() { 
-            $status = "NO CONFIRMADO";
+        function obtenerCronogramas() { 
             $state = $this->conn->prepare('SELECT 
             d1.idDireccion AS id_DirPrincipal,
             d1.calle AS calle_DirPrincipal, 
@@ -631,12 +630,13 @@
             d2.floor_ AS floor_DirAlternativa,
             d2.observaciones AS observaciones_DirAlternativa,
             cronograma.timestampGuardado,
+            cronograma.status AS statusCronograma,
             excepcion.idExcepcion, excepcion.fecha AS fechaExcepcion, excepcion.no_puede,
             excepcionhorarios.dir_alt, excepcionhorarios.horarios,
             disponibilidad.idDisponibilidad, disponibilidad.Monday, disponibilidad.Tuesday, disponibilidad.Wednesday, disponibilidad.Thursday, disponibilidad.Friday, disponibilidad.Saturday, disponibilidad.Sunday,
             alumno.idAlumno, alumno.nombre, alumno.telefono, clase.idClase, clase.idCronograma, clase.alumno, clase.auto, clase.fecha, clase.horaInicio, clase.idZona, clase.idDireccion, clase.status AS satusClase, cronograma.status AS cronogramaStatus 
             FROM clase 
-            INNER JOIN cronograma ON cronograma.idCronograma = clase.idCronograma AND cronograma.status = ? 
+            INNER JOIN cronograma ON cronograma.idCronograma = clase.idCronograma 
             INNER JOIN alumno ON clase.alumno = alumno.idAlumno 
             INNER JOIN direccion AS d1 ON d1.idDireccion = alumno.idDireccion 
             LEFT JOIN direccion AS d2 ON d2.idDireccion = alumno.idDireccionAlt
@@ -644,12 +644,20 @@
             LEFT JOIN excepcion ON excepcion.idAlumno = alumno.idAlumno
             LEFT JOIN excepcionhorarios ON excepcion.idExcepcion = excepcionhorarios.idExcepcion
             ORDER BY cronograma.idCronograma DESC');
-            $state->bind_param('s', $status);
 
             $cronogramas = array();
+            $cronogramaContainer = (object) [
+                'cronogramasConfirmados' => [],
+                'cronogramasPendientes' => [],
+                'cronogramasFinalizados' => []
+            ];
+
+            $cronogramasConfirmados = array();
+            $cronogramasPendientes = array();
+            $cronogramasFinalizados = array();
+
             if ($state->execute()) { //si la consulta fue exitosa
                 $result = $state->get_result();
-                //echo mysqli_num_rows($result);
                 while($row = $result->fetch_assoc()) {
                     $dirAlternativa = null;
                     if ($row['id_DirAlternativa'] != null) {
@@ -707,6 +715,7 @@
                     
                     $cronogramaObject = (object) [
                         'idCronograma' => $row['idCronograma'],
+                        'statusCronograma' => $row['statusCronograma'],
                         'alumno' => $row['alumno'],
                         'idDisponibilidad' => $row['idDisponibilidad'],
                         'nombreAlumno' => $row['nombre'],
@@ -782,7 +791,25 @@
             } else {
                 return 1;
             }
-            return $cronogramas;
+            
+            foreach ($cronogramas as $cronograma) {
+                if ($cronograma->statusCronograma == "NO CONFIRMADO") {
+                    array_push($cronogramasPendientes, $cronograma);
+                }
+
+                if ($cronograma->statusCronograma == "CONFIRMADO") {
+                    array_push($cronogramasConfirmados, $cronograma);
+                }
+
+                if ($cronograma->statusCronograma == "FINALIZADO") {
+                    array_push($cronogramasFinalizados, $cronograma);
+                }
+            }
+
+            $cronogramaContainer->cronogramasConfirmados = $cronogramasConfirmados;
+            $cronogramaContainer->cronogramasPendientes = $cronogramasPendientes;
+            $cronogramaContainer->cronogramasFinalizados = $cronogramasFinalizados;
+            return $cronogramaContainer;
         }
 
         function verificarSiEsTodoElDia($diaString, $direccionPrincipal, $direccionAlternativa, $direccionPrincipalFormateada, $direccionAlternativaFormateada) {
