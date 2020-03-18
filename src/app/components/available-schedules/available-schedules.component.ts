@@ -117,6 +117,7 @@ export class AvailableSchedulesComponent {
         let fecha_clase = clase.fecha;
         let hora_inicio = clase.horaInicio;
         let auto = clase.auto;
+        index_opt += 1;
     
         this.data.forEach(opt => {
 
@@ -148,7 +149,6 @@ export class AvailableSchedulesComponent {
                 console.log("OPT:: ", opt);
                 console.log("CLASE ::", clase);
                 this.classes.push(option);
-                index_opt += 1;
 
               }
               
