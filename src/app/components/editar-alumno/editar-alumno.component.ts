@@ -47,6 +47,8 @@ export class EditarAlumnoComponent implements OnInit {
   showSuccessBanner: boolean = false;
   dataToConfirm: any = [];
 
+  soloDatosPersonalesSinDireccion: boolean;
+
   constructor(private cdr : ChangeDetectorRef, private _snackBar: MatSnackBar, private alumnosService: AlumnosService, private breakpointObserver: BreakpointObserver, private sharedService:SharedService, private router: Router) { }
 
   @ViewChild('direccionFisica') direccionFisica;
@@ -237,22 +239,41 @@ export class EditarAlumnoComponent implements OnInit {
         data: response
       });
     } else {
-      if (this.editingStudentForm.valid && this.direccionFisica.validateForm()) {
-        let generateEditedInformation = {
-          idAlumno: this.alumnoInformation.idAlumno,
-          nuevoDocumento: this.documento,
-          nuevoNombre: this.search.student_name,
-          nuevoTelefono: this.search.student_phone,
-          idDirFisica: this.alumnoInformation.id_DirFisica,
-          direccionFisicaInformation: this.direccionFisica.getData()
-        }
 
-        this.showSuccessBanner = false;
-        this.dataToConfirm = generateEditedInformation;
-        this.customModal.open();
-      } else { //mostrar errores en la direccion
-        this.direccionFisica.showInputErrors();
+      if (this.soloDatosPersonalesSinDireccion) {
+        if (this.editingStudentForm.valid) {
+          let generateEditedInformation = {
+            idAlumno: this.alumnoInformation.idAlumno,
+            nuevoDocumento: this.documento,
+            nuevoNombre: this.search.student_name,
+            nuevoTelefono: this.search.student_phone,
+            idDirFisica: this.alumnoInformation.id_DirFisica,
+            direccionFisicaInformation: this.direccionFisica.getData()
+          }
+  
+          this.showSuccessBanner = false;
+          this.dataToConfirm = generateEditedInformation;
+          this.customModal.open();
+        }
+      } else {
+        if (this.editingStudentForm.valid && this.direccionFisica.validateForm()) {
+          let generateEditedInformation = {
+            idAlumno: this.alumnoInformation.idAlumno,
+            nuevoDocumento: this.documento,
+            nuevoNombre: this.search.student_name,
+            nuevoTelefono: this.search.student_phone,
+            idDirFisica: this.alumnoInformation.id_DirFisica,
+            direccionFisicaInformation: this.direccionFisica.getData()
+          }
+  
+          this.showSuccessBanner = false;
+          this.dataToConfirm = generateEditedInformation;
+          this.customModal.open();
+        } else { //mostrar errores en la direccion
+          this.direccionFisica.showInputErrors();
+        }
       }
+
       return false;
     }
   }
@@ -297,18 +318,22 @@ export class EditarAlumnoComponent implements OnInit {
           && this.alumnoInformation.floor_DirFisica == direccionFisicaInformation.direccion.floor
           && this.alumnoInformation.observaciones_DirFisica == direccionFisicaInformation.direccion.observations
           ) { //los datos personales continuan igual
+            this.soloDatosPersonalesSinDireccion = false;
             return false;
           } else { //modifico datos personales de la direccion fisica
+            this.soloDatosPersonalesSinDireccion = false;
             return true;
           }
       } else { //es una direccion que ya existe entonces tengo que comparar los ids
         if (direccionFisicaInformation.idDireccionSeleccionada == this.alumnoInformation.id_DirFisica) { //es la misma
           return false;
         } else {
+          this.soloDatosPersonalesSinDireccion = false;
           return true;
         }
       }
     } else { //modifico datos personales
+      this.soloDatosPersonalesSinDireccion = true;
       return true;
     }
   }
