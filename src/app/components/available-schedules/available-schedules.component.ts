@@ -92,6 +92,7 @@ export class AvailableSchedulesComponent {
     
     ngOnChanges() {
       this.cantSelectedClasses = 0;
+      this.classes = []; 
       setTimeout( () => {
         if (this.edit_cronograma) {
           this.verificoClases();
