@@ -68,3 +68,7 @@
     color: rgba(0, 0, 0, 0.37);
     font-weight: bold;
 }
+
+::ng-deep #cronogramasTabGroup mat-card {
+    margin-bottom: 20px;
+}
