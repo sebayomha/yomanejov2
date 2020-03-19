@@ -633,6 +633,8 @@
             cronograma.status AS statusCronograma,
             cronograma.timestampCancelado,
             cronograma.timestampFinalizado,
+            cronograma.timestampActivo,
+            cronograma.motivoBaja as motivoBajaCronograma,
             alumnocronogramaclasestomadas.cantClasesTomadas,
             alumnocronogramaclasestomadas.cantClasesTotales,
             excepcion.idExcepcion, excepcion.fecha AS fechaExcepcion, excepcion.no_puede,
@@ -654,12 +656,14 @@
             $cronogramaContainer = (object) [
                 'cronogramasConfirmados' => [],
                 'cronogramasPendientes' => [],
-                'cronogramasFinalizados' => []
+                'cronogramasFinalizados' => [],
+                'cronogramasCancelados' => []
             ];
 
             $cronogramasConfirmados = array();
             $cronogramasPendientes = array();
             $cronogramasFinalizados = array();
+            $cronogramasCancelados = array();
 
             if ($state->execute()) { //si la consulta fue exitosa
                 $result = $state->get_result();
@@ -733,6 +737,8 @@
                         'fechaHoraGuardado' => $row['timestampGuardado'],
                         'timestampFinalizado' => $row['timestampFinalizado'],
                         'timestampCancelado' => $row['timestampCancelado'],
+                        'timestampActivo' => $row['timestampActivo'],
+                        'motivoBajaCronograma' => $row['motivoBajaCronograma'],
                         'direccionAlternativaFormateada' => $dirAlternativa,
                         'idDireccionAlternativa' => $row['id_DirAlternativa'],
                         'disponibilidades' => $disponibilidades,
@@ -814,11 +820,16 @@
                 if ($cronograma->statusCronograma == "FINALIZADO") {
                     array_push($cronogramasFinalizados, $cronograma);
                 }
+
+                if($cronograma->statusCronograma == "CANCELADO") {
+                    array_push($cronogramasCancelados, $cronograma);
+                }
             }
 
             $cronogramaContainer->cronogramasConfirmados = $cronogramasConfirmados;
             $cronogramaContainer->cronogramasPendientes = $cronogramasPendientes;
             $cronogramaContainer->cronogramasFinalizados = $cronogramasFinalizados;
+            $cronogramaContainer->cronogramasCancelados = $cronogramasCancelados;
             return $cronogramaContainer;
         }
 
@@ -1036,6 +1047,31 @@
                                 return false;
                             }
                         }
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+
+        function cancelarCronogramaActivo($idCronograma, $idAlumno, $motivoBaja) {
+            $cancelado = "CANCELADO";
+            $now = date('Y-m-d h:i:s a', time());
+            $state = $this->conn->prepare('UPDATE clase SET clase.status = ? WHERE clase.idCronograma = ?');
+            $state->bind_param('si', $cancelado, $idCronograma);
+            if ($state->execute()) { 
+                $state = $this->conn->prepare('UPDATE cronograma SET cronograma.status = ?, cronograma.timestampCancelado = ?, motivoBaja = ? WHERE cronograma.idCronograma = ?');
+                $state->bind_param('sssi', $cancelado, $now, $motivoBaja, $idCronograma);
+                if ($state->execute()) {
+                    $inactivo = "false";
+                    $state = $this->conn->prepare('UPDATE alumno SET activo = ?, motivoBaja = ?, fechaBaja = ? WHERE alumno.idAlumno = ?');
+                    $state->bind_param('sssi', $inactivo, $motivoBaja, $now, $idAlumno);
+                    if ($state->execute()) {
+                        return true;
                     } else {
                         return false;
                     }

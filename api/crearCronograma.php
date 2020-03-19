@@ -183,6 +183,20 @@
 		}
 	}
 
+	function cancelarCronogramaActivo() {
+		$post = json_decode(file_get_contents('php://input'));
+		$idCronograma = $post->params->idCronograma;
+		$idAlumno = $post->params->idAlumno;
+		$motivoBaja = $post->params->motivoBaja;
+		$cronograma = new Cronograma();
+		$resultCronogramaCancelar = $cronograma->cancelarCronogramaActivo($idCronograma, $idAlumno, $motivoBaja);
+		if ($resultCronogramaCancelar) {
+			echo json_encode($GLOBALS['utils']->getResponse(0, 'El cronograma ha sido cancelado exitosamente'));	
+		} else {
+			echo json_encode($GLOBALS['utils']->getResponse(1, 'Lo lamentamos, ha ocurrido un error'));
+		}
+	}
+
 	function obtenerClasesPorFecha() {
 		$cronograma = new Cronograma();
 		echo json_encode($GLOBALS['utils']->getResponse(0, $cronograma->obtenerClasesPorFecha($_GET['fecha'])));
@@ -227,6 +241,9 @@
 				case '/calcularCronograma/actualizarCronogramaPendiente':
 					actualizarCronogramaPendiente();
 					break;
+				case '/calcularCronograma/cancelarCronogramaActivo':
+					cancelarCronogramaActivo();
+				break;
 				default:
 					echo "podriamos agregar otra consulta mas";
 					break;

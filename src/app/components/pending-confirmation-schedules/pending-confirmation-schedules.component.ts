@@ -29,6 +29,7 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
   cronogramas: Array<any> = [];
   cronogramasConfirmados: Array<any> = [];
   cronogramasFinalizados: Array<any> = [];
+  cronogramasCancelados: Array<any> = [];
 
   cronograma_edit = [];
   displayedColumns: string[] = ['noClase', 'fecha', 'hora', 'direccion', 'auto'];
@@ -55,6 +56,7 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
       this.cronogramas = response.data.cronogramasPendientes;
       this.cronogramasConfirmados = response.data.cronogramasConfirmados;
       this.cronogramasFinalizados = response.data.cronogramasFinalizados;
+      this.cronogramasCancelados = response.data.cronogramasCancelados;
       console.log("cronogramas", this.cronogramas);
       this.isLoaded = true;
 
@@ -88,7 +90,13 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
       }
     })
 
-    return cronogramaPendiente || cronogramaConfirmado || cronogramaFinalizado;
+    let cronogramaCancelado = this.cronogramasCancelados.find( (cronograma) => {
+      if (cronograma.idCronograma == idCronograma) {
+        return true;
+      }
+    })
+
+    return cronogramaPendiente || cronogramaConfirmado || cronogramaFinalizado || cronogramaCancelado;
   }
 
   ngOnDestroy() {
@@ -122,13 +130,13 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
   }
 
   getHourDayAndMinutesActive(cronograma) {
-    let endDate = new Date(cronograma.fechaHoraGuardado);
+    let endDate = new Date(cronograma.timestampActivo);
     let purchaseDate = new Date();
     let diffMs = Math.abs((purchaseDate.getTime() - endDate.getTime())); // milliseconds
     let diffDays = Math.floor(diffMs / 86400000); // days
     let diffHrs = Math.floor((diffMs % 86400000) / 3600000); // hours
     let diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
-    return diffDays + " días " + diffHrs + " horas " + diffMins + " minutos";
+    return diffDays + " días " + diffHrs + " horas ";
   }
 
   getHourDayAndMinutes(cronograma) {
@@ -138,7 +146,7 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
     let diffDays = Math.floor(diffMs / 86400000); // days
     let diffHrs = Math.floor((diffMs % 86400000) / 3600000); // hours
     let diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
-    return diffDays + " días " + diffHrs + " horas " + diffMins + " minutos";
+    return diffDays + " días " + diffHrs + " horas ";
   }
 
   isMobile() {
@@ -228,7 +236,7 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
     if (this.operation == 'Confirmar') {
       this.confirmarCronograma($event.idCronograma, $event.idAlumno, $event.direccionFisicaInformation, $event.documento, $event.clases);
     } else {
-      this.eliminarCronograma($event.idCronograma, $event.idAlumno);
+      this.eliminarCronograma($event.idCronograma, $event.idAlumno, $event.motivoDeBaja);
     }
   }
 
@@ -252,17 +260,31 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
     })
   }
 
-  eliminarCronograma(idCronograma, idAlumno) {
-    this.cronogramaService.cancelarCronogramaPendiente(idCronograma, idAlumno).subscribe( (response: Response) => {
-      this.showSuccessBanner = false;
-      this.customModal.onClose();
-      this._snackBar.openFromComponent(SnackbarComponent, {
-        duration: this.durationInSeconds * 1100,
-        data: response
-      });
-      this.ngOnInit();
-      window.scrollTo(0, 0);
-    })
+  eliminarCronograma(idCronograma, idAlumno, motivoBaja?: string) {
+    console.log("operation:: ", this.operation)
+    if (this.operation == 'Cancelar') {
+      this.cronogramaService.cancelarCronogramaPendiente(idCronograma, idAlumno).subscribe( (response: Response) => {
+        this.showSuccessBanner = false;
+        this.customModal.onClose();
+        this._snackBar.openFromComponent(SnackbarComponent, {
+          duration: this.durationInSeconds * 1100,
+          data: response
+        });
+        this.ngOnInit();
+        window.scrollTo(0, 0);
+      })
+    } else {
+      this.cronogramaService.cancelarCronogramaActivo(idCronograma, idAlumno, motivoBaja).subscribe( (response: Response) => {
+        this.showSuccessBanner = false;
+        this.customModal.onClose();
+        this._snackBar.openFromComponent(SnackbarComponent, {
+          duration: this.durationInSeconds * 1100,
+          data: response
+        });
+        this.ngOnInit();
+        window.scrollTo(0, 0);
+      })
+    }
   }
 
   onCancelSchedule(idCronograma, nombreAlumno, idAlumno) {
@@ -272,6 +294,16 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
       'idAlumno': idAlumno
     };
     this.operation = 'Cancelar';
+    this.customModal.open();
+  }
+
+  onCancelActiveSchedule(idCronograma, nombreAlumno, idAlumno) {
+    this.dataToConfirm = {
+      'idCronograma': idCronograma,
+      'nombreAlumno': nombreAlumno,
+      'idAlumno': idAlumno
+    };
+    this.operation = 'CancelarActivo';
     this.customModal.open();
   }
 

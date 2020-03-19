@@ -23,11 +23,12 @@ export class CustomModalComponent {
   @ViewChild('direccionFisica') direccionFisica: DireccionFisicaComponent;
   @ViewChildren('input') vc;
   @ViewChild('eliminarAlumnoForm') eliminarAlumnoForm: NgForm;
+  @ViewChild('eliminarCronogramaActivoForm') eliminarCronogramaActivoForm: NgForm;
 
   schedule : any;
 
   buttonDisabled;
-  motivoDeBaja: string;
+  motivoDeBaja: string = '';
 
   constructor(private breakpointObserver: BreakpointObserver, private cd: ChangeDetectorRef) { }
 
@@ -63,7 +64,20 @@ export class CustomModalComponent {
           this.eliminarAlumnoForm.form.get("motivoDeBaja").markAsDirty();
         }
       } else {
-        this.confirmation.emit(this.data);
+        if (this.component == 'pendingConfirmationSchedules' && this.operation == 'CancelarActivo') {
+          if (this.eliminarCronogramaActivoForm.form.valid) {
+            this.data.motivoDeBaja = this.motivoDeBaja;
+            this.motivoDeBaja = '';
+            this.eliminarCronogramaActivoForm.form.get("motivoDeBaja").markAsUntouched();
+            this.eliminarCronogramaActivoForm.form.get("motivoDeBaja").markAsPristine();
+            this.confirmation.emit(this.data);
+          } else {
+            this.eliminarCronogramaActivoForm.form.get("motivoDeBaja").markAsTouched();
+            this.eliminarCronogramaActivoForm.form.get("motivoDeBaja").markAsDirty();
+          }
+        } else {
+          this.confirmation.emit(this.data);
+        }
       }
     }
   }
