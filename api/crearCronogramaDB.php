@@ -427,7 +427,7 @@
             return $idCronograma;
         }
 
-        //Funcion principal que se encargara de guardar el cronograma correspondiente PREVIO a la confirmacion
+        //Funcion principal que se encargara de actualizar el cronograma correspondiente PREVIO a la confirmacion
         function actualizarCronogramaPendiente($idCronograma, $selectedOptions, $idAlumno, $studentName, $student_phone, $idDireccionPrincipal, $address, $idDireccionAlternativa, $address_alt, $idDisponibilidad, $disponibilidad, $idExcepciones, $excepciones) {
             /*
             SE HACE UN UPDATE DE:
@@ -847,21 +847,70 @@
             $diaEntero = ['08:00', '09:00', '10:00', '11:15', '12:15', '13:15', '14:30', '15:30', '16:30', '17:45', '18:45', '19:45'];
         
             if (substr_count($diaString, "|") == 1) { //es solo un tramo y es todo el dia (disponibleTodoElDia)
-                $diaInformacion->todoElDia = true;
-                //valido que direccion esta usando para todo el dia
-                if ($direccionAlternativa == null) { //nunca cargo una direccion alternativa asi que debe ser la principal
-                    $diaInformacion->direccionUtilizada = $direccionPrincipal;
-                    $diaInformacion->direccionUtilizadaFormateada = $direccionPrincipalFormateada;
-                    $diaInformacion->usandoDirAlternativa = false;
-                } else { //puede ser una direccion alternativa o una principal
-                    if (strpos($diaString, 'true') !== false) { //es la direccion alternativa
-                        $diaInformacion->direccionUtilizada = $direccionAlternativa;
-                        $diaInformacion->direccionUtilizadaFormateada = $direccionAlternativaFormateada;
-                        $diaInformacion->usandoDirAlternativa = true;
-                    } else { //es la direccion principal
+                $diaStringSoloHorarios = strtok($diaString, '|');
+                $diaStringSinCommas = str_replace(',', '', $diaStringSoloHorarios);
+                $diaStringSinEspacios = str_replace(' ', '', $diaStringSinCommas);
+
+                $diaEnteroString = implode("",$diaEntero);
+
+                if ($diaStringSinEspacios == $diaEnteroString) { //es todo el dia confirmado
+                    $diaInformacion->todoElDia = true;
+                    //valido que direccion esta usando para todo el dia
+                    if ($direccionAlternativa == null) { //nunca cargo una direccion alternativa asi que debe ser la principal
                         $diaInformacion->direccionUtilizada = $direccionPrincipal;
                         $diaInformacion->direccionUtilizadaFormateada = $direccionPrincipalFormateada;
                         $diaInformacion->usandoDirAlternativa = false;
+                    } else { //puede ser una direccion alternativa o una principal
+                        if (strpos($diaString, 'true') !== false) { //es la direccion alternativa
+                            $diaInformacion->direccionUtilizada = $direccionAlternativa;
+                            $diaInformacion->direccionUtilizadaFormateada = $direccionAlternativaFormateada;
+                            $diaInformacion->usandoDirAlternativa = true;
+                        } else { //es la direccion principal
+                            $diaInformacion->direccionUtilizada = $direccionPrincipal;
+                            $diaInformacion->direccionUtilizadaFormateada = $direccionPrincipalFormateada;
+                            $diaInformacion->usandoDirAlternativa = false;
+                        }
+                    }
+                } else { //Es un solo tramo
+                    $cantidadDeTramos = substr_count($diaString, "|"); //cantidadDeTramos
+                    $tramos = [];
+                    $diaStringCopy = $diaString;
+                    for ($i=0; $i < $cantidadDeTramos; $i++) {
+    
+                        $tramoHorario = (object) [
+                            'horarios' => null,
+                            'direccionUtilizada' => null,
+                            'usandoDirAlternativa' => false,
+                            'direccionUtilizadaFormateada' => null
+                        ];
+    
+                        $tramo = rtrim(strtok($diaStringCopy,  '|'), ", ");
+                        $tramo = trim(strtok($diaStringCopy,  '|'), ", ");
+                        $tramo = str_replace(", ", ",", $tramo);
+                        $diaStringCopy = trim($diaStringCopy, ", ");
+                        $diaStringCopy = str_replace(", ", ",", $diaStringCopy);
+
+                        $tramoSize = strlen($tramo);
+                        $indexToF = $tramoSize + 2;
+                        
+                        $lastIndexOfToF;
+                        if(substr($diaStringCopy, $indexToF, 1) == 't') { //es una direccion alternativa para ese tramo
+                            $tramoHorario->horarios = explode(",",$tramo);
+                            $tramoHorario->direccionUtilizada = $direccionAlternativa;
+                            $tramoHorario->direccionUtilizadaFormateada = $direccionAlternativaFormateada;
+                            $tramoHorario->usandoDirAlternativa = true;
+                            $lastIndexOfToF = $indexToF + 4;
+                        } else { //es la direccion principal para este tramo
+                            $tramoHorario->horarios = explode(",",$tramo); 
+                            $tramoHorario->direccionUtilizada = $direccionPrincipal;
+                            $tramoHorario->direccionUtilizadaFormateada = $direccionPrincipalFormateada;
+                            $tramoHorario->usandoDirAlternativa = false;
+                            $lastIndexOfToF = $indexToF + 5;
+                        }
+                        
+                        array_push($diaInformacion->tramosHorarios,$tramoHorario);
+    
+                        $diaStringCopy = substr($diaStringCopy, $lastIndexOfToF);
                     }
                 }
             } else { //posee mas de 1 tramo, y no es (disponibleTodoElDia)
@@ -885,6 +934,7 @@
                     $tramoSize = strlen($tramo);
                     $indexToF = $tramoSize + 3;
                     
+
                     $lastIndexOfToF;
                     if(substr($diaStringCopy, $indexToF, 1) == 't') { //es una direccion alternativa para ese tramo
                         $tramoHorario->horarios = explode(",",$tramo);
@@ -931,8 +981,9 @@
                 $state = $this->conn->prepare('UPDATE clase SET status = ? WHERE clase.idCronograma = ?');
                 $state->bind_param('si', $status, $idCronograma);
                 $state->execute();
-                $state = $this->conn->prepare('UPDATE cronograma SET status = ? WHERE cronograma.idCronograma = ?');
-                $state->bind_param('si', $status, $idCronograma);
+                $now = date('Y-m-d h:i:s a', time());
+                $state = $this->conn->prepare('UPDATE cronograma SET status = ?, timestampActivo = ? WHERE cronograma.idCronograma = ?');
+                $state->bind_param('ssi', $status, $now, $idCronograma);
                 $state->execute();
                 $confirmado = 'true'; //INDICA QUE EL ALUMNO YA ES UN ALUMNO FIJO
                 $today = date('Y-m-d');

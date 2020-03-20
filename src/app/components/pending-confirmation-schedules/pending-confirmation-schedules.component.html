@@ -60,7 +60,7 @@
           </mat-card-content>
     
           <mat-card-actions align="end">
-            <button mat-button class="editButton" (click)="onEditSchedule(c);">EDITAR</button>
+            <button mat-button class="editButton" (click)="onEditSchedule(cronograma);">EDITAR</button>
             <div fxFlex></div>
             <button mat-button class="deleteButton" (click)="onCancelSchedule(cronograma.idCronograma, cronograma.nombreAlumno, cronograma.alumno);">ELIMINAR</button>
             <div fxFlex></div>
@@ -149,7 +149,7 @@
           </mat-card-content>
     
           <mat-card-actions align="end">
-            <button mat-button class="editButton" (click)="onEditSchedule(c);">EDITAR</button>
+            <button mat-button class="editButton" (click)="onEditSchedule(cronograma);">EDITAR</button>
             <div fxFlex></div>
             <button mat-button class="deleteButton" (click)="onCancelActiveSchedule(cronograma.idCronograma, cronograma.nombreAlumno, cronograma.alumno);">ELIMINAR</button>
           </mat-card-actions>
@@ -451,7 +451,7 @@
       </mat-card-content>
 
       <mat-card-actions align="end">
-        <button *ngIf="detailedCronograma.statusCronograma != 'FINALIZADO'" mat-button class="editButton" (click)="onEditSchedule(c);">EDITAR</button>
+        <button *ngIf="detailedCronograma.statusCronograma != 'FINALIZADO'" mat-button class="editButton" (click)="onEditSchedule(cronograma);">EDITAR</button>
         <div fxFlex></div>
         <button *ngIf="detailedCronograma.statusCronograma != 'FINALIZADO'" mat-button class="deleteButton" (click)="onCancelSchedule(detailedCronograma.iddetailedCronograma, detailedCronograma.nombreAlumno, detailedCronograma.alumno);">ELIMINAR</button>
         <div fxFlex></div>

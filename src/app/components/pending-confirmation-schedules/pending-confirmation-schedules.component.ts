@@ -308,9 +308,9 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
     this.customModal.open();
   }
 
-  onEditSchedule(index){
+  onEditSchedule(cronograma){
     this.show_edit = true;
-    this.cronograma_edit = this.cronogramas[index];
+    this.cronograma_edit = cronograma;
   }
 
   //Cierro edicion
