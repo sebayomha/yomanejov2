@@ -14,7 +14,9 @@ export class EditPendingConfSchedulesComponent {
 
   constructor() { }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    window.scrollTo(0,0);
+  }
 
   //Cierro edicion
   closeEditCrono(flag) {
