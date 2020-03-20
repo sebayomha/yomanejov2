@@ -15,7 +15,7 @@
           </div>
         </div>
 
-        <div id="warningMessage" *ngIf="alumno.motivoBaja != 'Completó su cronograma'">
+        <div id="warningMessage" *ngIf="alumno.motivoBaja != 'Completó su cronograma' && alumno.motivoBaja != ''">
           <div class="alert alert-danger" role="alert" style="padding: 6px !important;">
             <i class="fas fa-exclamation-circle" style="margin-right: 12px; font-size: 20px;"></i>
             <span style="position: relative; bottom: 1px;">
@@ -80,13 +80,13 @@
                 <mat-card-subtitle mat-line style="text-align: left; position: relative; top: 2px; font-size: 15px;">
                   <span style="padding: 0; display: inline-block;" class="col-12 col-md-4">Clases tomadas:</span> 
                   <span class="col-12 col-md-3">
-                    <span [ngStyle]="{'color': alumno.motivoBaja != 'Completó su cronograma' ? '#ef2b2b':'rgb(67, 200, 157)'}" style="font-weight: 100;">{{alumno.cantClasesTomadas}}/</span>
-                    <span [ngStyle]="{'color': alumno.motivoBaja != 'Completó su cronograma' ? '#ef2b2b':'rgb(67, 200, 157)'}" style="font-weight: 500;">{{alumno.cantClasesTotales}}</span>
+                    <span [ngStyle]="{'color': (alumno.motivoBaja != 'Completó su cronograma' && alumno.motivoBaja != '') ? '#ef2b2b':'rgb(67, 200, 157)'}" style="font-weight: 100;">{{alumno.cantClasesTomadas}}/</span>
+                    <span [ngStyle]="{'color': (alumno.motivoBaja != 'Completó su cronograma' && alumno.motivoBaja != '') ? '#ef2b2b':'rgb(67, 200, 157)'}" style="font-weight: 500;">{{alumno.cantClasesTotales}}</span>
                   </span>
                 </mat-card-subtitle>
               </mat-list-item>
 
-              <mat-list-item style="height: 30px;" *ngIf="alumno.fechaBaja">
+              <mat-list-item style="height: 30px;" *ngIf="alumno.motivoBaja.length > 0">
                 <mat-icon mat-list-icon>warning</mat-icon>
                 <mat-card-subtitle mat-line style="text-align: left; position: relative; top: 2px; font-size: 15px;">
                   <span *ngIf="alumno.motivoBaja != 'Completó su cronograma'" style="padding: 0; display: inline-block;" class="col-12 col-md-4">Fecha de baja:</span>
