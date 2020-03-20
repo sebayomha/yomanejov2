@@ -33,6 +33,7 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
 
   cronograma_edit = [];
   displayedColumns: string[] = ['noClase', 'fecha', 'hora', 'direccion', 'auto'];
+  displayedColumnsStatus: string[] = ['Realizada', 'noClase', 'fecha', 'hora', 'direccion', 'auto'];
   showSuccessBanner: boolean = false;
   dataToConfirm: any;
   durationInSeconds: number = 3;
@@ -57,7 +58,7 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
       this.cronogramasConfirmados = response.data.cronogramasConfirmados;
       this.cronogramasFinalizados = response.data.cronogramasFinalizados;
       this.cronogramasCancelados = response.data.cronogramasCancelados;
-      console.log("cronogramas", this.cronogramas);
+      console.log("cronogramasCancelados", this.cronogramasCancelados);
       this.isLoaded = true;
 
       
