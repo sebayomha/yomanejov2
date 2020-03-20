@@ -59,6 +59,8 @@
             alumno.documento,
             alumno.idDisponibilidad,
             alumno.confirmado,
+            alumno.fechaBaja,
+            alumno.motivoBaja,
             cronograma.idCronograma,
             idAlumnoCronograma, cantClasesTomadas, cantClasesTotales,
             disponibilidad.Monday, disponibilidad.Tuesday, disponibilidad.Wednesday, disponibilidad.Thursday, disponibilidad.Friday, disponibilidad.Saturday, disponibilidad.Sunday
@@ -350,8 +352,9 @@
         function eliminarAlumno($idAlumno, $idCronograma, $motivoBaja) {
             //Eliminar cronograma (LOGICAMENTE)
             $status = "CANCELADO";
-            $state = $this->conn->prepare('UPDATE cronograma SET status = ? WHERE cronograma.idCronograma = ?');
-            $state->bind_param('si', $status, $idCronograma);
+            $nowHour = date('Y-m-d h:i:s a', time());
+            $state = $this->conn->prepare('UPDATE cronograma SET status = ?, timestampCancelado = ? WHERE cronograma.idCronograma = ?');
+            $state->bind_param('ssi', $status, $nowHour ,$idCronograma);
             $state->execute();
 
             //Eliminar clases (LOGICAMENTE)

@@ -14,6 +14,25 @@
             </span>
           </div>
         </div>
+
+        <div id="warningMessage" *ngIf="alumno.motivoBaja != 'Completó su cronograma'">
+          <div class="alert alert-danger" role="alert" style="padding: 6px !important;">
+            <i class="fas fa-exclamation-circle" style="margin-right: 12px; font-size: 20px;"></i>
+            <span style="position: relative; bottom: 1px;">
+              <span style="font-weight: 500;">Cancelado: </span>{{alumno.motivoBaja}} 
+            </span>
+          </div>
+        </div>
+
+        <div id="warningMessage" *ngIf="alumno.motivoBaja == 'Completó su cronograma'">
+          <div class="alert alert-success" role="alert" style="padding: 6px !important;">
+            <mat-icon mat-list-icon style="margin-right: 12px; font-size: 20px; position: relative; top: 3px">done</mat-icon>
+            <span style="position: relative; bottom: 1px;">
+              {{alumno.motivoBaja}} 
+            </span>
+          </div>
+        </div>
+
         <div id="alumnoContentDetail" style="margin-top: 10px;">
           <mat-card-subtitle>
             <mat-list>
@@ -58,12 +77,22 @@
 
               <mat-list-item style="height: 30px;" *ngIf="alumno.cantClasesTotales">
                 <mat-icon mat-list-icon>done</mat-icon>
-                <mat-card-subtitle mat-line style="text-align: left; position: relative;
-                top: 2px; font-size: 15px;">
+                <mat-card-subtitle mat-line style="text-align: left; position: relative; top: 2px; font-size: 15px;">
                   <span style="padding: 0; display: inline-block;" class="col-12 col-md-4">Clases tomadas:</span> 
                   <span class="col-12 col-md-3">
-                    <span style="color: rgb(67, 200, 157); font-weight: 100;">{{alumno.cantClasesTomadas}}/</span>
-                    <span style="font-weight: 500; color: rgb(67, 200, 157);">{{alumno.cantClasesTotales}}</span>
+                    <span [ngStyle]="{'color': alumno.motivoBaja != 'Completó su cronograma' ? '#ef2b2b':'rgb(67, 200, 157)'}" style="font-weight: 100;">{{alumno.cantClasesTomadas}}/</span>
+                    <span [ngStyle]="{'color': alumno.motivoBaja != 'Completó su cronograma' ? '#ef2b2b':'rgb(67, 200, 157)'}" style="font-weight: 500;">{{alumno.cantClasesTotales}}</span>
+                  </span>
+                </mat-card-subtitle>
+              </mat-list-item>
+
+              <mat-list-item style="height: 30px;" *ngIf="alumno.fechaBaja">
+                <mat-icon mat-list-icon>warning</mat-icon>
+                <mat-card-subtitle mat-line style="text-align: left; position: relative; top: 2px; font-size: 15px;">
+                  <span *ngIf="alumno.motivoBaja != 'Completó su cronograma'" style="padding: 0; display: inline-block;" class="col-12 col-md-4">Fecha de baja:</span>
+                  <span *ngIf="alumno.motivoBaja == 'Completó su cronograma'" style="padding: 0; display: inline-block;" class="col-12 col-md-4">Fecha de finalización:</span>  
+                  <span class="col-12 col-md-3">
+                    <span [ngStyle]="{'color': alumno.motivoBaja != 'Completó su cronograma' ? '#ef2b2b':'rgb(67, 200, 157)'}" style="font-weight: 100;">{{alumno.fechaBaja | date}}</span>
                   </span>
                 </mat-card-subtitle>
               </mat-list-item>

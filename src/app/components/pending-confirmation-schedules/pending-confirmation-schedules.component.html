@@ -265,7 +265,7 @@
               </div>
             </div>
 
-            <label id="totalClases" style="font-size: 14px; color: rgba(0,0,0,.54); font-weight: 500; margin-bottom: 0px;">Clases tomadas: <span style="color: #43c89d; font-weight: 500;">{{cronograma.cantClasesTomadas}}/{{cronograma.clases.length}}</span></label>
+            <label id="totalClases" style="font-size: 14px; color: rgba(0,0,0,.54); font-weight: 500; margin-bottom: 0px;">Clases tomadas: <span style="color: #ef2b2b; font-weight: 500;">{{cronograma.cantClasesTomadas}}/{{cronograma.clases.length}}</span></label>
             <table mat-table [dataSource]="cronograma.clases" style="width: 100%;" class="mat-elevation-z0">
             
               <!-- No.Clase Column -->
@@ -365,7 +365,7 @@
           </div>
         </div>
 
-        <label id="totalClases" style="font-size: 14px; color: rgba(0,0,0,.54); font-weight: 500; margin-bottom: 0px;">Clases tomadas: <span style="color: #43c89d; font-weight: 500;">{{detailedCronograma.cantClasesTomadas || 0}}/{{detailedCronograma.clases.length}}</span></label>
+        <label id="totalClases" style="font-size: 14px; color: rgba(0,0,0,.54); font-weight: 500; margin-bottom: 0px;">Clases tomadas: <span [ngStyle]="{'color': (detailedCronograma.statusCronograma == 'CANCELADO') ? '#ef2b2b':'rgb(67, 200, 157)'}" style="font-weight: 500;">{{detailedCronograma.cantClasesTomadas || 0}}/{{detailedCronograma.clases.length}}</span></label>
         <table mat-table [dataSource]="detailedCronograma.clases" style="width: 100%;" class="mat-elevation-z0">
         
           <!-- No.Clase Column -->
