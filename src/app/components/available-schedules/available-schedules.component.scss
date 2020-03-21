@@ -86,6 +86,19 @@
   color: #d40808;
 }
 
+div.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 75px;
+}
+
+.borderBox {
+  padding: 10px;
+  border: solid 1px grey;
+  background-color: white;
+  border-radius: .25rem;
+}
+
 @media (min-width: 767px) {
   .infoContainer {
     line-height: 37px;
