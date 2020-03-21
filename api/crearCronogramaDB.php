@@ -295,7 +295,7 @@
                 foreach ($clasesActualesCronograma as $clase) {
                     $claseData = (object) [
                         'idClase' => $clase['idClase'],
-                        'fecha': $clase['fecha'],
+                        'fecha' => $clase['fecha'],
                         'horaInicio' => $clase['horaInicio'],
                         'idAuto' => $clase['idAuto'],
                         'idCronograma' => $clase['idCronograma'],
