@@ -280,6 +280,70 @@
             return $horariosTentativos;
         }
 
+        //Funcion principal que se encargara de armar el cronograma
+        function obtenerClasesActivasCronograma($idCronograma, $disponibilidad, $fechaInicio, $excepciones, $resOptions, $resExcepcionesOptions){
+            $clasesFinalesRetornar = array(); //arreglo que se va a retornar con el cronograma
+
+            $fechaBusqueda = DateTime::createFromFormat("Y-m-d", $fechaInicio);
+            $nombreDiaBusqueda = strftime("%A",$fechaBusqueda->getTimestamp());
+
+            $fechasExcepciones = array_keys($excepciones);
+
+            $clasesActualesCronograma = $this->clasesActualesCronograma($idCronograma, $fechaBusqueda);
+
+            if (sizeof($clasesActualesCronograma) > 0) {
+                foreach ($clasesActualesCronograma as $clase) {
+                    $claseData = (object) [
+                        'idClase' => $clase['idClase'],
+                        'fecha': $clase['fecha'],
+                        'horaInicio' => $clase['horaInicio'],
+                        'idAuto' => $clase['idAuto'],
+                        'idCronograma' => $clase['idCronograma'],
+                        'idDireccion' => $clase['idDireccion'],
+                        'continuaDisponible' => true
+                    ];
+
+                    $puede = true; 
+                    if (in_array($fechaBusqueda->format('Y-m-d'), $fechasExcepciones)) { //evaluo si en las excepciones, el alumno puede esta fecha.
+                        if ($excepciones[$fechaBusqueda->format('Y-m-d')]->no_puede == true) {
+                            $puede = false;
+                        }
+                    }
+
+                    if ($puede) { //este dia dentro de las excepciones puede
+                        if ($disponibilidad[$nombreDiaBusqueda] != null) { //este dia es un dia que esta disponible
+                            //valido sobre las excepciones
+                            if (in_array($claseData->fecha, $fechasExcepciones) && count($excepciones[$claseData->fecha]->options) > 0) {
+                                if (in_array($claseData->horaInicio, $excepciones[$claseData->fecha]->options)) { //la clase esta dentro de los horarios de la excepcion
+                                    array_push($clasesFinalesRetornar, $claseData);
+                                } else { //la clase no esta dentro de los horarios posibles en la excepcion
+                                    $claseData->continuaDisponible = false;
+                                    array_push($clasesFinalesRetornar, $claseData);
+                                }
+                            } else { //no estoy en una excepcion, entonces valido con la disponibilidad
+                                if(in_array($clase['horaInicio'], $disponibilidad[$nombreDiaBusqueda])) { //el alumno continua disponible ese dia
+                                    array_push($clasesFinalesRetornar, $claseData);
+                                } else { //este dia no puede (basado en la disponibilidad)
+                                    $claseData->continuaDisponible = false;
+                                    array_push($clasesFinalesRetornar, $claseData);
+                                }
+                            }
+                        } else { //no esta disponible este dia
+                            $claseData->continuaDisponible = false;
+                            array_push($clasesFinalesRetornar, $claseData);
+                        }
+                    } else { //este dia no puede entonces directamente agrego la clase con el flag de que no esta disponible
+                        $claseData->continuaDisponible = false;
+                        array_push($clasesFinalesRetornar, $claseData);
+                    }
+                }
+            } else {
+                return [];
+            }
+
+            return $clasesFinalesRetornar;
+        }
+
         //Funcion principal que se encargara de guardar el cronograma correspondiente PREVIO a la confirmacion
         function guardarCronograma($selectedOptions, $studentName, $student_phone, $address, $address_alt, $disponibilidad, $excepciones) {
             /*
@@ -833,6 +897,25 @@
             $cronogramaContainer->cronogramasFinalizados = $cronogramasFinalizados;
             $cronogramaContainer->cronogramasCancelados = $cronogramasCancelados;
             return $cronogramaContainer;
+        }
+
+        function clasesActualesCronograma($idCronograma, $fecha) {
+           /* SE VERIFICA SI LAS CLASES AUN ESTAN DISPONIBLES */
+           $status = "CONFIRMADO";
+           $state = $this->conn->prepare('SELECT * FROM clase WHERE clase.fecha >= ? AND clase.status = ? AND clase.idCronogama = ?');
+           $state->bind_param('ssis', $fecha, $status, $idCronograma);
+           $state->execute(); 
+
+           $result = $state->get_result();
+
+           $clasesActivas = (array) [];
+           if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+               array_push($clasesActivas, $row);
+            }
+           } else {
+               return [];
+           }
         }
 
         function verificarSiEsTodoElDia($diaString, $direccionPrincipal, $direccionAlternativa, $direccionPrincipalFormateada, $direccionAlternativaFormateada) {

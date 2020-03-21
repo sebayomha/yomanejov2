@@ -93,6 +93,73 @@
 		
 	}
 
+	function obtenerClasesActivasCronograma(){
+		$post = json_decode(file_get_contents('php://input'));
+
+		$post = $post->params;
+		$idCronograma = (int) $post->idCronograma;
+		$fechaInicio = $post->fechaInicio;
+		$disponibilidad = json_decode($post->disponibilidad, true);
+		$excepciones = json_decode($post->excepciones, true);
+
+		$resDisponibilidad = [];
+		$hayDireccionAlternativa = false;
+		foreach ($disponibilidad as $dia) {
+			$resDisponibilidad[$dia['name_day']] = null;
+			$resOptions[$dia['name_day']] = [];
+
+			if($dia['option'][0]['scheduleSend'] != null) {
+				$resDisponibilidad[$dia['name_day']] = [];
+				$options = [];
+				foreach ($dia['option'] as $option) {
+					foreach ($option['scheduleSend'] as $schedule) {
+						array_push($options, $schedule);
+					}
+					if ($option['dir_alt'] == true) {
+						$hayDireccionAlternativa = true;
+					}
+					array_push($resOptions[$dia['name_day']], $option);
+				}
+				$resDisponibilidad[$dia['name_day']] = $options;
+			} else {
+				$resDisponibilidad[$dia['name_day']] = null;
+			}		
+		}
+
+		if (containsOnlyNull($resDisponibilidad)) {
+			echo json_encode($GLOBALS['utils']->getResponse(3, "Debe completar al menos un dia"));
+		} else {
+			$resExcepciones = [];
+			$resExcepcionesOptions = [];
+			foreach ($excepciones as $excepcion) {
+				$resExcepciones[$excepcion['date_string']] = [];
+				$resExcepcionesOptions[$excepcion['date_string']] = [];
+				$options = [];
+				foreach ($excepcion['horarios'] as $horario) {
+					foreach ($horario['horariosTotales'] as $schedule) {
+						array_push($options, $schedule);
+					}
+					if ($horario['dir_alt'] == true) {
+						$hayDireccionAlternativa = true;
+					}
+					array_push($resExcepcionesOptions[$excepcion['date_string']], $horario);
+				}
+				$objetoExcepcion = (object) [
+					'options' => $options,
+					'no_puede' => $excepcion['no_puede']
+				];
+
+				$resExcepciones[$excepcion['date_string']] = $objetoExcepcion;
+			}
+
+			$cronograma = new Cronograma();
+			$clasesActivas = $cronograma->obtenerClasesActivasCronograma($idCronograma, $disponibilidad, $fechaInicio, $excepciones, $resOptions, $resExcepcionesOptions);
+
+			echo json_encode($GLOBALS['utils']->getResponse(0, $clasesActivas));
+		}
+		
+	}
+
 	function guardarCronograma() {
 		$post = json_decode(file_get_contents('php://input'));
 
@@ -215,6 +282,9 @@
 					break;
 				case '/calcularCronograma/obtenerClasesPorFecha':
 					obtenerClasesPorFecha();
+					break;
+				case '/calcularCronograma/obtenerClasesActivasCronograma':
+					obtenerClasesActivasCronograma();
 					break;
 			  	default:
 					echo "podriamos agregar otra consulta mas";
