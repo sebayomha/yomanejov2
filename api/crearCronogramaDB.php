@@ -297,7 +297,8 @@
                         'idClase' => $clase['idClase'],
                         'fecha' => $clase['fecha'],
                         'horaInicio' => $clase['horaInicio'],
-                        'idAuto' => $clase['idAuto'],
+                        'idAlumno' => $clase['alumno'],
+                        'idAuto' => $clase['auto'],
                         'idCronograma' => $clase['idCronograma'],
                         'idDireccion' => $clase['idDireccion'],
                         'continuaDisponible' => true
