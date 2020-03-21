@@ -93,7 +93,7 @@
 		
 	}
 
-	function obtenerClasesActivasCronograma(){
+	function obtenerClasesActivasCronograma() {
 		$post = json_decode(file_get_contents('php://input'));
 
 		$post = $post->params;
@@ -204,6 +204,31 @@
 		} else {
 			echo json_encode($GLOBALS['utils']->getResponse(1, "Ocurrió un error al actualizar algún registro, vuelva a intentar más tarde."));
 		}	
+	}
+
+	function actualizarCronogramaActivo() {
+		$post = json_decode(file_get_contents('php://input'));
+		
+		$idCronograma = $post[0]->idCronograma;
+		$selectedOptions = $post[1]->selected_options;
+		$idAlumno = $post[2]->idAlumno;
+		$idDireccionPrincipal = $post[3]->idDireccionPrincipal;
+		$address = $post[4]->address;
+		$idDireccionAlternativa = $post[5]->idDireccionAlternativa;
+		$address_alt = $post[6]->address_alternative;
+		$idDisponibilidad = $post[7]->idDisponibilidad;
+		$disponibilidad = $post[8]->disponibilidad;
+		$idExcepciones = $post[9]->idExcepciones;
+		$excepciones = $post[10]->excepciones;
+		$idClasesModificadas = $post[11]->idClasesModificadas;
+
+		$cronograma = new Cronograma();
+		$resultActualizarCronogramaActivo = $cronograma->actualizarCronogramaActivo($idCronograma, $clasesModificadas, $selectedOptions, $idAlumno, $idDireccionPrincipal, $address, $idDireccionAlternativa, $address_alt, $idDisponibilidad, $disponibilidad, $idExcepciones, $excepciones);
+		if ($resultActualizarCronogramaActivo != false) {
+			echo json_encode($GLOBALS['utils']->getResponse(0, $resultActualizarCronogramaActivo));
+		} else {
+			echo json_encode($GLOBALS['utils']->getResponse(1, "Ocurrió un error al actualizar algún registro, vuelva a intentar más tarde."));
+		}
 	}
 
 	function obtenerCronogramas() {

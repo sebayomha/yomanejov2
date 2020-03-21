@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 20, 2020 at 10:31 PM
+-- Generation Time: Mar 21, 2020 at 11:48 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -221,7 +221,7 @@ INSERT INTO `clase` (`idClase`, `alumno`, `auto`, `fecha`, `horaInicio`, `idZona
 (557, 109, 3, '2020-03-11', '12:15', 32, 153, 102, 'CONFIRMADO', 'true'),
 (558, 109, 3, '2020-03-13', '18:45', 32, 153, 102, 'CONFIRMADO', 'true'),
 (559, 109, 3, '2020-03-16', '12:15', 32, 153, 102, 'CONFIRMADO', 'true'),
-(560, 109, 3, '2020-03-20', '18:45', 32, 153, 102, 'CONFIRMADO', 'false'),
+(560, 109, 3, '2020-03-20', '18:45', 32, 153, 102, 'CONFIRMADO', 'true'),
 (562, 111, 3, '2020-02-28', '13:15', 32, 156, 104, 'CANCELADO', 'true'),
 (563, 112, 2, '2020-03-02', '09:00', 17, 158, 105, 'CANCELADO', 'true'),
 (564, 112, 2, '2020-03-04', '08:00', 17, 158, 105, 'CANCELADO', 'true'),
@@ -276,6 +276,18 @@ INSERT INTO `clase` (`idClase`, `alumno`, `auto`, `fecha`, `horaInicio`, `idZona
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `clasemodificadaregistro`
+--
+
+CREATE TABLE `clasemodificadaregistro` (
+  `idClaseModificadaRegistro` int(11) NOT NULL,
+  `idClaseAnterior` int(11) NOT NULL,
+  `idClaseNueva` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `cronograma`
 --
 
@@ -287,6 +299,7 @@ CREATE TABLE `cronograma` (
   `timestampActivo` varchar(255) NOT NULL,
   `timestampCancelado` varchar(255) NOT NULL,
   `timestampFinalizado` varchar(255) NOT NULL,
+  `timestampModificado` varchar(255) NOT NULL,
   `motivoBaja` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -294,28 +307,28 @@ CREATE TABLE `cronograma` (
 -- Dumping data for table `cronograma`
 --
 
-INSERT INTO `cronograma` (`idCronograma`, `status`, `idAlumno`, `timestampGuardado`, `timestampActivo`, `timestampCancelado`, `timestampFinalizado`, `motivoBaja`) VALUES
-(100, 'CANCELADO', 107, '02/26/2020 11:43:15 am', '', '2020-03-19 01:34:19 pm', '', 'cronogramaBAJA'),
-(101, 'CANCELADO', 108, '02/26/2020 12:02:55 pm', '', '2020-03-20 12:42:51 am', '', 'Error en el alumno'),
-(102, 'CONFIRMADO', 109, '02/26/2020 07:21:33 pm', '', '0000-00-00', '', ''),
-(104, 'CANCELADO', 111, '02/26/2020 07:57:02 pm', '', '2020-03-15 08:14:37 pm', '', ''),
-(105, 'CANCELADO', 112, '02/26/2020 08:25:07 pm', '', '0000-00-00', '', ''),
-(106, 'CANCELADO', 113, '02/27/2020 03:35:28 pm', '', '2020-03-15', '', ''),
-(108, 'CANCELADO', 115, '03/06/2020 10:54:39 am', '', '0000-00-00', '', ''),
-(109, 'CANCELADO', 116, '03/08/2020 12:05:36 am', '', '0000-00-00', '', ''),
-(111, 'CANCELADO', 118, '03/08/2020 12:23:01 am', '', '0000-00-00', '', ''),
-(112, 'FINALIZADO', 119, '03/08/2020 04:35:52 pm', '', '0000-00-00', '2020-03-18 18:27:36', ''),
-(113, 'CANCELADO', 120, '03/09/2020 09:40:56 am', '', '0000-00-00', '', ''),
-(114, 'FINALIZADO', 121, '03/09/2020 04:11:26 pm', '', '0000-00-00', '2020-03-18 18:27:36', ''),
-(117, 'CANCELADO', 124, '03/15/2020 06:09:35 pm', '', '0000-00-00', '', ''),
-(120, 'NO CONFIRMADO', 127, '03/17/2020 03:22:51 pm', '', '', '', ''),
-(121, 'NO CONFIRMADO', 128, '03/17/2020 11:35:58 am', '', '', '', ''),
-(122, 'NO CONFIRMADO', 129, '03/17/2020 02:14:11 pm', '', '', '', ''),
-(123, 'NO CONFIRMADO', 130, '03/17/2020 02:15:01 pm', '', '', '', ''),
-(124, 'NO CONFIRMADO', 131, '03/17/2020 02:19:06 pm', '', '', '', ''),
-(125, 'CONFIRMADO', 132, '03/17/2020 11:35:52 pm', '03/19/2020 11:35:52 am', '', '', ''),
-(127, 'CONFIRMADO', 134, '03/20/2020 05:15:34 pm', '', '', '', ''),
-(128, 'CONFIRMADO', 135, '03/20/2020 06:26:01 pm', '2020-03-20 06:30:44 pm', '', '', '');
+INSERT INTO `cronograma` (`idCronograma`, `status`, `idAlumno`, `timestampGuardado`, `timestampActivo`, `timestampCancelado`, `timestampFinalizado`, `timestampModificado`, `motivoBaja`) VALUES
+(100, 'CANCELADO', 107, '02/26/2020 11:43:15 am', '', '2020-03-19 01:34:19 pm', '', '', 'cronogramaBAJA'),
+(101, 'CANCELADO', 108, '02/26/2020 12:02:55 pm', '', '2020-03-20 12:42:51 am', '', '', 'Error en el alumno'),
+(102, 'CONFIRMADO', 109, '02/26/2020 07:21:33 pm', '', '0000-00-00', '', '', ''),
+(104, 'CANCELADO', 111, '02/26/2020 07:57:02 pm', '', '2020-03-15 08:14:37 pm', '', '', ''),
+(105, 'CANCELADO', 112, '02/26/2020 08:25:07 pm', '', '0000-00-00', '', '', ''),
+(106, 'CANCELADO', 113, '02/27/2020 03:35:28 pm', '', '2020-03-15', '', '', ''),
+(108, 'CANCELADO', 115, '03/06/2020 10:54:39 am', '', '0000-00-00', '', '', ''),
+(109, 'CANCELADO', 116, '03/08/2020 12:05:36 am', '', '0000-00-00', '', '', ''),
+(111, 'CANCELADO', 118, '03/08/2020 12:23:01 am', '', '0000-00-00', '', '', ''),
+(112, 'FINALIZADO', 119, '03/08/2020 04:35:52 pm', '', '0000-00-00', '2020-03-18 18:27:36', '', ''),
+(113, 'CANCELADO', 120, '03/09/2020 09:40:56 am', '', '0000-00-00', '', '', ''),
+(114, 'FINALIZADO', 121, '03/09/2020 04:11:26 pm', '', '0000-00-00', '2020-03-18 18:27:36', '', ''),
+(117, 'CANCELADO', 124, '03/15/2020 06:09:35 pm', '', '0000-00-00', '', '', ''),
+(120, 'NO CONFIRMADO', 127, '03/17/2020 03:22:51 pm', '', '', '', '', ''),
+(121, 'NO CONFIRMADO', 128, '03/17/2020 11:35:58 am', '', '', '', '', ''),
+(122, 'NO CONFIRMADO', 129, '03/17/2020 02:14:11 pm', '', '', '', '', ''),
+(123, 'NO CONFIRMADO', 130, '03/17/2020 02:15:01 pm', '', '', '', '', ''),
+(124, 'NO CONFIRMADO', 131, '03/17/2020 02:19:06 pm', '', '', '', '', ''),
+(125, 'CONFIRMADO', 132, '03/17/2020 11:35:52 pm', '03/19/2020 11:35:52 am', '', '', '', ''),
+(127, 'CONFIRMADO', 134, '03/20/2020 05:15:34 pm', '', '', '', '', ''),
+(128, 'CONFIRMADO', 135, '03/20/2020 06:26:01 pm', '2020-03-20 06:30:44 pm', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -803,6 +816,12 @@ ALTER TABLE `clase`
   ADD PRIMARY KEY (`idClase`);
 
 --
+-- Indexes for table `clasemodificadaregistro`
+--
+ALTER TABLE `clasemodificadaregistro`
+  ADD PRIMARY KEY (`idClaseModificadaRegistro`);
+
+--
 -- Indexes for table `cronograma`
 --
 ALTER TABLE `cronograma`
@@ -889,6 +908,12 @@ ALTER TABLE `auto`
 --
 ALTER TABLE `clase`
   MODIFY `idClase` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=737;
+
+--
+-- AUTO_INCREMENT for table `clasemodificadaregistro`
+--
+ALTER TABLE `clasemodificadaregistro`
+  MODIFY `idClaseModificadaRegistro` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `cronograma`

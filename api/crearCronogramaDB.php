@@ -659,6 +659,191 @@
             return $idCronograma;
         }
 
+        //Funcion principal que se encargara de actualizar un cronograma ACTIVO
+        function actualizarCronogramaActivo($idCronograma, $clasesModificadas, $selectedOptions, $idAlumno, $idDireccionPrincipal, $address, $idDireccionAlternativa, $address_alt, $idDisponibilidad, $disponibilidad, $idExcepciones, $excepciones) {
+            /*
+            SE HACE UN UPDATE DE:
+            -Direccion principal
+            -Direccion alternativa
+            -Disponibilidad del alumno
+            -El alumno
+            -Excepciones que el alumno posea
+            -El cronograma
+            -Las clases asociadas a dicho cronograma
+
+            SE INSERTA EN LA NUEVA TABLA LAS CLASES QUE CAMBIARON ASOCIADAS A LAS NUEVAS
+            */
+        
+  
+            
+            /* SE HACE UN UPDATE DE LA DIRECCION PRINCIPAL */            
+            $state = $this->conn->prepare('UPDATE direccion SET calle = ?, calle_diag = ?, calle_a = ?, calle_a_diag = ?, calle_b = ?, calle_b_diag = ?, numero = ?, ciudad = ?, departamento = ?, floor_ = ?, observaciones = ? WHERE direccion.idDireccion = ?');
+            $address_diag_string = var_export($address[0]->diag, true);
+            $address_a_diag_string = var_export($address[1]->diag, true);
+            $address_b_diag_string = var_export($address[2]->diag, true);
+
+            $state->bind_param('sssssssssssi', $address[0]->street, $address_diag_string, $address[1]->street_a, $address_a_diag_string, $address[2]->street_b, $address_b_diag_string, $address[3]->altitud, $address[4]->city, $address[6]->department, $address[5]->floor, $address[7]->observations, $idDireccionPrincipal);
+            $state->execute();
+            
+            /* SE INSERTA LA DIRECCION ALTERNATIVA SI ES QUE POSEE */
+            if ($this->hayDireccionAlternativa($selectedOptions)) {
+
+                /* SE EVALUA SI YA TENIA DIRECCION ALTERNATIVA PARA HACER UN UPDATE O UN INSERT */
+                if ($idDireccionAlternativa == null) { //no tenia direccion alternativa
+                    /* SE INSERTA LA DIRECCION ALTERNATIVA */            
+                    $state = $this->conn->prepare('INSERT INTO direccion (calle, calle_diag, calle_a, calle_a_diag, calle_b, calle_b_diag, numero, ciudad, departamento, floor_, observaciones) VALUES (?,?,?,?,?,?,?,?,?,?,?)');
+                    $address_diag_string = var_export($address_alt[0]->diag, true);
+                    $address_a_diag_string = var_export($address_alt[1]->diag, true);
+                    $address_b_diag_string = var_export($address_alt[2]->diag, true);
+
+                    $state->bind_param('sssssssssss', $address_alt[0]->street, $address_diag_string, $address_alt[1]->street_a, $address_a_diag_string, $address_alt[2]->street_b, $address_b_diag_string, $address_alt[3]->altitud, $address_alt[4]->city, $address_alt[6]->department, $address_alt[5]->floor, $address_alt[7]->observations);
+                    
+                    if ($state->execute()) { //el insert de la direccion alternativa fue exitoso
+                        $idDireccionAlternativa = $this->conn->insert_id;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    /* SE HACE UN UPDATE DE LA DIRECCION ALTERNATIVA */            
+                    $state = $this->conn->prepare('UPDATE direccion SET calle = ?, calle_diag = ?, calle_a = ?, calle_a_diag = ?, calle_b = ?, calle_b_diag = ?, numero = ?, ciudad = ?, departamento = ?, floor_ = ?, observaciones = ? WHERE direccion.idDireccion = ?');
+                    $address_diag_string = var_export($address_alt[0]->diag, true);
+                    $address_a_diag_string = var_export($address_alt[1]->diag, true);
+                    $address_b_diag_string = var_export($address_alt[2]->diag, true);
+
+                    $state->bind_param('sssssssssssi', $address_alt[0]->street, $address_diag_string, $address_alt[1]->street_a, $address_a_diag_string, $address_alt[2]->street_b, $address_b_diag_string, $address_alt[3]->altitud, $address_alt[4]->city, $address_alt[6]->department, $address_alt[5]->floor, $address_alt[7]->observations, $idDireccionAlternativa);
+                    $state->execute();
+                }
+            }
+
+            /* SE HACE UN UPDATE DE LA DISPONIBILIDAD DEL ALUMNO */
+            /* SE INSERTARA LA DISPONIBILIDAD DEL ALUMNO CON EL SIGUIENTE FORMATO:
+            [DISPONIBILIDADES: STRING] | [DIRECCION_ALTERNATIVA: BOOLEAN]
+            SI EL TRAMO HORARIO ES EN LA DIRECCION ALTERNATIVA SE PONDRA EN TRUE, SI ES EN LA PRINCIPAL EN FALSE. 
+                */
+            $disponibilidad_string = [];
+            foreach ($disponibilidad as $dia) {
+                if ($dia->all_day) {
+                    $scheduleSend_string = implode (", ", $dia->option[0]->scheduleSend);
+                    $scheduleSend_string .= '|'.var_export($dia->option[0]->dir_alt, true);
+                    array_push($disponibilidad_string, $scheduleSend_string);
+                } else {
+                    if ($dia->option[0]->scheduleSend != null) {
+                        $arrayTotal = [];
+                        foreach ($dia->option as $option) {
+                            $arrayTotal = array_merge($arrayTotal, $option->scheduleSend);
+                            $scheduleSend_string = '|'.var_export($option->dir_alt, true);
+                            array_push($arrayTotal, $scheduleSend_string);
+                        }       
+                        $scheduleSend_string = implode (", ", $arrayTotal);
+                        array_push($disponibilidad_string, $scheduleSend_string);
+                    } else {
+                        array_push($disponibilidad_string, null);
+                    }
+                }
+            }                
+            $state = $this->conn->prepare('UPDATE disponibilidad SET Monday = ?, Tuesday = ?, Wednesday = ?, Thursday = ?, Friday = ?, Saturday = ?, Sunday = ? WHERE disponibilidad.idDisponibilidad = ?');
+            $state->bind_param('sssssssi', $disponibilidad_string[0], $disponibilidad_string[1], $disponibilidad_string[2], $disponibilidad_string[3], $disponibilidad_string[4], $disponibilidad_string[5], $disponibilidad_string[6], $idDisponibilidad);
+            $state->execute();
+            
+            /* SE HACE UN UPDATE DEL ALUMNO SOLO PARA LA DIR ALTERNATIVA*/
+            $state = $this->conn->prepare('UPDATE alumno SET idDireccionAlt = ? WHERE alumno.idAlumno = ?');
+            $state->bind_param('ii', $idDireccionAlternativa, $idAlumno);
+            $state->execute();
+            
+            /* SE INSERTAN LAS EXCEPCIONES SI POSEE */
+            if (sizeof($excepciones) > 0) {
+                /* ELIMINO LAS EXCEPCIONES QUE YA POSEA */
+                if ($idExcepciones != null) {
+                    foreach ($idExcepciones as $idExcepcion) {
+                        /* SE ELIMINAN TODAS LAS EXCEPCIONES DEL ALUMNO*/
+                        $state = $this->conn->prepare('DELETE FROM excepcionHorarios WHERE excepcionHorarios.idExcepcion = ?');
+                        $state->bind_param('i', $idExcepcion);
+                        $state->execute(); 
+
+                        $state = $this->conn->prepare('DELETE FROM excepcion WHERE excepcion.idExcepcion = ?');
+                        $state->bind_param('i', $idExcepcion);
+                        $state->execute(); 
+                    }
+                }
+                
+                /* SE VUELVEN A AGREGAR O SE AGREGAN POR PRIMERA VEZ */
+                foreach ($excepciones as $excepcion) {
+                    $no_puede = 'false';
+                    if ($excepcion->no_puede) {
+                        $no_puede = 'true';
+                    }
+                    $state = $this->conn->prepare('INSERT INTO excepcion (fecha, no_puede, idAlumno) VALUES (?,?,?)');
+                    $state->bind_param('ssi', $excepcion->date_string, $no_puede, $idAlumno);
+                    if ($state->execute()) {  //me guardo la excepcion
+                        $idExcepcion = $this->conn->insert_id;
+                    }
+
+                    if (sizeof($excepcion->horarios) > 0) { //si tiene horarios agregados, inserto los mismos
+                        foreach ($excepcion->horarios as $horarioRowTime) {
+                            $dir_alt_excepcion = var_export($horarioRowTime->dir_alt, true);
+                            $horariosTotales_string = implode (", ", $horarioRowTime->horariosTotales);
+                            $state = $this->conn->prepare('INSERT INTO excepcionHorarios (dir_alt, horarios, idExcepcion) VALUES (?,?,?)');
+                            $state->bind_param('ssi', $dir_alt_excepcion, $horariosTotales_string, $idExcepcion);
+                            $state->execute();
+                        }
+                    }
+                }
+            } else { //no tiene nuevas excepciones, por lo que debo eliminar las que ya tenia, si es que tenia
+                if ($idExcepciones != null) {
+                    foreach ($idExcepciones as $idExcepcion) {
+                        /* SE ELIMINAN TODAS LAS EXCEPCIONES DEL ALUMNO*/
+                        $state = $this->conn->prepare('DELETE FROM excepcionHorarios WHERE excepcionHorarios.idExcepcion = ?');
+                        $state->bind_param('i', $idExcepcion);
+                        $state->execute(); 
+
+                        $state = $this->conn->prepare('DELETE FROM excepcion WHERE excepcion.idExcepcion = ?');
+                        $state->bind_param('i', $idExcepcion);
+                        $state->execute(); 
+                    }
+                }
+            }
+
+            /* SE HACE UN UPDATE DEL CRONOGRAMA PARA RESETEAR EL TIMESTAMP */
+            $datetime = date('m/d/Y h:i:s a', time());
+            $state = $this->conn->prepare('UPDATE cronograma SET timestampModificado = ? WHERE cronograma.idCronograma = ?');
+            $state->bind_param('si', $datetime, $idCronograma);
+            $state->execute();
+            
+            /* SE UPDATEAN TODAS LAS CLASES CON EL STATUS DE MODIFICADO */
+            $status = "MODIFICADO";
+            foreach ($clasesModificadas as $clase) {
+                $state = $this->conn->prepare('UPDATE clase SET status = ? WHERE clase.idClase = ?');
+                $state->bind_param('si', $status, $clase->idClase);
+                $state->execute(); 
+            }
+
+            $arrayIdClasesNuevos = (array) [];
+
+            /* SE INSERTAN LAS NUEVAS */
+            foreach ($selectedOptions as $option) {
+                $status = "CONFIRMADO";
+                $state = $this->conn->prepare('INSERT INTO clase (alumno, auto, fecha, horaInicio, idZona, idDireccion, idCronograma, status) VALUES (?,?,?,?,?,?,?,?)');
+                $direccionClase = $idDireccionPrincipal;
+                if ($option->da) {
+                    $direccionClase = $idDireccionAlternativa;
+                }
+                $state->bind_param('iissiiis', $idAlumno, $option->id_auto, $option->fecha, $option->horario, $option->idZona, $direccionClase, $idCronograma, $status);
+                $state->execute();
+                array_push($arrayIdClasesNuevos, $this->conn->insert_id);
+            }
+            
+            /* SE AGREGAN EN LA NUEVA TABLA QUE CLASE CAMBIO POR CUAL */
+            $i = 0;
+            foreach ($arrayIdClasesNuevos as $idNuevaClase) {
+                $state = $this->conn->prepare('INSERT INTO claseModificadaRegistro (idClaseAnterior, idClaseNueva) VALUES (?,?)');
+                $state->bind_param('ii', $clasesModificadas[$i], $idNuevaClase);
+                $state->execute();
+                $i++;
+            }
+
+            return $idCronograma;
+        }
+
         function hayDireccionAlternativa($selectedOptions) {
             foreach($selectedOptions as $option) {
                 if ($option->da) {
