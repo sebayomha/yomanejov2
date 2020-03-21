@@ -45,7 +45,7 @@ export class CronogramaService {
     .set('direccion', JSON.stringify(searchParameters.address))
     .set('direccion_alt', JSON.stringify(searchParameters.address_alternative))
     .set('excepciones', JSON.stringify(excepciones)) */
-    return this.http.post('api/calcularCronograma/', {params: data});
+    return this.http.post('api/calcularCronograma/obtenerClasesActivasCronograma', {params: data});
   }
 
   guardarCronograma(cronograma) {

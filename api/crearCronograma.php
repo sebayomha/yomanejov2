@@ -153,7 +153,7 @@
 			}
 
 			$cronograma = new Cronograma();
-			$clasesActivas = $cronograma->obtenerClasesActivasCronograma($idCronograma, $disponibilidad, $fechaInicio, $excepciones, $resOptions, $resExcepcionesOptions);
+			$clasesActivas = $cronograma->obtenerClasesActivasCronograma($idCronograma, $resDisponibilidad, $fechaInicio, $excepciones, $resOptions, $resExcepcionesOptions);
 
 			echo json_encode($GLOBALS['utils']->getResponse(0, $clasesActivas));
 		}
@@ -308,9 +308,6 @@
 				case '/calcularCronograma/obtenerClasesPorFecha':
 					obtenerClasesPorFecha();
 					break;
-				case '/calcularCronograma/obtenerClasesActivasCronograma':
-					obtenerClasesActivasCronograma();
-					break;
 			  	default:
 					echo "podriamos agregar otra consulta mas";
 					break;
@@ -338,6 +335,12 @@
 					break;
 				case '/calcularCronograma/cancelarCronogramaActivo':
 					cancelarCronogramaActivo();
+				break;
+				case '/calcularCronograma/obtenerClasesActivasCronograma':
+					obtenerClasesActivasCronograma();
+				break;
+				case '/calcularCronograma/actualizarCronogramaActivo':
+					actualizarCronogramaActivo();
 				break;
 				default:
 					echo "podriamos agregar otra consulta mas";
