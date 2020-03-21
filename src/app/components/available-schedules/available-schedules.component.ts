@@ -74,19 +74,7 @@ export class AvailableSchedulesComponent {
       this.classes = [];        
       this.order_information = this.data;
       if (this.edit_cronograma) {
-        this.idAlumno = this.edit_cronograma.alumno;
-        this.idCronograma = this.edit_cronograma.idCronograma;
-        this.idDireccionPrincipal = this.edit_cronograma.idDireccionPrincipal;
-        this.idDireccionAlternativa = this.edit_cronograma.idDireccionAlternativa;
-        this.idDisponibilidad = this.edit_cronograma.idDisponibilidad;
-
-        if (this.edit_cronograma.excepciones[0].idExcepcion == null) {
-          this.idExcepciones = null;
-        } else {
-          this.edit_cronograma.excepciones.forEach( excepcion => {
-            this.idExcepciones.push(excepcion.idExcepcion);
-          })
-        }
+        this.completeDataToSave();
       }
     }
     
@@ -105,9 +93,32 @@ export class AvailableSchedulesComponent {
       $('[data-toggle="tooltip"]').tooltip();
     }
 
-    // Editar cronograma:
-    // Tomo las clases que se habian seleccionado y chequeo que aun esten disponibles. Las que no lo esten apareceran en el banner.
-    verificoClases() {
+    /**
+     * Editar cronograma:
+     * Completo datos que se van a enviar en la funcion saveOptions()
+     */
+    completeDataToSave() {
+      this.idAlumno = this.edit_cronograma.alumno;
+      this.idCronograma = this.edit_cronograma.idCronograma;
+      this.idDireccionPrincipal = this.edit_cronograma.idDireccionPrincipal;
+      this.idDireccionAlternativa = this.edit_cronograma.idDireccionAlternativa;
+      this.idDisponibilidad = this.edit_cronograma.idDisponibilidad;
+  
+      if (this.edit_cronograma.excepciones[0].idExcepcion == null) {
+        this.idExcepciones = null;
+      } else {
+        this.edit_cronograma.excepciones.forEach( excepcion => {
+          this.idExcepciones.push(excepcion.idExcepcion);
+        })
+      }
+    }
+
+
+    /**
+     * Editar cronograma:
+     * Tomo las clases que se habian seleccionado y chequeo que aun esten disponibles. Las que no lo esten apareceran en el banner.
+     */
+     verificoClases() {
       this.show_info_banner = false
       this.not_available_classes = [];
       this.classes = [];
