@@ -302,6 +302,7 @@
                         'idAuto' => $clase['auto'],
                         'idCronograma' => $clase['idCronograma'],
                         'idDireccion' => $clase['idDireccion'],
+                        'usandoDirAlt' => $this->usandoDirAlt($clase['idDireccion'], $clase['alumno']),
                         'continuaDisponible' => true
                     ];
 
@@ -1110,6 +1111,23 @@
                return [];
            }
            return $clasesActivas;
+        }
+
+        function usandoDirAlt($idDireccion, $idAlumno) {
+            $state = $this->conn->prepare('SELECT * FROM alumno WHERE alumno.idAlumno = ?');
+            $state->bind_param('i', $idAlumno);
+            $state->execute(); 
+            $result = $state->get_result();
+
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                   if ($row['idDireccion'] == $idDireccion) {
+                       return false;
+                   } else {
+                       return true;
+                   }
+                }
+            }
         }
 
         function verificarSiEsTodoElDia($diaString, $direccionPrincipal, $direccionAlternativa, $direccionPrincipalFormateada, $direccionAlternativaFormateada) {
