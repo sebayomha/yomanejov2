@@ -2,7 +2,7 @@
   <br>
   <div class="col-12 col-md-4 sticky" style="padding: 0px; margin-top: 25px;z-index: 1;">
 
-      <mat-form-field class="example-full-width datePickerBox">
+      <mat-form-field class="example-full-width borderBox">
           <input matInput readonly [matDatepicker]="picker" (click)="picker.open()"
               (focus)="picker.open()" placeholder="Fecha" [(ngModel)]="select_day"
               [ngModelOptions]="{standalone: true}" [min]="minDate" (dateChange)="buscarClases($event);">
