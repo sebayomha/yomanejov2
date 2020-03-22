@@ -45,6 +45,7 @@ export class AvailableSchedulesComponent {
     step:number;
     classes: Array<any>;
     classes_send: Array<any>;
+    classes_actives_changes: Array<any>;
     order_information:any;
     currentCheckedValue:String;
     dataToConfirm = [];
@@ -124,17 +125,17 @@ export class AvailableSchedulesComponent {
       this.classes = [];
       let index_class = 0;
       let index_opt = 0;
+      this.fecha_no_disponible = true;
       this.edit_cronograma.clases.forEach(clase => {
         index_class += 1;
         let fecha_clase = clase.fecha;
         let hora_inicio = clase.horaInicio;
         let auto = clase.auto;
-        index_opt += 1;
     
         this.data.forEach(opt => {
 
           if (opt.fecha == fecha_clase) {
-            this.fecha_no_disponible = true;
+            // this.fecha_no_disponible = true;
             
             opt.horarios.forEach(opt_day => {
 
@@ -174,7 +175,9 @@ export class AvailableSchedulesComponent {
             }
           }
         });
-        
+        if(this.fecha_no_disponible != true) {
+          index_opt += 1;
+        }
       });
 
 
@@ -230,7 +233,7 @@ export class AvailableSchedulesComponent {
         'id_auto': event.option.value.idAuto,
         'da': event.option.value.usandoDirAlt,
         'idZona': event.option.value.idZona,
-        'idClase': null
+        'idClase': event.option.value.idClase
       }
 
       if (selectedOptions._selection.size == 0) {
@@ -259,11 +262,16 @@ export class AvailableSchedulesComponent {
 
       this.cantSelectedClasses = 0;
       this.classes_send = [];
+      this.classes_actives_changes = [];
       this.classes.forEach(element => {
         this.cantSelectedClasses = this.cantSelectedClasses + element.cant;
         if (element.cant == 1) {
           element.fecha_orden.setDate(element.fecha_orden.getDate() - 1);
           this.classes_send.push(element);
+        } else {
+          if (element.idClase != undefined) {
+            this.classes_actives_changes.push(element.idClase);
+          }
         }
       });
 
@@ -289,6 +297,8 @@ export class AvailableSchedulesComponent {
       this.dataToConfirm.push({'disponibilidad' : this.disponibilidad});
       this.dataToConfirm.push({'idExcepciones' : this.idExcepciones});
       this.dataToConfirm.push({'excepciones' : this.excepciones});
+      this.dataToConfirm.push({'idClasesModificadas' : this.classes_actives_changes});
+
       console.log("dataToConfirm ::", this.dataToConfirm);
       this.customModal.open();
     }
@@ -312,22 +322,42 @@ export class AvailableSchedulesComponent {
           }
         })
       } else {
-        this.operationCustomModal = "EditarCronograma";
-        this.cronogramaService.actualizarCronogramaPendiente($event).subscribe( (response: Response) => {
-          console.log(response);
-          if (response.code == 0) {
-            this.showSuccessBanner = true;
-            this.idCronogramaGuardado = response.data;
-          } else {
-            this.idCronogramaGuardado = null;
-            this.customModal.onClose();
-            this.showSuccessBanner = false;
-            this._snackBar.openFromComponent(SnackbarComponent, {
-              duration: this.durationInSeconds * 1100,
-              data: response
-            });
-          }
-        })
+        if(this.edit_cronograma.statusCronograma == "CONFIRMADO") {
+          this.operationCustomModal = "EditarCronogramaActivo";
+          this.cronogramaService.actualizarCronogramaActivo($event).subscribe( (response: Response) => {
+            console.log(response);
+            if (response.code == 0) {
+              this.showSuccessBanner = true;
+              this.idCronogramaGuardado = response.data;
+            } else {
+              this.idCronogramaGuardado = null;
+              this.customModal.onClose();
+              this.showSuccessBanner = false;
+              this._snackBar.openFromComponent(SnackbarComponent, {
+                duration: this.durationInSeconds * 1100,
+                data: response
+              });
+            }
+          })
+        } else {
+          this.operationCustomModal = "EditarCronograma";
+          this.cronogramaService.actualizarCronogramaPendiente($event).subscribe( (response: Response) => {
+            console.log(response);
+            if (response.code == 0) {
+              this.showSuccessBanner = true;
+              this.idCronogramaGuardado = response.data;
+            } else {
+              this.idCronogramaGuardado = null;
+              this.customModal.onClose();
+              this.showSuccessBanner = false;
+              this._snackBar.openFromComponent(SnackbarComponent, {
+                duration: this.durationInSeconds * 1100,
+                data: response
+              });
+            }
+          })
+        }
+
       }
 
       console.log($event);

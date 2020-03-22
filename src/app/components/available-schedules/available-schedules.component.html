@@ -33,7 +33,7 @@
               <div id="horaInicioContainer" class="col-12 col-sm-12 col-md-6 col-lg-3 NoPadding">
                 <span>Inicio de clase: {{horario.horaInicio}} hs</span>
               </div>
-              <div id="puntajeContainer" class="col-12 col-sm-12 col-md-6 col-lg-3 NoPadding">
+              <div id="puntajeContainer" *ngIf="!horario.idClase" class="col-12 col-sm-12 col-md-6 col-lg-3 NoPadding">
                 <div id="iconContainer" style="margin-right: 15px; display: inline; position: relative; top: 5px;">
                   <span *ngIf="horario.tieneEldiaLibre" class="dot grey"></span>
                   <span *ngIf="!horario.tieneEldiaLibre && horario.ratingGeneral >= 7" class="dot green"></span>
@@ -42,8 +42,11 @@
                 </div>
                 <span style="font-size: 14px; font-style: italic;" class="text-muted">Puntaje: {{horario.tieneEldiaLibre ? 'No aplica' : horario.ratingGeneral}}</span>
               </div>
-              <div *ngIf="!horario.esDeLaZona" id="infoMessageContainer" class="col-12 col-sm-12 col-lg-6 NoPadding">
-                <span style="font-size: 14px; font-weight: 500;" class="text-muted mobile-text-12">Auto fuera de la zona del alumno.</span>
+              <div *ngIf="!horario.idClase" id="infoMessageContainer" class="col-12 col-sm-12 col-lg-6 NoPadding">
+                <span *ngIf="!horario.esDeLaZona" style="font-size: 14px; font-weight: 500;" class="text-muted mobile-text-12">Auto fuera de la zona del alumno.</span>
+              </div>
+              <div *ngIf="horario.idClase" id="infoMessageContainer" class="col-12 col-sm-12 col-lg-6 NoPadding">
+                <span style="font-size: 14px; font-weight: 500;" class="text-muted mobile-text-12">Clase activa en este cronograma.</span>
               </div>
             </div>
             <div class="col-3 col-sm-2 col-lg-1 NoPadding" style="line-height: 35px; text-align: right;">

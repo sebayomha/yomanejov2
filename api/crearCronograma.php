@@ -223,7 +223,7 @@
 		$idClasesModificadas = $post[11]->idClasesModificadas;
 
 		$cronograma = new Cronograma();
-		$resultActualizarCronogramaActivo = $cronograma->actualizarCronogramaActivo($idCronograma, $clasesModificadas, $selectedOptions, $idAlumno, $idDireccionPrincipal, $address, $idDireccionAlternativa, $address_alt, $idDisponibilidad, $disponibilidad, $idExcepciones, $excepciones);
+		$resultActualizarCronogramaActivo = $cronograma->actualizarCronogramaActivo($idCronograma, $idClasesModificadas, $selectedOptions, $idAlumno, $idDireccionPrincipal, $address, $idDireccionAlternativa, $address_alt, $idDisponibilidad, $disponibilidad, $idExcepciones, $excepciones);
 		if ($resultActualizarCronogramaActivo != false) {
 			echo json_encode($GLOBALS['utils']->getResponse(0, $resultActualizarCronogramaActivo));
 		} else {
