@@ -212,22 +212,27 @@
 		$idCronograma = $post[0]->idCronograma;
 		$selectedOptions = $post[1]->selected_options;
 		$idAlumno = $post[2]->idAlumno;
-		$idDireccionPrincipal = $post[3]->idDireccionPrincipal;
-		$address = $post[4]->address;
-		$idDireccionAlternativa = $post[5]->idDireccionAlternativa;
-		$address_alt = $post[6]->address_alternative;
-		$idDisponibilidad = $post[7]->idDisponibilidad;
-		$disponibilidad = $post[8]->disponibilidad;
-		$idExcepciones = $post[9]->idExcepciones;
-		$excepciones = $post[10]->excepciones;
-		$idClasesModificadas = $post[11]->idClasesModificadas;
+		$idDireccionPrincipal = $post[5]->idDireccionPrincipal;
+		$address = $post[6]->address;
+		$idDireccionAlternativa = $post[7]->idDireccionAlternativa;
+		$address_alt = $post[8]->address_alternative;
+		$idDisponibilidad = $post[9]->idDisponibilidad;
+		$disponibilidad = $post[10]->disponibilidad;
+		$idExcepciones = $post[11]->idExcepciones;
+		$excepciones = $post[12]->excepciones;
 
-		$cronograma = new Cronograma();
-		$resultActualizarCronogramaActivo = $cronograma->actualizarCronogramaActivo($idCronograma, $idClasesModificadas, $selectedOptions, $idAlumno, $idDireccionPrincipal, $address, $idDireccionAlternativa, $address_alt, $idDisponibilidad, $disponibilidad, $idExcepciones, $excepciones);
-		if ($resultActualizarCronogramaActivo != false) {
-			echo json_encode($GLOBALS['utils']->getResponse(0, $resultActualizarCronogramaActivo));
+		if (!$post[13]) {
+			echo json_encode($GLOBALS['utils']->getResponse(1, "Para editar debe modificar alguna de las clases."));
 		} else {
-			echo json_encode($GLOBALS['utils']->getResponse(1, "Ocurrió un error al actualizar algún registro, vuelva a intentar más tarde."));
+			$idClasesModificadas = $post[13]->idClasesModificadas;
+
+			$cronograma = new Cronograma();
+			$resultActualizarCronogramaActivo = $cronograma->actualizarCronogramaActivo($idCronograma, $idClasesModificadas, $selectedOptions, $idAlumno, $idDireccionPrincipal, $address, $idDireccionAlternativa, $address_alt, $idDisponibilidad, $disponibilidad, $idExcepciones, $excepciones);
+			if ($resultActualizarCronogramaActivo != false) {
+				echo json_encode($GLOBALS['utils']->getResponse(0, $resultActualizarCronogramaActivo));
+			} else {
+				echo json_encode($GLOBALS['utils']->getResponse(1, "Ocurrió un error al actualizar algún registro, vuelva a intentar más tarde."));
+			}
 		}
 	}
 

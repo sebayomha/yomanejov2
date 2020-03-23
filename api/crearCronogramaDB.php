@@ -820,7 +820,7 @@
             $status = "MODIFICADO";
             foreach ($clasesModificadas as $clase) {
                 $state = $this->conn->prepare('UPDATE clase SET status = ? WHERE clase.idClase = ?');
-                $state->bind_param('si', $status, $clase->idClase);
+                $state->bind_param('si', $status, $clase);
                 $state->execute(); 
             }
 
@@ -861,6 +861,7 @@
         }
 
         function obtenerCronogramas() { 
+            $statusNo = "MODIFICADO";
             $state = $this->conn->prepare('SELECT 
             d1.idDireccion AS id_DirPrincipal,
             d1.calle AS calle_DirPrincipal, 
@@ -909,8 +910,11 @@
             LEFT JOIN excepcion ON excepcion.idAlumno = alumno.idAlumno
             LEFT JOIN excepcionhorarios ON excepcion.idExcepcion = excepcionhorarios.idExcepcion
             LEFT JOIN alumnocronogramaclasestomadas ON alumnocronogramaclasestomadas.idCronograma = clase.idCronograma
+            WHERE clase.status <> ?
             ORDER BY cronograma.idCronograma DESC');
 
+            $state->bind_param('s', $statusNo);
+            
             $cronogramas = array();
             $cronogramaContainer = (object) [
                 'cronogramasConfirmados' => [],
