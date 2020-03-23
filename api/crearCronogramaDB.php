@@ -291,7 +291,7 @@
             $fechasExcepciones = array_keys($excepciones);
 
             $clasesActualesCronograma = $this->clasesActualesCronograma($idCronograma, $fechaBusqueda);
-
+            
             if (sizeof($clasesActualesCronograma) > 0) {
                 foreach ($clasesActualesCronograma as $clase) {
                     $claseData = (object) [
@@ -343,8 +343,8 @@
                                     array_push($clasesFinalesRetornar, $claseData);
                                 }
                             } else { //la clase ya paso
-                                $claseData->continuaDisponible = false;
-                                array_push($clasesFinalesRetornar, $claseData);
+/*                                 $claseData->continuaDisponible = false;
+                                array_push($clasesFinalesRetornar, $claseData); */
                             }
                         } else {
                             if ($puede) { //este dia dentro de las excepciones puede
@@ -354,29 +354,29 @@
                                         if (in_array($claseData->horaInicio, $excepciones[$claseData->fecha]->options)) { //la clase esta dentro de los horarios de la excepcion
                                             array_push($clasesFinalesRetornar, $claseData);
                                         } else { //la clase no esta dentro de los horarios posibles en la excepcion
-                                            $claseData->continuaDisponible = false;
-                                            array_push($clasesFinalesRetornar, $claseData);
+/*                                             $claseData->continuaDisponible = false;
+                                            array_push($clasesFinalesRetornar, $claseData); */
                                         }
                                     } else { //no estoy en una excepcion, entonces valido con la disponibilidad
                                         if(in_array($clase['horaInicio'], $disponibilidad[$nombreDiaBusqueda])) { //el alumno continua disponible ese dia
                                             array_push($clasesFinalesRetornar, $claseData);
                                         } else { //este dia no puede (basado en la disponibilidad)
-                                            $claseData->continuaDisponible = false;
-                                            array_push($clasesFinalesRetornar, $claseData);
+/*                                             $claseData->continuaDisponible = false;
+                                            array_push($clasesFinalesRetornar, $claseData); */
                                         }
                                     }
                                 } else { //no esta disponible este dia
-                                    $claseData->continuaDisponible = false;
-                                    array_push($clasesFinalesRetornar, $claseData);
+/*                                     $claseData->continuaDisponible = false;
+                                    array_push($clasesFinalesRetornar, $claseData); */
                                 }
                             } else { //este dia no puede entonces directamente agrego la clase con el flag de que no esta disponible
-                                $claseData->continuaDisponible = false;
-                                array_push($clasesFinalesRetornar, $claseData);
+/*                                 $claseData->continuaDisponible = false;
+                                array_push($clasesFinalesRetornar, $claseData); */
                             }
                         }
                     } else { //la clase ya paso
-                        $claseData->continuaDisponible = false;
-                        array_push($clasesFinalesRetornar, $claseData);
+/*                         $claseData->continuaDisponible = false;
+                        array_push($clasesFinalesRetornar, $claseData); */
                     }
                 }   
             } else {
@@ -517,14 +517,16 @@
                 }
 
                 /* SE CARGAN LAS CLASES SIN CONFIRMAR BAJO EL NUEVO CRONOGRAMA */
+                $i = 1;
                 foreach ($selectedOptions as $option) {
-                    $state = $this->conn->prepare('INSERT INTO clase (alumno, auto, fecha, horaInicio, idZona, idDireccion, idCronograma, status) VALUES (?,?,?,?,?,?,?,?)');
+                    $state = $this->conn->prepare('INSERT INTO clase (alumno, auto, fecha, horaInicio, idZona, idDireccion, idCronograma, status, nroClase) VALUES (?,?,?,?,?,?,?,?,?)');
                     $direccionClase = $idDireccionPrincipal;
                     if ($option->da) {
                         $direccionClase = $idDireccionAlternativa;
                     }
-                    $state->bind_param('iissiiis', $idAlumno, $option->id_auto, $option->fecha, $option->horario, $option->idZona, $direccionClase, $idCronograma, $status);
+                    $state->bind_param('iissiiisi', $idAlumno, $option->id_auto, $option->fecha, $option->horario, $option->idZona, $direccionClase, $idCronograma, $status, $i);
                     $state->execute();
+                    $i++;
                 }
             } else {
                 return false;
@@ -685,18 +687,18 @@
             $state->execute(); 
 
             /* SE INSERTAN LAS NUEVAS */
+            $i = 1;
             foreach ($selectedOptions as $option) {
                 $status = "NO CONFIRMADO";
-                $state = $this->conn->prepare('INSERT INTO clase (alumno, auto, fecha, horaInicio, idZona, idDireccion, idCronograma, status) VALUES (?,?,?,?,?,?,?,?)');
+                $state = $this->conn->prepare('INSERT INTO clase (alumno, auto, fecha, horaInicio, idZona, idDireccion, idCronograma, status, nroClase) VALUES (?,?,?,?,?,?,?,?,?)');
                 $direccionClase = $idDireccionPrincipal;
                 if ($option->da) {
                     $direccionClase = $idDireccionAlternativa;
                 }
-                $state->bind_param('iissiiis', $idAlumno, $option->id_auto, $option->fecha, $option->horario, $option->idZona, $direccionClase, $idCronograma, $status);
+                $state->bind_param('iissiiis', $idAlumno, $option->id_auto, $option->fecha, $option->horario, $option->idZona, $direccionClase, $idCronograma, $status, $i);
                 $state->execute();
+                $i++;
             }
-            
-
             return $idCronograma;
         }
 
@@ -711,7 +713,7 @@
             -Excepciones que el alumno posea
             -El cronograma
             -Las clases asociadas a dicho cronograma
-
+            -El contador de clase
             SE INSERTA EN LA NUEVA TABLA LAS CLASES QUE CAMBIARON ASOCIADAS A LAS NUEVAS
             */
         
@@ -871,6 +873,22 @@
                 $state->bind_param('iissiiis', $idAlumno, $option->id_auto, $option->fecha, $option->horario, $option->idZona, $direccionClase, $idCronograma, $status);
                 $state->execute();
                 array_push($arrayIdClasesNuevos, $this->conn->insert_id);
+            }
+
+            /* RENUEVO EL NUMERO DE CLASE */
+            $status = "CONFIRMADO";
+            $state = $this->conn->prepare('SELECT clase.idClase FROM clase WHERE clase.status = ? AND clase.idCronograma = ? ORDER BY clase.fecha');
+            $state->bind_param('si', $status, $idCronograma);
+            $state->execute(); 
+            $result = $state->get_result();
+
+            if ($result->num_rows > 0) {
+                $i = 1;
+                while($row = $result->fetch_assoc()) {
+                    $state = $this->conn->prepare('UPDATE clase SET nroClase = ? WHERE clase.idClase = ?');
+                    $state->bind_param('ii', $i, $row['idClase']);
+                    $state->execute(); 
+                }
             }
             
             /* SE AGREGAN EN LA NUEVA TABLA QUE CLASE CAMBIO POR CUAL */
@@ -1358,7 +1376,13 @@
 
         function obtenerClasesPorFecha($fecha) {
             $fechaString = $fecha;
-            $state = $this->conn->prepare('SELECT * FROM auto LEFT JOIN clase ON auto.idAuto = clase.auto AND clase.fecha = ? AND clase.status = ? LEFT JOIN alumno ON clase.alumno = alumno.idAlumno LEFT JOIN direccion ON clase.idDireccion = direccion.idDireccion ORDER BY clase.horaInicio');
+            $state = $this->conn->prepare(
+            'SELECT * FROM auto 
+            LEFT JOIN clase ON auto.idAuto = clase.auto AND clase.fecha = ? AND clase.status = ? 
+            LEFT JOIN alumno ON clase.alumno = alumno.idAlumno 
+            LEFT JOIN direccion ON clase.idDireccion = direccion.idDireccion
+            LEFT JOIN alumnocronogramaclasestomadas act ON act.idCronograma = clase.idCronograma
+            ORDER BY clase.horaInicio');
             $status = 'CONFIRMADO';
             $state->bind_param('ss', $fechaString, $status);
             $state->execute();
