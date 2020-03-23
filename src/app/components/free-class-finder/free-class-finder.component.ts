@@ -52,6 +52,9 @@ export class FreeClassFinderComponent {
   flag_crono_active:boolean = false;
   crono_active_id;
 
+  show_component_available:boolean = false;
+
+
 
   //ALUMNOS VARIABLES
   alumnos: Array<any>;
@@ -427,7 +430,7 @@ export class FreeClassFinderComponent {
     }
   }
 
-  searchSchedules() {
+  async searchSchedules() {
 
     this.control_collapse_search = false;
 
@@ -463,49 +466,15 @@ export class FreeClassFinderComponent {
     this.numberOfClasses = this.search.lessons;
     this.setExceptionHours();
 
-    this.cronogramaService.getCronograma(object, this.excepciones).subscribe( (response: Response) => {
+    await this.cronogramaService.getCronograma(object, this.excepciones).subscribe( (response: Response) => {
       console.log(response)
       switch (response.code) {
         case 0:
           this.available_schedules = Object.values(response.data);
           this._snackBar.dismiss();
 
-          if (this.flag_crono_active == true) {
-
-            this.cronogramaService.obtenerClasesActivasCronograma(this.crono_active_id, object, this.excepciones).subscribe( (response: Response) => {
-              console.log(response)
-              switch (response.code) {
-                case 0:
-                  this.crono_active_classes = Object.values(response.data);
-                  this._snackBar.dismiss();
-
-                  this.available_schedules.forEach(opt => {
-                    this.crono_active_classes.forEach(clase => {
-                      if (opt.fecha == clase.fecha) {
-                        clase.cronogramaActual = [];
-                        opt.horarios.unshift(clase);
-                      }
-                    });
-                  });
-
-                  break;
-                case 2:
-                case 3:{
-                  this.crono_active_classes = null;
-                  this.control_collapse_search = true;
-                  this._snackBar.openFromComponent(SnackbarComponent, {
-                    duration: this.durationInSeconds * 1100,
-                    data: response
-                  });
-                }
-                break;
-              }
-            });
-            
-
-      
-          }
-
+          this.show_component_available = true;
+          
           break;
         case 2:
         case 3:{
@@ -518,12 +487,50 @@ export class FreeClassFinderComponent {
         }
         break;
       }
+    },
+    (error) =>{
+
+    },() => {
+      if (this.flag_crono_active == true) {
+        this.show_component_available = false;
+        this.serviceObtenerClasesActivasCronograma(object);
+      }
+      
     });
-
-
-    
   }
 
+  serviceObtenerClasesActivasCronograma(obj) {
+    this.cronogramaService.obtenerClasesActivasCronograma(this.crono_active_id, obj, this.excepciones).subscribe( (response: Response) => {
+      console.log(response)
+      switch (response.code) {
+        case 0:
+          this.crono_active_classes = Object.values(response.data);
+          this._snackBar.dismiss();
+
+          this.available_schedules.forEach(opt => {
+            this.crono_active_classes.forEach(clase => {
+              if (opt.fecha == clase.fecha) {
+                clase.cronogramaActual = [];
+                opt.horarios.unshift(clase);
+              }
+            });
+          });
+          this.show_component_available = true;
+          break;
+        case 2:
+        case 3:{
+          this.crono_active_classes = null;
+          this.control_collapse_search = true;
+          this._snackBar.openFromComponent(SnackbarComponent, {
+            duration: this.durationInSeconds * 1100,
+            data: response
+          });
+        }
+        break;
+      }
+    });
+  }
+  
   onAvailableSchedulesFinish($event) {
     if ($event == "GuardarCronograma") {
       this.available_schedules = null;

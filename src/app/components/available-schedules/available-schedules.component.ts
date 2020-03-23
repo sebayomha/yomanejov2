@@ -45,7 +45,7 @@ export class AvailableSchedulesComponent {
     step:number;
     classes: Array<any>;
     classes_send: Array<any>;
-    classes_actives_changes: Array<any>;
+    classes_actives_changes: Array<any> = [];
     order_information:any;
     currentCheckedValue:String;
     dataToConfirm = [];
@@ -124,14 +124,15 @@ export class AvailableSchedulesComponent {
       this.not_available_classes = [];
       this.classes = [];
       let index_class = 0;
-      let index_opt = 0;
+      
       this.fecha_no_disponible = true;
       this.edit_cronograma.clases.forEach(clase => {
         index_class += 1;
         let fecha_clase = clase.fecha;
         let hora_inicio = clase.horaInicio;
         let auto = clase.auto;
-    
+        let index_opt = 0;
+
         this.data.forEach(opt => {
 
           if (opt.fecha == fecha_clase) {
@@ -174,10 +175,9 @@ export class AvailableSchedulesComponent {
               this.show_info_banner = true;
             }
           }
-        });
-        if(this.fecha_no_disponible != true) {
+
           index_opt += 1;
-        }
+        });
       });
 
 
@@ -251,18 +251,34 @@ export class AvailableSchedulesComponent {
           option.cant = 1;
           this.classes.push(option)
         } else {
-          let indexClass = this.classes.findIndex( element => element.index == index);
+          let indexClass = this.classes.findIndex( element => element.index == index );
           this.classes[indexClass].cant = 1;
           this.classes[indexClass].horario = option.horario;
           this.classes[indexClass].id_auto = option.id_auto;
           this.classes[indexClass].da = option.da;
           this.classes[indexClass].fecha = option.fecha;
+        
+          let claseActivaId = this.classes[indexClass].idClase ? this.classes[indexClass].idClase : option.idClase;
+          if (claseActivaId) {
+            
+            if (this.classes_actives_changes.length > 0) {
+              let indexClassActive = this.classes_actives_changes.findIndex( element => element == claseActivaId )
+              if (indexClassActive == -1) {
+                this.classes_actives_changes.push(claseActivaId);
+              } else {
+                this.classes_actives_changes.splice(indexClassActive, 1);
+              }
+            } else {
+              this.classes_actives_changes.push(claseActivaId);
+            }
+          }
+          this.classes[indexClass].idClase = option.idClase;
         }
       }
 
       this.cantSelectedClasses = 0;
       this.classes_send = [];
-      this.classes_actives_changes = [];
+      
       this.classes.forEach(element => {
         this.cantSelectedClasses = this.cantSelectedClasses + element.cant;
         if (element.cant == 1) {
