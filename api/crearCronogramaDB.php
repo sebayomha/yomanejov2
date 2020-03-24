@@ -959,7 +959,7 @@
             excepcionhorarios.dir_alt, excepcionhorarios.horarios,
             disponibilidad.idDisponibilidad, disponibilidad.Monday, disponibilidad.Tuesday, disponibilidad.Wednesday, disponibilidad.Thursday, disponibilidad.Friday, disponibilidad.Saturday, disponibilidad.Sunday,
             alumno.idAlumno, alumno.nombre, alumno.telefono, 
-            clase.idClase, clase.idCronograma, clase.alumno, clase.auto, clase.sumada, 
+            clase.idClase, clase.idCronograma, clase.alumno, clase.auto, clase.sumada, clase.claseCancelada, clase.motivoCancelacion,
             clase.fecha, clase.horaInicio, clase.idZona, clase.idDireccion, clase.status AS satusClase, cronograma.status AS cronogramaStatus 
             FROM clase 
             INNER JOIN cronograma ON cronograma.idCronograma = clase.idCronograma 
