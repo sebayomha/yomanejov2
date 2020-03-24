@@ -435,7 +435,7 @@ export class FreeClassFinderComponent {
     this.control_collapse_search = false;
 
     let object = JSON.parse(JSON.stringify(this.search));
-
+    console.log("search ", object);
     //Transformo los nombres de los dias en ingles
     for (let i = 0; i <=6; i++) {
       switch (i) {
