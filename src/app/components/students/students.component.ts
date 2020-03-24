@@ -92,6 +92,12 @@ export class StudentsComponent implements OnInit {
     this.alumnosPendientes.filter = filterValue.trim().toLowerCase();
   }
 
+  showTooltip(alumno) {
+    if (alumno.clasesCanceladasStatus) {
+      return "El alumno no ha asistido a las siguientes clases: " + alumno.clasesCanceladasStatus;
+    }
+  }
+
   openDetail(alumno) {
     this.alumno = alumno;
     this.sidenav.open();

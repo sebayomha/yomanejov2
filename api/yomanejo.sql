@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 24, 2020 at 06:40 PM
+-- Generation Time: Mar 24, 2020 at 08:26 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -202,7 +202,7 @@ CREATE TABLE `clase` (
   `sumada` varchar(5) NOT NULL DEFAULT 'false',
   `nroClase` int(11) NOT NULL,
   `claseCancelada` varchar(5) NOT NULL,
-  `motivoCancelacion` varchar(255) NOT NULL,
+  `motivoCancelacion` varchar(255) DEFAULT NULL,
   `fechaClaseCancelada` varchar(255) NOT NULL,
   `fechaClaseReactivada` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -281,8 +281,8 @@ INSERT INTO `clase` (`idClase`, `alumno`, `auto`, `fecha`, `horaInicio`, `idZona
 (736, 135, 1, '2020-03-24', '08:00', 24, 203, 128, 'CONFIRMADO', 'false', 0, '', '', '', ''),
 (740, 135, 1, '2020-03-25', '13:15', 24, 203, 128, 'CONFIRMADO', 'false', 0, '', '', '', ''),
 (741, 135, 1, '2020-03-23', '11:15', 37, 204, 128, 'CONFIRMADO', 'false', 0, '', '', '', ''),
-(742, 136, 1, '2020-03-30', '09:00', 24, 205, 129, 'CONFIRMADO', 'false', 0, '', '', '', ''),
-(743, 136, 1, '2020-04-06', '09:00', 24, 205, 129, 'CONFIRMADO', 'false', 0, '', '', '', '');
+(742, 136, 1, '2020-03-30', '09:00', 24, 205, 129, 'CONFIRMADO', 'false', 0, 'true', 'se quedo dormido', '', ''),
+(743, 136, 1, '2020-04-06', '09:00', 24, 205, 129, 'CONFIRMADO', 'false', 0, 'true', 'dejo de ir', '', '');
 
 -- --------------------------------------------------------
 

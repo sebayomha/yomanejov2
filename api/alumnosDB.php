@@ -62,6 +62,12 @@
             alumno.fechaBaja,
             alumno.motivoBaja,
             cronograma.idCronograma,
+            GROUP_CONCAT(
+                IF(clase.claseCancelada="" OR clase.claseCancelada="false", 
+                null, 
+                CONCAT(clase.idClase, ": ",clase.motivoCancelacion)
+                ) SEPARATOR ","
+            ) as clasesCanceladasStatus,
             idAlumnoCronograma, cantClasesTomadas, cantClasesTotales,
             disponibilidad.Monday, disponibilidad.Tuesday, disponibilidad.Wednesday, disponibilidad.Thursday, disponibilidad.Friday, disponibilidad.Saturday, disponibilidad.Sunday
             FROM alumno 
@@ -70,7 +76,9 @@
             LEFT JOIN direccion AS d2 ON d2.idDireccion = alumno.idDireccionAlt
             INNER JOIN disponibilidad ON disponibilidad.idDisponibilidad = alumno.idDisponibilidad
             INNER JOIN cronograma ON cronograma.idAlumno = alumno.idAlumno
+            INNER JOIN clase ON clase.idCronograma = cronograma.idCronograma
             LEFT JOIN alumnocronogramaclasestomadas ON alumnocronogramaclasestomadas.idAlumno = alumno.idAlumno AND alumnocronogramaclasestomadas.idCronograma = cronograma.idCronograma
+            GROUP BY alumno.idAlumno
             ORDER BY alumno.idAlumno DESC');
             $state->execute();
             $result = $state->get_result();
@@ -94,6 +102,7 @@
                         'Saturday' => $this->verificarSiEsTodoElDia($row['Saturday'],$row['id_DirPrincipal'],$row['id_DirAlternativa'], $row['dirPrincipalFormateada'], $row['dirAlternativaFormateada']),
                         'Sunday' => $this->verificarSiEsTodoElDia($row['Sunday'],$row['id_DirPrincipal'],$row['id_DirAlternativa'], $row['dirPrincipalFormateada'], $row['dirAlternativaFormateada'])
                     ];
+
 
                     $row['disponibilidades'] = $disponibilidades;
 
