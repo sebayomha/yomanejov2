@@ -1784,8 +1784,22 @@
             $now = date('Y-m-d h:i:s a', time());
             $state = $this->conn->prepare('UPDATE clase SET clase.claseCancelada = ?, clase.fechaClaseCancelada = ?, motivoCancelacion = ? WHERE clase.idClase = ?');
             $state->bind_param('sssi', $cancelado, $now, $motivoCancelacion, $idClase);
-            $state->execute();
-            return 0;
+            if($state->execute()) {
+                return 0;
+            }
+            return 1;
+        }
+
+        function reactivarClase($idClase) {
+            $cancelado = "false";
+            $vaciarCampos = "";
+            $now = date('Y-m-d h:i:s a', time());
+            $state = $this->conn->prepare('UPDATE clase SET clase.claseCancelada = ?, clase.fechaClaseCancelada = ?, motivoCancelacion = ?, fechaClaseReactivada = ? WHERE clase.idClase = ?');
+            $state->bind_param('ssssi', $cancelado, $vaciarCampos, $vaciarCampos, $now, $idClase);
+            if($state->execute()) {
+                return 0;
+            }
+            return 1;
         }
 
         //deprecated
