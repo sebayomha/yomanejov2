@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 24, 2020 at 08:26 PM
+-- Generation Time: Mar 24, 2020 at 09:13 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -45,7 +45,7 @@ BEGIN
 
 UPDATE alumnocronogramaclasestomadas act
 INNER JOIN clase ON clase.status = 'CONFIRMADO'
-AND STR_TO_DATE(CONCAT(clase.fecha, 'T', clase.horaInicio, ':00'), '%Y-%m-%d%H:%i:%s') < NOW()
+AND STR_TO_DATE(CONCAT(clase.fecha, ' ', clase.horaInicio, ':00'), '%Y-%m-%d%H:%i:%s') < NOW()
 AND clase.sumada = 'false'
 SET act.cantClasesTomadas = act.cantClasesTomadas + 1
 WHERE clase.idCronograma = act.idCronograma;
@@ -53,7 +53,7 @@ WHERE clase.idCronograma = act.idCronograma;
 UPDATE clase
 SET clase.sumada = 'true'
 WHERE clase.status = 'CONFIRMADO'
-AND STR_TO_DATE(CONCAT(clase.fecha, 'T', clase.horaInicio, ':00'), '%Y-%m-%d%H:%i:%s') < NOW();
+AND STR_TO_DATE(CONCAT(clase.fecha, ' ', clase.horaInicio, ':00'), '%Y-%m-%d%H:%i:%s') < NOW();
 
 END$$
 
@@ -143,8 +143,8 @@ INSERT INTO `alumnocronogramaclasestomadas` (`idAlumnoCronograma`, `idAlumno`, `
 (9, 133, 126, 0, 8),
 (10, 132, 125, 1, 4),
 (11, 134, 127, 2, 8),
-(12, 135, 128, 0, 2),
-(13, 136, 129, 0, 2);
+(12, 135, 128, 2, 3),
+(13, 136, 129, 100, 2);
 
 -- --------------------------------------------------------
 
@@ -278,10 +278,10 @@ INSERT INTO `clase` (`idClase`, `alumno`, `auto`, `fecha`, `horaInicio`, `idZona
 (733, 134, 1, '2020-04-04', '08:00', 24, 201, 127, 'CONFIRMADO', 'false', 0, '', '', '', ''),
 (734, 134, 1, '2020-04-06', '08:00', 24, 201, 127, 'CONFIRMADO', 'false', 0, '', '', '', ''),
 (735, 135, 3, '2020-03-23', '12:15', 37, 204, 128, 'MODIFICADO', 'false', 0, '', '', '', ''),
-(736, 135, 1, '2020-03-24', '08:00', 24, 203, 128, 'CONFIRMADO', 'false', 0, '', '', '', ''),
+(736, 135, 1, '2020-03-24', '08:00', 24, 203, 128, 'CONFIRMADO', 'true', 0, '', '', '', ''),
 (740, 135, 1, '2020-03-25', '13:15', 24, 203, 128, 'CONFIRMADO', 'false', 0, '', '', '', ''),
-(741, 135, 1, '2020-03-23', '11:15', 37, 204, 128, 'CONFIRMADO', 'false', 0, '', '', '', ''),
-(742, 136, 1, '2020-03-30', '09:00', 24, 205, 129, 'CONFIRMADO', 'false', 0, 'true', 'se quedo dormido', '', ''),
+(741, 135, 1, '2020-03-23', '11:15', 37, 204, 128, 'CONFIRMADO', 'true', 0, '', '', '', ''),
+(742, 136, 1, '2020-03-24', '17:14', 24, 205, 129, 'CONFIRMADO', 'false', 0, 'true', 'se quedo dormido', '', ''),
 (743, 136, 1, '2020-04-06', '09:00', 24, 205, 129, 'CONFIRMADO', 'false', 0, 'true', 'dejo de ir', '', '');
 
 -- --------------------------------------------------------
@@ -349,7 +349,7 @@ INSERT INTO `cronograma` (`idCronograma`, `status`, `idAlumno`, `timestampGuarda
 (125, 'CONFIRMADO', 132, '03/17/2020 11:35:52 pm', '03/19/2020 11:35:52 am', '', '', '', ''),
 (127, 'CONFIRMADO', 134, '03/20/2020 05:15:34 pm', '', '', '2020-03-21 23:32:07', '', ''),
 (128, 'CONFIRMADO', 135, '03/20/2020 06:26:01 pm', '2020-03-20 06:30:44 pm', '', '', '03/23/2020 03:13:56 pm', ''),
-(129, 'CONFIRMADO', 136, '03/23/2020 03:54:41 pm', '2020-03-23 03:54:49 pm', '', '', '', '');
+(129, 'FINALIZADO', 136, '03/23/2020 03:54:41 pm', '2020-03-23 03:54:49 pm', '', '2020-03-24 20:01:38', '', '');
 
 -- --------------------------------------------------------
 
