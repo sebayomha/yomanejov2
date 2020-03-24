@@ -378,6 +378,22 @@
 		}		
 	}
 
+	function cancelarClase() {
+		$post = json_decode(file_get_contents('php://input'));
+
+		$post = $post->params;
+		$idClase = (int) $post->idClase;
+		$motivoCancelacion = $post->motivoCancelacion;
+		$cronograma = new Cronograma();
+		$cancelarClaseResult = $cronograma->cancelarClase($idClase, $motivoCancelacion);
+
+		if ($cancelarClaseResult == 0) {
+			echo json_encode($GLOBALS['utils']->getResponse(0, "La clase se ha cancelado exitosamente"));
+		} else {
+			echo json_encode($GLOBALS['utils']->getResponse(1, "Lo lamentamos, ha ocurrido un error."));
+		}
+	}
+
 	function containsOnlyNull($input) {
 		return empty(array_filter($input, function ($a) { return $a !== null;}));
 	}
@@ -428,6 +444,9 @@
 				break;
 				case '/calcularCronograma/obtenerClasesDisponiblesParaAlumno':
 					obtenerClasesDisponiblesParaAlumno();
+				break;
+				case '/calcularCronograma/cancelarClase':
+					cancelarClase();
 				break;
 				default:
 					echo "podriamos agregar otra consulta mas";

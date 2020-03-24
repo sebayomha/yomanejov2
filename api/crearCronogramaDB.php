@@ -1779,6 +1779,15 @@
             return $searchResult;
         }
 
+        function cancelarClase($idClase, $motivoCancelacion) {
+            $cancelado = "true";
+            $now = date('Y-m-d h:i:s a', time());
+            $state = $this->conn->prepare('UPDATE clase SET clase.claseCancelada = ?, clase.fechaClaseCancelada = ?, motivoCancelacion = ? WHERE clase.idClase = ?');
+            $state->bind_param('sssi', $cancelado, $now, $motivoCancelacion, $idClase);
+            $state->execute();
+            return 0;
+        }
+
         //deprecated
         function sortAutosPorID($a, $b) {
             return strcmp($a->idAuto, $b->idAuto);
