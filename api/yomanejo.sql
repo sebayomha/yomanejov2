@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 23, 2020 at 11:00 PM
+-- Generation Time: Mar 24, 2020 at 02:37 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -297,8 +297,8 @@ CREATE TABLE `clasemodificadaregistro` (
 --
 
 INSERT INTO `clasemodificadaregistro` (`idClaseModificadaRegistro`, `idClaseAnterior`, `idClaseNueva`) VALUES
-(1, 735, 0),
-(2, 735, 0),
+(1, 715, 728),
+(2, 728, 729),
 (3, 735, 0);
 
 -- --------------------------------------------------------

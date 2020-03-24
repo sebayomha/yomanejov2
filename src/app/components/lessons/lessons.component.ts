@@ -33,6 +33,7 @@ export class  LessonsComponent {
   ngOnInit() {
     console.log(this.formatDate());
     this.cronogramaService.obtenerClasesPorFecha(this.formatDate()).subscribe( (response: Response) => {
+      console.log(response.data)
       this.autos = Object.entries(response.data);
       this.obtenerClasesPorRealizarse(this.autos);
       this.obtenerClasesRealizadas(this.autos);

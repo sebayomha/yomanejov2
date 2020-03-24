@@ -890,7 +890,15 @@
                     $state->execute(); 
                 }
             }
-            
+
+            /* REMUEVO LA CLASE DE LA NUEVA TABLA SI ES QUE YA ERA UNA CLASE NUEVA, YA QUE AHORA VA A SER MODIFICADA */
+            /* Y LAS INSERTO EN UN HISTORIAL DE MODIFICACIONES */
+            foreach ($clasesModificadas as $clase) {
+                $state = $this->conn->prepare('DELETE FROM claseModificadaRegistro WHERE claseModificadaRegistro.idClaseNueva = ?');
+                $state->bind_param('i', $clase);
+                $state->execute();
+            }
+
             /* SE AGREGAN EN LA NUEVA TABLA QUE CLASE CAMBIO POR CUAL */
             $i = 0;
             foreach ($arrayIdClasesNuevos as $idNuevaClase) {
@@ -1382,6 +1390,7 @@
             LEFT JOIN alumno ON clase.alumno = alumno.idAlumno 
             LEFT JOIN direccion ON clase.idDireccion = direccion.idDireccion
             LEFT JOIN alumnocronogramaclasestomadas act ON act.idCronograma = clase.idCronograma
+            LEFT JOIN clasemodificadaregistro cmr ON cmr.idClaseNueva = clase.idClase
             ORDER BY clase.horaInicio');
             $status = 'CONFIRMADO';
             $state->bind_param('ss', $fechaString, $status);
@@ -1392,12 +1401,28 @@
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
                     $row['direccionFormateada'] = $this->obtenerDireccionParaMostrar($row['calle'], filter_var($row['calle_diag'], FILTER_VALIDATE_BOOLEAN), $row['calle_a'], filter_var($row['calle_a_diag'], FILTER_VALIDATE_BOOLEAN), $row['calle_b'], filter_var($row['calle_b_diag'], FILTER_VALIDATE_BOOLEAN), $row['numero'], $row['ciudad'], $row['floor_'], $row['departamento']);
+                    if ($row['idClaseNueva'] != null) {
+                        $row['tieneClaseModificada'] = true;
+                        $row['claseModificada'] = $this->getInfoClaseModificada($row['idClaseAnterior']);
+                    }
                     $cronograma[$row['idAuto']][] = $row;
                 }
             } else {
                 return [];
             }
             return $cronograma;          
+        }
+
+        function getInfoClaseModificada($idClaseModificada) {
+            $state = $this->conn->prepare('SELECT * FROM clase WHERE clase.idClase = ?');
+            $state->bind_param('i', $idClaseModificada);
+            $state->execute();
+            $result = $state->get_result();
+            $claseModificada = null;
+            while($row = $result->fetch_assoc()) {
+                $claseModificada = $row;
+            }
+            return $claseModificada;
         }
 
         function cancelarCronograma($idCronograma, $idAlumno) {
