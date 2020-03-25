@@ -19,7 +19,6 @@
 
         //Funcion principal que se encargara de armar el cronograma
         function calcularCronograma($cantClases, $disponibilidad, $direccion, $fechaInicio, $excepciones, $direccion_alt, $hayDireccionAlternativa, $resOptions, $resExcepcionesOptions){
-
             $horariosTentativos = array(); //arreglo que se va a retornar con el cronograma
 
             $fechaBusqueda = DateTime::createFromFormat("Y-m-d", $fechaInicio);
@@ -90,12 +89,12 @@
                         $estoySobreUnaExcepcion = false;
                         if (in_array($result, $fechasExcepciones) && count($excepciones[$result]->options) > 0) {
                             $estoySobreUnaExcepcion = true;
-                            $horariosLibres = $this->obtenerHorariosLibresAutoYAlumnoExcepciones($clases, $excepciones[$result]->options);
+                            $horariosLibres = $this->obtenerHorariosLibresAutoYAlumnoExcepciones($clases, $excepciones[$result]->options, $result);
                         } else {
-                            $horariosLibres = $this->obtenerHorariosLibresAutoYAlumno($clases, $disponibilidad, $nombreDiaBusqueda);
+                            $horariosLibres = $this->obtenerHorariosLibresAutoYAlumno($clases, $disponibilidad, $nombreDiaBusqueda, $result,$idAuto);
                         }
 
-
+                        
                         $horariosOcupados = array_column($clases, 'horaInicio'); //son los horarios que estan efectivamente ocupados por clases
 
                         $horariosLibresDataGeneral = [];
@@ -126,7 +125,8 @@
 
                         //**********//
                         //comienzo a armar el array que se va a retornar
-                        //**********//                        
+                        //**********//           
+       
                         foreach ($horariosLibres as $horarioAuto) { //en base a los horarios libres instancio los objetos que se van a terminar retornando     
                             if ($disponibilidadesAutos[$idAuto] === "A" || $this->esTurnoDisponible($disponibilidadesAutos[$idAuto], $horarioAuto, $nombreDiaBusqueda)) { //si el horario esta en el turno que el auto puede (A = todo el dia,T= solo por la tarde, M= solo por la maniana)
                                 $esDeLaZona = false;
@@ -1865,7 +1865,7 @@
             }
         }
 
-        function obtenerHorariosLibresAutoYAlumno($clases, $disponibilidad, $nombreDiaBusqueda) {
+        function obtenerHorariosLibresAutoYAlumno($clases, $disponibilidad, $nombreDiaBusqueda, $fechaBusqueda, $idAuto) {
             $horariosOcupados = [];
             $claseData = [
                 'idClase' => '',
@@ -1873,36 +1873,81 @@
                 'idZona' => ''
             ];
 
-            foreach ($clases as $clase) { //recorro cada clase que tenga este auto
-                if(in_array($clase['horaInicio'], $disponibilidad[$nombreDiaBusqueda])) { //el auto esta ocupado en uno de los horarios disponibles del alumno
-                    $claseData['idClase'] = $clase['idClase'];
-                    $claseData['horaInicio'] = $clase['horaInicio'];
-                    $claseData['idZona'] = $clase['idZona'];
-                    array_push($horariosOcupados, $claseData);
+            if (date('Y-m-d') == $fechaBusqueda) {
+                foreach ($clases as $clase) { //recorro cada clase que tenga este auto
+                    if (strtotime($clase['horaInicio']) > time()) {
+                        if(in_array($clase['horaInicio'], $disponibilidad[$nombreDiaBusqueda])) { //el auto esta ocupado en uno de los horarios disponibles del alumno
+                            $claseData['idClase'] = $clase['idClase'];
+                            $claseData['horaInicio'] = $clase['horaInicio'];
+                            $claseData['idZona'] = $clase['idZona'];
+                            array_push($horariosOcupados, $claseData);
+                        }
+                    }
                 }
-            }
 
-            return array_values(array_diff($disponibilidad[$nombreDiaBusqueda], array_column($horariosOcupados, 'horaInicio'))); //obtengo los horarios libres que tanto el usuario como el auto estan libres
+                if (sizeof($horariosOcupados) == 0) {
+                    return [];
+                } else {
+                    return array_values(array_diff($disponibilidad[$nombreDiaBusqueda], array_column($horariosOcupados, 'horaInicio'))); //obtengo los horarios libres que tanto el usuario como el auto estan libres
+                }
+            } else {
+                foreach ($clases as $clase) { //recorro cada clase que tenga este auto
+                    if(in_array($clase['horaInicio'], $disponibilidad[$nombreDiaBusqueda])) { //el auto esta ocupado en uno de los horarios disponibles del alumno
+                        $claseData['idClase'] = $clase['idClase'];
+                        $claseData['horaInicio'] = $clase['horaInicio'];
+                        $claseData['idZona'] = $clase['idZona'];
+                        array_push($horariosOcupados, $claseData);
+                    }
+                }
+
+                return array_values(array_diff($disponibilidad[$nombreDiaBusqueda], array_column($horariosOcupados, 'horaInicio'))); //obtengo los horarios libres que tanto el usuario como el auto estan libres
+            }
         }
 
-        function obtenerHorariosLibresAutoYAlumnoExcepciones($clases, $disponibilidad) {
+        function obtenerHorariosLibresAutoYAlumnoExcepciones($clases, $disponibilidad, $fechaBusqueda) {
             $horariosOcupados = [];
             $claseData = [
                 'idClase' => '',
                 'horaInicio' => '',
                 'idZona' => ''
             ];
-
-            foreach ($clases as $clase) { //recorro cada clase que tenga este auto
-                if(in_array($clase['horaInicio'], $disponibilidad)) { //el auto esta ocupado en uno de los horarios disponibles del alumno
-                    $claseData['idClase'] = $clase['idClase'];
-                    $claseData['horaInicio'] = $clase['horaInicio'];
-                    $claseData['idZona'] = $clase['idZona'];
-                    array_push($horariosOcupados, $claseData);
+            
+            if (date('Y-m-d') == $fechaBusqueda) {
+                foreach ($clases as $clase) { //recorro cada clase que tenga este auto
+                    if (strtotime($clase['horaInicio']) > time()) {
+                        if(in_array($clase['horaInicio'], $disponibilidad)) { //el auto esta ocupado en uno de los horarios disponibles del alumno
+                            $claseData['idClase'] = $clase['idClase'];
+                            $claseData['horaInicio'] = $clase['horaInicio'];
+                            $claseData['idZona'] = $clase['idZona'];
+                            array_push($horariosOcupados, $claseData);
+                        }
+                    }
                 }
+
+                if (sizeof($horariosOcupados) == 0) {
+                    return [];
+                } else {
+                    return array_values(array_diff($disponibilidad[$nombreDiaBusqueda], array_column($horariosOcupados, 'horaInicio'))); //obtengo los horarios libres que tanto el usuario como el auto estan libres
+                }
+                
+            } else {
+                foreach ($clases as $clase) { //recorro cada clase que tenga este auto
+                    if(in_array($clase['horaInicio'], $disponibilidad)) { //el auto esta ocupado en uno de los horarios disponibles del alumno
+                        $claseData['idClase'] = $clase['idClase'];
+                        $claseData['horaInicio'] = $clase['horaInicio'];
+                        $claseData['idZona'] = $clase['idZona'];
+                        array_push($horariosOcupados, $claseData);
+                    }
+                }
+
+                return array_values(array_diff($disponibilidad[$nombreDiaBusqueda], array_column($horariosOcupados, 'horaInicio'))); //obtengo los horarios libres que tanto el usuario como el auto estan libres
             }
 
-            return array_values(array_diff($disponibilidad, array_column($horariosOcupados, 'horaInicio'))); //obtengo los horarios libres que tanto el usuario como el auto estan libres
+            if (sizeof($horariosOcupados) > 0) {
+                return array_values(array_diff($disponibilidad[$nombreDiaBusqueda], array_column($horariosOcupados, 'horaInicio'))); //obtengo los horarios libres que tanto el usuario como el auto estan libres
+            } else {
+                return [];
+            }
         }
 
         function obtenerCronogramaDelDia($fecha) {
