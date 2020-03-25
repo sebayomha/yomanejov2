@@ -171,7 +171,7 @@ export class AvailableSchedulesComponent {
             if(this.fecha_no_disponible == true) {
 
               //Armo array del banner
-              this.not_available_classes.push('La clase número '+index_class+' del día '+fecha_clase+' a las '+hora_inicio+' hs ya no se encuentra disponible.');
+              this.not_available_classes.push('La clase número '+index_class+' del día '+fecha_clase+' a las '+hora_inicio+' hs ya no se encuentra disponible o ya pasó.');
               this.show_info_banner = true;
             }
           }

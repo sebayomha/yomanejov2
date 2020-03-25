@@ -112,10 +112,14 @@ export class FreeClassFinderComponent {
         this.alumnos = response.data;
         console.log(this.alumnos)
       })
+      //Asigno numero de clases totales
+      this.numberOfClasses = this.search.lessons;
     }
     
     //Cargo los datos del cronograma a editar para realizar la busqueda de las opciones.
     if (this.edit_cronograma) {
+      //Asigno numero de clases pendientes para buscar.
+      this.numberOfClasses = this.edit_cronograma.cantClasesRestantes;
 
       if (this.edit_cronograma.statusCronograma == "CONFIRMADO") {
         this.flag_crono_active = true;
@@ -394,6 +398,8 @@ export class FreeClassFinderComponent {
       } else {
         this.search.date = new Date(this.edit_cronograma.fechaHoraGuardado);
       }
+
+      this.searchSchedules();
     }
   }
 
@@ -463,7 +469,6 @@ export class FreeClassFinderComponent {
       }
     }
 
-    this.numberOfClasses = this.search.lessons;
     this.setExceptionHours();
 
     await this.cronogramaService.getCronograma(object, this.excepciones).subscribe( (response: Response) => {
