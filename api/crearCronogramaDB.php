@@ -1875,21 +1875,22 @@
 
             if (date('Y-m-d') == $fechaBusqueda) {
                 foreach ($clases as $clase) { //recorro cada clase que tenga este auto
-                    if (strtotime($clase['horaInicio']) > time()) {
-                        if(in_array($clase['horaInicio'], $disponibilidad[$nombreDiaBusqueda])) { //el auto esta ocupado en uno de los horarios disponibles del alumno
-                            $claseData['idClase'] = $clase['idClase'];
-                            $claseData['horaInicio'] = $clase['horaInicio'];
-                            $claseData['idZona'] = $clase['idZona'];
-                            array_push($horariosOcupados, $claseData);
-                        }
+                    if(in_array($clase['horaInicio'], $disponibilidad[$nombreDiaBusqueda])) { //el auto esta ocupado en uno de los horarios disponibles del alumno
+                        $claseData['idClase'] = $clase['idClase'];
+                        $claseData['horaInicio'] = $clase['horaInicio'];
+                        $claseData['idZona'] = $clase['idZona'];
+                        array_push($horariosOcupados, $claseData);
                     }
                 }
 
-                if (sizeof($horariosOcupados) == 0) {
-                    return [];
-                } else {
-                    return array_values(array_diff($disponibilidad[$nombreDiaBusqueda], array_column($horariosOcupados, 'horaInicio'))); //obtengo los horarios libres que tanto el usuario como el auto estan libres
+                $resultado = array_values(array_diff($disponibilidad[$nombreDiaBusqueda], array_column($horariosOcupados, 'horaInicio'))); //obtengo los horarios libres que tanto el usuario como el auto estan libres
+                foreach ($resultado as $key => $horario) {
+                    if (strtotime($horario) < time()) {
+                        unset($resultado[$key]);
+                    }
                 }
+                return array_values($resultado);
+
             } else {
                 foreach ($clases as $clase) { //recorro cada clase que tenga este auto
                     if(in_array($clase['horaInicio'], $disponibilidad[$nombreDiaBusqueda])) { //el auto esta ocupado en uno de los horarios disponibles del alumno
@@ -1911,25 +1912,24 @@
                 'horaInicio' => '',
                 'idZona' => ''
             ];
-            
             if (date('Y-m-d') == $fechaBusqueda) {
                 foreach ($clases as $clase) { //recorro cada clase que tenga este auto
-                    if (strtotime($clase['horaInicio']) > time()) {
-                        if(in_array($clase['horaInicio'], $disponibilidad)) { //el auto esta ocupado en uno de los horarios disponibles del alumno
-                            $claseData['idClase'] = $clase['idClase'];
-                            $claseData['horaInicio'] = $clase['horaInicio'];
-                            $claseData['idZona'] = $clase['idZona'];
-                            array_push($horariosOcupados, $claseData);
-                        }
+                    if(in_array($clase['horaInicio'], $disponibilidad)) { //el auto esta ocupado en uno de los horarios disponibles del alumno
+                        $claseData['idClase'] = $clase['idClase'];
+                        $claseData['horaInicio'] = $clase['horaInicio'];
+                        $claseData['idZona'] = $clase['idZona'];
+                        array_push($horariosOcupados, $claseData);
                     }
                 }
 
-                if (sizeof($horariosOcupados) == 0) {
-                    return [];
-                } else {
-                    return array_values(array_diff($disponibilidad[$nombreDiaBusqueda], array_column($horariosOcupados, 'horaInicio'))); //obtengo los horarios libres que tanto el usuario como el auto estan libres
+                $resultado = array_values(array_diff($disponibilidad[$nombreDiaBusqueda], array_column($horariosOcupados, 'horaInicio'))); //obtengo los horarios libres que tanto el usuario como el auto estan libres
+                foreach ($resultado as $key => $horario) {
+                    if (strtotime($horario) < time()) {
+                        unset($resultado[$key]);
+                    }
                 }
-                
+                return array_values($resultado);
+
             } else {
                 foreach ($clases as $clase) { //recorro cada clase que tenga este auto
                     if(in_array($clase['horaInicio'], $disponibilidad)) { //el auto esta ocupado en uno de los horarios disponibles del alumno
