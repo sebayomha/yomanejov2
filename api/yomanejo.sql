@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 24, 2020 at 09:13 PM
+-- Generation Time: Mar 25, 2020 at 02:09 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -111,7 +111,9 @@ INSERT INTO `alumno` (`idAlumno`, `idDireccion`, `idDireccionAlt`, `fechaAlta`, 
 (133, 200, NULL, '2020-03-18', 'true', 'Hernan feler', '2216754337', 'true', '2020-03-18', 143, 200, '36.068.444', '', ''),
 (134, 201, '202', '2020-03-20', 'true', 'sandra zocchi', '2215389044', 'true', '2020-03-20', 144, 201, '17.569.555', '', ''),
 (135, 203, '204', '2020-03-20', 'true', 'Prueba fuerte', '2216754337', 'true', '2020-03-20', 145, 204, '36.068.422', '', ''),
-(136, 205, NULL, '2020-03-23', 'true', 'Sebastian Yomha', '2216754337', 'true', '2020-03-23', 146, 205, '36.068.223', '', '');
+(136, 205, NULL, '2020-03-23', 'true', 'Sebastian Yomha', '2216754337', 'true', '2020-03-23', 146, 205, '36.068.223', '', ''),
+(137, 206, NULL, '2020-03-24', 'true', 'ghgrgf', '2216754337', 'true', '2020-03-24', 147, 206, '36.068.223', '', ''),
+(138, 207, NULL, '2020-03-24', 'true', 'Sebastian Yomha', '2216754337', 'true', '2020-03-24', 148, 207, '36.068.223', '', '');
 
 -- --------------------------------------------------------
 
@@ -144,7 +146,9 @@ INSERT INTO `alumnocronogramaclasestomadas` (`idAlumnoCronograma`, `idAlumno`, `
 (10, 132, 125, 1, 4),
 (11, 134, 127, 2, 8),
 (12, 135, 128, 2, 3),
-(13, 136, 129, 100, 2);
+(13, 136, 129, 103, 2),
+(14, 137, 130, 1, 2),
+(15, 138, 131, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -281,8 +285,12 @@ INSERT INTO `clase` (`idClase`, `alumno`, `auto`, `fecha`, `horaInicio`, `idZona
 (736, 135, 1, '2020-03-24', '08:00', 24, 203, 128, 'CONFIRMADO', 'true', 0, '', '', '', ''),
 (740, 135, 1, '2020-03-25', '13:15', 24, 203, 128, 'CONFIRMADO', 'false', 0, '', '', '', ''),
 (741, 135, 1, '2020-03-23', '11:15', 37, 204, 128, 'CONFIRMADO', 'true', 0, '', '', '', ''),
-(742, 136, 1, '2020-03-24', '17:14', 24, 205, 129, 'CONFIRMADO', 'false', 0, 'true', 'se quedo dormido', '', ''),
-(743, 136, 1, '2020-04-06', '09:00', 24, 205, 129, 'CONFIRMADO', 'false', 0, 'true', 'dejo de ir', '', '');
+(742, 136, 1, '2020-03-24', '22:14', 24, 205, 129, 'CONFIRMADO', 'false', 0, 'true', 'se quedo dormido', '', ''),
+(743, 136, 1, '2020-03-24', '22:09', 24, 205, 129, 'CONFIRMADO', 'true', 0, 'true', 'dejo de ir', '', ''),
+(744, 137, 1, '2020-03-24', '09:00', 24, 206, 130, 'CONFIRMADO', 'true', 1, '', NULL, '', ''),
+(745, 137, 1, '2020-03-30', '09:00', 24, 206, 130, 'CONFIRMADO', 'false', 2, '', NULL, '', ''),
+(746, 138, 1, '2020-03-24', '16:30', 24, 207, 131, 'CONFIRMADO', 'true', 1, '', NULL, '', ''),
+(747, 138, 1, '2020-03-31', '08:00', 24, 207, 131, 'CONFIRMADO', 'false', 2, '', NULL, '', '');
 
 -- --------------------------------------------------------
 
@@ -349,7 +357,9 @@ INSERT INTO `cronograma` (`idCronograma`, `status`, `idAlumno`, `timestampGuarda
 (125, 'CONFIRMADO', 132, '03/17/2020 11:35:52 pm', '03/19/2020 11:35:52 am', '', '', '', ''),
 (127, 'CONFIRMADO', 134, '03/20/2020 05:15:34 pm', '', '', '2020-03-21 23:32:07', '', ''),
 (128, 'CONFIRMADO', 135, '03/20/2020 06:26:01 pm', '2020-03-20 06:30:44 pm', '', '', '03/23/2020 03:13:56 pm', ''),
-(129, 'FINALIZADO', 136, '03/23/2020 03:54:41 pm', '2020-03-23 03:54:49 pm', '', '2020-03-24 20:01:38', '', '');
+(129, 'FINALIZADO', 136, '03/23/2020 03:54:41 pm', '2020-03-23 03:54:49 pm', '', '2020-03-24 20:01:38', '', ''),
+(130, 'CONFIRMADO', 137, '03/24/2020 06:08:04 pm', '2020-03-24 06:08:14 pm', '', '', '', ''),
+(131, 'CONFIRMADO', 138, '03/24/2020 06:08:41 pm', '2020-03-24 06:08:49 pm', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -423,7 +433,9 @@ INSERT INTO `direccion` (`idDireccion`, `calle`, `calle_diag`, `calle_a`, `calle
 (202, '48', 'false', '', 'false', '', 'false', '343', 'La Plata', '', '', ''),
 (203, '123', 'false', '', 'false', '', 'false', '755', 'Ensenada', '', '', ''),
 (204, '66', 'false', '5', 'false', '', 'false', '', 'La Plata', '', '', ''),
-(205, '123', 'false', '', 'false', '', 'false', '755', 'Ensenada', '', '', '');
+(205, '123', 'false', '', 'false', '', 'false', '755', 'Ensenada', '', '', ''),
+(206, '123', 'false', '', 'false', '', 'false', '755', 'Ensenada', '', '', ''),
+(207, '123', 'false', '', 'false', '', 'false', '755', 'Ensenada', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -471,7 +483,9 @@ INSERT INTO `disponibilidad` (`idDisponibilidad`, `Monday`, `Tuesday`, `Wednesda
 (143, '08:00, 09:00, 10:00, 11:15, 12:15, 13:15, 14:30, 15:30, 16:30, 17:45, 18:45, 19:45|false', NULL, '08:00, 09:00, 10:00, 11:15, 12:15, 13:15, 14:30, 15:30, 16:30, 17:45, 18:45, 19:45|false', NULL, '08:00, 09:00, 10:00, 11:15, 12:15, 13:15, 14:30, 15:30, 16:30, 17:45, 18:45, 19:45|false', NULL, NULL),
 (144, '08:00, 09:00, 10:00, 11:15, 12:15, 13:15, 14:30, 15:30, 16:30, 17:45, 18:45, 19:45|false', NULL, NULL, '17:45, 18:45, 19:45, |true', NULL, '08:00, 09:00, 10:00, 11:15, |false', NULL),
 (145, '08:00, 09:00, 10:00, 11:15, 12:15, 13:15, 14:30, 15:30, 16:30, 17:45, 18:45, 19:45|true', '08:00, 09:00, 10:00, 11:15, 12:15, 13:15, 14:30, 15:30, 16:30, 17:45, 18:45, 19:45|false', '08:00,    09:00,    10:00,    11:15,    12:15, |true, 13:15,    14:30,    15:30,    16:30,    17:45, |false, 18:45,    19:45, |true', '08:00,    09:00,    10:00,    11:15,    12:15,    13:15, |false, 17:45,    18:45,    19:45, |true', '08:00, 09:00, 10:00, |false', '08:00, 09:00, 10:00, |true', NULL),
-(146, '08:00, 09:00, 10:00, 11:15, 12:15, 13:15, 14:30, 15:30, 16:30, 17:45, 18:45, 19:45|false', NULL, NULL, NULL, NULL, NULL, NULL);
+(146, '08:00, 09:00, 10:00, 11:15, 12:15, 13:15, 14:30, 15:30, 16:30, 17:45, 18:45, 19:45|false', NULL, NULL, NULL, NULL, NULL, NULL),
+(147, '08:00, 09:00, 10:00, 11:15, 12:15, 13:15, 14:30, 15:30, 16:30, 17:45, 18:45, 19:45|false', '08:00, 09:00, 10:00, 11:15, 12:15, 13:15, 14:30, 15:30, 16:30, 17:45, 18:45, 19:45|false', NULL, NULL, NULL, NULL, NULL),
+(148, NULL, '08:00, 09:00, 10:00, 11:15, 12:15, 13:15, 14:30, 15:30, 16:30, 17:45, 18:45, 19:45|false', NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -912,13 +926,13 @@ ALTER TABLE `zonasvecinas`
 -- AUTO_INCREMENT for table `alumno`
 --
 ALTER TABLE `alumno`
-  MODIFY `idAlumno` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=137;
+  MODIFY `idAlumno` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=139;
 
 --
 -- AUTO_INCREMENT for table `alumnocronogramaclasestomadas`
 --
 ALTER TABLE `alumnocronogramaclasestomadas`
-  MODIFY `idAlumnoCronograma` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `idAlumnoCronograma` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `auto`
@@ -930,7 +944,7 @@ ALTER TABLE `auto`
 -- AUTO_INCREMENT for table `clase`
 --
 ALTER TABLE `clase`
-  MODIFY `idClase` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=744;
+  MODIFY `idClase` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=748;
 
 --
 -- AUTO_INCREMENT for table `clasemodificadaregistro`
@@ -942,19 +956,19 @@ ALTER TABLE `clasemodificadaregistro`
 -- AUTO_INCREMENT for table `cronograma`
 --
 ALTER TABLE `cronograma`
-  MODIFY `idCronograma` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=130;
+  MODIFY `idCronograma` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=132;
 
 --
 -- AUTO_INCREMENT for table `direccion`
 --
 ALTER TABLE `direccion`
-  MODIFY `idDireccion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=206;
+  MODIFY `idDireccion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=208;
 
 --
 -- AUTO_INCREMENT for table `disponibilidad`
 --
 ALTER TABLE `disponibilidad`
-  MODIFY `idDisponibilidad` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=147;
+  MODIFY `idDisponibilidad` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=149;
 
 --
 -- AUTO_INCREMENT for table `excepcion`
