@@ -119,11 +119,12 @@ export class FreeClassFinderComponent {
     //Cargo los datos del cronograma a editar para realizar la busqueda de las opciones.
     if (this.edit_cronograma) {
       //Asigno numero de clases pendientes para buscar.
-      this.numberOfClasses = this.edit_cronograma.cantClasesRestantes;
+      this.numberOfClasses = this.edit_cronograma.clases.length;
 
       if (this.edit_cronograma.statusCronograma == "CONFIRMADO") {
         this.flag_crono_active = true;
         this.crono_active_id = this.edit_cronograma.idCronograma;
+        this.numberOfClasses = this.edit_cronograma.cantClasesRestantes;
       }
       console.log(this.edit_cronograma);
 

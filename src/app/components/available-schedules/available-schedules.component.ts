@@ -125,13 +125,13 @@ export class AvailableSchedulesComponent {
       this.classes = [];
       let index_class = 0;
       
-      this.fecha_no_disponible = true;
       this.edit_cronograma.clases.forEach(clase => {
         index_class += 1;
         let fecha_clase = clase.fecha;
         let hora_inicio = clase.horaInicio;
         let auto = clase.auto;
         let index_opt = 0;
+        this.fecha_no_disponible = true;
 
         this.data.forEach(opt => {
 
@@ -173,13 +173,22 @@ export class AvailableSchedulesComponent {
               //Armo array del banner
               this.not_available_classes.push('La clase número '+index_class+' del día '+fecha_clase+' a las '+hora_inicio+' hs ya no se encuentra disponible o ya pasó.');
               this.show_info_banner = true;
+              this.fecha_no_disponible = false;
             }
           }
 
+
           index_opt += 1;
         });
-      });
 
+        if(this.fecha_no_disponible == true) {
+
+          //Armo array del banner
+          this.not_available_classes.push('La clase número '+index_class+' del día '+fecha_clase+' a las '+hora_inicio+' hs ya no se encuentra disponible o ya pasó.');
+          this.show_info_banner = true;
+          
+        }
+      });
 
       this.classes_send = [];
       this.classes.forEach(element => {
