@@ -25,12 +25,12 @@
         <div style="margin-top: 15px;"> 
           <label style="margin-left: 20px; font-weight: 500;
           color: rgba(0, 0, 0, 0.68);">Clases por realizarse</label>
-          <table mat-table id="lessonsTable" [dataSource]="auto.clasesPorRealizarse" class="mat-elevation-z0">
+          <table mat-table id="lessonsTable" [dataSource]="auto.clasesPorRealizarse" class="mat-elevation-z0" [ngClass]="{'mobileTable' : auto.clasesPorRealizarse.length !== 0}">
         
             <!-- Position Column -->
             <ng-container matColumnDef="No">
               <th mat-header-cell *matHeaderCellDef> Id </th>
-              <td mat-cell *matCellDef="let element"> {{element.idClase}} </td>
+              <td mat-cell *matCellDef="let element" style="padding-left: 15px;padding-right: 5px;"> {{element.idClase}} </td>
               <td mat-footer-cell *matFooterCellDef>               
                 <div style="text-align: center; width: 100%;">
                   <div style="cursor: pointer; margin-top: 10px;" (click)="showMore(auto, 'clasesPorRealizarse')" *ngIf="auto.clasesPorRealizarse.length == 4 && auto.clasesPorRealizarseAll.length > 4">
@@ -49,24 +49,41 @@
               </td>
             </ng-container>
         
-            <!-- Name Column -->
+            <!-- Número de clase Column -->
+            <ng-container matColumnDef="numero">
+              <th mat-header-cell *matHeaderCellDef> N° </th>
+              <td mat-cell *matCellDef="let element"style="padding-left: 5px;padding-right: 5px;"> {{element.cantClasesTomadas}}/{{element.cantClasesTotales}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <!-- Hour Column -->
             <ng-container matColumnDef="hora">
               <th mat-header-cell *matHeaderCellDef> Hora </th>
-              <td mat-cell *matCellDef="let element"> {{element.horaInicio}} </td>
+              <td mat-cell *matCellDef="let element"style="padding-left: 5px;padding-right: 5px;"> {{element.horaInicio}} hs</td>
               <td mat-footer-cell *matFooterCellDef></td>
             </ng-container>
         
-            <!-- Weight Column -->
+            <!-- Dirección Column -->
             <ng-container matColumnDef="direccion">
               <th mat-header-cell *matHeaderCellDef> Dirección </th>
-              <td mat-cell *matCellDef="let element"> {{element.direccionFormateada}} </td>
+              <td mat-cell *matCellDef="let element" style="padding-left: 5px;padding-right: 5px;"> {{element.direccionFormateada}} </td>
               <td mat-footer-cell *matFooterCellDef></td>
             </ng-container>
         
-            <!-- Symbol Column -->
+            <!-- Alumno Column -->
             <ng-container matColumnDef="alumno">
               <th mat-header-cell *matHeaderCellDef> Alumno </th>
-              <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
+              <td mat-cell *matCellDef="let element" style="padding-left: 5px;padding-right: 15px;"> {{element.nombre}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <!-- Operacion Column -->
+            <ng-container matColumnDef="operacion">
+              <th mat-header-cell *matHeaderCellDef> Operación </th>
+              <td mat-cell *matCellDef="let element">
+                <span style="padding-left: 10px;padding-right: 10px;"><i class="fas fa-exclamation-triangle"></i></span>
+                <span style="padding-left: 10px;padding-right: 10px;"><i class="fas fa-pencil-alt"></i></span>
+                <span style="padding-left: 10px;padding-right: 10px;"><i class="fas fa-trash"></i></span></td>
               <td mat-footer-cell *matFooterCellDef></td>
             </ng-container>
         
@@ -84,12 +101,12 @@
         <div style="margin-top: 15px;">
           <label style="margin-left: 20px; font-weight: 500;
           color: rgba(0, 0, 0, 0.68);">Clases realizadas</label>
-          <table id="lessonsTable" mat-table [dataSource]="auto.clasesRealizadas" class="mat-elevation-z0" @fadeIn>
+          <table id="lessonsTable" mat-table [dataSource]="auto.clasesRealizadas" class="mat-elevation-z0" @fadeIn [ngClass]="{'mobileTable' : auto.clasesRealizadas.length !== 0}">
         
             <!-- Position Column -->
             <ng-container matColumnDef="No">
               <th mat-header-cell *matHeaderCellDef> Id </th>
-              <td mat-cell *matCellDef="let element"> {{element.idClase}} </td>
+              <td mat-cell *matCellDef="let element" style="padding-left: 15px;padding-right: 5px;"> {{element.idClase}} </td>
               <td mat-footer-cell *matFooterCellDef>               
                 <div style="text-align: center; width: 100%;">
                   <div style="cursor: pointer; margin-top: 10px;" (click)="showMore(auto, 'clasesRealizadas')" *ngIf="auto.clasesRealizadas.length == 4 && auto.clasesRealizadasAll.length > 4">
@@ -108,31 +125,51 @@
               </td>
             </ng-container>
         
-            <!-- Name Column -->
+            <!-- Número Column -->
+            <ng-container matColumnDef="numero">
+              <th mat-header-cell *matHeaderCellDef> N° </th>
+              <td mat-cell *matCellDef="let element" style="padding-left: 5px;padding-right: 5px;"> {{element.cantClasesTomadas}}/{{element.cantClasesTotales}} </td>
+              <td mat-footer-cell *matFooterCellDef>               
+                
+              </td>
+            </ng-container>
+
+            <!-- Hora Column -->
             <ng-container matColumnDef="hora">
               <th mat-header-cell *matHeaderCellDef> Hora </th>
-              <td mat-cell *matCellDef="let element"> {{element.horaInicio}} </td>
+              <td mat-cell *matCellDef="let element" style="padding-left: 5px;padding-right: 5px;"> {{element.horaInicio}} hs </td>
               <td mat-footer-cell *matFooterCellDef>               
                 
               </td>
             </ng-container>
         
-            <!-- Weight Column -->
+            <!-- Dirección Column -->
             <ng-container matColumnDef="direccion">
               <th mat-header-cell *matHeaderCellDef> Dirección </th>
-              <td mat-cell *matCellDef="let element"> {{element.direccionFormateada}} </td>
+              <td mat-cell *matCellDef="let element" style="padding-left: 5px;padding-right: 5px;"> {{element.direccionFormateada}} </td>
               <td mat-footer-cell *matFooterCellDef>               
                 
               </td>
             </ng-container>
         
-            <!-- Symbol Column -->
+            <!-- Alumno Column -->
             <ng-container matColumnDef="alumno">
               <th mat-header-cell *matHeaderCellDef> Alumno </th>
-              <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
+              <td mat-cell *matCellDef="let element" style="padding-left: 5px;padding-right: 5px;"> {{element.nombre}} </td>
               <td mat-footer-cell *matFooterCellDef>               
                 
               </td>
+            </ng-container>
+
+            <!-- Operacion Column -->
+            <ng-container matColumnDef="operacion">
+              <th mat-header-cell *matHeaderCellDef> Operación </th>
+              <td mat-cell *matCellDef="let element" style="padding-left: 5px;padding-right: 15px;">
+                <span style="padding-left: 10px;padding-right: 10px;"><i class="fas fa-exclamation-triangle"></i></span>
+                <span style="padding-left: 10px;padding-right: 10px;"><i class="fas fa-pencil-alt"></i></span>
+                <span style="padding-left: 10px;padding-right: 10px;"><i class="fas fa-trash"></i></span>
+              </td>
+              <td mat-footer-cell *matFooterCellDef></td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

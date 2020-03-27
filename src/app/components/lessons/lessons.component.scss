@@ -45,3 +45,13 @@ div.sticky {
   background-color: white;
   border-radius: .25rem;
 }
+
+@media (max-width: 767px) {
+  .mobileTable {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    width: 100%;
+  }
+}
+

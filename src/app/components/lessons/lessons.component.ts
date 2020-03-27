@@ -25,7 +25,7 @@ export class  LessonsComponent {
 
   constructor(private breakpointObserver: BreakpointObserver, private cronogramaService: CronogramaService) { }
 
-  displayedColumns: string[] = ['No', 'hora', 'direccion', 'alumno'];
+  displayedColumns: string[] = ['No', 'numero', 'hora', 'direccion', 'alumno', 'operacion'];
   select_day : Date = new Date();
   minDate = new Date();
   autos;
