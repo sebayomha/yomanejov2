@@ -284,9 +284,13 @@
         function obtenerClasesActivasCronograma($idCronograma, $disponibilidad, $fechaInicio, $excepciones, $resOptions, $resExcepcionesOptions){
             $clasesFinalesRetornar = array(); //arreglo que se va a retornar con el cronograma
 
+            /* NO SE UTILIZA */
             $fechaBusqueda = DateTime::createFromFormat("Y-m-d", $fechaInicio);
             $fechaBusquedaString = $fechaBusqueda->format('Y-m-d');
             $nombreDiaBusqueda = strftime("%A",$fechaBusqueda->getTimestamp());
+            /* NO SE UTILIZA */
+
+            //Comentario: Los continue = false los dejo por si en un futuro se necesitan
 
             $fechasExcepciones = array_keys($excepciones);
 
@@ -306,49 +310,53 @@
                         'continuaDisponible' => true
                     ];
 
+                    $fechaClaseDate = DateTime::createFromFormat("Y-m-d", $claseData->fecha);
+                    $nombreDiaClase = strftime("%A",$fechaClaseDate->getTimestamp());
+
                     $puede = true; 
                     if (in_array($fechaBusqueda->format('Y-m-d'), $fechasExcepciones)) { //evaluo si en las excepciones, el alumno puede esta fecha.
                         if ($excepciones[$fechaBusqueda->format('Y-m-d')]->no_puede == true) {
                             $puede = false;
                         }
                     }
-
+                   
                     if ($claseData->fecha >= $fechaBusquedaString) {
                         if ($claseData->fecha == $fechaBusquedaString) {
                             if (date('H:i', strtotime($claseData->horaInicio)) > date('H:i')) {
                                 if ($puede) { //este dia dentro de las excepciones puede
-                                    if ($disponibilidad[$nombreDiaBusqueda] != null) { //este dia es un dia que esta disponible
+                                    if ($disponibilidad[$nombreDiaClase] != null) { //este dia es un dia que esta disponible
                                         //valido sobre las excepciones
                                         if (in_array($claseData->fecha, $fechasExcepciones) && count($excepciones[$claseData->fecha]->options) > 0) {
                                             if (in_array($claseData->horaInicio, $excepciones[$claseData->fecha]->options)) { //la clase esta dentro de los horarios de la excepcion
                                                 array_push($clasesFinalesRetornar, $claseData);
                                             } else { //la clase no esta dentro de los horarios posibles en la excepcion
-                                                $claseData->continuaDisponible = false;
-                                                array_push($clasesFinalesRetornar, $claseData);
+/*                                                 $claseData->continuaDisponible = false;
+                                                array_push($clasesFinalesRetornar, $claseData); */
                                             }
                                         } else { //no estoy en una excepcion, entonces valido con la disponibilidad
-                                            if(in_array($clase['horaInicio'], $disponibilidad[$nombreDiaBusqueda])) { //el alumno continua disponible ese dia
+                                            if(in_array($clase['horaInicio'], $disponibilidad[$nombreDiaClase])) { //el alumno continua disponible ese dia
                                                 array_push($clasesFinalesRetornar, $claseData);
                                             } else { //este dia no puede (basado en la disponibilidad)
-                                                $claseData->continuaDisponible = false;
-                                                array_push($clasesFinalesRetornar, $claseData);
+/*                                                 $claseData->continuaDisponible = false;
+                                                array_push($clasesFinalesRetornar, $claseData); */
                                             }
                                         }
                                     } else { //no esta disponible este dia
-                                        $claseData->continuaDisponible = false;
-                                        array_push($clasesFinalesRetornar, $claseData);
+/*                                         $claseData->continuaDisponible = false;
+                                        array_push($clasesFinalesRetornar, $claseData); */
                                     }
                                 } else { //este dia no puede entonces directamente agrego la clase con el flag de que no esta disponible
-                                    $claseData->continuaDisponible = false;
-                                    array_push($clasesFinalesRetornar, $claseData);
+/*                                     $claseData->continuaDisponible = false;
+                                    array_push($clasesFinalesRetornar, $claseData); */
                                 }
                             } else { //la clase ya paso
 /*                                 $claseData->continuaDisponible = false;
                                 array_push($clasesFinalesRetornar, $claseData); */
                             }
                         } else {
+                            
                             if ($puede) { //este dia dentro de las excepciones puede
-                                if ($disponibilidad[$nombreDiaBusqueda] != null) { //este dia es un dia que esta disponible
+                                if ($disponibilidad[$nombreDiaClase] != null) { //este dia es un dia que esta disponible              
                                     //valido sobre las excepciones
                                     if (in_array($claseData->fecha, $fechasExcepciones) && count($excepciones[$claseData->fecha]->options) > 0) {
                                         if (in_array($claseData->horaInicio, $excepciones[$claseData->fecha]->options)) { //la clase esta dentro de los horarios de la excepcion
@@ -358,7 +366,7 @@
                                             array_push($clasesFinalesRetornar, $claseData); */
                                         }
                                     } else { //no estoy en una excepcion, entonces valido con la disponibilidad
-                                        if(in_array($clase['horaInicio'], $disponibilidad[$nombreDiaBusqueda])) { //el alumno continua disponible ese dia
+                                         if(in_array($clase['horaInicio'], $disponibilidad[$nombreDiaClase])) { //el alumno continua disponible ese dia
                                             array_push($clasesFinalesRetornar, $claseData);
                                         } else { //este dia no puede (basado en la disponibilidad)
 /*                                             $claseData->continuaDisponible = false;
