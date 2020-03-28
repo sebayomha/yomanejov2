@@ -45,6 +45,7 @@ export class  LessonsComponent {
       this.autos = Object.entries(response.data);
       this.obtenerClasesPorRealizarse(this.autos);
       this.obtenerClasesRealizadas(this.autos);
+      console.log(response);
     })
   }
 
