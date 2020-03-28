@@ -439,6 +439,10 @@ export class FreeClassFinderComponent {
 
   async searchSchedules() {
 
+    if (!this.edit_cronograma) {
+      this.numberOfClasses = this.search.lessons;
+    }
+
     this.control_collapse_search = false;
 
     let object = JSON.parse(JSON.stringify(this.search));
