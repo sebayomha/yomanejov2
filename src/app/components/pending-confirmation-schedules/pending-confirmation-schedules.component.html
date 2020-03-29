@@ -108,11 +108,9 @@
               <ng-container matColumnDef="Realizada">
                 <th mat-header-cell *matHeaderCellDef> Realizada </th>
                 <td mat-cell *matCellDef="let element; let i = index">
-                  <!-- <mat-icon style="color: rgb(67, 200, 157);" mat-list-icon *ngIf="element.sumada == 'true'">done</mat-icon> -->
-                  <!-- <mat-icon style="color: #4d65dc" mat-list-icon *ngIf="element.sumada == 'false'">hourglass_empty</mat-icon> -->
-                  
                   <span style="color: rgb(67, 200, 157); font-size: 18px;" *ngIf="element.sumada == 'true'"><i class="fas fa-check"></i></span>
                   <span style="color: #4d65dc; font-size: 18px;" *ngIf="element.sumada == 'false'"><i class="far fa-calendar-plus"></i></span>
+                  <span class="showMobile" matTooltipClass="tooltipFontSize" matTooltip="Clase modificada: {{element.claseModificada.idClase}} - {{element.claseModificada.fecha | date: 'dd/MM/yyyy'}} - {{element.claseModificada.horaInicio}} hs" style="padding-left: 10px;padding-right: 10px; color: #ffad18; cursor: pointer;" *ngIf="element.tieneClaseModificada == true"><i class="fas fa-exclamation-triangle"></i></span>
                 </td>
               </ng-container>
 
@@ -199,9 +197,8 @@
                 <th mat-header-cell *matHeaderCellDef> Realizada </th>
                 <td mat-cell *matCellDef="let element; let i = index">
                   <span style="color: rgb(67, 200, 157); font-size: 18px;" *ngIf="element.sumada == 'true'"><i class="fas fa-check"></i></span>
-                  <span style="color: #ffad18; font-size: 18px;" *ngIf="element.sumada == 'false'"><i class="fas fa-exclamation-triangle"></i></span>
-                  <!-- <mat-icon style="color: rgb(67, 200, 157);" mat-list-icon *ngIf="element.sumada == 'true'">done</mat-icon> -->              
-                  <!-- <mat-icon style="color: #ffad18" mat-list-icon *ngIf="element.sumada == 'false'">warning</mat-icon> -->
+                  <span style="color: red; font-size: 18px;" *ngIf="element.sumada == 'false'"><i class="fas fa-times"></i></span>
+                  <span class="showMobile" matTooltipClass="tooltipFontSize" matTooltip="Clase modificada: {{element.claseModificada.idClase}} - {{element.claseModificada.fecha | date: 'dd/MM/yyyy'}} - {{element.claseModificada.horaInicio}} hs" style="padding-left: 10px;padding-right: 10px; color: #ffad18; cursor: pointer;" *ngIf="element.tieneClaseModificada == true"><i class="fas fa-exclamation-triangle"></i></span>
                 </td>
               </ng-container>
 
@@ -296,9 +293,8 @@
                 <th mat-header-cell *matHeaderCellDef> Realizada </th>
                 <td mat-cell *matCellDef="let element; let i = index">
                   <span style="color: rgb(67, 200, 157); font-size: 18px;" *ngIf="element.sumada == 'true'"><i class="fas fa-check"></i></span>
-                  <span style="color: #ffad18; font-size: 18px;" *ngIf="element.sumada == 'false'"><i class="fas fa-exclamation-triangle"></i></span>
-                  <!-- <mat-icon style="color: rgb(67, 200, 157);" mat-list-icon *ngIf="element.sumada == 'true'">done</mat-icon>
-                  <mat-icon style="color: #ffad18" mat-list-icon *ngIf="element.sumada == 'false'">warning</mat-icon> -->
+                  <span style="color: red; font-size: 18px;" *ngIf="element.sumada == 'false'"><i class="fas fa-times"></i></span>
+                  <span class="showMobile" matTooltipClass="tooltipFontSize" matTooltip="Clase modificada: {{element.claseModificada.idClase}} - {{element.claseModificada.fecha | date: 'dd/MM/yyyy'}} - {{element.claseModificada.horaInicio}} hs" style="padding-left: 10px;padding-right: 10px; color: #ffad18; cursor: pointer;" *ngIf="element.tieneClaseModificada == true"><i class="fas fa-exclamation-triangle"></i></span>
                 </td>
               </ng-container>
               
@@ -407,13 +403,10 @@
             <th mat-header-cell *matHeaderCellDef> Realizada </th>
             <td mat-cell *matCellDef="let element; let i = index">
               <span style="color: rgb(67, 200, 157); font-size: 18px;" *ngIf="element.sumada == 'true'"><i class="fas fa-check"></i></span>
-              <span style="color: #ffad18; font-size: 18px;" *ngIf="element.sumada == 'false' && detailedCronograma.statusCronograma != 'CONFIRMADO'"><i class="fas fa-exclamation-triangle"></i></span>
+              <span style="color: red; font-size: 18px;" *ngIf="element.sumada == 'false' && detailedCronograma.statusCronograma != 'CONFIRMADO'"><i class="fas fa-times"></i>></span>
               <span style="color: #4d65dc; font-size: 18px;" *ngIf="element.sumada == 'false' && detailedCronograma.statusCronograma == 'CONFIRMADO'"><i class="far fa-calendar-plus"></i></span>
-  
-              <!-- <mat-icon style="color: rgb(67, 200, 157);" mat-list-icon *ngIf="element.sumada == 'true'">done</mat-icon>
-              <mat-icon style="color: #ffad18" mat-list-icon *ngIf="element.sumada == 'false' && detailedCronograma.statusCronograma != 'CONFIRMADO'">warning</mat-icon>
-              <mat-icon style="color: #4d65dc" mat-list-icon *ngIf="element.sumada == 'false' && detailedCronograma.statusCronograma == 'CONFIRMADO'">hourglass_empty</mat-icon> -->
-            </td>
+              <span class="showMobile" matTooltipClass="tooltipFontSize" matTooltip="Clase modificada: {{element.claseModificada.idClase}} - {{element.claseModificada.fecha | date: 'dd/MM/yyyy'}} - {{element.claseModificada.horaInicio}} hs" style="padding-left: 10px;padding-right: 10px; color: #ffad18; cursor: pointer;" *ngIf="element.tieneClaseModificada == true"><i class="fas fa-exclamation-triangle"></i></span>
+          </td>
           </ng-container>
 
           <!-- No.Clase Column -->

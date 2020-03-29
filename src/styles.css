@@ -29,3 +29,15 @@ body { margin: 0; overflow-x:hidden; font-family: 'Roboto', sans-serif; }
 .mat-ink-bar {
     background-color:#43c89d !important;  
 }
+
+.tooltipFontSize {
+    font-size: 14px !important;
+    max-width: unset !important;
+}
+
+
+@media (max-width: 1024px) {
+    .showMobile {
+      display: none;
+    }
+}

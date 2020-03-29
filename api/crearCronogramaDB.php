@@ -970,7 +970,8 @@
             excepcion.idExcepcion, excepcion.fecha AS fechaExcepcion, excepcion.no_puede,
             excepcionhorarios.dir_alt, excepcionhorarios.horarios,
             disponibilidad.idDisponibilidad, disponibilidad.Monday, disponibilidad.Tuesday, disponibilidad.Wednesday, disponibilidad.Thursday, disponibilidad.Friday, disponibilidad.Saturday, disponibilidad.Sunday,
-            alumno.idAlumno, alumno.nombre, alumno.telefono, 
+            alumno.idAlumno, alumno.nombre, alumno.telefono,
+            cmr.idClaseNueva, cmr.idClaseAnterior,
             clase.idClase, clase.idCronograma, clase.alumno, clase.auto, clase.sumada, clase.claseCancelada, clase.motivoCancelacion,
             clase.fecha, clase.horaInicio, clase.idZona, clase.idDireccion, clase.status AS satusClase, cronograma.status AS cronogramaStatus 
             FROM clase 
@@ -981,6 +982,7 @@
             INNER JOIN disponibilidad ON disponibilidad.idDisponibilidad = alumno.idDisponibilidad
             LEFT JOIN excepcion ON excepcion.idAlumno = alumno.idAlumno
             LEFT JOIN excepcionhorarios ON excepcion.idExcepcion = excepcionhorarios.idExcepcion
+            LEFT JOIN clasemodificadaregistro cmr ON cmr.idClaseNueva = clase.idClase
             LEFT JOIN alumnocronogramaclasestomadas ON alumnocronogramaclasestomadas.idCronograma = clase.idCronograma
             WHERE clase.status <> ?
             ORDER BY cronograma.idCronograma DESC');
@@ -1055,6 +1057,13 @@
                         }
 
                         array_push($excepciones, $excepcion);
+                    }
+
+                    if ($row['idClaseNueva'] != null && $row['idClaseNueva'] != '') {
+                        $row['tieneClaseModificada'] = true;
+                        $row['claseModificada'] = $this->getInfoClaseModificada($row['idClaseAnterior']);
+                    } else {
+                        $row['tieneClaseModificada'] = false;
                     }
                     
                     $cronogramaObject = (object) [
