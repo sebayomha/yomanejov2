@@ -58,7 +58,7 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
       this.cronogramasConfirmados = response.data.cronogramasConfirmados;
       this.cronogramasFinalizados = response.data.cronogramasFinalizados;
       this.cronogramasCancelados = response.data.cronogramasCancelados;
-      console.log("cronogramasCancelados", this.cronogramasCancelados);
+      console.log("cronogramasConfirmados", this.cronogramasConfirmados);
       this.isLoaded = true;
 
       
