@@ -113,7 +113,7 @@ export class  LessonsComponent {
         return false;
       })
       auto.clasesRealizadasAll = auto.clasesRealizadas;
-      auto.clasesRealizadas = auto.clasesRealizadas.splice(0,4);
+      auto.clasesRealizadas = auto.clasesRealizadas;
     })
   }
 
@@ -132,7 +132,7 @@ export class  LessonsComponent {
         return false;
       })
       auto.clasesPorRealizarseAll = auto.clasesPorRealizarse;
-      auto.clasesPorRealizarse = auto.clasesPorRealizarse.splice(0,4);
+      auto.clasesPorRealizarse = auto.clasesPorRealizarse;
     })
   }
 }

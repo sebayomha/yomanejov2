@@ -266,6 +266,7 @@ export class AvailableSchedulesComponent {
           this.classes[indexClass].id_auto = option.id_auto;
           this.classes[indexClass].da = option.da;
           this.classes[indexClass].fecha = option.fecha;
+          this.classes[indexClass].idZona = option.idZona;
         
           let claseActivaId = this.classes[indexClass].idClase ? this.classes[indexClass].idClase : option.idClase;
           if (claseActivaId) {
