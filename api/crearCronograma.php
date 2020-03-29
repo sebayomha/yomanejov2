@@ -306,8 +306,8 @@
 		$idAlumno = (int) $post->idAlumno;
 
 		$cronograma = new Cronograma();
-		$searchObject = $cronograma->generarSearch($idAlumno);
-		$this->calcularCronogramaParametros($searchObject->lessons, $searchObject->date, $searchObject->address, $searchObject->address_altenative, $address->dates_times, []);
+		$resultObject = $cronograma->generarSearch($idAlumno);
+		$this->calcularCronogramaParametros($resultObject->searchResult->lessons, $resultObject->searchResult->date, $resultObject->searchResult->address, $resultObject->searchResult->address_altenative, $resultObject->searchResult->dates_times, $resultObject->excepciones);
 	}
 
 	function calcularCronogramaParametros($cantClases, $fechaInicio, $direccion, $direccion_alt, $disponibilidad, $excepciones) {

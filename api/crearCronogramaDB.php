@@ -880,6 +880,10 @@
                 }
                 $state->bind_param('iissiiis', $idAlumno, $option->id_auto, $option->fecha, $option->horario, $option->idZona, $direccionClase, $idCronograma, $status);
                 $state->execute();
+                if ($this->conn->error) {
+                    echo json_encode($this->conn->error);
+
+                }
                 array_push($arrayIdClasesNuevos, $this->conn->insert_id);
             }
 
@@ -1535,6 +1539,8 @@
                 'dates_times' => []
             ];
 
+            $excepcionResult = (array) [ ];
+
             $idDisponibilidad;
             $disponibilidad_info;
             $excepciones;
@@ -1784,7 +1790,51 @@
 
             $searchResult->address_alternative = $address_alternative_array;
 
-            return $searchResult;
+            //Obtengo las excepciones (si es que posee).
+            $state = $this->conn->prepare('SELECT * FROM excepcion WHERE excepcion.idAlumno = ?');
+            $state->bind_param('i', $idAlumno);
+            $state->execute();
+            $result = $state->get_result();
+            if (mysqli_num_rows($result) > 0) { //tiene excepciones
+                while($row = $result->fetch_assoc()) {
+                    $excepcionObjectResult = (object) [
+                        'date_string' => '',
+                        'no_puede' => false,
+                        'horarios' => []
+                    ];
+
+                    $excepcionObjectResult->date_string = $row['fecha'];
+
+                    if ($row['no_puede'] == 'true') { //no puede
+                        $excepcionObjectResult->no_puede = true;
+                        array_push($excepcionResult, $excepcionObjectResult);
+                    } else { //puede, asi que tengo que buscar los tramos
+                        $state = $this->conn->prepare('SELECT * FROM excepcionhorarios WHERE excepcionhorarios.idExcepcion = ?');
+                        $state->bind_param('i', $row['idExcepcion']);
+                        $state->execute();
+                        $result = $state->get_result();
+
+                        while($row = $result->fetch_assoc()) { //recorro cada uno de los tramos
+                            $horariosExcepcionesObject = (object) [
+                                'horariosTotales' => [],
+                                'dir_alt' => false
+                            ];
+                            array_push($horariosExcepcionesObject->horariosTotales, $row['horarios']);
+                            $horariosExcepcionesObject->dir_alt = filter_var($row['dir_alt'], FILTER_VALIDATE_BOOLEAN);
+                            array_push($excepcionObjectResult->horarios, $horariosExcepcionesObject);
+                        }
+
+                        array_push($excepcionResult, $excepcionObjectResult);
+                    }
+                }
+            }
+
+            $objectReturned = (object) [
+                'searchResult' => $searchResult,
+                'excepciones' => $excepcionResult
+            ];
+
+            return $objectReturned;
         }
 
         function cancelarClase($idClase, $motivoCancelacion) {

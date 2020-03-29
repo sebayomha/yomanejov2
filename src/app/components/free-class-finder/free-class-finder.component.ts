@@ -476,6 +476,7 @@ export class FreeClassFinderComponent {
 
     this.setExceptionHours();
 
+    console.log("excepciones:: ", this.excepciones)
     await this.cronogramaService.getCronograma(object, this.excepciones).subscribe( (response: Response) => {
       console.log(response)
       switch (response.code) {
