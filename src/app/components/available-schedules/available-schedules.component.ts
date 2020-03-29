@@ -66,6 +66,7 @@ export class AvailableSchedulesComponent {
     idDisponibilidad;
     idDireccionPrincipal;
     idDireccionAlternativa;
+    dataToConfirmAux = [];
 
     constructor(private cdr: ChangeDetectorRef, private cronogramaService: CronogramaService, private _snackBar: MatSnackBar) { }
 
@@ -296,7 +297,10 @@ export class AvailableSchedulesComponent {
           this.classes_send.push(element);
         } else {
           if (element.idClase != undefined) {
-            this.classes_actives_changes.push(element.idClase);
+            let indexClassActive = this.classes_actives_changes.findIndex( ele => ele == element.idClase );
+            if (indexClassActive == -1) {
+              this.classes_actives_changes.push(element.idClase);
+            }
           }
         }
       });
@@ -306,6 +310,7 @@ export class AvailableSchedulesComponent {
     }
 
     saveOptions(){
+
       this.dataToConfirm = [];
       //Ordeno los dias
       this.classes_send.sort(function(a, b){return a.fecha_orden - b.fecha_orden});
@@ -350,7 +355,26 @@ export class AvailableSchedulesComponent {
       } else {
         if(this.edit_cronograma.statusCronograma == "CONFIRMADO") {
           this.operationCustomModal = "EditarCronogramaActivo";
-          this.cronogramaService.actualizarCronogramaActivo($event).subscribe( (response: Response) => {
+
+
+          /* Cuando estoy editando un crono activo, tengo que enviar solo la clase que cambio en el selected_options */
+          this.dataToConfirmAux = this.dataToConfirm;
+          let classes_send_index = 0;
+          let classes_send_aux = [];
+          if (this.edit_cronograma && this.edit_cronograma.statusCronograma == "CONFIRMADO") {
+            this.dataToConfirmAux[1].selected_options.forEach(element => {
+              if (element.idZona != undefined && element.idClase == undefined) {
+
+                classes_send_aux.push(element);
+
+              }
+              classes_send_index += 1;
+            })
+          }
+          this.dataToConfirmAux[1].selected_options = classes_send_aux;
+
+          
+          this.cronogramaService.actualizarCronogramaActivo(this.dataToConfirmAux).subscribe( (response: Response) => {
             console.log(response);
             if (response.code == 0) {
               this.showSuccessBanner = true;
