@@ -175,6 +175,7 @@ export class AvailableSchedulesComponent {
               this.not_available_classes.push('La clase número '+index_class+' del día '+fecha_clase+' a las '+hora_inicio+' hs ya no se encuentra disponible o ya pasó.');
               this.show_info_banner = true;
               this.fecha_no_disponible = false;
+              this.classes_actives_changes.push(clase.idClase);
             }
           }
 
@@ -187,6 +188,7 @@ export class AvailableSchedulesComponent {
           //Armo array del banner
           this.not_available_classes.push('La clase número '+index_class+' del día '+fecha_clase+' a las '+hora_inicio+' hs ya no se encuentra disponible o ya pasó.');
           this.show_info_banner = true;
+          this.classes_actives_changes.push(clase.idClase);
           
         }
       });
