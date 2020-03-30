@@ -356,9 +356,8 @@ export class AvailableSchedulesComponent {
         if(this.edit_cronograma.statusCronograma == "CONFIRMADO") {
           this.operationCustomModal = "EditarCronogramaActivo";
 
-
           /* Cuando estoy editando un crono activo, tengo que enviar solo la clase que cambio en el selected_options */
-          this.dataToConfirmAux = this.dataToConfirm;
+          this.dataToConfirmAux = this.dataToConfirm.map(object => ({ ...object }))
           let classes_send_index = 0;
           let classes_send_aux = [];
           if (this.edit_cronograma && this.edit_cronograma.statusCronograma == "CONFIRMADO") {
@@ -373,7 +372,6 @@ export class AvailableSchedulesComponent {
           }
           this.dataToConfirmAux[1].selected_options = classes_send_aux;
 
-          
           this.cronogramaService.actualizarCronogramaActivo(this.dataToConfirmAux).subscribe( (response: Response) => {
             console.log(response);
             if (response.code == 0) {
