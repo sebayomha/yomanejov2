@@ -89,7 +89,7 @@
                         $estoySobreUnaExcepcion = false;
                         if (in_array($result, $fechasExcepciones) && count($excepciones[$result]->options) > 0) {
                             $estoySobreUnaExcepcion = true;
-                            $horariosLibres = $this->obtenerHorariosLibresAutoYAlumnoExcepciones($clases, $excepciones[$result]->options, $result);
+                            $horariosLibres = $this->obtenerHorariosLibresAutoYAlumnoExcepciones($clases, $excepciones[$result]->options,$nombreDiaBusqueda, $result);
                         } else {
                             $horariosLibres = $this->obtenerHorariosLibresAutoYAlumno($clases, $disponibilidad, $nombreDiaBusqueda, $result,$idAuto);
                         }
@@ -703,7 +703,7 @@
                 if ($option->da) {
                     $direccionClase = $idDireccionAlternativa;
                 }
-                $state->bind_param('iissiiis', $idAlumno, $option->id_auto, $option->fecha, $option->horario, $option->idZona, $direccionClase, $idCronograma, $status, $i);
+                $state->bind_param('iissiiisi', $idAlumno, $option->id_auto, $option->fecha, $option->horario, $option->idZona, $direccionClase, $idCronograma, $status, $i);
                 $state->execute();
                 $i++;
             }
@@ -1972,7 +1972,7 @@
             }
         }
 
-        function obtenerHorariosLibresAutoYAlumnoExcepciones($clases, $disponibilidad, $fechaBusqueda) {
+        function obtenerHorariosLibresAutoYAlumnoExcepciones($clases, $disponibilidad, $nombreDiaBusqueda, $fechaBusqueda) {
             $horariosOcupados = [];
             $claseData = [
                 'idClase' => '',
@@ -1989,7 +1989,7 @@
                     }
                 }
 
-                $resultado = array_values(array_diff($disponibilidad[$nombreDiaBusqueda], array_column($horariosOcupados, 'horaInicio'))); //obtengo los horarios libres que tanto el usuario como el auto estan libres
+                $resultado = array_values(array_diff($disponibilidad, array_column($horariosOcupados, 'horaInicio'))); //obtengo los horarios libres que tanto el usuario como el auto estan libres
                 foreach ($resultado as $key => $horario) {
                     if (strtotime($horario) < time()) {
                         unset($resultado[$key]);
@@ -2006,14 +2006,8 @@
                         array_push($horariosOcupados, $claseData);
                     }
                 }
-
-                return array_values(array_diff($disponibilidad[$nombreDiaBusqueda], array_column($horariosOcupados, 'horaInicio'))); //obtengo los horarios libres que tanto el usuario como el auto estan libres
-            }
-
-            if (sizeof($horariosOcupados) > 0) {
-                return array_values(array_diff($disponibilidad[$nombreDiaBusqueda], array_column($horariosOcupados, 'horaInicio'))); //obtengo los horarios libres que tanto el usuario como el auto estan libres
-            } else {
-                return [];
+    
+                return array_values(array_diff($disponibilidad, array_column($horariosOcupados, 'horaInicio'))); //obtengo los horarios libres que tanto el usuario como el auto estan libres
             }
         }
 
