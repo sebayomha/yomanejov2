@@ -135,4 +135,10 @@ export class  LessonsComponent {
       auto.clasesPorRealizarse = auto.clasesPorRealizarse;
     })
   }
+
+  editarClase(idAlumno){
+    this.cronogramaService.obtenerClasesDisponiblesParaAlumno(idAlumno).subscribe( (response: Response) => {
+      console.log('RESPUESTA ',response);
+    })
+  }
 }
