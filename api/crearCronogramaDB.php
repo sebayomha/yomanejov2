@@ -1726,78 +1726,81 @@
 
             //Obtengo la direccion alternativa como esta en el objecto search.
             $address_alternative_array = [];
-            $address_object = (array) [
-                'street' => '',
-                'diag' => false
-            ];
-
-            $address_object['street'] = $direccion_alt_info['calle'];
-            $address_object['diag'] = filter_var($direccion_alt_info['calle_diag'], FILTER_VALIDATE_BOOLEAN);
-            array_push($address_alternative_array, $address_object);
-
-            $address_object = (array) [
-                'street_a' => '',
-                'diag' => false
-            ];
-
-            $address_object['street_a'] = $direccion_alt_info['calle_a'];
-            $address_object['diag'] = filter_var($direccion_alt_info['calle_a_diag'], FILTER_VALIDATE_BOOLEAN);
-            array_push($address_alternative_array, $address_object);
-
-            $address_object = (array) [
-                'street_b' => '',
-                'diag' => false
-            ];
-
-            $address_object['street_b'] = $direccion_alt_info['calle_b'];
-            $address_object['diag'] = filter_var($direccion_alt_info['calle_b_diag'], FILTER_VALIDATE_BOOLEAN);
-            array_push($address_alternative_array, $address_object);
-
-            $address_object = (array) [
-                'altitud' => '',
-                'diag' => false
-            ];
-
-            $address_object['altitud'] = $direccion_alt_info['numero'];
-            array_push($address_alternative_array, $address_object);
-
-            $address_object = (array) [
-                'city' => '',
-                'diag' => false
-            ];
-
-            $address_object['city'] = $direccion_alt_info['ciudad'];
-            array_push($address_alternative_array, $address_object);
-
-            $address_object = (array) [
-                'city' => '',
-                'floor' => '',
-                'diag' => false
-            ];
-
-            $address_object['floor'] = $direccion_alt_info['floor_'];
-            array_push($address_alternative_array, $address_object);
-
-            $address_object = (array) [
-                'city' => '',
-                'floor' => '',
-                'departamento' => '',
-                'diag' => false
-            ];
-
-            $address_object['departamento'] = $direccion_alt_info['departamento'];
-            array_push($address_alternative_array, $address_object);
-
-            $address_object = (array) [
-                'city' => '',
-                'floor' => '',
-                'observations' => '',
-                'diag' => false
-            ];
-
-            $address_object['observations'] = $direccion_alt_info['observaciones'];
-            array_push($address_alternative_array, $address_object);
-
+            if ($idDireccion_alt != null) {
+                $address_object = (array) [
+                    'street' => '',
+                    'diag' => false
+                ];
+    
+                $address_object['street'] = $direccion_alt_info['calle'];
+                $address_object['diag'] = filter_var($direccion_alt_info['calle_diag'], FILTER_VALIDATE_BOOLEAN);
+                array_push($address_alternative_array, $address_object);
+    
+                $address_object = (array) [
+                    'street_a' => '',
+                    'diag' => false
+                ];
+    
+                $address_object['street_a'] = $direccion_alt_info['calle_a'];
+                $address_object['diag'] = filter_var($direccion_alt_info['calle_a_diag'], FILTER_VALIDATE_BOOLEAN);
+                array_push($address_alternative_array, $address_object);
+    
+                $address_object = (array) [
+                    'street_b' => '',
+                    'diag' => false
+                ];
+    
+                $address_object['street_b'] = $direccion_alt_info['calle_b'];
+                $address_object['diag'] = filter_var($direccion_alt_info['calle_b_diag'], FILTER_VALIDATE_BOOLEAN);
+                array_push($address_alternative_array, $address_object);
+    
+                $address_object = (array) [
+                    'altitud' => '',
+                    'diag' => false
+                ];
+    
+                $address_object['altitud'] = $direccion_alt_info['numero'];
+                array_push($address_alternative_array, $address_object);
+    
+                $address_object = (array) [
+                    'city' => '',
+                    'diag' => false
+                ];
+    
+                $address_object['city'] = $direccion_alt_info['ciudad'];
+                array_push($address_alternative_array, $address_object);
+    
+                $address_object = (array) [
+                    'city' => '',
+                    'floor' => '',
+                    'diag' => false
+                ];
+    
+                $address_object['floor'] = $direccion_alt_info['floor_'];
+                array_push($address_alternative_array, $address_object);
+    
+                $address_object = (array) [
+                    'city' => '',
+                    'floor' => '',
+                    'departamento' => '',
+                    'diag' => false
+                ];
+    
+                $address_object['departamento'] = $direccion_alt_info['departamento'];
+                array_push($address_alternative_array, $address_object);
+    
+                $address_object = (array) [
+                    'city' => '',
+                    'floor' => '',
+                    'observations' => '',
+                    'diag' => false
+                ];
+    
+                $address_object['observations'] = $direccion_alt_info['observaciones'];
+                array_push($address_alternative_array, $address_object);
+    
+            }
+            
             $searchResult['address_alternative'] = $address_alternative_array;
 
             //Obtengo las excepciones (si es que posee).
