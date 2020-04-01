@@ -1540,7 +1540,7 @@
         }
 
         function generarSearch($idAlumno) {
-            $searchResult = (object) [
+            $searchResult = (array) [
                 'lessons' => 1,
                 'date' => date('Y-m-d'),
                 'address' => [],
@@ -1599,13 +1599,13 @@
             }
 
             $disponibilidadesInfoPorDia = (object) [
-                'Monday' => $this->verificarSiEsTodoElDia($disponibilidad_info['Monday'],$idDireccion,$idDireccion_alt, $direccionPrincipalFormateada, $dirAlternativa, null, null),
-                'Tuesday' => $this->verificarSiEsTodoElDia($disponibilidad_info['Tuesday'],$idDireccion,$idDireccion_alt, $direccionPrincipalFormateada, $dirAlternativa, null, null),
-                'Wednesday' => $this->verificarSiEsTodoElDia($disponibilidad_info['Wednesday'],$idDireccion,$idDireccion_alt, $direccionPrincipalFormateada, $dirAlternativa, null, null),
-                'Thursday' => $this->verificarSiEsTodoElDia($disponibilidad_info['Thursday'],$idDireccion,$idDireccion_alt, $direccionPrincipalFormateada, $dirAlternativa, null, null),
-                'Friday' => $this->verificarSiEsTodoElDia($disponibilidad_info['Friday'],$idDireccion,$idDireccion_alt, $direccionPrincipalFormateada, $dirAlternativa, null, null),
-                'Saturday' => $this->verificarSiEsTodoElDia($disponibilidad_info['Saturday'],$idDireccion,$idDireccion_alt, $direccionPrincipalFormateada, $dirAlternativa, null, null),
-                'Sunday' => $this->verificarSiEsTodoElDia($disponibilidad_info['Sunday'],$idDireccion,$idDireccion_alt, $direccionPrincipalFormateada, $dirAlternativa, null, null)
+                'Monday' => $this->verificarSiEsTodoElDia($disponibilidad_info['Monday'],$idDireccion,$idDireccion_alt, null, null, null, null),
+                'Tuesday' => $this->verificarSiEsTodoElDia($disponibilidad_info['Tuesday'],$idDireccion,$idDireccion_alt, null, null, null, null),
+                'Wednesday' => $this->verificarSiEsTodoElDia($disponibilidad_info['Wednesday'],$idDireccion,$idDireccion_alt, null, null, null, null),
+                'Thursday' => $this->verificarSiEsTodoElDia($disponibilidad_info['Thursday'],$idDireccion,$idDireccion_alt, null, null, null, null),
+                'Friday' => $this->verificarSiEsTodoElDia($disponibilidad_info['Friday'],$idDireccion,$idDireccion_alt, null, null, null, null),
+                'Saturday' => $this->verificarSiEsTodoElDia($disponibilidad_info['Saturday'],$idDireccion,$idDireccion_alt, null, null, null, null),
+                'Sunday' => $this->verificarSiEsTodoElDia($disponibilidad_info['Sunday'],$idDireccion,$idDireccion_alt, null, null, null, null)
             ];
 
             //Completo las disponibilidades como esta en el objecto search.
@@ -1613,191 +1613,192 @@
             
             $dates_times = [];
             foreach ($disponibilidadesInfoPorDia as $dayKey => $valueKey) {
-                $search_dates_dayObject = (object) [
+                $search_dates_dayObject = (array) [
                     'name_day' => '',
                     'all_day' => false,
                     'option' => [],
                 ];
 
-                $option = (object) [
+                $option = (array) [
                     'scheduleSend' => [],
                     'dir_alt' => false
                 ];
 
+                $search_dates_dayObject['name_day'] = $dayKey;
+
                 if ($valueKey->todoElDia) {
-                    $search_dates_dayObject->name_day = $dayKey;
-                    $search_dates_dayObject->all_day = true;
-                    $option->scheduleSend = $diaEntero;
-                    $option->dir_alt = $valueKey->usandoDirAlternativa;
-                    array_push($search_dates_dayObject->option, $option);
+                    $search_dates_dayObject['all_day'] = true;
+                    $option['scheduleSend'] = $diaEntero;
+                    $option['dir_alt'] = $valueKey->usandoDirAlternativa;
+                    array_push($search_dates_dayObject['option'], $option);
                 } else {
                     foreach ($valueKey->tramosHorarios as $tramoHorario) {
-                        $option = (object) [
+                        $option = (array) [
                             'scheduleSend' => [],
                             'dir_alt' => false
                         ];
-                        $option->scheduleSend = $tramoHorario->horarios;
-                        $option->dir_alt = $tramoHorario->usandoDirAlternativa;
-                        array_push($search_dates_dayObject->option, $option);
+                        $option['scheduleSend'] = $tramoHorario->horarios;
+                        $option['dir_alt'] = $tramoHorario->usandoDirAlternativa;
+                        array_push($search_dates_dayObject['option'], $option);
                     }
                 }
 
                 array_push($dates_times, $search_dates_dayObject);
             }
 
-            $searchResult->dates_times = $dates_times;
+            $searchResult['dates_times'] = $dates_times;
 
             //Obtengo la direccion principal como esta en el objecto search.
             $address_array = [];
-            $address_object = (object) [
+            $address_object = (array) [
                 'street' => '',
                 'diag' => false
             ];
 
-            $address_object->street = $direccionInfo['calle'];
-            $address_object->diag = filter_var($direccionInfo['calle_diag'], FILTER_VALIDATE_BOOLEAN);
+            $address_object['street'] = $direccionInfo['calle'];
+            $address_object['diag'] = filter_var($direccionInfo['calle_diag'], FILTER_VALIDATE_BOOLEAN);
             array_push($address_array, $address_object);
 
-            $address_object = (object) [
+            $address_object = (array) [
                 'street_a' => '',
                 'diag' => false
             ];
 
-            $address_object->street_a = $direccionInfo['calle_a'];
-            $address_object->diag = filter_var($direccionInfo['calle_a_diag'], FILTER_VALIDATE_BOOLEAN);
+            $address_object['street_a'] = $direccionInfo['calle_a'];
+            $address_object['diag'] = filter_var($direccionInfo['calle_a_diag'], FILTER_VALIDATE_BOOLEAN);
             array_push($address_array, $address_object);
 
-            $address_object = (object) [
+            $address_object = (array) [
                 'street_b' => '',
                 'diag' => false
             ];
 
-            $address_object->street_b = $direccionInfo['calle_b'];
-            $address_object->diag = filter_var($direccionInfo['calle_b_diag'], FILTER_VALIDATE_BOOLEAN);
+            $address_object['street_b'] = $direccionInfo['calle_b'];
+            $address_object['diag'] = filter_var($direccionInfo['calle_b_diag'], FILTER_VALIDATE_BOOLEAN);
             array_push($address_array, $address_object);
 
-            $address_object = (object) [
+            $address_object = (array) [
                 'altitud' => '',
                 'diag' => false
             ];
 
-            $address_object->altitud = $direccionInfo['numero'];
+            $address_object['altitud'] = $direccionInfo['numero'];
             array_push($address_array, $address_object);
 
-            $address_object = (object) [
+            $address_object = (array) [
                 'city' => '',
                 'diag' => false
             ];
 
-            $address_object->city = $direccionInfo['ciudad'];
+            $address_object['city'] = $direccionInfo['ciudad'];
             array_push($address_array, $address_object);
 
-            $address_object = (object) [
+            $address_object = (array) [
                 'city' => '',
                 'floor' => '',
                 'diag' => false
             ];
 
-            $address_object->floor = $direccionInfo['floor_'];
+            $address_object['floor'] = $direccionInfo['floor_'];
             array_push($address_array, $address_object);
 
-            $address_object = (object) [
+            $address_object = (array) [
                 'city' => '',
                 'floor' => '',
                 'departamento' => '',
                 'diag' => false
             ];
 
-            $address_object->departamento = $direccionInfo['departamento'];
+            $address_object['departamento'] = $direccionInfo['departamento'];
             array_push($address_array, $address_object);
 
-            $address_object = (object) [
+            $address_object = (array) [
                 'city' => '',
                 'floor' => '',
                 'observations' => '',
                 'diag' => false
             ];
 
-            $address_object->observations = $direccionInfo['observaciones'];
+            $address_object['observations'] = $direccionInfo['observaciones'];
             array_push($address_array, $address_object);
 
-            $searchResult->address = $address_array;
+            $searchResult['address'] = $address_array;
 
             //Obtengo la direccion alternativa como esta en el objecto search.
             $address_alternative_array = [];
-            $address_object = (object) [
+            $address_object = (array) [
                 'street' => '',
                 'diag' => false
             ];
 
-            $address_object->street = $direccion_alt_info['calle'];
-            $address_object->diag = filter_var($direccion_alt_info['calle_diag'], FILTER_VALIDATE_BOOLEAN);
+            $address_object['street'] = $direccion_alt_info['calle'];
+            $address_object['diag'] = filter_var($direccion_alt_info['calle_diag'], FILTER_VALIDATE_BOOLEAN);
             array_push($address_alternative_array, $address_object);
 
-            $address_object = (object) [
+            $address_object = (array) [
                 'street_a' => '',
                 'diag' => false
             ];
 
-            $address_object->street_a = $direccion_alt_info['calle_a'];
-            $address_object->diag = filter_var($direccion_alt_info['calle_a_diag'], FILTER_VALIDATE_BOOLEAN);
+            $address_object['street_a'] = $direccion_alt_info['calle_a'];
+            $address_object['diag'] = filter_var($direccion_alt_info['calle_a_diag'], FILTER_VALIDATE_BOOLEAN);
             array_push($address_alternative_array, $address_object);
 
-            $address_object = (object) [
+            $address_object = (array) [
                 'street_b' => '',
                 'diag' => false
             ];
 
-            $address_object->street_b = $direccion_alt_info['calle_b'];
-            $address_object->diag = filter_var($direccion_alt_info['calle_b_diag'], FILTER_VALIDATE_BOOLEAN);
+            $address_object['street_b'] = $direccion_alt_info['calle_b'];
+            $address_object['diag'] = filter_var($direccion_alt_info['calle_b_diag'], FILTER_VALIDATE_BOOLEAN);
             array_push($address_alternative_array, $address_object);
 
-            $address_object = (object) [
+            $address_object = (array) [
                 'altitud' => '',
                 'diag' => false
             ];
 
-            $address_object->altitud = $direccion_alt_info['numero'];
+            $address_object['altitud'] = $direccion_alt_info['numero'];
             array_push($address_alternative_array, $address_object);
 
-            $address_object = (object) [
+            $address_object = (array) [
                 'city' => '',
                 'diag' => false
             ];
 
-            $address_object->city = $direccion_alt_info['ciudad'];
+            $address_object['city'] = $direccion_alt_info['ciudad'];
             array_push($address_alternative_array, $address_object);
 
-            $address_object = (object) [
+            $address_object = (array) [
                 'city' => '',
                 'floor' => '',
                 'diag' => false
             ];
 
-            $address_object->floor = $direccion_alt_info['floor_'];
+            $address_object['floor'] = $direccion_alt_info['floor_'];
             array_push($address_alternative_array, $address_object);
 
-            $address_object = (object) [
+            $address_object = (array) [
                 'city' => '',
                 'floor' => '',
                 'departamento' => '',
                 'diag' => false
             ];
 
-            $address_object->departamento = $direccion_alt_info['departamento'];
+            $address_object['departamento'] = $direccion_alt_info['departamento'];
             array_push($address_alternative_array, $address_object);
 
-            $address_object = (object) [
+            $address_object = (array) [
                 'city' => '',
                 'floor' => '',
                 'observations' => '',
                 'diag' => false
             ];
 
-            $address_object->observations = $direccion_alt_info['observaciones'];
+            $address_object['observations'] = $direccion_alt_info['observaciones'];
             array_push($address_alternative_array, $address_object);
 
-            $searchResult->address_alternative = $address_alternative_array;
+            $searchResult['address_alternative'] = $address_alternative_array;
 
             //Obtengo las excepciones (si es que posee).
             $state = $this->conn->prepare('SELECT * FROM excepcion WHERE excepcion.idAlumno = ?');
@@ -1806,16 +1807,16 @@
             $result = $state->get_result();
             if (mysqli_num_rows($result) > 0) { //tiene excepciones
                 while($row = $result->fetch_assoc()) {
-                    $excepcionObjectResult = (object) [
+                    $excepcionObjectResult = (array) [
                         'date_string' => '',
                         'no_puede' => false,
                         'horarios' => []
                     ];
 
-                    $excepcionObjectResult->date_string = $row['fecha'];
+                    $excepcionObjectResult['date_string'] = $row['fecha'];
 
                     if ($row['no_puede'] == 'true') { //no puede
-                        $excepcionObjectResult->no_puede = true;
+                        $excepcionObjectResult['no_puede'] = true;
                         array_push($excepcionResult, $excepcionObjectResult);
                     } else { //puede, asi que tengo que buscar los tramos
                         $state = $this->conn->prepare('SELECT * FROM excepcionhorarios WHERE excepcionhorarios.idExcepcion = ?');
@@ -1824,13 +1825,13 @@
                         $result = $state->get_result();
 
                         while($row = $result->fetch_assoc()) { //recorro cada uno de los tramos
-                            $horariosExcepcionesObject = (object) [
+                            $horariosExcepcionesObject = (array) [
                                 'horariosTotales' => [],
                                 'dir_alt' => false
                             ];
-                            array_push($horariosExcepcionesObject->horariosTotales, $row['horarios']);
-                            $horariosExcepcionesObject->dir_alt = filter_var($row['dir_alt'], FILTER_VALIDATE_BOOLEAN);
-                            array_push($excepcionObjectResult->horarios, $horariosExcepcionesObject);
+                            array_push($horariosExcepcionesObject['horariosTotales'], $row['horarios']);
+                            $horariosExcepcionesObject['dir_alt'] = filter_var($row['dir_alt'], FILTER_VALIDATE_BOOLEAN);
+                            array_push($excepcionObjectResult['horarios'], $horariosExcepcionesObject);
                         }
 
                         array_push($excepcionResult, $excepcionObjectResult);
@@ -1838,7 +1839,7 @@
                 }
             }
 
-            $objectReturned = (object) [
+            $objectReturned = (array) [
                 'searchResult' => $searchResult,
                 'excepciones' => $excepcionResult
             ];

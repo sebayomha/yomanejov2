@@ -98,7 +98,7 @@ export class CronogramaService {
   }
 
   obtenerClasesDisponiblesParaAlumno(idAlumno) {
-    return this.http.post('api/calcularCronograma/obtenerClasesDisponiblesParaAlumno', JSON.stringify(idAlumno));
+    return this.http.post('api/calcularCronograma/obtenerClasesDisponiblesParaAlumno', {params: idAlumno});
   }
 
 }

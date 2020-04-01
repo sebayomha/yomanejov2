@@ -303,11 +303,11 @@
 		$post = json_decode(file_get_contents('php://input'));
 
 		$post = $post->params;
-		$idAlumno = (int) $post->idAlumno;
+		$idAlumno = (int) $post;
 
 		$cronograma = new Cronograma();
 		$resultObject = $cronograma->generarSearch($idAlumno);
-		$this->calcularCronogramaParametros($resultObject->searchResult->lessons, $resultObject->searchResult->date, $resultObject->searchResult->address, $resultObject->searchResult->address_altenative, $resultObject->searchResult->dates_times, $resultObject->excepciones);
+		calcularCronogramaParametros($resultObject['searchResult']['lessons'], $resultObject['searchResult']['date'], $resultObject['searchResult']['address'], $resultObject['searchResult']['address_alternative'], $resultObject['searchResult']['dates_times'], $resultObject['excepciones']);
 	}
 
 	function calcularCronogramaParametros($cantClases, $fechaInicio, $direccion, $direccion_alt, $disponibilidad, $excepciones) {
@@ -317,7 +317,7 @@
 			$resDisponibilidad[$dia['name_day']] = null;
 			$resOptions[$dia['name_day']] = [];
 
-			if($dia['option'][0]['scheduleSend'] != null) {
+			if($dia['option'] != null) {
 				$resDisponibilidad[$dia['name_day']] = [];
 				$options = [];
 				foreach ($dia['option'] as $option) {
