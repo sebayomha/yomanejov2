@@ -307,8 +307,17 @@
 
 		$cronograma = new Cronograma();
 		$resultObject = $cronograma->generarSearch($idAlumno);
-		calcularCronogramaParametros($resultObject['searchResult']['lessons'], $resultObject['searchResult']['date'], $resultObject['searchResult']['address'], $resultObject['searchResult']['address_alternative'], $resultObject['searchResult']['dates_times'], $resultObject['excepciones']);
+		$fechasEnUso = $cronograma->obtenerFechasEnUsoParaCronograma($idAlumno);
+		$resultBusqueda = calcularCronogramaParametros($resultObject['searchResult']['lessons'], $resultObject['searchResult']['date'], $resultObject['searchResult']['address'], $resultObject['searchResult']['address_alternative'], $resultObject['searchResult']['dates_times'], $resultObject['excepciones']);
+		$filtroFechas = array_diff_key(array_column($resultBusqueda, null, 'fecha'), array_flip($fechasEnUso));
+
+		if (!empty($filtroFechas)) {
+			echo json_encode($GLOBALS['utils']->getResponse(0, $filtroFechas));
+		} else {
+			echo json_encode($GLOBALS['utils']->getResponse(1, "Ocurrió un error al calcular el cronograma, por favor vuelva a intentar."));
+		}
 	}
+		
 
 	function calcularCronogramaParametros($cantClases, $fechaInicio, $direccion, $direccion_alt, $disponibilidad, $excepciones) {
 		$resDisponibilidad = [];
@@ -364,17 +373,7 @@
 			$cronograma = new Cronograma();
 			$cronogramaResultante = $cronograma->calcularCronograma($cantClases, $resDisponibilidad, $direccion, $fechaInicio, $resExcepciones, $direccion_alt, $hayDireccionAlternativa, $resOptions, $resExcepcionesOptions);
 
-			if (is_array($cronogramaResultante)) {
-				if (!empty($cronogramaResultante)) {
-					echo json_encode($GLOBALS['utils']->getResponse(0, $cronogramaResultante));
-				} else {
-					echo json_encode($GLOBALS['utils']->getResponse(1, "Ocurrió un error al calcular el cronograma, por favor vuelva a intentar."));
-				}
-			} else {
-				if ($cronogramaResultante == 2) {
-					echo json_encode($GLOBALS['utils']->getResponse(2, "La dirección ingresada no corresponde a una zona de trabajo. Por favor, ingrese un punto de encuentro"));
-				}
-			}
+			return $cronogramaResultante;
 		}		
 	}
 
@@ -404,6 +403,24 @@
 
 		if ($reactivarClaseResult == 0) {
 			echo json_encode($GLOBALS['utils']->getResponse(0, "La clase se ha reactivado exitosamente"));
+		} else {
+			echo json_encode($GLOBALS['utils']->getResponse(1, "Lo lamentamos, ha ocurrido un error."));
+		}
+	}
+
+	function agregarClaseACronograma() {
+		$post = json_decode(file_get_contents('php://input'));
+
+		$idCronograma = (int) $post[0]->idCronograma;
+		$idAlumno = (int) $post[2]->idAlumno;
+		$selectedOption = $post[1]->selectedOption;
+		$fechaClase = $post[3]->fechaClase;
+
+		$cronograma = new Cronograma();
+		$agregarClaseACronograma = $cronograma->agregarClaseACronograma($idCronograma, $idAlumno, $selectedOption, $fechaClase);
+
+		if ($agregarClaseACronograma == 0) {
+			echo json_encode($GLOBALS['utils']->getResponse(0, "La clase se ha agregado exitosamente"));
 		} else {
 			echo json_encode($GLOBALS['utils']->getResponse(1, "Lo lamentamos, ha ocurrido un error."));
 		}
@@ -465,6 +482,9 @@
 				break;
 				case '/calcularCronograma/reactivarClase':
 					reactivarClase();
+				break;
+				case '/calcularCronograma/agregarClaseACronograma':
+					agregarClaseACronograma();
 				break;
 				default:
 					echo "podriamos agregar otra consulta mas";

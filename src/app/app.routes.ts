@@ -4,11 +4,13 @@ import { PendingConfirmationSchedulesComponent } from './components/pending-conf
 import { LessonsComponent } from './components/lessons/lessons.component';
 import { StudentsComponent } from './components/students/students.component';
 import { EditarAlumnoComponent } from './components/editar-alumno/editar-alumno.component';
- 
+import { AddClassSchedulesComponent } from './components/add-class-schedules/add-class-schedules.component';
+
 const app_routes: Routes = [
   { path: 'busqueda', component: FreeClassFinderComponent},
   { path: 'pendientes', component: PendingConfirmationSchedulesComponent},
   { path: 'pendientes/:idCronograma', component: PendingConfirmationSchedulesComponent},
+  { path: 'pendientes/agregarClase/:idCronograma', component: AddClassSchedulesComponent},
   { path: 'clases', component: LessonsComponent},
   { path: 'alumnos', component: StudentsComponent, data: {animation: 'StudentsPage'}},
   { path: 'alumnos/editar/:id', component: EditarAlumnoComponent, data: {animation: 'EditingStudentPage'}},

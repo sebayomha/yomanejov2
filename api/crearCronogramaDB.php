@@ -1539,6 +1539,61 @@
             }
         }
 
+        function agregarClaseACronograma($idCronograma, $idAlumno, $selectedOption, $fechaClase) {
+            //Agrego la nueva clase
+            $claseExtra = "true";
+            $status = "CONFIRMADO";
+            $nroClase = 20; //hardcodeado
+            $idDireccion;
+            $idDireccion_alt;
+            $sumada = "false";
+
+            //Obtengo las dos direcciones del alumno
+            $state = $this->conn->prepare('SELECT alumno.idDireccion, alumno.idDireccionAlt FROM alumno WHERE alumno.idAlumno = ?');
+            $state->bind_param('i', $idAlumno);
+            $state->execute(); 
+            $result = $state->get_result();
+            while($row = $result->fetch_assoc()) {
+                $idDireccion = $row['idDireccion'];
+                $idDireccion_alt = $row['idDireccionAlt'];
+            }
+
+            $state = $this->conn->prepare('INSERT INTO clase (alumno, auto, fecha, horaInicio, idZona, idDireccion, idCronograma, status, nroClase, claseExtra, sumada) VALUES (?,?,?,?,?,?,?,?,?,?,?)');
+            $direccionClase = $idDireccion;
+            if ($selectedOption->usandoDirAlt) {
+                $direccionClase = $idDireccion_alt;
+            }
+            $state->bind_param('iissiiisiss', $idAlumno, $selectedOption->idAuto, $fechaClase, $selectedOption->horaInicio, $selectedOption->idZona, $direccionClase, $idCronograma, $status, $nroClase, $claseExtra, $sumada);
+            $state->execute();
+
+            //Reordeno el nro de clase
+            $state = $this->conn->prepare('SELECT clase.idClase FROM clase WHERE clase.status = ? AND clase.idCronograma = ? ORDER BY clase.fecha');
+            $state->bind_param('si', $status, $idCronograma);
+            $state->execute(); 
+            $result = $state->get_result();
+
+            $nuevoTotalClases = $result->num_rows;
+            if ($nuevoTotalClases > 0) {
+                $i = 1;
+                while($row = $result->fetch_assoc()) {
+                    $state = $this->conn->prepare('UPDATE clase SET nroClase = ? WHERE clase.idClase = ?');
+                    $state->bind_param('ii', $i, $row['idClase']);
+                    $state->execute(); 
+                }
+            }
+
+            //update timestamp cronograma modificado
+            $datetime = date('m/d/Y h:i:s a', time());
+            $state = $this->conn->prepare('UPDATE cronograma SET timestampModificado = ? WHERE cronograma.idCronograma = ?');
+            $state->bind_param('si', $datetime, $idCronograma);
+            $state->execute(); 
+
+            //aumento el nuevo total de cantidad de clases totales del cronograma
+            $state = $this->conn->prepare('UPDATE alumnocronogramaclasestomadas SET cantClasesTotales = ? WHERE alumnocronogramaclasestomadas.idCronograma = ?');
+            $state->bind_param('ii', $nuevoTotalClases, $idCronograma);
+            $state->execute(); 
+        }
+
         function generarSearch($idAlumno) {
             $searchResult = (array) [
                 'lessons' => 1,
@@ -1848,6 +1903,31 @@
             ];
 
             return $objectReturned;
+        }
+
+        function obtenerFechasEnUsoParaCronograma($idAlumno) {
+            $status = "CONFIRMADO";
+            $sumada = "false";
+            $state = $this->conn->prepare('SELECT cronograma.idCronograma FROM cronograma WHERE cronograma.idAlumno = ? AND cronograma.status = ?');
+            $state->bind_param('is', $idAlumno, $status);
+            $state->execute();
+            $result = $state->get_result();
+            $idCronograma = null;
+            while($row = $result->fetch_assoc()) {
+                $idCronograma = $row['idCronograma'];
+            }
+
+            $state = $this->conn->prepare('SELECT clase.fecha FROM clase WHERE clase.alumno = ? AND clase.status = ? AND clase.sumada = ? AND clase.idCronograma = ? ORDER BY clase.fecha');
+            $state->bind_param('issi', $idAlumno, $status, $sumada, $idCronograma);
+            $state->execute();
+            $result = $state->get_result();
+
+            $fechasEnUso = [];
+            while($row = $result->fetch_assoc()) {
+                array_push($fechasEnUso, $row['fecha']);
+            }
+
+            return $fechasEnUso;
         }
 
         function cancelarClase($idClase, $motivoCancelacion) {

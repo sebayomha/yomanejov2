@@ -1,0 +1,91 @@
+<div id="addClassContainer" class="col-12 col-md-10 offset-md-1">
+  <div class="col-12 sticky borderBox" style="margin-bottom: 100px; text-align: right; z-index: 1;">
+    <label style="font-size: 14px;">Clases seleccionadas : {{cantSelectedClasses}} / {{number_of_classes}}</label>
+    <label *ngIf="cantSelectedClasses > number_of_classes" style="display: block; font-size: 14px; color: red;">No puede seleccionar más clases del límite establecido</label>
+  </div>
+
+  <div style="text-align: center; margin-bottom: 20px;">
+    <span matTooltip="Volver" style="float:left; font-size: 22px; cursor: pointer;" (click)="volver()"><i
+            class="fas fa-arrow-left"></i></span>
+    <label style="font-weight: 500; font-size: 17px;">Agregando clase al cronograma número
+        {{idCronograma}}</label>
+  </div>
+
+  <mat-accordion class="example-headers-align">
+    <mat-expansion-panel #panel *ngFor="let option of this.data; let i = index;" [expanded]="step === i" (opened)="setStep(i)" hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <i class="far fa-check-circle" *ngIf="classChoser.selectedOptions.selected[0]" style="position: relative; top: 3px; margin-right: 8px; color: #43c89d; font-size: 16px;"></i>
+          {{option.dia}} {{option.fecha | date: 'dd/MM/yyyy'}}
+        </mat-panel-title>
+        <mat-panel-description>
+          <div>
+            <a *ngIf="!classChoser.selectedOptions.selected[0]">Aún no seleccionó una opción.</a>
+            <a *ngIf="classChoser.selectedOptions.selected[0]">El horario seleccionado para este día es: {{classChoser.selectedOptions.selected[0].value.horaInicio}} hs</a>
+          </div>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <mat-selection-list #classChoser (selectionChange)="totalClassesSelected(i, $event, option.fecha);">
+          <mat-list-option checkboxPosition="before" [value]="horario" style="margin: 0; height: auto !important; border-top: 1px solid rgba(0, 0, 0, 0.12); padding: 3px !important;" class="classChoser container NoPadding col-12" *ngFor="let horario of option.horarios | slice:0:option.showMoreHours let h = index" @fadeIn [selected]="horario.selected">
+            <!-- <bar-rating title="{{horario.ratingGeneral}}" [readOnly]="true" [(rate)]="horario.ratingGeneral" [max]="10"></bar-rating> -->
+            <div class="row NoPadding">
+              <div class="col-9 col-sm-10 col-lg-11 NoPadding infoContainer">
+                <div id="horaInicioContainer" class="col-12 col-sm-12 col-md-6 col-lg-3 NoPadding">
+                  <span>Inicio de clase: {{horario.horaInicio}} hs</span>
+                </div>
+                <div id="puntajeContainer" *ngIf="!horario.idClase" class="col-12 col-sm-12 col-md-6 col-lg-3 NoPadding">
+                  <div id="iconContainer" style="margin-right: 15px; display: inline; position: relative; top: 5px;">
+                    <span *ngIf="horario.tieneEldiaLibre" class="dot grey"></span>
+                    <span *ngIf="!horario.tieneEldiaLibre && horario.ratingGeneral >= 7" class="dot green"></span>
+                    <span *ngIf="!horario.tieneEldiaLibre && horario.ratingGeneral >= 4 && horario.ratingGeneral < 7" class="dot yellow"></span>
+                    <span *ngIf="!horario.tieneEldiaLibre && horario.ratingGeneral < 4" class="dot red"></span>
+                  </div>
+                  <span style="font-size: 14px; font-style: italic;" class="text-muted">Puntaje: {{horario.tieneEldiaLibre ? 'No aplica' : horario.ratingGeneral}}</span>
+                </div>
+                <div *ngIf="!horario.idClase" id="infoMessageContainer" class="col-12 col-sm-12 col-lg-6 NoPadding">
+                  <span *ngIf="!horario.esDeLaZona" style="font-size: 14px; font-weight: 500;" class="text-muted mobile-text-12">Auto fuera de la zona del alumno.</span>
+                </div>
+                <div *ngIf="horario.idClase" id="infoMessageContainer" class="col-12 col-sm-12 col-lg-6 NoPadding">
+                  <span style="font-size: 14px; font-weight: 500;" class="text-muted mobile-text-12">Clase activa en este cronograma.</span>
+                </div>
+              </div>
+              <div class="col-3 col-sm-2 col-lg-1 NoPadding" style="line-height: 35px; text-align: right;">
+                <schedule-tooltip [id_car]="horario.idAuto" [info_schedule_car]="horario.cronogramaActual"></schedule-tooltip>
+              </div>
+            </div>
+          </mat-list-option>
+          <div class="emptyMessageList" *ngIf="option.horarios?.length === 0">
+            <div>
+              No se han encontrado resultados para los criterios de búsqueda
+            </div>
+          </div>
+      </mat-selection-list>
+
+      <mat-action-row>
+        <div style="text-align: center; width: 80%;">
+          <div style="cursor: pointer; margin-top: 5px;" [ngClass]="{'margin-left-14': i != '0', 'margin-left-0': i == '0' }" (click)="showMore(option)" *ngIf="option.showMoreHours == 4 && option.horarios.length > 4">
+            <i style="color: rgb(67, 200, 157);" class="material-icons">
+              keyboard_arrow_down
+              </i>
+            <button class="showMoreBtn">VER MÁS</button>
+          </div>
+          <div style="cursor: pointer; margin-top: 5px;" [ngClass]="{'margin-left-14': i != '0', 'margin-left-0': i == '0' }" (click)="showLess(option)" *ngIf="option.showMoreHours == 20">
+            <i style="color: rgb(67, 200, 157);" class="material-icons">
+              keyboard_arrow_up
+              </i>
+            <button class="showMoreBtn">VER MENOS</button>
+          </div>
+        </div>
+        <div>
+          <button *ngIf="i != 0" mat-button color="warn" (click)="prevStep()">ANTERIOR</button>
+          <button *ngIf="i != (this.data.length - 1)" mat-button color="primary" (click)="nextStep()">SIGUIENTE</button>
+        </div>
+      </mat-action-row>
+    </mat-expansion-panel>
+  </mat-accordion>
+  <div class="col-12" style="margin-top: 20px;"><button style="margin-bottom:45px;float: right;" mat-button [disabled]="cantSelectedClasses != number_of_classes" (click)="saveOptions()">FINALIZAR</button></div>
+</div>
+<br>
+<br>
+<custom-modal #customModal (close)="onCustomModalClose($event);" (confirmation)="confirmSchedule($event);" [idCronogramaGuardado]="idCronograma" [data]="dataToConfirm" [component]="'addClassSchedule'" [successBanner]="showSuccessBanner"></custom-modal>

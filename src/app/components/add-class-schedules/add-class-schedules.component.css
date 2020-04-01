@@ -1,0 +1,112 @@
+.dot {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  
+  .grey {
+    background-color: #bbb;
+  }
+  
+  .green {
+    background-color: green;
+  }
+  
+  .yellow {
+    background-color: #ffc107;
+  }
+  
+  .red {
+    background-color: #dc3545;
+  }
+  
+  .NoPadding {
+    padding: 0px !important;
+  }
+  
+  .classChoser .mat-list-item-content{
+    padding: 3px !important;
+  }
+  
+  ::ng-deep .classChoser .mat-list-item-content {
+    padding: 5px 10px !important;
+  }
+  
+  ::ng-deep .mat-expansion-panel-body {
+    padding: 0 10px;
+  }
+  
+  ::ng-deep mat-pseudo-checkbox.mat-pseudo-checkbox.mat-pseudo-checkbox-checked {
+    background-color:#43c89d !important;
+  }
+  
+  ::ng-deep bar-rating > div {
+    display: inline !important;
+  }
+  
+  ::ng-deep .br.br-default {
+    display: inline !important;
+  }
+  
+  ::ng-deep .br-unit.br-selected {
+    margin-right: 1px !important;
+  }
+  
+  ::ng-deep .br-unit.br-selected::after {
+    color: #43c89d !important;
+  }
+  
+  .iconContainer span{
+    vertical-align: middle;
+  }
+  
+  .showMoreBtn {
+    border: 0;
+    background: inherit;
+    color: rgb(67, 200, 157);
+    position: relative;
+    bottom: 7px;
+    font-weight: 500;
+  }
+  
+  .margin-left-14 {
+    margin-left: 14%;
+  }
+  
+  .margin-left-0 {
+    margin-left: 0%;
+  }
+  
+  .emptyMessageList {
+    text-align: center;
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    margin-bottom: 20px;
+    padding: 10px;
+    color: #d40808;
+  }
+  
+  div.sticky {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 75px;
+  }
+  
+  .borderBox {
+    padding: 10px;
+    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+    background-color: white;
+    border-radius: .25rem;
+  }
+  
+  @media (min-width: 767px) {
+    .infoContainer {
+      line-height: 37px;
+    }
+  
+    .infoContainer div{
+      display: inline-block;
+    }
+  
+  }
+  

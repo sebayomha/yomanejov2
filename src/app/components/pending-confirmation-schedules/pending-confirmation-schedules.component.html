@@ -148,8 +148,10 @@
               <tr mat-row *matRowDef="let row; columns: displayedColumnsStatus;"></tr>
             </table>
           </mat-card-content>
-    
+
           <mat-card-actions align="end">
+            <button mat-button class="editButton" (click)="addClass(cronograma);">AGREGAR CLASE</button>
+            <div fxFlex></div>
             <button mat-button class="editButton" (click)="onEditSchedule(cronograma);">EDITAR</button>
             <div fxFlex></div>
             <button mat-button class="deleteButton" (click)="onCancelActiveSchedule(cronograma.idCronograma, cronograma.nombreAlumno, cronograma.alumno);">ELIMINAR</button>

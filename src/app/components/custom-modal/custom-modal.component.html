@@ -16,6 +16,9 @@
           <span *ngIf="component == 'eliminarAlumno'">
             Dar de baja alumno
           </span>
+          <span *ngIf="component == 'addClassSchedule'">
+            Agregar nueva clase
+          </span>
         </h5>
         <h5 class="modal-title" *ngIf="successBanner" style="margin: auto; font-size: 90px; color: white;"><i class="fas fa-check-circle"></i></h5>
         <button *ngIf="!successBanner" type="button" class="close closeCross" (click)="onClose();" aria-label="Close">
@@ -32,6 +35,9 @@
             <p>{{i+1}}°- Dia: {{clase.fecha | date: 'dd/MM/yyyy'}} - Hora: {{clase.horario}} hs</p>
           </div>
         </div>
+      </div>
+      <div class="modal-body" style="max-height: 330px; overflow-y: auto;" *ngIf="component == 'addClassSchedule' && data.length && !successBanner">
+        <span>¿Está seguro que desea agregar una nueva clase?</span>
       </div>
       <div class="modal-body" [ngClass]="{'height-290': this.data[1].selected_options.length > 10}" style="max-height: 500px; overflow-y: auto;" *ngIf="component == 'availableSchedules' && data.length && successBanner && operation != 'EditarCronogramaActivo'">
         <div>
@@ -210,7 +216,7 @@
           <span *ngIf="component == 'availableSchedules'">
             Confirmar cronograma
           </span>
-          <span *ngIf="component == 'editarAlumno' || component == 'eliminarAlumno'">Confirmar</span>
+          <span *ngIf="component == 'editarAlumno' || component == 'eliminarAlumno' || component == 'addClassSchedule'">Confirmar</span>
         </button>
         <button *ngIf="successBanner" type="button" class="btn btn-primary" (click)="sendWsp();" style="margin: auto; border-radius: 20px; background-color: #43c89d; border-color: #43c89d;">Enviar Whatsapp <i class="fab fa-whatsapp"></i></button>
       </div>

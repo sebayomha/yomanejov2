@@ -7,6 +7,7 @@ import { SnackbarComponent } from '../snackbar/snackbar/snackbar.component';
 import { ActivatedRoute,Router } from '@angular/router';
 import { AlumnosService } from 'src/app/services/alumnos/alumnos.service';
 import { trigger, transition, animate, style } from '@angular/animations';
+import { SharedService } from 'src/app/services/sharedService/shared-service';
 
 @Component({
   selector: 'app-pending-confirmation-schedules',
@@ -24,7 +25,7 @@ import { trigger, transition, animate, style } from '@angular/animations';
 })
 export class PendingConfirmationSchedulesComponent implements OnInit {
 
-  constructor(private router: Router, private alumnoService: AlumnosService, private route: ActivatedRoute, private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private _snackBar: MatSnackBar) { }
+  constructor(private sharedService: SharedService ,private router: Router, private alumnoService: AlumnosService, private route: ActivatedRoute, private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private _snackBar: MatSnackBar) { }
 
   cronogramas: Array<any> = [];
   cronogramasConfirmados: Array<any> = [];
@@ -317,5 +318,11 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
   closeEditCrono(flag){
     this.show_edit = flag;
     this.ngOnInit();
+  }
+
+  //Agregar nueva clase a cronograma
+  addClass(cronograma) {
+    this.sharedService.setData(cronograma.alumno);
+    this.router.navigate(['pendientes/agregarClase/', cronograma.idCronograma]);
   }
 }
