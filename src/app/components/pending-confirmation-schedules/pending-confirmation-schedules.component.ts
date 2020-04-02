@@ -321,6 +321,41 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
     }
   }
 
+  removeAllNombres() {
+    this.selectedNombresChips.forEach( (cronograma) => {
+      let index = this.filteredArrayCronogramas.findIndex( (c) => {
+        if (c.idCronograma == cronograma.idCronograma) 
+          return true;
+        return false;
+      });
+      this.filteredArrayCronogramas.splice(index, 1);
+    })
+
+    this.selectedNombresChips = [];
+    
+    this.sinRepetidosCronogramas = this.filteredArrayCronogramas.filter((thing, index, self) =>
+      index === self.findIndex((t) => (
+        t.idCronograma === thing.idCronograma
+    )))
+  }
+
+  removeAllIds() {
+    this.selectedIdsCronogramasChips.forEach( (cronograma) => {
+      let index = this.filteredArrayCronogramas.findIndex( (c) => {
+        if (c.idCronograma == cronograma.idCronograma) 
+          return true;
+        return false;
+      });
+      this.filteredArrayCronogramas.splice(index, 1);
+    })
+    
+    this.selectedIdsCronogramasChips = [];
+    this.sinRepetidosCronogramas = this.filteredArrayCronogramas.filter((thing, index, self) =>
+      index === self.findIndex((t) => (
+        t.idCronograma === thing.idCronograma
+    )))
+  }
+
   selectedNombre(event) {
     this.selectedNombresChips.push(event.option.viewValue);
     this.nameInput.nativeElement.value = '';
