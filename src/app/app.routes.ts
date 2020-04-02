@@ -8,9 +8,9 @@ import { AddClassSchedulesComponent } from './components/add-class-schedules/add
 
 const app_routes: Routes = [
   { path: 'busqueda', component: FreeClassFinderComponent},
-  { path: 'pendientes', component: PendingConfirmationSchedulesComponent},
+  { path: 'pendientes', component: PendingConfirmationSchedulesComponent,  data: {animation: 'StudentsPage'}},
   { path: 'pendientes/:idCronograma', component: PendingConfirmationSchedulesComponent},
-  { path: 'pendientes/agregarClase/:idCronograma', component: AddClassSchedulesComponent},
+  { path: 'pendientes/agregarClase/:idCronograma', component: AddClassSchedulesComponent, data: {animation: 'EditingStudentPage'}},
   { path: 'clases', component: LessonsComponent},
   { path: 'alumnos', component: StudentsComponent, data: {animation: 'StudentsPage'}},
   { path: 'alumnos/editar/:id', component: EditarAlumnoComponent, data: {animation: 'EditingStudentPage'}},

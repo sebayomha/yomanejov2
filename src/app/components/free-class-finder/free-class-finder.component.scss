@@ -81,17 +81,7 @@
   ::ng-deep .mat-radio-button.mat-accent .mat-radio-inner-circle {
     background-color: #43c89d !important;
   }
-
-  ::ng-deep .mat-form-field-ripple {
-    /*change color of underline when focused*/
-    background-color: #43c89d !important;;
-   }
-
-   ::ng-deep .mat-focused .mat-form-field-label {
-    /*change color of label*/
-    color: #43c89d !important;
-   }
-
+  
   ::ng-deep .mat-form-field.mat-form-field-invalid .mat-form-field-ripple {
     background-color: #f44336 !important;
   }

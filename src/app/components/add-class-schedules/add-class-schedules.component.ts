@@ -42,6 +42,7 @@ export class AddClassSchedulesComponent implements OnInit {
   dataToConfirm = [];
   selectedOption;
   fechaClase;
+  showPage: boolean = false;
 
   constructor(private sharedService: SharedService ,private cronogramaService: CronogramaService, private _snackBar: MatSnackBar, private route: ActivatedRoute, private router: Router) { }
 
@@ -54,6 +55,7 @@ export class AddClassSchedulesComponent implements OnInit {
     this.idAlumno = this.sharedService.getData();
     this.cronogramaService.obtenerClasesDisponiblesParaAlumno(this.idAlumno).subscribe( (response: Response) => {
       if (response.code == 0) {
+        this.showPage = true;
         this.data =  Object.values(response.data);
       } else {
         this._snackBar.openFromComponent(SnackbarComponent, {
