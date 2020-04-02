@@ -52,9 +52,11 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
   idCronograma;
   detailedCronograma;
   sub;
+  allCronogramas;
 
   ngOnInit() {
     this.cronogramaService.obtenerCronogramasPendientesDeConfirmar().subscribe( (response: Response) => {
+      this.allCronogramas = response.data;
       this.cronogramas = response.data.cronogramasPendientes;
       this.cronogramasConfirmados = response.data.cronogramasConfirmados;
       this.cronogramasFinalizados = response.data.cronogramasFinalizados;
@@ -249,6 +251,7 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
   confirmarCronograma(idCronograma, idAlumno, direccionFisicaInformation, documento, clases) {
     this.cronogramaService.confirmarCronogramaPendiente(idCronograma, idAlumno, direccionFisicaInformation, documento, clases).subscribe( (response: Response) => { 
       if (response.code == 2) {
+        this.durationInSeconds = 5;
         response.data = "Para poder confirmar el cronograma debe modificar las siguientes clases ya que alguno de sus datos fue confirmado previamente: " + response.data.join(', ');
       }
       this.showSuccessBanner = false;
@@ -257,6 +260,7 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
         duration: this.durationInSeconds * 1100,
         data: response
       });
+      this.show_edit = false;
       this.ngOnInit();
       window.scrollTo(0, 0);
     })
