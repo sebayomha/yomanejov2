@@ -30,6 +30,8 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatStepperModule} from '@angular/material/stepper';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatDialogModule} from '@angular/material';
 
 /* Components */
 import { AppComponent } from './app.component';
@@ -113,8 +115,10 @@ export class MyHammerConfig extends HammerGestureConfig {
     MatDatepickerModule,
     MatNativeDateModule,
     MatCheckboxModule,
+    MatDialogModule,
     MatSelectModule,
     MatStepperModule,
+    MatChipsModule,
     MatButtonModule,
     MatExpansionModule,
     MatIconModule,
