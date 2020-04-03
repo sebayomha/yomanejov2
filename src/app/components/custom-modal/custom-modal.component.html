@@ -19,6 +19,9 @@
           <span *ngIf="component == 'addClassSchedule'">
             Agregar nueva clase
           </span>
+          <span *ngIf="component == 'lessons'">
+            Ingresar motivo de inasistencia
+          </span>
         </h5>
         <h5 class="modal-title" *ngIf="successBanner" style="margin: auto; font-size: 90px; color: white;"><i class="fas fa-check-circle"></i></h5>
         <button *ngIf="!successBanner" type="button" class="close closeCross" (click)="onClose();" aria-label="Close">
@@ -208,6 +211,33 @@
           </div>
       </div>
       </div>
+      <div class="modal-body" style="height: 185px;" *ngIf="component == 'lessons' && data">
+
+        <span>Añadir el motivo por el cual, la clase </span>
+        <span style="font-weight: 500; color: #43c89d;">{{data.idClase}}</span>
+        <span> la cual iba a realizarse el día </span>
+        <span style="font-weight: 500; color: #43c89d;">{{data.fecha | date: 'dd/MM/yyyy'}}</span>
+        <span>  a las </span>
+        <span style="font-weight: 500; color: #43c89d;">{{data.horaInicio}}</span>
+        <span>  hs, no fue realizada.</span>
+        
+        <div class="col-12">
+          <form #bajaClaseForm="ngForm">
+            <mat-form-field style="width: 100%; margin-top: 10px;">
+              <mat-label>Motivo</mat-label>
+              <textarea autofocus cdkTextareaAutosize
+              cdkAutosizeMinRows="1"
+              cdkAutosizeMaxRows="5" matInput #motivoBaja="ngModel" required name="motivoDeBaja" [(ngModel)]="motivoDeBaja"></textarea>
+            </mat-form-field>
+
+            <mat-error *ngIf="motivoBaja.errors?.required && motivoBaja.touched"
+            style="color: #f44336; font-size: 12px; position: relative; bottom: 10px;">
+              Debe ingresar un motivo para continuar
+            </mat-error>
+          </form>
+        </div>
+
+      </div>
       <div class="modal-footer" style="padding: 25px;">
         <button [disabled]="checkDisabledConditions()" *ngIf="!successBanner" type="button" class="btn btn-primary confirmCustomModal" [ngClass]="classConfirmBtn()" (click)="onConfirm();">
           <span *ngIf="component == 'pendingConfirmationSchedules'">
@@ -216,7 +246,7 @@
           <span *ngIf="component == 'availableSchedules'">
             Confirmar cronograma
           </span>
-          <span *ngIf="component == 'editarAlumno' || component == 'eliminarAlumno' || component == 'addClassSchedule'">Confirmar</span>
+          <span *ngIf="component == 'lessons' || component == 'editarAlumno' || component == 'eliminarAlumno' || component == 'addClassSchedule'">Confirmar</span>
         </button>
         <button *ngIf="successBanner" type="button" class="btn btn-primary" (click)="sendWsp();" style="margin: auto; border-radius: 20px; background-color: #43c89d; border-color: #43c89d;">Enviar Whatsapp <i class="fab fa-whatsapp"></i></button>
       </div>

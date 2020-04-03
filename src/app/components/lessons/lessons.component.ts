@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CronogramaService } from 'src/app/services/cronograma/cronograma.service';
 import { Response } from '../../models/response';
 import { trigger,animate,transition,style } from '@angular/animations';
+import { SnackbarComponent } from '../snackbar/snackbar/snackbar.component';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'lessons',
@@ -23,12 +25,17 @@ import { trigger,animate,transition,style } from '@angular/animations';
 
 export class  LessonsComponent {
 
-  constructor(private breakpointObserver: BreakpointObserver, private cronogramaService: CronogramaService) { }
+  constructor(private breakpointObserver: BreakpointObserver, private cronogramaService: CronogramaService, private _snackBar: MatSnackBar) { }
+
+  @ViewChild('customModal') customModal;
 
   displayedColumns: string[] = ['No', 'numero', 'hora', 'direccion', 'alumno', 'operacion'];
   select_day : Date = new Date();
   minDate = new Date();
   autos;
+  dataToConfirm: any;
+  durationInSeconds = 3;
+  
 
   ngOnInit() {
     console.log(this.formatDate());
@@ -136,9 +143,46 @@ export class  LessonsComponent {
     })
   }
 
-  editarClase(idAlumno){
-    this.cronogramaService.obtenerClasesDisponiblesParaAlumno(idAlumno).subscribe( (response: Response) => {
-      console.log('RESPUESTA ',response);
-    })
+  // editarClase(idAlumno){
+  //   this.cronogramaService.obtenerClasesDisponiblesParaAlumno(idAlumno).subscribe( (response: Response) => {
+  //     console.log('RESPUESTA ',response);
+  //   })
+  // }
+
+  //Funcion que agrega el motivo por el cual la clase no se produjo.
+  cancelarClase(clase){
+
+    this.dataToConfirm = {
+      'idClase': clase.idClase,
+      'fecha': clase.fecha,
+      'horaInicio': clase.horaInicio
+    };
+
+    this.customModal.open();
+
   }
+
+  confirmUnsubscribe(data){
+
+    this.cronogramaService.cancelarClase(data.idClase, data.motivoDeBaja).subscribe( (response: Response) => {
+
+      this.customModal.onClose();
+      this.cronogramaService.obtenerClasesPorFecha(this.formatDateWithDate(this.select_day)).subscribe( (response: Response) => {
+        this.autos = Object.entries(response.data);
+        this.obtenerClasesPorRealizarse(this.autos);
+        this.obtenerClasesRealizadas(this.autos);
+      })
+      this._snackBar.openFromComponent(SnackbarComponent, {
+        duration: this.durationInSeconds * 1100,
+        data: response
+      });
+    })
+
+    this.customModal.onClose();
+  }
+
+  onCustomModalClose() {
+    this.customModal.onClose();
+  }
+
 }

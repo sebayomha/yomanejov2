@@ -127,3 +127,21 @@ mat-tab-body > div {
     padding-left: 10px;
     padding-right: 10px;
 }
+
+#imageContainer {
+    text-align: center;
+    background: rgba(0, 0, 0, 0.08);
+    border-radius: 50%;
+    height: 300px;
+    width: 300px;
+    margin: 0 auto;
+    vertical-align: middle;
+    line-height: 300px;
+}
+
+#emptyMessageContainer {
+    text-align: center;
+    margin-top: 80px;
+    color: rgba(0, 0, 0, 0.37);
+    font-weight: bold;
+}

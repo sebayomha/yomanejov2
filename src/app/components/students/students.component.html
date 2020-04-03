@@ -233,12 +233,12 @@
       
       <mat-tab label="({{alumnosActivosLength}}) Activos">
     
-        <mat-form-field class="buscarInput" style="width: 100%; margin-top: 20px;">
+        <mat-form-field class="buscarInput" style="width: 100%; margin-top: 20px;" *ngIf="alumnosActivosLength > 0">
           <input (keyup)="applyFilter($event, 'AlumnosActivos')" matInput placeholder="Buscar alumno.." name="busquedaAlumno"
               [(ngModel)]="busquedaAlumnoActivo" #busquedaAlumno="ngModel">
         </mat-form-field>
     
-        <div class="tablesContainer">
+        <div class="tablesContainer" *ngIf="alumnosActivosLength > 0">
           <table mat-table id="alumnosActivosTable" [dataSource]="alumnosActivos" class="mat-elevation-z8">
                   
             <!-- Position Column -->
@@ -305,16 +305,28 @@
             </ng-container>
           </table>
         </div>
-      <div class="emptyMessageTable" *ngIf="alumnosActivos && alumnosActivos.length === 0">No se encontraron alumnos</div>
+ 
+      <div class="container" style="margin-top: 40px; height: 100%;" *ngIf="alumnosActivosLength == 0">
+        <div class="row" style="height: 100%;">
+          <div id="resultsContainer" style="height: 40%; width: 100%;">
+            <div id="imageContainer">
+              <img src="assets/img/noConfirmUsers.png" alt="No hay resultados" height="250" width="250">
+            </div>
+            <div id="emptyMessageContainer">
+              <span>No se encontraron alumnos activos</span>
+            </div>
+          </div>
+        </div>
+      </div>
       </mat-tab>
     
       <mat-tab label="({{alumnosPendientesLength}}) Pendientes">
         <mat-form-field style="width: 100%; margin-top: 20px; padding-left: 15px;
-        padding-right: 15px;">
+        padding-right: 15px;" *ngIf="alumnosPendientesLength > 0">
           <input (keyup)="applyFilter($event, 'AlumnosPendientes')" matInput placeholder="Buscar alumno.." name="busquedaAlumno"
               [(ngModel)]="busquedaAlumnoInctivos" #busquedaAlumno="ngModel">
         </mat-form-field>
-        <div class="tablesContainer">
+        <div class="tablesContainer" *ngIf="alumnosPendientesLength > 0">
           <table mat-table id="alumnosPendientesTable" [dataSource]="alumnosPendientes" class="mat-elevation-z8">     
             <!-- Position Column -->
             <ng-container matColumnDef="No">
@@ -372,18 +384,30 @@
             </ng-container>
           </table>
         </div>
-        <div class="emptyMessageTable" *ngIf="alumnosPendientes && alumnosPendientes.length === 0">No se encontraron alumnos</div>
+        
+        <div class="container" style="margin-top: 40px; height: 100%;" *ngIf="alumnosPendientesLength == 0">
+          <div class="row" style="height: 100%;">
+            <div id="resultsContainer" style="height: 40%; width: 100%;">
+              <div id="imageContainer">
+                <img src="assets/img/noPendinglUsers.png" alt="No hay resultados" height="250" width="250">
+              </div>
+              <div id="emptyMessageContainer">
+                <span>No se encontraron alumnos pendientes</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </mat-tab>
 
       <mat-tab label="({{alumnosInactivosLength}}) Históricos">
       
         <mat-form-field style="width: 100%; margin-top: 20px; padding-left: 15px;
-        padding-right: 15px;">
+        padding-right: 15px;" *ngIf="alumnosInactivosLength > 0">
           <input (keyup)="applyFilter($event, 'AlumnosInactivos')" matInput placeholder="Buscar alumno.." name="busquedaAlumno"
               [(ngModel)]="busquedaAlumnoInctivos" #busquedaAlumno="ngModel">
         </mat-form-field>
       
-        <div class="tablesContainer">
+        <div class="tablesContainer" *ngIf="alumnosInactivosLength > 0">
           <table mat-table id="alumnosInactivosTable" [dataSource]="alumnosInactivos" class="mat-elevation-z8">     
             <!-- Position Column -->
             <ng-container matColumnDef="No">
@@ -441,7 +465,19 @@
             </ng-container>
           </table>
         </div>
-        <div class="emptyMessageTable" *ngIf="alumnosInactivos && alumnosInactivos.length === 0">No se encontraron alumnos</div>
+
+        <div class="container" style="margin-top: 40px; height: 100%;" *ngIf="alumnosInactivosLength == 0">
+          <div class="row" style="height: 100%;">
+            <div id="resultsContainer" style="height: 40%; width: 100%;">
+              <div id="imageContainer">
+                <img src="assets/img/noHistoricalUsers.png" alt="No hay resultados" height="250" width="250">
+              </div>
+              <div id="emptyMessageContainer">
+                <span>No se encontraron alumnos históricos</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </mat-tab>
 
     </mat-tab-group>
