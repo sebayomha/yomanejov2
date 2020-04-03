@@ -8,6 +8,7 @@ import { ActivatedRoute,Router } from '@angular/router';
 import { AlumnosService } from 'src/app/services/alumnos/alumnos.service';
 import { trigger, transition, animate, style } from '@angular/animations';
 import { SharedService } from 'src/app/services/sharedService/shared-service';
+import { MatDialog, MatDialogRef, MatDialogConfig, MAT_DIALOG_DATA} from '@angular/material';
 
 @Component({
   selector: 'app-pending-confirmation-schedules',
@@ -25,7 +26,7 @@ import { SharedService } from 'src/app/services/sharedService/shared-service';
 })
 export class PendingConfirmationSchedulesComponent implements OnInit {
 
-  constructor(private sharedService: SharedService ,private router: Router, private alumnoService: AlumnosService, private route: ActivatedRoute, private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private _snackBar: MatSnackBar) { }
+  constructor(private dialog: MatDialog, private sharedService: SharedService ,private router: Router, private alumnoService: AlumnosService, private route: ActivatedRoute, private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private _snackBar: MatSnackBar) { }
 
   cronogramas: Array<any> = [];
   cronogramasConfirmados: Array<any> = [];
@@ -45,6 +46,11 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
     documento: ''
   };
 
+  @ViewChild('nameInput') nameInput;
+  @ViewChild('nameForm') nameForm;
+  @ViewChild('idForm') idForm;
+  @ViewChild('idInput') idInput;
+  @ViewChild('filterDialog') filterDialog;
   @Output() finish = new EventEmitter<any>();
   @ViewChild('customModal') customModal;
 
@@ -52,9 +58,28 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
   idCronograma;
   detailedCronograma;
   sub;
+  allCronogramas;
+
+  filterType: Array<string> = [];
+  filterShowType: string = null;
+  currentArrayToFilter = null;
+  nombres;
+  idsCronogramas;
+  selectedNombreFilter;
+  selectedIdCronogramaFilter;
+  selectedNombresChips: Array<any> = [];
+  selectedIdsCronogramasChips: Array<any> = [];
+  filteredArrayCronogramas: Array<any> = [];
+  filterConfirmation: boolean = false;
+
+
+  filteredArrayByNombre: Array<any> = [];
+  filteredArrayByIdCronograma: Array<any> = [];
+  sinRepetidosCronogramas: Array<any> = [];
 
   ngOnInit() {
     this.cronogramaService.obtenerCronogramasPendientesDeConfirmar().subscribe( (response: Response) => {
+      this.allCronogramas = response.data;
       this.cronogramas = response.data.cronogramasPendientes;
       this.cronogramasConfirmados = response.data.cronogramasConfirmados;
       this.cronogramasFinalizados = response.data.cronogramasFinalizados;
@@ -149,6 +174,218 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
     let diffHrs = Math.floor((diffMs % 86400000) / 3600000); // hours
     let diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
     return diffDays + " días " + diffHrs + " horas ";
+  }
+
+  openDialog(filterType: string, arrayToFilter: Array<any>): void {
+    const dialogRef = this.dialog.open(this.filterDialog, {
+      backdropClass: 'backdropBackground',
+      position: { top: '210px', left: '200px' },
+      width: '550px'
+    });
+    this.filterShowType = filterType;
+    this.currentArrayToFilter = arrayToFilter;
+    this.filterType.push(filterType);
+
+    if(this.filterShowType == 'nombre') {
+      this.nombres = arrayToFilter.map( (cronograma) => {
+        return cronograma.nombreAlumno;
+      });
+    }
+
+    if(this.filterShowType == 'ID') {
+      this.idsCronogramas = arrayToFilter.map( (cronograma) => {
+        return cronograma.idCronograma;
+      });
+    }
+
+    dialogRef.afterClosed().subscribe(result => {
+    });
+  }
+
+  filterCronogramaByProperty(property, arrayToFilter, valueToSearch) {
+    if (property == 'nombre') {
+      let filteredCronogramas = arrayToFilter.filter( (cronograma) => {
+        if (valueToSearch ==cronograma.nombreAlumno.toLowerCase()) {
+          return true;
+        }
+        return false;
+      })
+      this.filteredArrayCronogramas = [...this.filteredArrayCronogramas, ...filteredCronogramas];
+    }
+
+    if (property == 'ID') {
+      let filteredCronogramas = arrayToFilter.filter( (cronograma) => {
+        if (valueToSearch == cronograma.idCronograma.toString()) {
+          return true;
+        }
+        return false;
+      })
+      this.filteredArrayCronogramas = [...this.filteredArrayCronogramas, ...filteredCronogramas];
+    }
+
+    //Elimino los duplicados solo para mostrar en pantalla
+    this.sinRepetidosCronogramas = this.filteredArrayCronogramas.filter((thing, index, self) =>
+      index === self.findIndex((t) => (
+        t.idCronograma === thing.idCronograma
+      ))
+    )
+    //reordeno
+    this.sinRepetidosCronogramas.sort( (a, b) => {
+      if (a.idCronograma > b.idCronograma) {
+        return -1
+      }
+      return 1;
+    })
+  }
+
+  nombreAgregado(nombre) {
+    let found = this.filteredArrayCronogramas.find( (cronograma) => {
+      if (cronograma.nombreAlumno == nombre) {
+        return true;
+      }
+      return false;
+    })
+
+    if (found) {
+      return true;
+    }
+    return false;
+  }
+
+  idAgregado(id) {
+    let found = this.filteredArrayCronogramas.find( (cronograma) => {
+      if (cronograma.idCronograma == id) {
+        return true;
+      }
+      return false;
+    })
+
+    if (found) {
+      return true;
+    }
+    return false;
+  }
+
+  removeNombre(nombre: string) {
+    const index = this.selectedNombresChips.map( (v) => {return v.toLowerCase()}).indexOf(nombre.toLowerCase());
+
+    if (index >= 0) {
+      this.selectedNombresChips.splice(index, 1);
+      const indexCronograma = this.filteredArrayCronogramas.findIndex( (cronograma) => {
+        if (cronograma.nombreAlumno.toLowerCase() == nombre.toLowerCase()) 
+          return true;
+        return false;
+      });
+
+      this.filteredArrayCronogramas.splice(indexCronograma, 1);
+      this.sinRepetidosCronogramas = this.filteredArrayCronogramas.filter((thing, index, self) =>
+        index === self.findIndex((t) => (
+          t.idCronograma === thing.idCronograma
+        ))
+      )
+
+      //reordeno
+      this.sinRepetidosCronogramas.sort( (a, b) => {
+        if (a.idCronograma > b.idCronograma) {
+          return -1
+        }
+        return 1;
+      })
+    }
+  }
+
+  removeId(id) {
+    const index = this.selectedIdsCronogramasChips.indexOf(id);
+
+    if (index >= 0) {
+      this.selectedIdsCronogramasChips.splice(index, 1);
+      const indexCronograma = this.filteredArrayCronogramas.findIndex( (cronograma) => {
+        if (cronograma.idCronograma == id) 
+          return true;
+        return false;
+      });
+      this.filteredArrayCronogramas.splice(indexCronograma, 1);
+      this.sinRepetidosCronogramas = this.filteredArrayCronogramas.filter((thing, index, self) =>
+        index === self.findIndex((t) => (
+          t.idCronograma === thing.idCronograma
+        ))
+      )
+
+      //reordeno
+      this.sinRepetidosCronogramas.sort( (a, b) => {
+        if (a.idCronograma > b.idCronograma) {
+          return -1
+        }
+        return 1;
+      })
+    }
+  }
+
+  removeAllNombres() {
+    this.selectedNombresChips.forEach( (cronograma) => {
+      let index = this.filteredArrayCronogramas.findIndex( (c) => {
+        if (c.idCronograma == cronograma.idCronograma) 
+          return true;
+        return false;
+      });
+      this.filteredArrayCronogramas.splice(index, 1);
+    })
+
+    this.selectedNombresChips = [];
+    
+    this.sinRepetidosCronogramas = this.filteredArrayCronogramas.filter((thing, index, self) =>
+      index === self.findIndex((t) => (
+        t.idCronograma === thing.idCronograma
+    )))
+  }
+
+  removeAllIds() {
+    this.selectedIdsCronogramasChips.forEach( (cronograma) => {
+      let index = this.filteredArrayCronogramas.findIndex( (c) => {
+        if (c.idCronograma == cronograma.idCronograma) 
+          return true;
+        return false;
+      });
+      this.filteredArrayCronogramas.splice(index, 1);
+    })
+    
+    this.selectedIdsCronogramasChips = [];
+    this.sinRepetidosCronogramas = this.filteredArrayCronogramas.filter((thing, index, self) =>
+      index === self.findIndex((t) => (
+        t.idCronograma === thing.idCronograma
+    )))
+  }
+
+  selectedNombre(event) {
+    this.selectedNombresChips.push(event.option.viewValue);
+    this.nameInput.nativeElement.value = '';
+    this.nameForm.controls['nameInput'].disable();
+    this.nameForm.controls['nameInput'].enable();
+    this.filterCronogramaByProperty(this.filterShowType, this.currentArrayToFilter, event.option.viewValue.toLowerCase());
+  }
+
+  selectedId(event) {
+    this.selectedIdsCronogramasChips.push(event.option.viewValue);
+    this.idInput.nativeElement.value = '';
+    this.idForm.controls['idInput'].disable();
+    this.idForm.controls['idInput'].enable();
+    this.filterCronogramaByProperty(this.filterShowType, this.currentArrayToFilter, event.option.viewValue.toLowerCase());
+  }
+
+  changeBorder(property) {
+    if (property == 'ID') {
+      if (this.selectedIdsCronogramasChips.length > 0) {
+        return '2px solid #43c89d';
+      }
+      return '1px solid #e0e0e0';
+    }
+
+    if (property == 'nombre') {
+      if (this.selectedNombresChips.length > 0) {
+        return '2px solid #43c89d';
+      }
+      return '1px solid #e0e0e0';
+    }
   }
 
   isMobile() {
@@ -249,6 +486,7 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
   confirmarCronograma(idCronograma, idAlumno, direccionFisicaInformation, documento, clases) {
     this.cronogramaService.confirmarCronogramaPendiente(idCronograma, idAlumno, direccionFisicaInformation, documento, clases).subscribe( (response: Response) => { 
       if (response.code == 2) {
+        this.durationInSeconds = 5;
         response.data = "Para poder confirmar el cronograma debe modificar las siguientes clases ya que alguno de sus datos fue confirmado previamente: " + response.data.join(', ');
       }
       this.showSuccessBanner = false;
@@ -257,6 +495,7 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
         duration: this.durationInSeconds * 1100,
         data: response
       });
+      this.show_edit = false;
       this.ngOnInit();
       window.scrollTo(0, 0);
     })
