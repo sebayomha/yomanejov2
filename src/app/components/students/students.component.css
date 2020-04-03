@@ -97,6 +97,11 @@
 .buscarInput {
     padding-left: 8px; 
     padding-right: 8px;
+    width: 100%;
+    margin-top: 20px;
+    border-radius: 34px;
+    box-shadow: 0 3px 6px 0 rgba(32, 33, 36, .28);
+    margin-bottom: 20px;
 }
 
 @media(max-width: 767px) {
