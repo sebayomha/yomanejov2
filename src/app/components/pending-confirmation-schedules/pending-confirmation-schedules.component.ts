@@ -59,23 +59,37 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
   detailedCronograma;
   sub;
   allCronogramas;
+  currentTabIndex = 0;
 
   filterType: Array<string> = [];
   filterShowType: string = null;
   currentArrayToFilter = null;
   nombres;
   idsCronogramas;
-  selectedNombreFilter;
-  selectedIdCronogramaFilter;
-  selectedNombresChips: Array<any> = [];
-  selectedIdsCronogramasChips: Array<any> = [];
+  selectedNombreFilter: Array<any> = [];
+  selectedIdCronogramaFilter: Array<any> = [];
+  selectedNombresChips = new Map([ 
+    [0, []], 
+    [1, []], 
+    [2, []],
+    [3, []] 
+  ]);
+  selectedIdsCronogramasChips = new Map([ 
+    [0, []], 
+    [1, []], 
+    [2, []],
+    [3, []] 
+  ]);
   filteredArrayCronogramas: Array<any> = [];
-  filterConfirmation: boolean = false;
+  filteredArrayFinalizadosCronogramas: Array<any> = [];
 
 
   filteredArrayByNombre: Array<any> = [];
   filteredArrayByIdCronograma: Array<any> = [];
   sinRepetidosCronogramas: Array<any> = [];
+  sinRepetidosFinalizadosCronogramas: Array<any> = [];
+  nombresFiltered: Array<any> = [];
+  idsCronogramasFiltered: Array<any> = [];
 
   ngOnInit() {
     this.cronogramaService.obtenerCronogramasPendientesDeConfirmar().subscribe( (response: Response) => {
@@ -177,11 +191,14 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
   }
 
   openDialog(filterType: string, arrayToFilter: Array<any>): void {
-    const dialogRef = this.dialog.open(this.filterDialog, {
+    console.log("currentTabIndex", this.currentTabIndex);
+    console.log("selectedIdCronogramaFilter", this.selectedIdCronogramaFilter);
+    this.dialog.open(this.filterDialog, {
       backdropClass: 'backdropBackground',
       position: { top: '210px', left: '200px' },
       width: '550px'
     });
+
     this.filterShowType = filterType;
     this.currentArrayToFilter = arrayToFilter;
     this.filterType.push(filterType);
@@ -190,52 +207,74 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
       this.nombres = arrayToFilter.map( (cronograma) => {
         return cronograma.nombreAlumno;
       });
+
+      this.nombresFiltered = this.nombres.slice();
     }
 
     if(this.filterShowType == 'ID') {
       this.idsCronogramas = arrayToFilter.map( (cronograma) => {
         return cronograma.idCronograma;
       });
-    }
 
-    dialogRef.afterClosed().subscribe(result => {
-    });
+      this.idsCronogramasFiltered = this.idsCronogramas.slice();
+    }
   }
 
   filterCronogramaByProperty(property, arrayToFilter, valueToSearch) {
+    let filteredCronogramas;
+
     if (property == 'nombre') {
-      let filteredCronogramas = arrayToFilter.filter( (cronograma) => {
+      filteredCronogramas = arrayToFilter.filter( (cronograma) => {
         if (valueToSearch ==cronograma.nombreAlumno.toLowerCase()) {
           return true;
         }
         return false;
       })
-      this.filteredArrayCronogramas = [...this.filteredArrayCronogramas, ...filteredCronogramas];
     }
 
     if (property == 'ID') {
-      let filteredCronogramas = arrayToFilter.filter( (cronograma) => {
+      filteredCronogramas = arrayToFilter.filter( (cronograma) => {
         if (valueToSearch == cronograma.idCronograma.toString()) {
           return true;
         }
         return false;
       })
-      this.filteredArrayCronogramas = [...this.filteredArrayCronogramas, ...filteredCronogramas];
     }
 
-    //Elimino los duplicados solo para mostrar en pantalla
-    this.sinRepetidosCronogramas = this.filteredArrayCronogramas.filter((thing, index, self) =>
-      index === self.findIndex((t) => (
-        t.idCronograma === thing.idCronograma
-      ))
-    )
-    //reordeno
-    this.sinRepetidosCronogramas.sort( (a, b) => {
-      if (a.idCronograma > b.idCronograma) {
-        return -1
-      }
-      return 1;
-    })
+    
+    if (this.currentTabIndex == 1) {
+      this.filteredArrayCronogramas = [...this.filteredArrayCronogramas, ...filteredCronogramas];
+      //Elimino los duplicados solo para mostrar en pantalla
+      this.sinRepetidosCronogramas = this.filteredArrayCronogramas.filter((thing, index, self) =>
+        index === self.findIndex((t) => (
+          t.idCronograma === thing.idCronograma
+        ))
+      )
+      //reordeno
+      this.sinRepetidosCronogramas.sort( (a, b) => {
+        if (a.idCronograma > b.idCronograma) {
+          return -1
+        }
+        return 1;
+      })
+    }
+
+    if (this.currentTabIndex == 2) {
+      this.filteredArrayFinalizadosCronogramas = [...this.filteredArrayFinalizadosCronogramas, ...filteredCronogramas];
+      //Elimino los duplicados solo para mostrar en pantalla
+      this.sinRepetidosFinalizadosCronogramas = this.filteredArrayFinalizadosCronogramas.filter((thing, index, self) =>
+        index === self.findIndex((t) => (
+          t.idCronograma === thing.idCronograma
+        ))
+      )
+      //reordeno
+      this.sinRepetidosFinalizadosCronogramas.sort( (a, b) => {
+        if (a.idCronograma > b.idCronograma) {
+          return -1
+        }
+        return 1;
+      })    
+    }
   }
 
   nombreAgregado(nombre) {
@@ -267,10 +306,9 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
   }
 
   removeNombre(nombre: string) {
-    const index = this.selectedNombresChips.map( (v) => {return v.toLowerCase()}).indexOf(nombre.toLowerCase());
-
-    if (index >= 0) {
-      this.selectedNombresChips.splice(index, 1);
+    if (this.currentTabIndex == 1) {
+      const index = this.selectedNombresChips.get(this.currentTabIndex).map( (v) => {return v.toLowerCase()}).indexOf(nombre.toLowerCase());
+      this.selectedNombresChips.get(this.currentTabIndex).splice(index, 1);
       const indexCronograma = this.filteredArrayCronogramas.findIndex( (cronograma) => {
         if (cronograma.nombreAlumno.toLowerCase() == nombre.toLowerCase()) 
           return true;
@@ -292,13 +330,37 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
         return 1;
       })
     }
+
+    if (this.currentTabIndex == 2) {
+      const index = this.selectedNombresChips.get(this.currentTabIndex).map( (v) => {return v.toLowerCase()}).indexOf(nombre.toLowerCase());
+      this.selectedNombresChips.get(this.currentTabIndex).splice(index, 1);
+      const indexCronograma = this.filteredArrayFinalizadosCronogramas.findIndex( (cronograma) => {
+        if (cronograma.nombreAlumno.toLowerCase() == nombre.toLowerCase()) 
+          return true;
+        return false;
+      });
+
+      this.filteredArrayFinalizadosCronogramas.splice(indexCronograma, 1);
+      this.sinRepetidosFinalizadosCronogramas = this.filteredArrayFinalizadosCronogramas.filter((thing, index, self) =>
+        index === self.findIndex((t) => (
+          t.idCronograma === thing.idCronograma
+        ))
+      )
+
+      //reordeno
+      this.sinRepetidosFinalizadosCronogramas.sort( (a, b) => {
+        if (a.idCronograma > b.idCronograma) {
+          return -1
+        }
+        return 1;
+      })
+    }
   }
 
   removeId(id) {
-    const index = this.selectedIdsCronogramasChips.indexOf(id);
-
-    if (index >= 0) {
-      this.selectedIdsCronogramasChips.splice(index, 1);
+    if (this.currentTabIndex == 1) {
+      const index = this.selectedIdsCronogramasChips.get(this.currentTabIndex).indexOf(id);
+      this.selectedIdsCronogramasChips.get(this.currentTabIndex).splice(index, 1);
       const indexCronograma = this.filteredArrayCronogramas.findIndex( (cronograma) => {
         if (cronograma.idCronograma == id) 
           return true;
@@ -319,70 +381,182 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
         return 1;
       })
     }
+
+    if (this.currentTabIndex == 2) {
+      const index = this.selectedIdsCronogramasChips.get(this.currentTabIndex).indexOf(id);
+
+      this.selectedIdsCronogramasChips.get(this.currentTabIndex).splice(index, 1);
+      const indexCronograma = this.filteredArrayFinalizadosCronogramas.findIndex( (cronograma) => {
+        if (cronograma.idCronograma == id) 
+          return true;
+        return false;
+      });
+      this.filteredArrayFinalizadosCronogramas.splice(indexCronograma, 1);
+      this.sinRepetidosFinalizadosCronogramas = this.filteredArrayFinalizadosCronogramas.filter((thing, index, self) =>
+        index === self.findIndex((t) => (
+          t.idCronograma === thing.idCronograma
+        ))
+      )
+
+      //reordeno
+      this.sinRepetidosFinalizadosCronogramas.sort( (a, b) => {
+        if (a.idCronograma > b.idCronograma) {
+          return -1
+        }
+        return 1;
+      })
+    }
   }
 
   removeAllNombres() {
-    this.selectedNombresChips.forEach( (cronograma) => {
-      let index = this.filteredArrayCronogramas.findIndex( (c) => {
-        if (c.idCronograma == cronograma.idCronograma) 
-          return true;
-        return false;
-      });
-      this.filteredArrayCronogramas.splice(index, 1);
-    })
+    if (this.currentTabIndex == 1) {
+      this.selectedNombresChips.get(this.currentTabIndex).forEach( (cronograma) => {
+        let index = this.filteredArrayCronogramas.findIndex( (c) => {
+          if (c.idCronograma == cronograma.idCronograma) 
+            return true;
+          return false;
+        });
+        this.filteredArrayCronogramas.splice(index, 1);
+      })
+  
+      this.selectedNombresChips.get(this.currentTabIndex).length = 0;
+      
+      this.sinRepetidosCronogramas = this.filteredArrayCronogramas.filter((thing, index, self) =>
+        index === self.findIndex((t) => (
+          t.idCronograma === thing.idCronograma
+      )))
+    }
 
-    this.selectedNombresChips = [];
-    
-    this.sinRepetidosCronogramas = this.filteredArrayCronogramas.filter((thing, index, self) =>
-      index === self.findIndex((t) => (
-        t.idCronograma === thing.idCronograma
-    )))
+    if (this.currentTabIndex == 2) {
+      this.selectedNombresChips.get(this.currentTabIndex).forEach( (cronograma) => {
+        let index = this.filteredArrayFinalizadosCronogramas.findIndex( (c) => {
+          if (c.idCronograma == cronograma.idCronograma) 
+            return true;
+          return false;
+        });
+        this.filteredArrayFinalizadosCronogramas.splice(index, 1);
+      })
+  
+      this.selectedNombresChips.get(this.currentTabIndex).length = 0;
+      
+      this.sinRepetidosFinalizadosCronogramas = this.filteredArrayFinalizadosCronogramas.filter((thing, index, self) =>
+        index === self.findIndex((t) => (
+          t.idCronograma === thing.idCronograma
+      )))
+    }
   }
 
   removeAllIds() {
-    this.selectedIdsCronogramasChips.forEach( (cronograma) => {
-      let index = this.filteredArrayCronogramas.findIndex( (c) => {
-        if (c.idCronograma == cronograma.idCronograma) 
-          return true;
-        return false;
-      });
-      this.filteredArrayCronogramas.splice(index, 1);
-    })
-    
-    this.selectedIdsCronogramasChips = [];
-    this.sinRepetidosCronogramas = this.filteredArrayCronogramas.filter((thing, index, self) =>
-      index === self.findIndex((t) => (
-        t.idCronograma === thing.idCronograma
-    )))
+    if (this.currentTabIndex == 1) {
+      this.selectedIdsCronogramasChips.get(this.currentTabIndex).forEach( (cronograma) => {
+        let index = this.filteredArrayCronogramas.findIndex( (c) => {
+          if (c.idCronograma == cronograma.idCronograma) 
+            return true;
+          return false;
+        });
+        this.filteredArrayCronogramas.splice(index, 1);
+      })
+      
+      this.selectedIdsCronogramasChips.get(this.currentTabIndex).length = 0;
+      this.sinRepetidosCronogramas = this.filteredArrayCronogramas.filter((thing, index, self) =>
+        index === self.findIndex((t) => (
+          t.idCronograma === thing.idCronograma
+      )))
+    }
+
+    if (this.currentTabIndex == 2) {
+      this.selectedIdsCronogramasChips.get(this.currentTabIndex).forEach( (cronograma) => {
+        let index = this.filteredArrayFinalizadosCronogramas.findIndex( (c) => {
+          if (c.idCronograma == cronograma.idCronograma) 
+            return true;
+          return false;
+        });
+        this.filteredArrayFinalizadosCronogramas.splice(index, 1);
+      })
+      
+      this.selectedIdsCronogramasChips.get(this.currentTabIndex).length = 0;
+      this.sinRepetidosFinalizadosCronogramas = this.filteredArrayFinalizadosCronogramas.filter((thing, index, self) =>
+        index === self.findIndex((t) => (
+          t.idCronograma === thing.idCronograma
+      )))
+    }
+  }
+
+  tabChanged(tabChangeEvent): void {
+    this.currentTabIndex = tabChangeEvent.index;
   }
 
   selectedNombre(event) {
-    this.selectedNombresChips.push(event.option.viewValue);
-    this.nameInput.nativeElement.value = '';
-    this.nameForm.controls['nameInput'].disable();
-    this.nameForm.controls['nameInput'].enable();
-    this.filterCronogramaByProperty(this.filterShowType, this.currentArrayToFilter, event.option.viewValue.toLowerCase());
+    if (this.currentTabIndex == 1) {
+      this.selectedNombresChips.get(this.currentTabIndex).push(event.option.viewValue);
+      this.nameInput.nativeElement.value = '';
+      this.nameForm.controls['nameInput'].disable();
+      this.nameForm.controls['nameInput'].enable();
+      this.filterCronogramaByProperty(this.filterShowType, this.currentArrayToFilter, event.option.viewValue.toLowerCase());  
+    }
+
+    if (this.currentTabIndex == 2) {
+      this.selectedNombresChips.get(this.currentTabIndex).push(event.option.viewValue);
+      this.nameInput.nativeElement.value = '';
+      this.nameForm.controls['nameInput'].disable();
+      this.nameForm.controls['nameInput'].enable();
+      this.filterCronogramaByProperty(this.filterShowType, this.currentArrayToFilter, event.option.viewValue.toLowerCase());  
+    }
   }
 
   selectedId(event) {
-    this.selectedIdsCronogramasChips.push(event.option.viewValue);
-    this.idInput.nativeElement.value = '';
-    this.idForm.controls['idInput'].disable();
-    this.idForm.controls['idInput'].enable();
-    this.filterCronogramaByProperty(this.filterShowType, this.currentArrayToFilter, event.option.viewValue.toLowerCase());
+    if (this.currentTabIndex == 1) {
+      this.selectedIdsCronogramasChips.get(this.currentTabIndex).push(event.option.viewValue);
+      this.idInput.nativeElement.value = '';
+      this.idForm.controls['idInput'].disable();
+      this.idForm.controls['idInput'].enable();
+      this.filterCronogramaByProperty(this.filterShowType, this.currentArrayToFilter, event.option.viewValue.toLowerCase());
+    }
+
+    if (this.currentTabIndex == 2) {
+      this.selectedIdsCronogramasChips.get(this.currentTabIndex).push(event.option.viewValue);
+      this.idInput.nativeElement.value = '';
+      this.idForm.controls['idInput'].disable();
+      this.idForm.controls['idInput'].enable();
+      this.filterCronogramaByProperty(this.filterShowType, this.currentArrayToFilter, event.option.viewValue.toLowerCase());
+    }
+  }
+
+  filterCronogramas() {
+    this.idsCronogramasFiltered = this.idsCronogramas.filter( (idCronograma) => {
+      if (idCronograma.toString().startsWith(this.selectedIdCronogramaFilter[this.currentTabIndex])) {
+        return true;
+      }
+      return false;
+    })
+  }
+
+  filterNombres() {
+    this.nombresFiltered = this.nombres.filter( (nombre) => {
+      if (nombre.toLowerCase().startsWith(this.selectedNombreFilter[this.currentTabIndex].toLowerCase())) {
+        return true;
+      }
+      return false;
+    })
   }
 
   changeBorder(property) {
     if (property == 'ID') {
-      if (this.selectedIdsCronogramasChips.length > 0) {
-        return '2px solid #43c89d';
+      if(this.selectedIdsCronogramasChips.get(this.currentTabIndex)) {
+        if (this.selectedIdsCronogramasChips.get(this.currentTabIndex).length > 0) {
+          return '2px solid #43c89d';
+        }
+        return '1px solid #e0e0e0';
       }
       return '1px solid #e0e0e0';
     }
 
     if (property == 'nombre') {
-      if (this.selectedNombresChips.length > 0) {
-        return '2px solid #43c89d';
+      if (this.selectedNombresChips.get(this.currentTabIndex)) {
+        if (this.selectedNombresChips.get(this.currentTabIndex).length > 0) {
+          return '2px solid #43c89d';
+        }
+        return '1px solid #e0e0e0';
       }
       return '1px solid #e0e0e0';
     }
