@@ -97,6 +97,11 @@
 .buscarInput {
     padding-left: 8px; 
     padding-right: 8px;
+    width: 100%;
+    margin-top: 20px;
+    border-radius: 34px;
+    box-shadow: 0 3px 6px 0 rgba(32, 33, 36, .28);
+    margin-bottom: 20px;
 }
 
 @media(max-width: 767px) {
@@ -126,4 +131,22 @@
 mat-tab-body > div {
     padding-left: 10px;
     padding-right: 10px;
+}
+
+#imageContainer {
+    text-align: center;
+    background: rgba(0, 0, 0, 0.08);
+    border-radius: 50%;
+    height: 300px;
+    width: 300px;
+    margin: 0 auto;
+    vertical-align: middle;
+    line-height: 300px;
+}
+
+#emptyMessageContainer {
+    text-align: center;
+    margin-top: 80px;
+    color: rgba(0, 0, 0, 0.37);
+    font-weight: bold;
 }

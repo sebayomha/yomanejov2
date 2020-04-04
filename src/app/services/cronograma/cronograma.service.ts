@@ -105,4 +105,12 @@ export class CronogramaService {
     return this.http.post('api/calcularCronograma/agregarClaseACronograma', JSON.stringify(data));
   }
 
+  cancelarClase(idClase, motivoCancelacion) {
+    let data = {
+      idClase: idClase,
+      motivoCancelacion: motivoCancelacion
+    }
+    return this.http.post('api/calcularCronograma/cancelarClase', {params: data});
+  }
+
 }

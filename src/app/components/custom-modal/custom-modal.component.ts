@@ -24,6 +24,8 @@ export class CustomModalComponent {
   @ViewChildren('input') vc;
   @ViewChild('eliminarAlumnoForm') eliminarAlumnoForm: NgForm;
   @ViewChild('eliminarCronogramaActivoForm') eliminarCronogramaActivoForm: NgForm;
+  @ViewChild('bajaClaseForm') bajaClaseForm: NgForm;
+
 
   schedule : any;
 
@@ -76,7 +78,20 @@ export class CustomModalComponent {
             this.eliminarCronogramaActivoForm.form.get("motivoDeBaja").markAsDirty();
           }
         } else {
-          this.confirmation.emit(this.data);
+          if (this.component == 'lessons') {
+            if (this.bajaClaseForm.form.valid) {
+              this.data.motivoDeBaja = this.motivoDeBaja;
+              this.motivoDeBaja = '';
+              this.bajaClaseForm.form.get("motivoDeBaja").markAsUntouched();
+              this.bajaClaseForm.form.get("motivoDeBaja").markAsPristine();
+              this.confirmation.emit(this.data);
+            } else {
+              this.bajaClaseForm.form.get("motivoDeBaja").markAsTouched();
+              this.bajaClaseForm.form.get("motivoDeBaja").markAsDirty();
+            }
+          } else {
+            this.confirmation.emit(this.data);
+          }
         }
       }
     }
