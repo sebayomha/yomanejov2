@@ -284,14 +284,14 @@
               <th mat-header-cell *matHeaderCellDef style="text-align: center;"> Acción </th>
               <td mat-cell *matCellDef="let element" style="text-align: center;">
                 <div>
-                  <span style="display: inline-block; color: grey; font-size: 18px;" (click)="editarAlumno(element, $event);" title="Editar">
+                  <span style="display: inline-block; color: grey; font-size: 18px;" (click)="editarAlumno(element, $event);" matTooltip="Editar">
                     <!-- <i style="color: #3f51b5;" class="material-icons icons" matTooltip="Editar">
                       edit
                     </i> -->
                     <i class="fas fa-pencil-alt"></i>
                   </span>
       
-                  <span style="display: inline-block; padding-left: 15px; font-size: 18px; color: #d61c1c;" (click)="eliminarAlumno(element, $event);" title="Dar de baja">
+                  <span style="display: inline-block; padding-left: 15px; font-size: 18px; color: #d61c1c;" (click)="eliminarAlumno(element, $event);" matTooltip="Dar de baja">
                     <!-- <i style="color: #d61c1c;" class="material-icons icons" matTooltip="Dar de baja">
                       archive
                     </i> -->
