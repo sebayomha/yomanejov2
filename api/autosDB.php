@@ -18,7 +18,6 @@
         }
 
         function obtenerAutos() {
-            echo "ACA";
             $state = $this->conn->prepare('SELECT * FROM auto');
             $state->execute();
             $result = $state->get_result();

@@ -14,7 +14,6 @@
 	$method = $_SERVER['REQUEST_METHOD']; //Obtengo el METODO: PUT/GET/DELETE/POST.
 	
 	function obtenerAutos() {
-		echo "ACA PRIMERO";
 		$autos = new Auto();
 		$resultAuto = $autos->obtenerAutos();
 		echo json_encode($GLOBALS['utils']->getResponse(0, $resultAuto));	
