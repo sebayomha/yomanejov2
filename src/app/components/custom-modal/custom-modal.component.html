@@ -31,7 +31,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body" style="max-height: 330px; overflow-y: auto;" *ngIf="component == 'availableSchedules' && data.length && !successBanner">
+      <div class="modal-body" style="max-height: 360px; overflow-y: auto;" *ngIf="component == 'availableSchedules' && data.length && !successBanner">
         <div>
           Clases:
           <div *ngFor="let clase of this.data[1].selected_options; let i = index" style="text-align: center;">
@@ -96,25 +96,30 @@
               Se ha editado el cronograma <span style="color: #43c89d; font-weight: 500;">{{idCronogramaGuardado}}</span>. Puede encontrarlo en la pantalla de <span style="color: #43c89d; font-weight: 500;">Cronogramas</span> en la pestaña de Activos.
             </span>
           </div>
-          <div id="horariosContainer">
-            <div *ngFor="let clase of this.data[1].selected_options; let i = index">
-              <div class="row" *ngIf="i % 2 == 0">
-                <div class="col-12 col-lg-6" *ngIf="this.data[1].selected_options[i]" style="margin-top: 10px; margin-bottom: 10px;">
-                  <div>
-                    <span class="dot margin-left-10-porc">
-                    <p style="margin: 1px; color: white; margin-left: 8px;">{{i+1}}</p>
-                  </span>
-                  <span>&nbsp;&nbsp; {{this.data[1].selected_options[i].dia}} {{this.data[1].selected_options[i].fecha | date: 'mediumDate'}}&nbsp;&nbsp;</span> 
-                  <span>-&nbsp;&nbsp;{{this.data[1].selected_options[i].horario}} hs</span>
+          <div id="horariosContainer" class="row">
+            <div id="leftSide" class="col-12 col-lg-6">
+              <div *ngFor="let clase of this.data[1].selected_options | slice: 0: math.round((this.data[1].selected_options.length / 2)); let i = index">
+                  <div style="margin-top: 10px; margin-bottom: 10px;">
+                    <div>
+                      <span class="dot margin-left-10-porc">
+                      <p style="margin: 1px; color: white; margin-left: 8px;">{{i+1}}</p>
+                    </span>
+                    <span>&nbsp;&nbsp; {{this.data[1].selected_options[i].dia}} {{this.data[1].selected_options[i].fecha | date: 'mediumDate'}}&nbsp;&nbsp;</span> 
+                    <span>-&nbsp;&nbsp;{{this.data[1].selected_options[i].horario}} hs</span>
+                    </div>
                   </div>
-                </div>
-                <div class="col-12 col-lg-6" *ngIf="this.data[1].selected_options[i+1]" style="margin-top: 10px; margin-bottom: 10px;">
-                  <span class="dot margin-left-10-porc">
-                    <p style="margin: 1px; color: white; margin-left: 8px;">{{i+2}}
-                    </p>
-                  </span>
-                  <span> &nbsp;&nbsp; {{this.data[1].selected_options[i+1].dia}} {{this.data[1].selected_options[i+1].fecha | date: 'mediumDate'}}&nbsp;&nbsp;</span> 
-                  <span>-&nbsp;&nbsp;{{this.data[1].selected_options[i+1].horario}} hs</span>
+              </div>
+            </div>
+            <div id="rightSide" class="col-12 col-lg-6">
+              <div *ngFor="let clase of this.data[1].selected_options | slice: math.round((this.data[1].selected_options.length / 2)):this.data[1].selected_options.length; let i = index">
+                  <div style="margin-top: 10px; margin-bottom: 10px;">
+                    <div>
+                      <span class="dot margin-left-10-porc">
+                      <p style="margin: 1px; color: white; margin-left: 8px;">{{ (this.data[1].selected_options.length % 2 == 0) ? (math.round((this.data[1].selected_options.length + 1) / 2) + i):(math.round((this.data[1].selected_options.length + 1) / 2) + i + 1)}}</p>
+                    </span>
+                    <span>&nbsp;&nbsp; {{this.data[1].selected_options[math.floor((this.data[1].selected_options.length + 1) / 2) + i].dia}} {{this.data[1].selected_options[math.floor((this.data[1].selected_options.length + 1) / 2) + i].fecha | date: 'mediumDate'}}&nbsp;&nbsp;</span> 
+                    <span>-&nbsp;&nbsp;{{this.data[1].selected_options[math.floor((this.data[1].selected_options.length + 1) / 2) + i].horario}} hs</span>
+                    </div>
                 </div>
               </div>
             </div>
