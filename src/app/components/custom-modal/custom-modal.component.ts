@@ -138,7 +138,9 @@ export class CustomModalComponent {
   }
 
   checkDisabledConditions() {
-    if (this.component == 'availableSchedules') {
+    return false;
+    //Mandatorio de documento y direccion fisica deshabilitados
+/*     if (this.component == 'availableSchedules') {
       return false;
     } else {
       if (this.component == 'pendingConfirmationSchedules' && this.operation == 'Confirmar') {
@@ -147,7 +149,7 @@ export class CustomModalComponent {
       else {
         return false;
       }
-    }
+    } */
   }
 
   preventLetters($event) {
