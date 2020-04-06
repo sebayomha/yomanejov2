@@ -31,7 +31,7 @@ export class CustomModalComponent {
 
   buttonDisabled;
   motivoDeBaja: string = '';
-
+  math = Math;
   constructor(private breakpointObserver: BreakpointObserver, private cd: ChangeDetectorRef) { }
 
   ngOnInit() { }
