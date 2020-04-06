@@ -54,6 +54,10 @@ export class FreeClassFinderComponent {
 
   show_component_available:boolean = false;
 
+  //SELECCION RAPIDA DE HORARIOS VARIABLES
+  flag_custom_selector:boolean = false;
+  sr_all_day:boolean = false;
+
 
 
   //ALUMNOS VARIABLES
@@ -817,4 +821,13 @@ export class FreeClassFinderComponent {
   verCronosPendientes(flag){
     this.show_edit.emit(flag);
   }
+
+  //COMIENZO DE FUNCIONES DEL SELECTOR RAPIDO
+
+  changeCustomSelector(){
+    if (this.flag_custom_selector) {
+      
+    }
+  }
+
 }
