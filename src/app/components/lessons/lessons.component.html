@@ -81,11 +81,12 @@
             <ng-container matColumnDef="operacion">
               <th mat-header-cell *matHeaderCellDef> Operación </th>
               <td mat-cell *matCellDef="let element">
-                <span style="padding-left: 10px;padding-right: 10px; color: grey; cursor: pointer; font-size: 18px;" (click)="cancelarClase(element)" *ngIf="element.claseCancelada != 'true'"><i class="far fa-calendar-times"></i></span></td>
+                <span style="padding-left: 10px;padding-right: 10px; color: grey; cursor: pointer; font-size: 18px;" (click)="cancelarClase(element)" *ngIf="element.claseCancelada != 'true'"><i class="far fa-calendar-times"></i></span>
                 <span class="showMobile" matTooltipClass="tooltipFontSize" matTooltip="Clase modificada: {{element.claseModificada.idClase}} - {{element.claseModificada.fecha | date: 'dd/MM/yyyy'}} - {{element.claseModificada.horaInicio}} hs" style="padding-left: 10px;padding-right: 10px; color: #ffad18; cursor: pointer; font-size: 18px;" *ngIf="element.tieneClaseModificada == true"><i class="fas fa-exclamation-triangle"></i></span>
                 <!-- <span style="padding-left: 10px;padding-right: 10px; color: grey;" (click)="editarClase(element.idAlumno)"><i class="fas fa-pencil-alt"></i></span> -->
                 <span class="showMobile" matTooltipClass="tooltipFontSize" matTooltip="Motivo: {{element.motivoCancelacion}} - {{element.fechaClaseCancelada | date: 'dd/MM/yyyy HH:mm'}} hs" style="padding-left: 10px;padding-right: 10px; color: #f44336; font-size: 18px; cursor: pointer;" *ngIf="element.claseCancelada == 'true'"><i class="fas fa-minus-circle"></i></span>
-              <td mat-footer-cell *matFooterCellDef></td>
+              </td>
+                <td mat-footer-cell *matFooterCellDef></td>
             </ng-container>
         
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

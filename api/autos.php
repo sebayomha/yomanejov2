@@ -1,7 +1,7 @@
 <?php
 	header("Access-Control-Allow-Origin: *");
 	header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
-	require_once('alumnosDB.php');
+	require_once('autosDB.php');
 	iconv_set_encoding("internal_encoding", "UTF-8");
     date_default_timezone_set('America/Argentina/Buenos_Aires');
 	//Va a ser utilizada cuando existan sesiones
@@ -14,6 +14,7 @@
 	$method = $_SERVER['REQUEST_METHOD']; //Obtengo el METODO: PUT/GET/DELETE/POST.
 	
 	function obtenerAutos() {
+		echo "ACA PRIMERO";
 		$autos = new Auto();
 		$resultAuto = $autos->obtenerAutos();
 		echo json_encode($GLOBALS['utils']->getResponse(0, $resultAuto));	
