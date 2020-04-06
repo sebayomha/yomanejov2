@@ -5,6 +5,7 @@ import { LessonsComponent } from './components/lessons/lessons.component';
 import { StudentsComponent } from './components/students/students.component';
 import { EditarAlumnoComponent } from './components/editar-alumno/editar-alumno.component';
 import { AddClassSchedulesComponent } from './components/add-class-schedules/add-class-schedules.component';
+import { CarsComponent } from './components/cars/cars.component';
 
 const app_routes: Routes = [
   { path: 'busqueda', component: FreeClassFinderComponent},
@@ -12,6 +13,7 @@ const app_routes: Routes = [
   { path: 'pendientes/:idCronograma', component: PendingConfirmationSchedulesComponent},
   { path: 'pendientes/agregarClase/:idCronograma', component: AddClassSchedulesComponent, data: {animation: 'EditingStudentPage'}},
   { path: 'clases', component: LessonsComponent},
+  { path: 'autos', component: CarsComponent},
   { path: 'alumnos', component: StudentsComponent, data: {animation: 'StudentsPage'}},
   { path: 'alumnos/editar/:id', component: EditarAlumnoComponent, data: {animation: 'EditingStudentPage'}},
   { path: '', pathMatch: 'full', redirectTo: 'busqueda' },

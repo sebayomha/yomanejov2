@@ -69,6 +69,7 @@ import { EditarAlumnoComponent } from './components/editar-alumno/editar-alumno.
 
 import { SharedService } from './services/sharedService/shared-service';
 import { AddClassSchedulesComponent } from './components/add-class-schedules/add-class-schedules.component';
+import { CarsComponent } from './components/cars/cars.component';
 
 export class MyHammerConfig extends HammerGestureConfig {
     overrides = <any> {
@@ -98,7 +99,8 @@ export class MyHammerConfig extends HammerGestureConfig {
     StudentsDetailsComponent,
     EditarAlumnoComponent,
     EditPendingConfSchedulesComponent,
-    AddClassSchedulesComponent  
+    AddClassSchedulesComponent,
+    CarsComponent
   ],
   imports: [
     BrowserModule,
