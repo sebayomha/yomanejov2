@@ -14,8 +14,10 @@ export class CarsComponent implements OnInit {
 
   ngOnInit() {
 
-    this.autos = this.autosService.obtenerAutos(); //obtengo la informacion del servicio compartido
-    console.log(this.autos);
+    this.autos = this.autosService.obtenerAutos().subscribe( (response)=>{
+      console.log(this.autos);  
+    });
+    
 
   }
 
