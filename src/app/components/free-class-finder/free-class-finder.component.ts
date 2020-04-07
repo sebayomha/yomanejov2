@@ -13,6 +13,7 @@ import { DatePipe } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackbarComponent } from '../snackbar/snackbar/snackbar.component';
 import { NgForm } from '@angular/forms';
+import { GeneralHour } from '../../models/general-hour';
 
 @Component({
   selector: 'free-class-finder',
@@ -31,6 +32,8 @@ export class FreeClassFinderComponent {
   addresses = Array<Address>();
   addresses_alt = Array<Address>();
   minDate = new Date();
+  predefinedDays = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+  checkedGeneralDays = Array<Number>();
   locations = ["La Plata", "Berisso", "Ensenada"];
   predefinedHours = ["08:00", "09:00", "10:00", "11:15", "12:15", "13:15", "14:30", "15:30", "16:30", "17:45", "18:45", "19:45"];
   search: Search;
@@ -59,16 +62,23 @@ export class FreeClassFinderComponent {
   sr_all_day:boolean = false;
 
 
-
   //ALUMNOS VARIABLES
   alumnos: Array<any>;
   selectedAlumno; 
   yaEsAlumno: boolean;
 
 
+  //TEMPLATE GENERAL
+  generalSchedule = {
+    allDay: false,
+    address_alternative: false,
+    date_times: Array<GeneralHour>()
+  }
+
   constructor(private alumnoService: AlumnosService, private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private datePipe: DatePipe, private _snackBar: MatSnackBar) { }
 
   ngOnInit() {
+    this.addGeneralDateTime();
     this.flag_crono_active = false;
     this.addresses = [];
     this.addresses_alt = [];
@@ -823,11 +833,70 @@ export class FreeClassFinderComponent {
   }
 
   //COMIENZO DE FUNCIONES DEL SELECTOR RAPIDO
-
   changeCustomSelector(){
     if (this.flag_custom_selector) {
       
     }
   }
+
+  
+  setSchedule(generalSchedule) {
+    if(this.checkedGeneralDays.length) {
+      this.checkedGeneralDays.forEach( (checkedElement, index) => {
+        if (checkedElement) {
+          let checkedDay = this.predefinedDays[index];
+          let dateTimeDay = this.search.dates_times.find( (dateTime) => { if (dateTime.name_day == checkedDay) return true; return false;})
+          //setting vaalues
+          dateTimeDay.all_day = generalSchedule.allDay;
+          if (dateTimeDay.all_day) {
+            let option = new Option('08:00', '19:45', this.predefinedHours, this.predefinedHours, this.predefinedHours, generalSchedule.address_alternative);
+            let options = new Array(option);
+            dateTimeDay.option = options;
+          } else {
+            dateTimeDay.option = [];
+            generalSchedule.date_times.forEach( (dateTime: GeneralHour) => {
+              let indexStart = this.predefinedHours.indexOf(dateTime.hour_start);
+              let indexFinish = this.predefinedHours.indexOf(dateTime.hour_finish);
+              let scheduleSend = this.predefinedHours.slice(indexStart, indexFinish + 1);
+              let option = new Option(dateTime.hour_start, dateTime.hour_finish, dateTime.from, dateTime.to, scheduleSend, dateTime.address_alternative);
+              dateTimeDay.option.push(option);
+            })
+          }
+        }
+      });
+    }
+
+    console.log("asf", this.search.dates_times)
+  }
+
+  doGeneralScheduleTo(i, hour) {
+    const indexFrom = this.generalSchedule.date_times[i].from.indexOf(hour);
+    this.generalSchedule.date_times[i].to = this.generalSchedule.date_times[i].from.slice(indexFrom + 1, this.generalSchedule.date_times[i].from.length);
+  }
+
+  addGeneralDateTime() {
+    let lastIndexTo;
+    if (this.generalSchedule.date_times.length) {
+      lastIndexTo = this.predefinedHours.indexOf(this.generalSchedule.date_times[this.generalSchedule.date_times.length - 1].hour_finish);
+    }
+  
+    let general_date_time: GeneralHour = {
+      hour_finish: '',
+      hour_start: '',
+      from: this.predefinedHours,
+      to: [],
+      address_alternative: false
+    }
+    this.generalSchedule.date_times.push(general_date_time);
+
+    if (lastIndexTo) {
+      this.generalSchedule.date_times[this.generalSchedule.date_times.length - 1].from = this.predefinedHours.slice(lastIndexTo + 1, this.predefinedHours.length);  
+    }
+  }
+  
+  removeGeneralDateTime(i) {
+    this.generalSchedule.date_times.splice(i,1);
+  }
+
 
 }
