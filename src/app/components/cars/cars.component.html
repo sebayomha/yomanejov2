@@ -1,67 +1,100 @@
-<div class="tablesContainer">
-  <table mat-table id="alumnosActivosTable" [dataSource]="alumnosActivos" class="mat-elevation-z8">
-          
-    <!-- Position Column -->
-    <ng-container matColumnDef="Id">
-      <th mat-header-cell *matHeaderCellDef> Id </th>
-      <td mat-cell *matCellDef="let element"> {{element.idAuto}} </td>
-      <td mat-footer-cell *matFooterCellDef>               
-      </td>
-    </ng-container>
-
-    <!-- Name Column -->
-    <ng-container matColumnDef="patente">
-      <th mat-header-cell *matHeaderCellDef> Patente </th>
-      <td mat-cell *matCellDef="let element"> {{element.patente}} </td>
-      <td mat-footer-cell *matFooterCellDef></td>
-    </ng-container>
-
-    <!-- Weight Column -->
-    <ng-container matColumnDef="disponibilidad">
-      <th mat-header-cell *matHeaderCellDef> Dirección del alumno </th>
-      <td mat-cell *matCellDef="let element"> {{ (element.id_DirFisica) ? element.dirFisicaFormateada: 'No posee'}} </td>
-      <td mat-footer-cell *matFooterCellDef></td>
-    </ng-container>
-
-    <!-- Symbol Column -->
-    <ng-container matColumnDef="descripcion">
-      <th mat-header-cell *matHeaderCellDef> Teléfono </th>
-      <td mat-cell *matCellDef="let element"> {{element.telefono | phone}} </td>
-      <td mat-footer-cell *matFooterCellDef></td>
-    </ng-container>
-
-    <!-- Symbol Column -->
-    <ng-container matColumnDef="zonaMaster">
-      <th mat-header-cell *matHeaderCellDef> Documento </th>
-      <td mat-cell *matCellDef="let element"> {{element.documento | document}} </td>
-      <td mat-footer-cell *matFooterCellDef></td>
-    </ng-container>
-
-    <!-- Symbol Column -->
-    <ng-container matColumnDef="accion">
-      <th mat-header-cell *matHeaderCellDef style="text-align: center;"> Acción </th>
-      <td mat-cell *matCellDef="let element" style="text-align: center;">
-        <div>
-          <div style="display: inline-block;" (click)="editarAlumno(element, $event);">
-            <i style="color: #3f51b5;" class="material-icons icons" matTooltip="Editar">
-              edit
-            </i>
+<div class="container" style="margin-top: 95px;">
+  <div class="row">
+    <div class="col-4" *ngFor="let auto of autos" style="margin-top:15px">
+      <mat-card>
+        <div class="row">
+          <div class="col-2">
+            <span class="dot">
+              <p style="margin: 1px; color: white; margin-left: 8px;">{{auto.idAuto}}</p>
+            </span>
           </div>
+          <div class="col-6" style="padding:0px;">
+            <span style="margin-top:13px;">{{auto.modelo}}</span>
+          </div>
+          <div class="col-4">
+            <span class="icons" style="font-size: 18px; color: #d61c1c; float:right;" (click)="eliminarAlumno(element, $event);" matTooltip="Dar de baja">
+              <i class="fas fa-trash-alt"></i>
+            </span>
+            <span class="icons" style="color: grey; font-size: 18px; float:right; margin-right: 15px;" (click)="editarAlumno(element, $event);" matTooltip="Editar">
+              <i class="fas fa-pencil-alt"></i>
+            </span>
 
-          <div style="display: inline-block; padding-left: 10px;" (click)="eliminarAlumno(element, $event);">
-            <i style="color: #d61c1c;" class="material-icons icons" matTooltip="Dar de baja">
-              archive
-            </i>
+            
           </div>
         </div>
-      </td>
-      <td mat-footer-cell *matFooterCellDef></td>
-    </ng-container>
+        <mat-card-content>
+          <div class="row" style="margin-top: 15px;">
+            <div class="col-6">
+              Patente: {{auto.patente}}
+            </div>
+            <div class="col-6">
+              Zona: {{auto.zonaMaster}}
+            </div>
+          </div>
+        </mat-card-content>
+        <mat-card-actions></mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+  <!-- <div class="tablesContainer">
+    <table mat-table id="autosTable" [dataSource]="autos" class="mat-elevation-z8">
+            
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="openDetail(row)"></tr>
-    <ng-container *ngIf="alumnosActivos && alumnosActivos.length > 4">
-      <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
-    </ng-container>
-  </table>
+      <ng-container matColumnDef="Id">
+        <th mat-header-cell *matHeaderCellDef> Id </th>
+        <td mat-cell *matCellDef="let element"> {{element.idAuto}} </td>
+        <td mat-footer-cell *matFooterCellDef>               
+        </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="patente">
+        <th mat-header-cell *matHeaderCellDef> Patente </th>
+        <td mat-cell *matCellDef="let element"> {{element.patente}} </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="color">
+        <th mat-header-cell *matHeaderCellDef> Color </th>
+        <td mat-cell *matCellDef="let element"> {{element.color}} </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="zona">
+        <th mat-header-cell *matHeaderCellDef> Zona </th>
+        <td mat-cell *matCellDef="let element"> {{element.zonaMaster}} </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+
+
+      <ng-container matColumnDef="accion">
+        <th mat-header-cell *matHeaderCellDef style="text-align: center;"> Acción </th>
+        <td mat-cell *matCellDef="let element" style="text-align: center;">
+          <div>
+            <div style="display: inline-block;">
+              <i style="color: #3f51b5;" class="material-icons icons" matTooltip="Editar">
+                edit
+              </i>
+            </div>
+
+            <div style="display: inline-block; padding-left: 10px;">
+              <i style="color: #d61c1c;" class="material-icons icons" matTooltip="Dar de baja">
+                archive
+              </i>
+            </div>
+          </div>
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="openDetail(row)"></tr>
+      <ng-container *ngIf="autos && autos.length > 4">
+        <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+      </ng-container>
+    </table>
+  </div> -->
 </div>

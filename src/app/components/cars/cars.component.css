@@ -1,0 +1,13 @@
+.tablesContainer {
+    height: 400px;
+    overflow: auto;
+    margin-bottom: 10px;
+}
+
+.dot {
+    height: 25px;
+    width: 25px;
+    background-color: #43c89d;
+    border-radius: 50%;
+    display: inline-block;
+}
