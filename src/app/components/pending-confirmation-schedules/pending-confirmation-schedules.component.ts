@@ -80,14 +80,16 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
     [2, []],
     [3, []] 
   ]);
+
   filteredArrayCronogramas: Array<any> = [];
   filteredArrayFinalizadosCronogramas: Array<any> = [];
-
+  filteredArrayCanceladosCronogramas: Array<any> = [];
 
   filteredArrayByNombre: Array<any> = [];
   filteredArrayByIdCronograma: Array<any> = [];
   sinRepetidosCronogramas: Array<any> = [];
   sinRepetidosFinalizadosCronogramas: Array<any> = [];
+  sinRepetidosCanceladosCronogramas: Array<any> = [];
   nombresFiltered: Array<any> = [];
   idsCronogramasFiltered: Array<any> = [];
 
@@ -275,6 +277,23 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
         return 1;
       })    
     }
+
+    if (this.currentTabIndex == 3) {
+      this.filteredArrayCanceladosCronogramas = [...this.filteredArrayCanceladosCronogramas, ...filteredCronogramas];
+      //Elimino los duplicados solo para mostrar en pantalla
+      this.sinRepetidosCanceladosCronogramas = this.filteredArrayCanceladosCronogramas.filter((thing, index, self) =>
+        index === self.findIndex((t) => (
+          t.idCronograma === thing.idCronograma
+        ))
+      )
+      //reordeno
+      this.sinRepetidosCanceladosCronogramas.sort( (a, b) => {
+        if (a.idCronograma > b.idCronograma) {
+          return -1
+        }
+        return 1;
+      })    
+    }
   }
 
   nombreAgregado(nombre) {
@@ -355,6 +374,31 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
         return 1;
       })
     }
+
+    if (this.currentTabIndex == 3) {
+      const index = this.selectedNombresChips.get(this.currentTabIndex).map( (v) => {return v.toLowerCase()}).indexOf(nombre.toLowerCase());
+      this.selectedNombresChips.get(this.currentTabIndex).splice(index, 1);
+      const indexCronograma = this.filteredArrayCanceladosCronogramas.findIndex( (cronograma) => {
+        if (cronograma.nombreAlumno.toLowerCase() == nombre.toLowerCase()) 
+          return true;
+        return false;
+      });
+
+      this.filteredArrayCanceladosCronogramas.splice(indexCronograma, 1);
+      this.sinRepetidosCanceladosCronogramas = this.filteredArrayCanceladosCronogramas.filter((thing, index, self) =>
+        index === self.findIndex((t) => (
+          t.idCronograma === thing.idCronograma
+        ))
+      )
+
+      //reordeno
+      this.sinRepetidosCanceladosCronogramas.sort( (a, b) => {
+        if (a.idCronograma > b.idCronograma) {
+          return -1
+        }
+        return 1;
+      })
+    }
   }
 
   removeId(id) {
@@ -406,6 +450,31 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
         return 1;
       })
     }
+
+    if (this.currentTabIndex == 3) {
+      const index = this.selectedIdsCronogramasChips.get(this.currentTabIndex).indexOf(id);
+
+      this.selectedIdsCronogramasChips.get(this.currentTabIndex).splice(index, 1);
+      const indexCronograma = this.filteredArrayCanceladosCronogramas.findIndex( (cronograma) => {
+        if (cronograma.idCronograma == id) 
+          return true;
+        return false;
+      });
+      this.filteredArrayCanceladosCronogramas.splice(indexCronograma, 1);
+      this.sinRepetidosCanceladosCronogramas = this.filteredArrayCanceladosCronogramas.filter((thing, index, self) =>
+        index === self.findIndex((t) => (
+          t.idCronograma === thing.idCronograma
+        ))
+      )
+
+      //reordeno
+      this.sinRepetidosCanceladosCronogramas.sort( (a, b) => {
+        if (a.idCronograma > b.idCronograma) {
+          return -1
+        }
+        return 1;
+      })
+    }
   }
 
   removeAllNombres() {
@@ -440,6 +509,24 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
       this.selectedNombresChips.get(this.currentTabIndex).length = 0;
       
       this.sinRepetidosFinalizadosCronogramas = this.filteredArrayFinalizadosCronogramas.filter((thing, index, self) =>
+        index === self.findIndex((t) => (
+          t.idCronograma === thing.idCronograma
+      )))
+    }
+
+    if (this.currentTabIndex == 3) {
+      this.selectedNombresChips.get(this.currentTabIndex).forEach( (cronograma) => {
+        let index = this.filteredArrayCanceladosCronogramas.findIndex( (c) => {
+          if (c.idCronograma == cronograma.idCronograma) 
+            return true;
+          return false;
+        });
+        this.filteredArrayCanceladosCronogramas.splice(index, 1);
+      })
+  
+      this.selectedNombresChips.get(this.currentTabIndex).length = 0;
+      
+      this.sinRepetidosCanceladosCronogramas = this.filteredArrayCanceladosCronogramas.filter((thing, index, self) =>
         index === self.findIndex((t) => (
           t.idCronograma === thing.idCronograma
       )))
@@ -480,6 +567,23 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
           t.idCronograma === thing.idCronograma
       )))
     }
+
+    if (this.currentTabIndex == 3) {
+      this.selectedIdsCronogramasChips.get(this.currentTabIndex).forEach( (cronograma) => {
+        let index = this.filteredArrayCanceladosCronogramas.findIndex( (c) => {
+          if (c.idCronograma == cronograma.idCronograma) 
+            return true;
+          return false;
+        });
+        this.filteredArrayCanceladosCronogramas.splice(index, 1);
+      })
+      
+      this.selectedIdsCronogramasChips.get(this.currentTabIndex).length = 0;
+      this.sinRepetidosCanceladosCronogramas = this.filteredArrayCanceladosCronogramas.filter((thing, index, self) =>
+        index === self.findIndex((t) => (
+          t.idCronograma === thing.idCronograma
+      )))
+    }
   }
 
   tabChanged(tabChangeEvent): void {
@@ -487,39 +591,20 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
   }
 
   selectedNombre(event) {
-    if (this.currentTabIndex == 1) {
-      this.selectedNombresChips.get(this.currentTabIndex).push(event.option.viewValue);
-      this.nameInput.nativeElement.value = '';
-      this.nameForm.controls['nameInput'].disable();
-      this.nameForm.controls['nameInput'].enable();
-      this.filterCronogramaByProperty(this.filterShowType, this.currentArrayToFilter, event.option.viewValue.toLowerCase());  
-    }
-
-    if (this.currentTabIndex == 2) {
-      this.selectedNombresChips.get(this.currentTabIndex).push(event.option.viewValue);
-      this.nameInput.nativeElement.value = '';
-      this.nameForm.controls['nameInput'].disable();
-      this.nameForm.controls['nameInput'].enable();
-      this.filterCronogramaByProperty(this.filterShowType, this.currentArrayToFilter, event.option.viewValue.toLowerCase());  
-    }
+    this.selectedNombresChips.get(this.currentTabIndex).push(event.option.viewValue);
+    this.nameInput.nativeElement.value = '';
+    this.nameForm.controls['nameInput'].disable();
+    this.nameForm.controls['nameInput'].enable();
+    this.filterCronogramaByProperty(this.filterShowType, this.currentArrayToFilter, event.option.viewValue.toLowerCase());  
   }
 
-  selectedId(event) {
-    if (this.currentTabIndex == 1) {
-      this.selectedIdsCronogramasChips.get(this.currentTabIndex).push(event.option.viewValue);
-      this.idInput.nativeElement.value = '';
-      this.idForm.controls['idInput'].disable();
-      this.idForm.controls['idInput'].enable();
-      this.filterCronogramaByProperty(this.filterShowType, this.currentArrayToFilter, event.option.viewValue.toLowerCase());
-    }
-
-    if (this.currentTabIndex == 2) {
-      this.selectedIdsCronogramasChips.get(this.currentTabIndex).push(event.option.viewValue);
-      this.idInput.nativeElement.value = '';
-      this.idForm.controls['idInput'].disable();
-      this.idForm.controls['idInput'].enable();
-      this.filterCronogramaByProperty(this.filterShowType, this.currentArrayToFilter, event.option.viewValue.toLowerCase());
-    }
+  selectedId(event) { 
+    this.selectedIdsCronogramasChips.get(this.currentTabIndex).push(event.option.viewValue);
+    this.idInput.nativeElement.value = '';
+    this.idForm.controls['idInput'].disable();
+    this.idForm.controls['idInput'].enable();
+    this.filterCronogramaByProperty(this.filterShowType, this.currentArrayToFilter, event.option.viewValue.toLowerCase());
+  
   }
 
   filterCronogramas() {
