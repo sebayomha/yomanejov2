@@ -913,6 +913,8 @@ export class FreeClassFinderComponent {
       if (!(i == (this.generalSchedule.date_times.length - 1))) {
         this.generalSchedule.date_times[i + 1].from = this.generalSchedule.date_times[i].from;
         this.generalSchedule.date_times.splice(i,1);
+      } else {
+        this.generalSchedule.date_times.splice(i,1);
       }
     }
   }

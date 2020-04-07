@@ -307,7 +307,7 @@
                                 </mat-checkbox>
                             </div>
                             <div class="col-4 col-sm-1">
-                                <button type="button" [disabled]="date_time.hour_finish == ''" class="btnHover" style="width: 100%; margin-top: 10px;" mat-button
+                                <button [ngClass]="{'circle-color-primary-disabled': date_time.hour_finish == '', 'circle-color-primary': date_time.hour_finish != ''}" type="button" [disabled]="date_time.hour_finish == ''" class="btnHover" style="width: 100%; margin-top: 10px;" mat-button
                                 (click)="addGeneralDateTime()" *ngIf="isLast"><span
                                     style="font-size: 20px"><i
                                         class="fas fa-plus-circle"></i></span></button>
