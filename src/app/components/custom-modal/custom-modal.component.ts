@@ -25,6 +25,7 @@ export class CustomModalComponent {
   @ViewChild('eliminarAlumnoForm') eliminarAlumnoForm: NgForm;
   @ViewChild('eliminarCronogramaActivoForm') eliminarCronogramaActivoForm: NgForm;
   @ViewChild('bajaClaseForm') bajaClaseForm: NgForm;
+  @ViewChild('agregarAutoForm') agregarAutoForm: NgForm;
 
 
   schedule : any;
@@ -32,6 +33,7 @@ export class CustomModalComponent {
   buttonDisabled;
   motivoDeBaja: string = '';
   math = Math;
+  modeloDeAuto;
   constructor(private breakpointObserver: BreakpointObserver, private cd: ChangeDetectorRef) { }
 
   ngOnInit() { }

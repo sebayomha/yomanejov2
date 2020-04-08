@@ -22,6 +22,9 @@
           <span *ngIf="component == 'lessons'">
             Ingresar motivo de inasistencia
           </span>
+          <span *ngIf="component == 'cars'">
+            Crear auto
+          </span>
         </h5>
         <h5 class="modal-title" *ngIf="successBanner" style="margin: auto; font-size: 90px; color: white;"><i class="fas fa-check-circle"></i></h5>
         <button *ngIf="!successBanner" type="button" class="close closeCross" (click)="onClose();" aria-label="Close">
@@ -244,6 +247,24 @@
             style="color: #f44336; font-size: 12px; position: relative; bottom: 10px;">
               Debe ingresar un motivo para continuar
             </mat-error>
+          </form>
+        </div>
+
+      </div>
+      <div class="modal-body" style="height: 185px;" *ngIf="component == 'cars'">
+        
+        <div class="col-12">
+          <form #agregarAutoForm="ngForm">
+            <mat-form-field class="col-12 col-md-4" style="padding: 0px; margin-top: 10px; display: block;" *ngIf="operation == 'agregar_auto'">
+              <input autofocus matInput placeholder="Modelo del auto" name="modeloDeAuto"
+              [(ngModel)]="modeloDeAuto" #modeloAuto="ngModel" required>
+
+              <!-- <mat-error *ngIf="modeloAuto.errors?.required && modeloAuto.touched"
+              style="font-size: 12px;">
+                Debe ingresar un modelo para continuar
+              </mat-error> -->
+
+            </mat-form-field>
           </form>
         </div>
 
