@@ -33,7 +33,7 @@ export class FreeClassFinderComponent {
   addresses_alt = Array<Address>();
   minDate = new Date();
   predefinedDays = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
-  checkedGeneralDays = Array<Number>();
+  checkedGeneralDays = Array<Boolean>();
   locations = ["La Plata", "Berisso", "Ensenada"];
   predefinedHours = ["08:00", "09:00", "10:00", "11:15", "12:15", "13:15", "14:30", "15:30", "16:30", "17:45", "18:45", "19:45"];
   search: Search;
@@ -844,6 +844,7 @@ export class FreeClassFinderComponent {
   setSchedule(generalSchedule) {
     if(this.checkedGeneralDays.length && this.isGeneralInformationFilled()) {
       this.generalFormHasError = false;
+      this.sr_all_day = false;
       this.checkedGeneralDays.forEach( (checkedElement, index) => {
         if (checkedElement) {
           let checkedDay = this.predefinedDays[index];
@@ -950,6 +951,14 @@ export class FreeClassFinderComponent {
       } else {
         this.generalSchedule.date_times.splice(i,1);
       }
+    }
+  }
+
+  allDaySR() {
+    if (this.sr_all_day) {
+      this.checkedGeneralDays = [true, true, true, true, true, true, true];
+    } else {
+      this.checkedGeneralDays = [];
     }
   }
 
