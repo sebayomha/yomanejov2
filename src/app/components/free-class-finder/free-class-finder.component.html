@@ -335,7 +335,10 @@
                         </mat-checkbox>
                     </div>
                 </div>
-                <button type="button" (click)="setSchedule(generalSchedule)">LOG GENERAL</button>
+                <button type="button" (click)="setSchedule(generalSchedule);">LOG GENERAL</button>
+                <mat-error *ngIf="generalFormHasError">
+                    Debe seleccionar al menos un día y completar los horarios para poder aplicar los cambios.
+                </mat-error>
                 <!-- FIN TEMPLATE GENERAL -->
 
                 <div style="margin-top: 30px;"><label style="font-weight: 500; font-size: 17px;">Disponibilidad
