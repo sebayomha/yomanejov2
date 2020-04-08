@@ -6,6 +6,7 @@ import { StudentsComponent } from './components/students/students.component';
 import { EditarAlumnoComponent } from './components/editar-alumno/editar-alumno.component';
 import { AddClassSchedulesComponent } from './components/add-class-schedules/add-class-schedules.component';
 import { CarsComponent } from './components/cars/cars.component';
+import { LoginComponent } from './components/login/login.component';
 
 const app_routes: Routes = [
   { path: 'busqueda', component: FreeClassFinderComponent},
@@ -16,6 +17,7 @@ const app_routes: Routes = [
   { path: 'autos', component: CarsComponent},
   { path: 'alumnos', component: StudentsComponent, data: {animation: 'StudentsPage'}},
   { path: 'alumnos/editar/:id', component: EditarAlumnoComponent, data: {animation: 'EditingStudentPage'}},
+  { path: 'login', component: LoginComponent},
   { path: '', pathMatch: 'full', redirectTo: 'busqueda' },
   { path: '**', pathMatch: 'full', redirectTo: 'busqueda' }
 ];
