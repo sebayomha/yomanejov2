@@ -10,6 +10,19 @@
     background-color:#43c89d !important;  
 }
 
+.padding-20 {
+    padding: 20px;
+}
+
+.confirmButton {
+    color: #43c89d;
+}
+
+.confirmButton:hover {
+    background: #43c89d;
+    color: white;
+}
+
 @media (max-width: 767px) {
     .mobile-text-12 {
         font-size: 12px !important;
