@@ -275,7 +275,7 @@
                 <!-- TEMPLATE GENERAL -->
                 <div>TEMPLATE GENERAL</div>
                <div class="container" style="margin-left: 0px;" style="overflow-y: hidden;">
-                    <div *ngIf="!generalSchedule.all_day">
+                    <div *ngIf="!generalSchedule.allDay">
                         <div class="row margin-top-30" *ngFor="let date_time of generalSchedule.date_times; let i = index; last as isLast">
                             <div class="col-sm-4">
                                 <mat-form-field class="example-full-width" >
@@ -283,7 +283,7 @@
                                     <mat-select
                                         [(ngModel)]="date_time.hour_start" name="date_time.hour_start_{{i}}"
                                         (selectionChange)="doGeneralScheduleTo(i, $event.value)"
-                                        [disabled]="date_time.hour_finish != ''">
+                                        [disabled]="!isLast && date_time.hour_finish != '' && generalSchedule.date_times.length > 1">
                                         <mat-option
                                             *ngFor="let hour of date_time.from"
                                             [value]="hour">
@@ -295,7 +295,7 @@
                             <div class="col-sm-4" *ngIf="date_time.hour_start">
                                 <mat-form-field class="example-full-width">
                                     <mat-label>Hasta</mat-label>
-                                    <mat-select [(ngModel)]="date_time.hour_finish" name="date_time.hour_finish_{{i}}">
+                                    <mat-select [disabled]="generalSchedule.date_times.length > 1 && !isLast" [(ngModel)]="date_time.hour_finish" name="date_time.hour_finish_{{i}}">
                                         <mat-option *ngFor="let hour of date_time.to" [value]="hour">
                                             {{hour}}
                                         </mat-option>
@@ -307,7 +307,7 @@
                                 </mat-checkbox>
                             </div>
                             <div class="col-4 col-sm-1">
-                                <button type="button" class="btnHover" style="width: 100%; margin-top: 10px;" mat-button
+                                <button [ngClass]="{'circle-color-primary-disabled': date_time.hour_finish == '', 'circle-color-primary': date_time.hour_finish != ''}" type="button" [disabled]="date_time.hour_finish == ''" class="btnHover" style="width: 100%; margin-top: 10px;" mat-button
                                 (click)="addGeneralDateTime()" *ngIf="isLast"><span
                                     style="font-size: 20px"><i
                                         class="fas fa-plus-circle"></i></span></button>
@@ -335,7 +335,10 @@
                         </mat-checkbox>
                     </div>
                 </div>
-                <button type="button" (click)="setSchedule(generalSchedule)">LOG GENERAL</button>
+                <button type="button" (click)="setSchedule(generalSchedule);">LOG GENERAL</button>
+                <mat-error *ngIf="generalFormHasError">
+                    Debe seleccionar al menos un día y completar los horarios para poder aplicar los cambios.
+                </mat-error>
                 <!-- FIN TEMPLATE GENERAL -->
 
                 <div style="margin-top: 30px;"><label style="font-weight: 500; font-size: 17px;">Disponibilidad

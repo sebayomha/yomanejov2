@@ -74,6 +74,7 @@ export class FreeClassFinderComponent {
     address_alternative: false,
     date_times: Array<GeneralHour>()
   }
+  generalFormHasError = false;
 
   constructor(private alumnoService: AlumnosService, private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private datePipe: DatePipe, private _snackBar: MatSnackBar) { }
 
@@ -841,7 +842,8 @@ export class FreeClassFinderComponent {
 
   
   setSchedule(generalSchedule) {
-    if(this.checkedGeneralDays.length) {
+    if(this.checkedGeneralDays.length && this.isGeneralInformationFilled()) {
+      this.generalFormHasError = false;
       this.checkedGeneralDays.forEach( (checkedElement, index) => {
         if (checkedElement) {
           let checkedDay = this.predefinedDays[index];
@@ -864,14 +866,50 @@ export class FreeClassFinderComponent {
           }
         }
       });
+      this.resetGeneralForm();
+    } else {
+      this.generalFormHasError = true;
+    }
+  }
+
+  isGeneralInformationFilled() {
+    if (this.generalSchedule.allDay) {
+      return true;
+    } else {
+      if (this.generalSchedule.date_times.length == 1 && this.generalSchedule.date_times[0].hour_start != '' && this.generalSchedule.date_times[0].hour_finish != '') {
+        return true;
+      } else {
+        if (this.generalSchedule.date_times.length > 1) {
+          return true;
+        }
+      }
     }
 
-    console.log("asf", this.search.dates_times)
+    return false;
+  }
+
+  resetGeneralForm() {
+    this.checkedGeneralDays = [];
+    this.generalSchedule.allDay = false;
+    this.generalSchedule.address_alternative = false;
+    this.generalSchedule.date_times = [];
+    let general_date_time: GeneralHour = {
+      hour_finish: '',
+      hour_start: '',
+      from: this.predefinedHours,
+      to: [],
+      address_alternative: false
+    }
+    this.generalSchedule.date_times.push(general_date_time);
   }
 
   doGeneralScheduleTo(i, hour) {
     const indexFrom = this.generalSchedule.date_times[i].from.indexOf(hour);
-    this.generalSchedule.date_times[i].to = this.generalSchedule.date_times[i].from.slice(indexFrom + 1, this.generalSchedule.date_times[i].from.length);
+    if (indexFrom == (this.generalSchedule.date_times[i].from.length -1)) {
+      this.generalSchedule.date_times[i].to = ['19:45'];
+    } else {
+      this.generalSchedule.date_times[i].to = this.generalSchedule.date_times[i].from.slice(indexFrom + 1, this.generalSchedule.date_times[i].from.length);
+    }
   }
 
   addGeneralDateTime() {
@@ -895,7 +933,24 @@ export class FreeClassFinderComponent {
   }
   
   removeGeneralDateTime(i) {
-    this.generalSchedule.date_times.splice(i,1);
+    if (i == 0 && this.generalSchedule.date_times.length == 1) {
+      let general_date_time: GeneralHour = {
+        hour_finish: '',
+        hour_start: '',
+        from: this.predefinedHours,
+        to: [],
+        address_alternative: false
+      }
+      this.generalSchedule.date_times = [];
+      this.generalSchedule.date_times.push(general_date_time);
+    } else {
+      if (!(i == (this.generalSchedule.date_times.length - 1))) {
+        this.generalSchedule.date_times[i + 1].from = this.generalSchedule.date_times[i].from;
+        this.generalSchedule.date_times.splice(i,1);
+      } else {
+        this.generalSchedule.date_times.splice(i,1);
+      }
+    }
   }
 
 
