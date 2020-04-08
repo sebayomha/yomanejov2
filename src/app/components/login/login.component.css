@@ -217,7 +217,8 @@ Negro: 343436;*/
   height: 100vh;
   background-size:cover;
   width:100vw;
-  background-image:url('/assets/img/TS.png');
+  background: #505050;
+  /* background-image:url('/assets/img/TS.png'); */
   background-attachment: fixed;
   background-repeat: no-repeat;
   background-position: bottom;
