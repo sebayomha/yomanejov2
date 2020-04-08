@@ -1,0 +1,287 @@
+/*colores*/
+
+/*
+Amarillo: f8cb29;
+Gris claro: 7a7a7a;
+Gris oscuro: 444645;
+Negro: 343436;*/
+
+
+
+.passwordIcon{
+    position: absolute;
+    right: 25px;
+    top: 44px;
+}
+
+.form {
+  background:#444645;
+  padding: 40px;
+  max-width:600px;
+  margin:40px auto;
+  border-radius:4px;
+  box-shadow: 0 4px 10px 4px rgba(19, 35, 47, 0.3);
+}
+
+.inp {
+  position: relative;
+  margin: 10px;
+  width: 100%;
+  margin-top: 5px;
+}
+
+.inp .label {
+  position: absolute;
+  top: 12px;
+  left: 0;
+  font-size: 16px;
+  color: rgb(14, 56, 53);
+  font-weight: 500;
+  -webkit-transform-origin: 0 0;
+  transform-origin: 0 0;
+  transition: all 0.2s ease;
+}
+
+.inp .border-input {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  background: #07f;
+  -webkit-transform: scaleX(0);
+  transform: scaleX(0);
+  -webkit-transform-origin: 0 0;
+  transform-origin: 0 0;
+  transition: all 0.15s ease;
+}
+
+.inp input {
+  -webkit-appearance: none;
+  width: 100%;
+  border: 0;
+  font-family: inherit;
+  padding: 12px 0;
+  margin-top: 10px;
+  height: 30px;
+  font-size: 16px;
+  font-weight: 500;
+  border-bottom: 2px solid #c8ccd4;
+  background: none;
+  border-radius: 0;
+  color: #223254;
+  transition: all 0.15s ease;
+}
+
+.inp input:read-only, .inp input:read-only + i + span, .inp input:read-only + span{
+  border-bottom: none !important;
+  color: rgba(0,0,0,.38) !important;
+  cursor: default !important;
+}
+
+.mat-chip-selected {
+  background-color: #346cb0;
+  color: white;
+}
+
+.inp input:read-only + i + span + span, .inp input:read-only + span + span{
+  background-color: transparent !important;
+  background-image: linear-gradient(to right,rgba(0,0,0,.42) 0,rgba(0,0,0,.42) 33%,transparent 0) !important;
+  background-size: 4px 100% !important;
+  background-repeat: repeat-x !important;
+}
+
+.inp input.ng-dirty.ng-invalid:not(:placeholder-shown) + i + span, .inp input.ng-dirty.ng-invalid:not(:placeholder-shown) + span {
+  font-size: 17px;
+  color: red;
+  -webkit-transform: translateY(-24px) scale(0.75);
+  transform: translateY(-24px) scale(0.75);
+}
+
+.inp input.ng-dirty.ng-touched.ng-valid:not(:placeholder-shown) + i + span, .inp input.ng-dirty.ng-touched.ng-valid:not(:placeholder-shown) + span {
+  font-size: 17px;
+  color: rgb(14, 56, 53);
+  -webkit-transform: translateY(-24px) scale(0.75);
+  transform: translateY(-24px) scale(0.75);
+}
+
+.inp input:focus {
+  background: none;
+  outline: none;
+}
+
+.inp input:focus + span, .inp input:focus + i + span {
+  color: #07f !important;
+  -webkit-transform: translateY(-26px) scale(0.75);
+  transform: translateY(-26px) scale(0.75);
+  font-size: 17px;
+}
+
+.inp input:focus + span + .border-input, .inp input:focus + i + span + .border-input {
+  -webkit-transform: scaleX(1);
+  transform: scaleX(1);
+  width: 100%;
+}
+
+.login-box {
+  width: 385px;
+  height: 460px;
+  background: #00000073;
+  color: #fff;
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  box-sizing: border-box;
+  padding: 70px 25px;
+}
+
+.login-box-setpassword {
+  width: 385px;
+  height: 430px;
+  background: #00000073;
+  color: #fff;
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  box-sizing: border-box;
+  padding: 25px 25px;
+}
+
+.login-box .avatar {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  position: absolute;
+  top: -75px;
+  left: calc(50% - 125px);
+}
+
+.login-box h1 {
+  margin: 0;
+  padding: 0 0 20px;
+  text-align: center;
+  font-size: 22px;
+}
+
+.login-box label {
+  margin: 0;
+  padding: 0;
+  font-weight: bold;
+  display: block;
+}
+
+.login-box input {
+  width: 100%;
+}
+
+.login-box input[type="text"], .login-box input[type="password"] {
+  border: none;
+  border-bottom: 1px solid #fff;
+  background: transparent;
+  outline: none;
+  height: 40px;
+  color: #fff;
+  font-size: 16px;
+}
+
+.login-box input[type="submit"] {
+  border: none;
+  outline: none;
+  height: 40px;
+  background: #b80f22;
+  color: #fff;
+  font-size: 18px;
+  border-radius: 20px;
+}
+
+.login-box input[type="submit"]:hover {
+  cursor: pointer;
+  background: #ffc107;
+  color: #000;
+}
+
+.login-box a {
+  text-decoration: none;
+  font-size: 12px;
+  line-height: 20px;
+  color: darkgrey;
+}
+
+.login-box a:hover {
+  color: #fff;
+}
+
+.image{
+  height: 100vh;
+  background-size:cover;
+  width:100vw;
+  background-image:url('/assets/img/TS.png');
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-position: bottom;
+}
+
+@-webkit-keyframes autofill {
+  to {
+      color: white;
+      background: transparent;
+  }
+}
+
+input:-webkit-autofill {
+  -webkit-animation-name: autofill;
+  -webkit-animation-fill-mode: both;
+}
+
+::ng-deep #loginForm .mat-form-field-label {
+  color: #fdc929 !important;
+}
+
+::ng-deep #loginForm .mat-form-field.ng-invalid.ng-dirty .mat-form-field-label {
+  color: #f44336 !important;
+}
+
+::ng-deep #loginForm .mat-form-field.ng-valid .mat-form-field-underline {
+  /*change color of label*/
+  background: #fdc929 !important;
+}
+
+::ng-deep #loginForm .mat-form-field.ng-invalid.ng-dirty .mat-form-field-underline .mat-form-field-ripple {
+  /*change color of label*/
+  background: #f44336 !important;
+}
+
+::ng-deep #loginForm .mat-focused .mat-form-field-underline{
+  background: #fdc929 !important;
+}
+
+::ng-deep #loginForm .mat-form-field-ripple, ::ng-deep .mat-form-field-underline{
+  /*change color of underline when focused*/
+  background-color: #fdc929 !important;;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.subtitle {
+  font-size: 14px;
+}
+
+ @media (max-height: 630px) {
+  .login-box {
+    width: 330px;
+    padding: 70px 0px;
+  }
+
+  .login-box .avatar {
+    width: 200px;
+    height: 200px;
+    top: -25px;
+    left: calc(50% - 100px);
+  }
+
+ }
