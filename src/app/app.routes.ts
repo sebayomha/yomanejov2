@@ -20,7 +20,7 @@ const app_routes: Routes = [
   { path: 'alumnos/editar/:id', component: EditarAlumnoComponent, data: {animation: 'EditingStudentPage'}, canActivate:[AuthGuardService]},
   { path: 'login', component: LoginComponent, data: {isLoginPage: true}, canActivate:[AuthGuardService]},
   { path: '', pathMatch: 'full', redirectTo: 'busqueda'},
-  { path: '**', pathMatch: 'full', redirectTo: 'busqueda'}
+  { path: '**', pathMatch: 'full', redirectTo: 'busqueda' }
 ];
 
 export const app_routing = RouterModule.forRoot(app_routes);

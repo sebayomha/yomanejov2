@@ -5,6 +5,7 @@ import { Response } from '../../models/response';
 import { trigger,animate,transition,style } from '@angular/animations';
 import { SnackbarComponent } from '../snackbar/snackbar/snackbar.component';
 import { MatSnackBar } from '@angular/material';
+import { AppSettings } from '../../appConstants';
 
 @Component({
   selector: 'lessons',
@@ -26,10 +27,11 @@ import { MatSnackBar } from '@angular/material';
 export class  LessonsComponent {
 
   constructor(private breakpointObserver: BreakpointObserver, private cronogramaService: CronogramaService, private _snackBar: MatSnackBar) { }
+  USER_ROLE = AppSettings.USER_ROLE;
 
   @ViewChild('customModal') customModal;
 
-  displayedColumns: string[] = ['No', 'numero', 'hora', 'direccion', 'alumno', 'operacion'];
+  displayedColumns: string[] = this.USER_ROLE == 'ADMIN' ? ['No', 'numero', 'hora', 'direccion', 'alumno', 'operacion'] : ['No', 'numero', 'hora', 'direccion', 'alumno'];
   select_day : Date = new Date();
   minDate = new Date();
   autos;
@@ -38,7 +40,6 @@ export class  LessonsComponent {
   
 
   ngOnInit() {
-    console.log(this.formatDate());
     this.cronogramaService.obtenerClasesPorFecha(this.formatDate()).subscribe( (response: Response) => {
       console.log(response.data)
       this.autos = Object.entries(response.data);

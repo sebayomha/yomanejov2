@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { Router } from '@angular/router';
+import { AppSettings } from '../../appConstants';
 
 @Component({
   selector: 'navbar',
@@ -10,9 +11,12 @@ import { Router } from '@angular/router';
 
 export class NavbarComponent {
 
-  constructor(private authService: AuthService, private router: Router) { }
+  USER_ROLE;
+  constructor(private authService: AuthService, private router: Router,) { }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    this.USER_ROLE = AppSettings.USER_ROLE;
+  }
 
   logout() {
     this.authService.logout(this.authService.decodePayload().idUsuario).subscribe( res => {
