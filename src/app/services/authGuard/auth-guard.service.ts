@@ -26,7 +26,10 @@ export class AuthGuardService implements CanActivate {
             this._router.navigate(['login']);
             return false;
         } else {
-            return true;
+            if(!route.data.authRole || (this.authService.decodePayload().role == route.data.authRole))
+                return true;
+            this._router.navigate(['busqueda']);
+            return false;
         }
     }      
   }

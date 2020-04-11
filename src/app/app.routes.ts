@@ -15,9 +15,9 @@ const app_routes: Routes = [
   { path: 'pendientes/:idCronograma', component: PendingConfirmationSchedulesComponent},
   { path: 'pendientes/agregarClase/:idCronograma', component: AddClassSchedulesComponent, data: {animation: 'EditingStudentPage'}, canActivate:[AuthGuardService]},
   { path: 'clases', component: LessonsComponent, canActivate:[AuthGuardService]},
-  { path: 'autos', component: CarsComponent, canActivate:[AuthGuardService]},
-  { path: 'alumnos', component: StudentsComponent, data: {animation: 'StudentsPage'}, canActivate:[AuthGuardService]},
-  { path: 'alumnos/editar/:id', component: EditarAlumnoComponent, data: {animation: 'EditingStudentPage'}, canActivate:[AuthGuardService]},
+  { path: 'autos', component: CarsComponent, data: {authRole: 'ADMIN'}, canActivate:[AuthGuardService]},
+  { path: 'alumnos', component: StudentsComponent, data: {animation: 'StudentsPage', authRole: 'ADMIN'}, canActivate:[AuthGuardService]},
+  { path: 'alumnos/editar/:id', component: EditarAlumnoComponent, data: {animation: 'EditingStudentPage', authRole: 'ADMIN'}, canActivate:[AuthGuardService]},
   { path: 'login', component: LoginComponent, data: {isLoginPage: true}, canActivate:[AuthGuardService]},
   { path: '', pathMatch: 'full', redirectTo: 'busqueda'},
   { path: '**', pathMatch: 'full', redirectTo: 'busqueda' }

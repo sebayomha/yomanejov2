@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 import { Response } from 'src/app/models/response';
 import { SnackbarComponent } from '../snackbar/snackbar/snackbar.component';
+import { AppSettings } from '../../appConstants';
 
 @Component({
   selector: 'app-login',
@@ -48,6 +49,7 @@ export class LoginComponent implements OnInit {
       if (data.code == 0) { //login exitoso
         localStorage.setItem('uniqueid', data.data.jwt);
         localStorage.setItem('uniquert', data.data.rt);
+        AppSettings.refreshRole();
         this.router.navigate(['busqueda'])
       } else{
         switch(data.code) {

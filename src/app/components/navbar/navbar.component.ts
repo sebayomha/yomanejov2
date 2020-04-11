@@ -16,6 +16,7 @@ export class NavbarComponent {
 
   ngOnInit() { 
     this.USER_ROLE = AppSettings.USER_ROLE;
+    console.log("asf", this.USER_ROLE)
   }
 
   logout() {
