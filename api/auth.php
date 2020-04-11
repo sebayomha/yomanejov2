@@ -46,10 +46,10 @@
 			if ($authResult->code == 0) {
 				echo json_encode($GLOBALS['utils']->getResponse(0, $authResult));	
 			} else {
-				echo json_encode($GLOBALS['utils']->getResponse($authResult->code, $authResult));	
+				echo json_encode($authResult);	
 			}
 		}else{
-			echo json_encode($GLOBALS['utils']->getResponse(1, 'Ingrese los campos'));	
+			echo json_encode($authResult);
 		}
 	}
 

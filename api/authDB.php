@@ -59,7 +59,7 @@ class Auth{
                             'loggedIn' => true,
                             'jwt' => $jwt,
                             'rt' => $rt,
-                            'result' => 'Contrasenia correcta'
+                            'data' => 'Contrasenia correcta'
                         ];
                     }else{ //En este caso la PW es la default
                         $data = (object) [
@@ -67,19 +67,19 @@ class Auth{
                             'iduser'=> $result[0]['idUsuario'],
                             'name'=> $result[0]['nombre'],
                             'role'=> $result[0]['role'],
-                            'result'=> 'la contraseña del usuario es la default'
+                            'data'=> 'la contraseña del usuario es la default'
                         ];
                     }
                  }else { //En este caso el usuario es correcto y la pw es incorrecta
                     $data = (object) [
                         'code' => 1,
-                        'result' => 'Usuario y contrasenia incorrecta'
+                        'data' => 'Usuario o contraseña incorrecto'
                     ];                   
                 }               
                 }else { //No lo encontro porque no existe el usuario
                     $data = (object) [
-                        'code' => 1,
-                        'message' => 'Usuario no existe'
+                        'code' => 3,
+                        'data' => 'Usuario o contraseña incorrecto'
                     ];
                 }
             mysqli_close($this->conn);
