@@ -76,6 +76,8 @@ export class FreeClassFinderComponent {
   }
   generalFormHasError = false;
 
+  panelHorarioSemanal:boolean = false;
+
   constructor(private alumnoService: AlumnosService, private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private datePipe: DatePipe, private _snackBar: MatSnackBar) { }
 
   ngOnInit() {
@@ -843,6 +845,7 @@ export class FreeClassFinderComponent {
   
   setSchedule(generalSchedule) {
     if(this.checkedGeneralDays.length && this.isGeneralInformationFilled()) {
+      this.panelHorarioSemanal = true;
       this.generalFormHasError = false;
       this.sr_all_day = false;
       this.checkedGeneralDays.forEach( (checkedElement, index) => {

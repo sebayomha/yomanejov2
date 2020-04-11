@@ -280,11 +280,13 @@
                     al menos un horario para realizar la búsqueda</div>
 
                 <!-- Selección Rápida -->
-                <div style="margin-top: 20px;"><label style="font-weight: 500; font-size: 14px;">Selección Rápida</label></div>
-                <div style="font-size: 13px;" class="text-muted">Elija un rango de horario</div>
-                <div class="container" style="margin-left: 0px;" style="overflow-y: hidden;">
+
+                <div class="container sobreado" style="margin-left: 0px; overflow-y: hidden;">
+                    <div style="margin-top: 20px;"><label style="font-weight: 500; font-size: 14px;">Selección rápida de horarios</label></div>
+                    <span style="font-size: 13px;" style="font-weight: 500; color:#43c89d;">1- </span>
+                    <span style="font-size: 13px;" class="text-muted">Elija un rango de horarios</span>
                     <div *ngIf="!generalSchedule.allDay">
-                        <div class="row margin-top-30" *ngFor="let date_time of generalSchedule.date_times; let i = index; last as isLast">
+                        <div class="row margin-top-15" *ngFor="let date_time of generalSchedule.date_times; let i = index; last as isLast">
                             <div class="col-sm-4">
                                 <mat-form-field class="example-full-width" >
                                     <mat-label>Desde</mat-label>
@@ -315,147 +317,166 @@
                                 </mat-checkbox>
                             </div>
                             <div class="col-4 col-sm-1">
-                                <button [ngClass]="{'circle-color-primary-disabled': date_time.hour_finish == '', 'circle-color-primary': date_time.hour_finish != ''}" type="button" [disabled]="date_time.hour_finish == ''" class="btnHover" style="width: 100%; margin-top: 10px;" mat-button
+                                <button type="button" [disabled]="date_time.hour_finish == ''" class="btnHover" style="width: 100%; margin-top: 10px;" mat-button
                                 (click)="addGeneralDateTime()" *ngIf="isLast"><span
-                                    style="font-size: 20px"><i
-                                        class="fas fa-plus-circle"></i></span></button>
+                                    style="font-size: 20px" matTooltipClass="tooltipFontSize" matTooltip="Agregar rango"><i
+                                        class="fas fa-plus-circle" [ngClass]="{'circle-color-primary-disabled': date_time.hour_finish == '', 'circle-color-primary': date_time.hour_finish != ''}"></i></span></button>
                             </div>
                             <div class="col-4 col-sm-2">
                                 <button type="button" style="width: 100%; margin-top: 10px;" mat-button
                                     (click)="removeGeneralDateTime(i)"><span
-                                        style="font-size: 20px;"><i
+                                        style="font-size: 20px;" matTooltipClass="tooltipFontSize" matTooltip="Eliminar rango"><i
                                             class="fas fa-trash-alt"></i></span></button>
                             </div>
                         </div>
                     </div>
-                    <div class="margin-top-30" style="text-align: center; margin-bottom: 30px;">
+                    <div class="margin-top-15" style="text-align: center; margin-bottom: 30px;">
                         <mat-checkbox [(ngModel)]="generalSchedule.allDay" style="margin-right:15px" name="generalSchedule_allDay">Disponible todo el día
                         </mat-checkbox>
                         <mat-checkbox [(ngModel)]="generalSchedule.address_alternative" *ngIf="generalSchedule.allDay && flag_address_alt" name="generalSchedule_alternativeAddress">DA
                         </mat-checkbox>
                     </div>
-                </div>
-                
-                <div style="font-size: 13px; margin-bottom: 30px;" class="text-muted">Elija los dias de la semana para incluir su rango de horario,
-                recuerde que al aplicar su seleccion, su horario semanal sera reemplazado.</div>
-                <div class="row">
-                    <div id="daysGeneralContainer" class="offset-xl-2 col-12">
-                        <div class="row">
-                            <div *ngFor="let day of predefinedDays; let dindex = index" class="col-4 col-md-3 col-lg-3 col-xl-1">
-                                <mat-checkbox [(ngModel)]="checkedGeneralDays[dindex]" name="generalDay_{{dindex}}" [value]="day"> 
-                                    {{day}}
-                                </mat-checkbox>
-                            </div>
-                            <div class="col-1">
-                                <mat-checkbox [(ngModel)]="sr_all_day" (change)="allDaySR()" name="sr_all_day"> 
-                                    Todos
-                                </mat-checkbox>
+                    <span style="font-size: 13px;" style="font-weight: 500; color:#43c89d;">2- </span>
+                    <span style="font-size: 13px;" class="text-muted">Elija los dias de la semana para incluir su rango de horarios,
+                        recuerde que al aplicar su seleccion, su horario semanal sera reemplazado.</span>
+                    <div class="row" style="margin-top: 30px;">
+                        <div id="daysGeneralContainer" class="col-12">
+                            <div class="row">
+                                <div class="offset-xl-2">
+
+                                </div>
+                                <div *ngFor="let day of predefinedDays; let dindex = index" class="col-4 col-md-3 col-lg-3 col-xl-1">
+                                    <mat-checkbox [(ngModel)]="checkedGeneralDays[dindex]" name="generalDay_{{dindex}}" [value]="day"> 
+                                        {{day}}
+                                    </mat-checkbox>
+                                </div>
+                                <div class="col-1">
+                                    <mat-checkbox [(ngModel)]="sr_all_day" (change)="allDaySR()" name="sr_all_day"> 
+                                        Todos
+                                    </mat-checkbox>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div class="col-12" style="text-align: center; margin-top: 25px; margin-bottom: 15px;">
+                        <button mat-button type="button" class="confirmButton" (click)="setSchedule(generalSchedule);" >APLICAR EN HORARIO SEMANAL<span style="font-size: 20px; margin-left: 10px;"><i class="fas fa-arrow-alt-circle-down"></i></span></button>
+                    </div>
                 </div>
-                <div class="col-12" style="text-align: center; margin-top: 25px;">
-                    <button mat-button type="button" class="confirmButton" (click)="setSchedule(generalSchedule);" >APLICAR<span style="font-size: 20px; margin-left: 10px;"><i class="fas fa-arrow-alt-circle-down"></i></span></button>
-                </div>
+                
+                
 
                 
                 <mat-error *ngIf="generalFormHasError" style="margin-top: 15px;">
                     Debe seleccionar al menos un día y completar los horarios para poder aplicar los cambios.
                 </mat-error>
                 <!-- FIN Seleccion Rapida -->
+                <br>
+                <!-- Horario semanal -->
+                <mat-expansion-panel (opened)="panelHorarioSemanal = true"
+                (closed)="panelHorarioSemanal = false" [expanded]="panelHorarioSemanal">
+                    <mat-expansion-panel-header style="background-color:#6c757dc7;">
+                        <mat-panel-title style="color:white;">
+                            <i style="margin-top: 3px; margin-right: 20px;"></i><span>Horario semanal</span>
+                        </mat-panel-title>
+                        <mat-panel-description style="color:white;">
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
 
-                <div style="margin-top: 20px;"><label style="font-weight: 500; font-size: 14px;">Horario semanal</label></div>
-                <div style="font-size: 13px; margin-bottom: 15px;" class="text-muted">A continuación puede ver como quedará su disponibilidad semanal</div>
-                <mat-tab-group mat-stretch-tabs #tabulator>
-                    <div *ngFor="let day of search.dates_times; let i = index;">
-                        <mat-tab>
-                            <ng-template mat-tab-label>
-                                <i class="far fa-check-circle"
-                                    *ngIf="(day.option[0].hour_start != '' && day.option[0].hour_start != null) || day.all_day == true"
-                                    style="margin-right: 5px;color: #43c89d;font-size: 16px;"></i>
-                                <span>{{day.name_day}}</span>
-                            </ng-template>
-                            <div class="container" style="margin-left: 0px;" (swipeleft)="onSwipeLeft(tabulator)"
-                                (swiperight)="onSwipeRight(tabulator)" style="overflow-y: hidden;">
-                                <div *ngIf="!search.dates_times[i].all_day">
-                                    <div class="row margin-top-30"
-                                        *ngFor="let option of search.dates_times[i].option; let j = index;">
-                                        <div class="col-sm-4"
-                                            *ngIf="search.dates_times[i].option[j].hour_start || search.dates_times[i].option[j].hour_start == null">
-                                            <mat-form-field class="example-full-width">
-                                                <mat-label>Desde</mat-label>
-                                                <mat-select
-                                                    (selectionChange)="doScheduleTo(day.name_day,$event.value,j)"
-                                                    [disabled]="search.dates_times[i].option.length - 1 > j"
-                                                    [(value)]="search.dates_times[i].option[j].hour_start">
-                                                    <mat-option
-                                                        *ngFor="let hour of search.dates_times[i].option[j].scheduleFrom"
-                                                        [value]="hour">
-                                                        {{hour}}
-                                                    </mat-option>
-                                                </mat-select>
-                                            </mat-form-field>
+                    <mat-tab-group mat-stretch-tabs #tabulator>
+                        <div *ngFor="let day of search.dates_times; let i = index;">
+                            <mat-tab>
+                                <ng-template mat-tab-label>
+                                    <i class="far fa-check-circle"
+                                        *ngIf="(day.option[0].hour_start != '' && day.option[0].hour_start != null) || day.all_day == true"
+                                        style="margin-right: 5px;color: #43c89d;font-size: 16px;"></i>
+                                    <span>{{day.name_day}}</span>
+                                </ng-template>
+                                <div class="container" style="margin-left: 0px;" (swipeleft)="onSwipeLeft(tabulator)"
+                                    (swiperight)="onSwipeRight(tabulator)" style="overflow-y: hidden;">
+                                    <div *ngIf="!search.dates_times[i].all_day">
+                                        <div class="row margin-top-30"
+                                            *ngFor="let option of search.dates_times[i].option; let j = index;">
+                                            <div class="col-sm-4"
+                                                *ngIf="search.dates_times[i].option[j].hour_start || search.dates_times[i].option[j].hour_start == null">
+                                                <mat-form-field class="example-full-width">
+                                                    <mat-label>Desde</mat-label>
+                                                    <mat-select
+                                                        (selectionChange)="doScheduleTo(day.name_day,$event.value,j)"
+                                                        [disabled]="search.dates_times[i].option.length - 1 > j"
+                                                        [(value)]="search.dates_times[i].option[j].hour_start">
+                                                        <mat-option
+                                                            *ngFor="let hour of search.dates_times[i].option[j].scheduleFrom"
+                                                            [value]="hour">
+                                                            {{hour}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-4"
+                                                *ngIf="search.dates_times[i].option[j].scheduleTo.length > 0">
+                                                <mat-form-field class="example-full-width">
+                                                    <mat-label>Hasta</mat-label>
+                                                    <mat-select
+                                                        (selectionChange)="setHourFinish(search.dates_times[i].option[j],$event.value)"
+                                                        [disabled]="search.dates_times[i].option.length - 1 > j"
+                                                        [(value)]="search.dates_times[i].option[j].hour_finish">
+                                                        <mat-option
+                                                            *ngFor="let hour of search.dates_times[i].option[j].scheduleTo"
+                                                            [value]="hour">
+                                                            {{hour}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-4 col-sm-1"
+                                                *ngIf="(search.dates_times[i].option[j].scheduleSend != null) && flag_address_alt"
+                                                style="text-align: center; margin: auto;">
+                                                <mat-checkbox name="check_da_{{i}}{{j}}"
+                                                    [(ngModel)]="search.dates_times[i].option[j].dir_alt">DA
+                                                </mat-checkbox>
+                                            </div>
+                                            <div class="col-4 col-sm-1"
+                                                *ngIf="!(search.dates_times[i].option.length - 1 > j)">
+                                                <button *ngIf="!(search.dates_times[i].option[0].hour_start == '')"
+                                                    type="button" class="btnHover" style="width: 100%; margin-top: 10px;"
+                                                    mat-button (click)="addDateTime(day.name_day)"
+                                                    [disabled]="(search.dates_times[i].option[j].scheduleSend == null)"><span
+                                                        style="font-size: 20px" matTooltipClass="tooltipFontSize" matTooltip="Agregar rango"><i class="fas fa-plus-circle"
+                                                            [ngClass]="{'circle-color-primary-disabled': search.dates_times[i].option[j].scheduleSend == null, 'circle-color-primary': search.dates_times[i].option[j].scheduleSend != null}"></i></span></button>
+                                            </div>
+                                            <div class="col-4 col-sm-2"
+                                                *ngIf="(search.dates_times[i].option[j].hour_start || search.dates_times[i].option[j].hour_start == null) && j == (search.dates_times[i].option.length - 1)">
+                                                <button style="width: 100%; margin-top: 10px;" mat-button
+                                                    (click)="removeOption(j,search.dates_times[i].option)"><span
+                                                        style="font-size: 20px;" matTooltipClass="tooltipFontSize" matTooltip="Borrar rango"><i
+                                                            class="fas fa-trash-alt"></i></span></button>
+                                            </div>
                                         </div>
-                                        <div class="col-sm-4"
-                                            *ngIf="search.dates_times[i].option[j].scheduleTo.length > 0">
-                                            <mat-form-field class="example-full-width">
-                                                <mat-label>Hasta</mat-label>
-                                                <mat-select
-                                                    (selectionChange)="setHourFinish(search.dates_times[i].option[j],$event.value)"
-                                                    [disabled]="search.dates_times[i].option.length - 1 > j"
-                                                    [(value)]="search.dates_times[i].option[j].hour_finish">
-                                                    <mat-option
-                                                        *ngFor="let hour of search.dates_times[i].option[j].scheduleTo"
-                                                        [value]="hour">
-                                                        {{hour}}
-                                                    </mat-option>
-                                                </mat-select>
-                                            </mat-form-field>
-                                        </div>
-                                        <div class="col-4 col-sm-1"
-                                            *ngIf="(search.dates_times[i].option[j].scheduleSend != null) && flag_address_alt"
-                                            style="text-align: center; margin: auto;">
-                                            <mat-checkbox name="check_da_{{i}}{{j}}"
-                                                [(ngModel)]="search.dates_times[i].option[j].dir_alt">DA
-                                            </mat-checkbox>
-                                        </div>
-                                        <div class="col-4 col-sm-1"
-                                            *ngIf="!(search.dates_times[i].option.length - 1 > j)">
-                                            <button *ngIf="!(search.dates_times[i].option[0].hour_start == '')"
-                                                type="button" class="btnHover" style="width: 100%; margin-top: 10px;"
-                                                mat-button (click)="addDateTime(day.name_day)"
-                                                [disabled]="(search.dates_times[i].option[j].scheduleSend == null)"><span
-                                                    style="font-size: 20px"><i class="fas fa-plus-circle"
-                                                        [ngClass]="{'circle-color-primary-disabled': search.dates_times[i].option[j].scheduleSend == null, 'circle-color-primary': search.dates_times[i].option[j].scheduleSend != null}"></i></span></button>
-                                        </div>
-                                        <div class="col-4 col-sm-2"
-                                            *ngIf="(search.dates_times[i].option[j].hour_start || search.dates_times[i].option[j].hour_start == null) && j == (search.dates_times[i].option.length - 1)">
-                                            <button style="width: 100%; margin-top: 10px;" mat-button
-                                                (click)="removeOption(j,search.dates_times[i].option)"><span
-                                                    style="font-size: 20px;"><i
-                                                        class="fas fa-trash-alt"></i></span></button>
+                                        <div style="margin: auto;" class="col-12 col-md-2"
+                                            *ngIf="(search.dates_times[i].option[0].hour_start == '')">
+                                            <button type="button" class="btnHover" style="width: 100%;" mat-button
+                                                (click)="addDateTime(day.name_day)"><span style="font-size: 20px"><i
+                                                        class="fas fa-plus-circle" style="color: #43c89d"></i></span> Nuevo
+                                                horario</button>
                                         </div>
                                     </div>
-                                    <div style="margin: auto;" class="col-12 col-md-2"
-                                        *ngIf="(search.dates_times[i].option[0].hour_start == '')">
-                                        <button type="button" class="btnHover" style="width: 100%;" mat-button
-                                            (click)="addDateTime(day.name_day)"><span style="font-size: 20px"><i
-                                                    class="fas fa-plus-circle" style="color: #43c89d"></i></span> Nuevo
-                                            horario</button>
+                                    <div class="margin-top-30" style="text-align: center; margin-bottom: 30px;">
+                                        <mat-checkbox [checked]="day.all_day" (change)="allDay(day.name_day,$event)"
+                                            style="margin-right:15px">Disponible todo el día
+                                        </mat-checkbox>
+                                        <mat-checkbox *ngIf="day.all_day && flag_address_alt" name="{{i}}"
+                                            [(ngModel)]="search.dates_times[i].option[0].dir_alt">DA
+                                        </mat-checkbox>
                                     </div>
                                 </div>
-                                <div class="margin-top-30" style="text-align: center; margin-bottom: 30px;">
-                                    <mat-checkbox [checked]="day.all_day" (change)="allDay(day.name_day,$event)"
-                                        style="margin-right:15px">Disponible todo el día
-                                    </mat-checkbox>
-                                    <mat-checkbox *ngIf="day.all_day && flag_address_alt" name="{{i}}"
-                                        [(ngModel)]="search.dates_times[i].option[0].dir_alt">DA
-                                    </mat-checkbox>
-                                </div>
-                            </div>
-                        </mat-tab>
-                    </div>
-                </mat-tab-group>
+                            </mat-tab>
+                        </div>
+                    </mat-tab-group>
+                </mat-expansion-panel>
+                <br>
+                <!-- <div style="margin-top: 20px;"><label style="font-weight: 500; font-size: 14px;">Horario semanal</label></div>
+                <div style="font-size: 13px; margin-bottom: 15px;" class="text-muted">A continuación puede ver como quedará su disponibilidad semanal</div> -->
+
 
                 <!-- Excepciones -->
                 <mat-expansion-panel>
@@ -560,13 +581,13 @@
                                                 <button *ngIf="h == (excepcion.horarios.length - 1)" type="button"
                                                     style="width: 100%; margin-top: 10px;" mat-button
                                                     (click)="addNewRowTime(j,h)"
-                                                    [disabled]="excepcion.horarios[h].horariosTotales.length == 0"><span style="font-size: 20px" 
+                                                    [disabled]="excepcion.horarios[h].horariosTotales.length == 0"><span style="font-size: 20px" matTooltipClass="tooltipFontSize" matTooltip="Agregar rango"
                                                     ><i class="fas fa-plus-circle" [ngClass]="{'circle-color-primary-disabled': excepcion.horarios[h].horariosTotales.length == 0, 'circle-color-primary': excepcion.horarios[h].horariosTotales.length != 0}"></i></span>
                                                 </button>
                                             </div>
                                             <div class="col-4 col-sm-2">
                                                 <button style="width: 100%; margin-top: 10px;" mat-button
-                                                    (click)="removeRowTime(j, h)"><span style="font-size: 20px"><i
+                                                    (click)="removeRowTime(j, h)"><span style="font-size: 20px" matTooltipClass="tooltipFontSize" matTooltip="Borrar rango"><i
                                                             class="fas fa-trash-alt"></i></span>
                                                 </button>
                                             </div>
