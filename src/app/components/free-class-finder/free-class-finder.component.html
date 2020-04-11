@@ -282,8 +282,9 @@
                 <!-- Selección Rápida -->
 
                 <div class="container sobreado" style="margin-left: 0px; overflow-y: hidden;">
-                    <div style="margin-top: 20px;"><label style="font-weight: 500; font-size: 14px;">Selección Rápida</label></div>
-                    <div style="font-size: 13px;" class="text-muted">Elija un rango de horarios</div>
+                    <div style="margin-top: 20px;"><label style="font-weight: 500; font-size: 14px;">Selección rápida de horarios</label></div>
+                    <span style="font-size: 13px;" style="font-weight: 500; color:#43c89d;">1- </span>
+                    <span style="font-size: 13px;" class="text-muted">Elija un rango de horarios</span>
                     <div *ngIf="!generalSchedule.allDay">
                         <div class="row margin-top-15" *ngFor="let date_time of generalSchedule.date_times; let i = index; last as isLast">
                             <div class="col-sm-4">
@@ -335,9 +336,10 @@
                         <mat-checkbox [(ngModel)]="generalSchedule.address_alternative" *ngIf="generalSchedule.allDay && flag_address_alt" name="generalSchedule_alternativeAddress">DA
                         </mat-checkbox>
                     </div>
-                    <div style="font-size: 13px; margin-bottom: 30px;" class="text-muted">Elija los dias de la semana para incluir su rango de horario,
-                        recuerde que al aplicar su seleccion, su horario semanal sera reemplazado.</div>
-                    <div class="row">
+                    <span style="font-size: 13px;" style="font-weight: 500; color:#43c89d;">2- </span>
+                    <span style="font-size: 13px;" class="text-muted">Elija los dias de la semana para incluir su rango de horarios,
+                        recuerde que al aplicar su seleccion, su horario semanal sera reemplazado.</span>
+                    <div class="row" style="margin-top: 30px;">
                         <div id="daysGeneralContainer" class="col-12">
                             <div class="row">
                                 <div class="offset-xl-2">
