@@ -23,6 +23,10 @@
     color: white;
 }
 
+.confirmButton:focus {
+    outline-color: white;
+}
+
 @media (max-width: 767px) {
     .mobile-text-12 {
         font-size: 12px !important;
