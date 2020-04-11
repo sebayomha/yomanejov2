@@ -33,6 +33,33 @@
             return $autos;
         }
 
+        function obtenerZonas() {
+            $state = $this->conn->prepare('SELECT * FROM zonamaster');
+            $state->execute();
+            $result = $state->get_result();
+            $zonas = (array) [];
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+
+                    array_push($zonas, $row);
+                }
+            } else {
+                return [];
+            }
+            return $zonas;
+        }
+
+        function crearAuto($zonaAuto, $patenteAuto, $modeloAuto, $colorAuto) {
+            $state = $this->conn->prepare('INSERT INTO auto (patente, color, zonaMaster, modelo) VALUES (?,?,?,?)');
+            $state->bind_param('ssss', $patenteAuto, $colorAuto, $zonaAuto, $modeloAuto);
+            if ($state->execute()) { 
+                //el insert del auto fue exitoso
+                $idAuto = $this->conn->insert_id;
+            } else {
+                return false;
+            }
+        }
+
     }
 
 ?>

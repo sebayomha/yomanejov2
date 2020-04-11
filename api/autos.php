@@ -19,6 +19,30 @@
 		echo json_encode($GLOBALS['utils']->getResponse(0, $resultAuto));	
 	}
 
+	function obtenerZonas() {
+		$zonas = new Auto();
+		$resultZona = $zonas->obtenerZonas();
+		echo json_encode($GLOBALS['utils']->getResponse(0, $resultZona));	
+	}
+
+	function crearAuto() {
+
+		$post = json_decode(file_get_contents('php://input'));
+		$zonaAuto = $post->zonaAuto;
+		$patenteAuto = $post->patenteAuto;
+		$modeloAuto = $post->modeloAuto;
+		$colorAuto = $post->colorAuto;
+
+		$auto = new Auto();
+		$resultCrearAuto = $auto->crearAuto($zonaAuto, $patenteAuto, $modeloAuto, $colorAuto);
+		if ($resultCrearAuto == 0) {
+			echo json_encode($GLOBALS['utils']->getResponse(0, 'Auto creado correctamente'));	
+		} else {
+			echo json_encode($GLOBALS['utils']->getResponse(1, 'Lo lamentamos, ha ocurrido un error'));
+		}
+
+	}
+
 	switch ($method) {
 		case 'GET': {
 		  	//Obtengo la URL Final para saber cual accion ejecutar.
@@ -26,8 +50,21 @@
 				case '/autos':
 					obtenerAutos();
 					break;
+				case '/autos/zonas':
+					obtenerZonas();
+					break;
 		  	}	    
 			break;	
 		} 
+		case 'POST': {
+			//Obtengo la URL Final para saber cual accion ejecutar.
+			switch ($requestMethod){
+				case '/crear':
+					crearAuto();
+					break;
+			}
+			break;    	
+		  }
 	}
+	
 ?>

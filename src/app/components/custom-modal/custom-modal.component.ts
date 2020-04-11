@@ -34,9 +34,15 @@ export class CustomModalComponent {
   motivoDeBaja: string = '';
   math = Math;
   modeloDeAuto;
+  zonaDeAuto;
+  patenteDeAuto;
+  colorDeAuto;
+  
   constructor(private breakpointObserver: BreakpointObserver, private cd: ChangeDetectorRef) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    console.log(this.data);
+   }
 
   ngAfterContentChecked() {
     this.cd.detectChanges();
@@ -92,8 +98,40 @@ export class CustomModalComponent {
               this.bajaClaseForm.form.get("motivoDeBaja").markAsDirty();
             }
           } else {
-            this.confirmation.emit(this.data);
-          }
+            if (this.component == 'cars') {
+              if (this.agregarAutoForm.form.valid) {
+                this.data.modeloDeAuto = this.modeloDeAuto;
+                this.data.zonaDeAuto = this.zonaDeAuto;
+                this.data.patenteDeAuto = this.patenteDeAuto;
+                this.data.colorDeAuto = this.colorDeAuto;
+                this.modeloDeAuto = '';
+                this.zonaDeAuto = '';
+                this.patenteDeAuto = '';
+                this.colorDeAuto = '';
+                this.agregarAutoForm.form.get("modeloAuto").markAsUntouched();
+                this.agregarAutoForm.form.get("modeloAuto").markAsPristine();
+                this.agregarAutoForm.form.get("zonaAuto").markAsUntouched();
+                this.agregarAutoForm.form.get("zonaAuto").markAsPristine();
+                this.agregarAutoForm.form.get("patenteAuto").markAsUntouched();
+                this.agregarAutoForm.form.get("patenteAuto").markAsPristine();
+                this.agregarAutoForm.form.get("colorAuto").markAsUntouched();
+                this.agregarAutoForm.form.get("colorAuto").markAsPristine();
+                this.confirmation.emit(this.data);
+              } else {
+                this.agregarAutoForm.form.get("modeloAuto").markAsTouched();
+                this.agregarAutoForm.form.get("modeloAuto").markAsDirty();
+                this.agregarAutoForm.form.get("zonaAuto").markAsUntouched();
+                this.agregarAutoForm.form.get("zonaAuto").markAsPristine();
+                this.agregarAutoForm.form.get("patenteAuto").markAsUntouched();
+                this.agregarAutoForm.form.get("patenteAuto").markAsPristine();
+                this.agregarAutoForm.form.get("colorAuto").markAsUntouched();
+                this.agregarAutoForm.form.get("colorAuto").markAsPristine();
+              }
+            }
+            else{
+              this.confirmation.emit(this.data);
+            }
+          }  
         }
       }
     }
