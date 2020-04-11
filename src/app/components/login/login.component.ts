@@ -1,9 +1,11 @@
-import { Component, OnInit, ViewChild, Output, ElementRef, EventEmitter} from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { LoginUser } from '../../models/LoginUser';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 import { Response } from 'src/app/models/response';
+import { SnackbarComponent } from '../snackbar/snackbar/snackbar.component';
+import { AppSettings } from '../../appConstants';
 
 @Component({
   selector: 'app-login',
@@ -33,8 +35,7 @@ export class LoginComponent implements OnInit {
   showNewPasswordBox: boolean;
 
   userData;
-
-  @ViewChild('password') password: ElementRef<HTMLElement>;
+  durationInSeconds: number = 3;
 
   ngOnInit() { 
     this.showPass = false;
@@ -45,23 +46,21 @@ export class LoginComponent implements OnInit {
   onSubmit(){
     let usuario = new LoginUser(this.user.email, this.user.password);
     this.auth.login(usuario).subscribe( (data: Response) => {
-      if(data.code == 0){ //login exitoso
-        //Guardo la informacion del usuario en localstorage para manipular la info durante toda la aplicacion.
+      if (data.code == 0) { //login exitoso
         localStorage.setItem('uniqueid', data.data.jwt);
-        //Redirecciono al Home.
-        this.router.navigate(['clases'])
-      }else{
-        switch(data.code){
-          case 6500: 
-          this.errorMsg = "Usuario o contraseña incorrecta";
+        localStorage.setItem('uniquert', data.data.rt);
+        AppSettings.refreshRole();
+        this.router.navigate(['busqueda'])
+      } else{
+        switch(data.code) {
+          case 1: {
+            this.snackbar.openFromComponent(SnackbarComponent, {
+              duration: this.durationInSeconds * 1100,
+              data: data
+            });
+          }
           break;
-          case 7000: 
-          this.errorMsg = "Usuario o contraseña incorrecta";
-          break;
-          case 4000:
-          this.errorMsg = "El correo y la contraseña son mandatorios";
-          break;
-          case 8000: { //la contraseña del usuario es la default
+          case 2: { //la contraseña del usuario es la default
             this.errorMsg = "";
             this.userData = {
               'email': this.user.email,
@@ -69,13 +68,11 @@ export class LoginComponent implements OnInit {
               'surname':data.data.surname,
               'iduser': data.data.iduser
             }
-            localStorage.setItem('userData', JSON.stringify(this.userData));
             this.showNewPasswordBox = true;
           }
           break;
         }
-        //login fallido
-        this.errorLogin = true;
+        this.errorLogin = true; //login fallido
       }   
     });
   }
@@ -91,34 +88,4 @@ export class LoginComponent implements OnInit {
   showNewPassBox(){
     this.showNewPasswordBox = !this.showNewPasswordBox;
   }
-
-  changePassword($event){
-    let user = new LoginUser(this.userData.email);
-    user.setUser(this.userData.email, this.userData.name, this.userData.surname, this.userData.iduser);
-    this.userService.changeFirstPassword($event.password, user).subscribe( (data:any) =>{
-      if(data.code == 0){ //cambio de contraseña exitoso
-        this.openSnackBar("Contraseña actualizada correctamente", "success", false, true, $event.password);
-      }else{ //Ocurrio un error
-        this.openSnackBar(data.message, "error", false, false);
-      }
-    });
-  }
-
-  openSnackBar(message, bannerClass, action, generateActionAfterDismiss, newPassword?){
-    let usuario = new LoginUser(this.user.email, newPassword);
-    this.snackbar.openFromComponent(BannerMessageComponent, {
-      duration: 3000,
-      panelClass: 'successMessage',
-      data: {message: message, bannerClass: bannerClass, action: action, snackbar: this.snackbar}
-    }).afterDismissed().subscribe( () => { //Hacer login una vez que desaparezca el mensaje
-        if(generateActionAfterDismiss) //si lo que ocurrio fue un cambio de contraseña exitoso intento el login
-          this.auth.login(usuario).subscribe( (data: Response) => {
-            if(data.code == 0){
-              localStorage.setItem('uniqueid', data.data.jwt);
-              this.router.navigate(['clases'])
-            }            
-        })       
-  })
-  }
-
 }

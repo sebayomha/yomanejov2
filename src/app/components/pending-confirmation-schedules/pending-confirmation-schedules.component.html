@@ -167,7 +167,7 @@
               </table>
             </mat-card-content>
 
-            <mat-card-actions align="end">
+            <mat-card-actions *ngIf="USER_ROLE == 'ADMIN'" align="end">
               <button mat-button class="editButton" (click)="addClass(cronograma);">AGREGAR CLASE</button>
               <div fxFlex></div>
               <button mat-button class="editButton" (click)="onEditSchedule(cronograma);">EDITAR</button>
@@ -244,7 +244,7 @@
               </table>
             </mat-card-content>
 
-            <mat-card-actions align="end">
+            <mat-card-actions *ngIf="USER_ROLE == 'ADMIN'" align="end">
               <button mat-button class="editButton" (click)="addClass(cronograma);">AGREGAR CLASE</button>
               <div fxFlex></div>
               <button mat-button class="editButton" (click)="onEditSchedule(cronograma);">EDITAR</button>
@@ -448,7 +448,6 @@
       </mat-tab>
 
       <mat-tab label="({{cronogramasCancelados.length}}) Cancelados">
-
         <div id="chipsContainer" class="col-12 col-md-10 offset-md-1">
           <mat-chip-list aria-label="Selection">
             <mat-chip [style.border]="changeBorder('ID')" (click)="openDialog('ID', cronogramasCancelados)"
@@ -730,7 +729,7 @@
     </div>
     <mat-card class="col-12 col-md-10 offset-md-1 mat-elevation-z6" style="margin-top: 10px;"> 
       <mat-card-header>
-        <div mat-card-avatar class="avatar" style="margin-top: 5px;"><!--{{inicialesNombreAlumno(cronograma.nombreAlumno)}}-->{{detailedCronograma.idCronograma}}</div>
+        <div mat-card-avatar class="avatar" style="margin-top: 5px;">{{detailedCronograma.idCronograma}}</div>
         <mat-card-title>
           <span style="margin-right: 10px; font-weight: 500; font-size: 16px;">{{ detailedCronograma.nombreAlumno | capitalize}}</span> 
           <span class="spanLink" style="margin-left: 3px;" (click)="sendWsp(detailedCronograma.telefonoAlumno);" matTooltip="Enviar Whatsapp">{{detailedCronograma.telefonoAlumno | phone}}<i style="margin-left: 7px; color: #43c89d;" class="fab fa-whatsapp"></i></span>
@@ -817,7 +816,9 @@
         </table>
       </mat-card-content>
 
-      <mat-card-actions align="end">
+      <mat-card-actions *ngIf="(detailedCronograma.statusCronograma == 'NO CONFIRMADO' || (detailedCronograma.statusCronograma == 'CONFIRMADO' && USER_ROLE == 'ADMIN'))" align="end">
+        <button mat-button class="editButton" (click)="addClass(detailedCronograma);">AGREGAR CLASE</button>
+        <div fxFlex></div>
         <button *ngIf="detailedCronograma.statusCronograma != 'FINALIZADO'" mat-button class="editButton" (click)="onEditSchedule(cronograma);">EDITAR</button>
         <div fxFlex></div>
         <button *ngIf="detailedCronograma.statusCronograma != 'FINALIZADO'" mat-button class="deleteButton" (click)="onCancelSchedule(detailedCronograma.iddetailedCronograma, detailedCronograma.nombreAlumno, detailedCronograma.alumno);">ELIMINAR</button>

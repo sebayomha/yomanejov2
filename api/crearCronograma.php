@@ -1,12 +1,12 @@
 <?php
 	header("Access-Control-Allow-Origin: *");
 	header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
-	require_once('crearCronogramaDB.php');
 	iconv_set_encoding("internal_encoding", "UTF-8");
-    date_default_timezone_set('America/Argentina/Buenos_Aires');
-	//Va a ser utilizada cuando existan sesiones
-	//require_once('token.php');
+	date_default_timezone_set('America/Argentina/Buenos_Aires');
+	require_once('crearCronogramaDB.php');
 	require_once('utils.php');
+	require_once('token.php');
+	require_once('authGuard.php');
 
 	$utils = new Utils();
 	$requestMethod = $utils->getUri();
@@ -430,67 +430,79 @@
 		return empty(array_filter($input, function ($a) { return $a !== null;}));
 	}
 
-	switch ($method) {
-		case 'GET': {
-		  	//Obtengo la URL Final para saber cual accion ejecutar.
-		  	switch ($requestMethod){
-				case '/calcularCronograma/cronogramasPendientes':
-					obtenerCronogramas();
-					break;
-				case '/calcularCronograma/obtenerClasesPorFecha':
-					obtenerClasesPorFecha();
-					break;
-			  	default:
-					echo "podriamos agregar otra consulta mas";
-					break;
-		  	}	    
-			break;	
-		}
-
-		case 'POST': {
-			//Obtengo la URL Final para saber cual accion ejecutar.
-			switch ($requestMethod){
-				case '/calcularCronograma':
-					calcularCronograma();
-					break;
-				case '/calcularCronograma/guardar':
-					guardarCronograma();
-					break;
-				case '/calcularCronograma/confirmarCronograma':
-					confirmarCronograma();
-					break;
-				case '/calcularCronograma/cancelarCronograma':
-					cancelarCronograma();
-					break;
-				case '/calcularCronograma/actualizarCronogramaPendiente':
-					actualizarCronogramaPendiente();
-					break;
-				case '/calcularCronograma/cancelarCronogramaActivo':
-					cancelarCronogramaActivo();
-				break;
-				case '/calcularCronograma/obtenerClasesActivasCronograma':
-					obtenerClasesActivasCronograma();
-				break;
-				case '/calcularCronograma/actualizarCronogramaActivo':
-					actualizarCronogramaActivo();
-				break;
-				case '/calcularCronograma/obtenerClasesDisponiblesParaAlumno':
-					obtenerClasesDisponiblesParaAlumno();
-				break;
-				case '/calcularCronograma/cancelarClase':
-					cancelarClase();
-				break;
-				case '/calcularCronograma/reactivarClase':
-					reactivarClase();
-				break;
-				case '/calcularCronograma/agregarClaseACronograma':
-					agregarClaseACronograma();
-				break;
-				default:
-					echo "podriamos agregar otra consulta mas";
-					break;
+	$authGuard = new AuthGuard();
+	$allowedAccessResult = $authGuard->allowedAccess();
+	if ($allowedAccessResult != false && $allowedAccessResult != "expired") {
+		switch ($method) {
+			case 'GET': {
+				//Obtengo la URL Final para saber cual accion ejecutar.
+				switch ($requestMethod){
+					case '/calcularCronograma/cronogramasPendientes':
+						obtenerCronogramas();
+						break;
+					case '/calcularCronograma/obtenerClasesPorFecha':
+						obtenerClasesPorFecha();
+						break;
+					default:
+						echo "podriamos agregar otra consulta mas";
+						break;
+				}	    
+				break;	
 			}
-			break;    	
-		  }  
-	  }
+
+			case 'POST': {
+				//Obtengo la URL Final para saber cual accion ejecutar.
+				switch ($requestMethod){
+					case '/calcularCronograma':
+						calcularCronograma();
+						break;
+					case '/calcularCronograma/guardar':
+						guardarCronograma();
+						break;
+					case '/calcularCronograma/confirmarCronograma':
+						confirmarCronograma();
+						break;
+					case '/calcularCronograma/cancelarCronograma':
+						cancelarCronograma();
+						break;
+					case '/calcularCronograma/actualizarCronogramaPendiente':
+						actualizarCronogramaPendiente();
+						break;
+					case '/calcularCronograma/cancelarCronogramaActivo':
+						cancelarCronogramaActivo();
+					break;
+					case '/calcularCronograma/obtenerClasesActivasCronograma':
+						obtenerClasesActivasCronograma();
+					break;
+					case '/calcularCronograma/actualizarCronogramaActivo':
+						actualizarCronogramaActivo();
+					break;
+					case '/calcularCronograma/obtenerClasesDisponiblesParaAlumno':
+						obtenerClasesDisponiblesParaAlumno();
+					break;
+					case '/calcularCronograma/cancelarClase':
+						cancelarClase();
+					break;
+					case '/calcularCronograma/reactivarClase':
+						reactivarClase();
+					break;
+					case '/calcularCronograma/agregarClaseACronograma':
+						agregarClaseACronograma();
+					break;
+					default:
+						echo "podriamos agregar otra consulta mas";
+						break;
+				}
+				break;    	
+			}  
+		}
+	} else {
+		if ($allowedAccessResult == "expired") {
+			header("HTTP/1.1 401 Token Expired");
+			exit;
+		} else {
+			header("HTTP/1.1 401 Unauthorized");
+			exit;
+		}
+	}
 ?>

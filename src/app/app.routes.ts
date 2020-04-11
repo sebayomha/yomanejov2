@@ -7,18 +7,19 @@ import { EditarAlumnoComponent } from './components/editar-alumno/editar-alumno.
 import { AddClassSchedulesComponent } from './components/add-class-schedules/add-class-schedules.component';
 import { CarsComponent } from './components/cars/cars.component';
 import { LoginComponent } from './components/login/login.component';
+import { AuthGuardService } from './services/authGuard/auth-guard.service';
 
 const app_routes: Routes = [
-  { path: 'busqueda', component: FreeClassFinderComponent},
-  { path: 'pendientes', component: PendingConfirmationSchedulesComponent,  data: {animation: 'StudentsPage'}},
+  { path: 'busqueda', component: FreeClassFinderComponent, canActivate:[AuthGuardService]},
+  { path: 'pendientes', component: PendingConfirmationSchedulesComponent,  data: {animation: 'StudentsPage'}, canActivate:[AuthGuardService]},
   { path: 'pendientes/:idCronograma', component: PendingConfirmationSchedulesComponent},
-  { path: 'pendientes/agregarClase/:idCronograma', component: AddClassSchedulesComponent, data: {animation: 'EditingStudentPage'}},
-  { path: 'clases', component: LessonsComponent},
-  { path: 'autos', component: CarsComponent},
-  { path: 'alumnos', component: StudentsComponent, data: {animation: 'StudentsPage'}},
-  { path: 'alumnos/editar/:id', component: EditarAlumnoComponent, data: {animation: 'EditingStudentPage'}},
-  { path: 'login', component: LoginComponent},
-  { path: '', pathMatch: 'full', redirectTo: 'busqueda' },
+  { path: 'pendientes/agregarClase/:idCronograma', component: AddClassSchedulesComponent, data: {animation: 'EditingStudentPage'}, canActivate:[AuthGuardService]},
+  { path: 'clases', component: LessonsComponent, canActivate:[AuthGuardService]},
+  { path: 'autos', component: CarsComponent, data: {authRole: 'ADMIN'}, canActivate:[AuthGuardService]},
+  { path: 'alumnos', component: StudentsComponent, data: {animation: 'StudentsPage', authRole: 'ADMIN'}, canActivate:[AuthGuardService]},
+  { path: 'alumnos/editar/:id', component: EditarAlumnoComponent, data: {animation: 'EditingStudentPage', authRole: 'ADMIN'}, canActivate:[AuthGuardService]},
+  { path: 'login', component: LoginComponent, data: {isLoginPage: true}, canActivate:[AuthGuardService]},
+  { path: '', pathMatch: 'full', redirectTo: 'busqueda'},
   { path: '**', pathMatch: 'full', redirectTo: 'busqueda' }
 ];
 

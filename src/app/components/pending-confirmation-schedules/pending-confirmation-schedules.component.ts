@@ -8,7 +8,8 @@ import { ActivatedRoute,Router } from '@angular/router';
 import { AlumnosService } from 'src/app/services/alumnos/alumnos.service';
 import { trigger, transition, animate, style } from '@angular/animations';
 import { SharedService } from 'src/app/services/sharedService/shared-service';
-import { MatDialog, MatDialogRef, MatDialogConfig, MAT_DIALOG_DATA} from '@angular/material';
+import { MatDialog} from '@angular/material';
+import { AppSettings } from '../../appConstants';
 
 @Component({
   selector: 'app-pending-confirmation-schedules',
@@ -27,6 +28,8 @@ import { MatDialog, MatDialogRef, MatDialogConfig, MAT_DIALOG_DATA} from '@angul
 export class PendingConfirmationSchedulesComponent implements OnInit {
 
   constructor(private dialog: MatDialog, private sharedService: SharedService ,private router: Router, private alumnoService: AlumnosService, private route: ActivatedRoute, private cronogramaService: CronogramaService, private breakpointObserver: BreakpointObserver, private _snackBar: MatSnackBar) { }
+
+  USER_ROLE = AppSettings.USER_ROLE;
 
   cronogramas: Array<any> = [];
   cronogramasConfirmados: Array<any> = [];
@@ -193,8 +196,6 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
   }
 
   openDialog(filterType: string, arrayToFilter: Array<any>): void {
-    console.log("currentTabIndex", this.currentTabIndex);
-    console.log("selectedIdCronogramaFilter", this.selectedIdCronogramaFilter);
     this.dialog.open(this.filterDialog, {
       backdropClass: 'backdropBackground',
       position: { top: '210px', left: '200px' },
