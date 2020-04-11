@@ -38,9 +38,19 @@
     margin-left: 10%;
 }
 
+.height-185 {
+    height:185px !important;
+}
+
 @media (max-width: 991px) {
     .margin-left-10-porc {
       margin-left: 20%;
+    }
+}
+
+@media (max-width: 756px) {
+    .height-185 {
+        height:290px !important;
     }
 }
 
@@ -55,3 +65,7 @@
       margin-left: 10%;
     }
 }
+
+::ng-deep .cdk-global-overlay-wrapper, ::ng-deep .cdk-overlay-container {
+    z-index: 99999 !important;
+ }

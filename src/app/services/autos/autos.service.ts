@@ -12,4 +12,13 @@ export class AutosService {
     return this.http.get('api/autos');
   }
 
+  obtenerZonas() {
+    return this.http.get('api/autos/zonas');
+  }
+
+  crearAuto(data){
+    return this.http.post('api/autos/crear', data); 
+
+  }
+
 }
