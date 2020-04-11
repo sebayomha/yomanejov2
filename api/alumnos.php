@@ -4,9 +4,9 @@
 	require_once('alumnosDB.php');
 	iconv_set_encoding("internal_encoding", "UTF-8");
     date_default_timezone_set('America/Argentina/Buenos_Aires');
-	//Va a ser utilizada cuando existan sesiones
-	//require_once('token.php');
 	require_once('utils.php');
+	require_once('token.php');
+	require_once('authGuard.php');
 
 	$utils = new Utils();
 	$requestMethod = $utils->getUri();
@@ -59,31 +59,44 @@
 		}
 	}
 
-	switch ($method) {
-		case 'GET': {
-		  	//Obtengo la URL Final para saber cual accion ejecutar.
-		  	switch ($requestMethod){
-				case '/alumnos':
-					obtenerAlumnos();
+	$authGuard = new AuthGuard();
+	$allowedAccessResult = $authGuard->allowedAccess();
+	if ($allowedAccessResult != false && $allowedAccessResult != "expired") {
+		switch ($method) {
+			case 'GET': {
+					//Obtengo la URL Final para saber cual accion ejecutar.
+					switch ($requestMethod){
+					case '/alumnos':
+						obtenerAlumnos();
+						break;
+					case '/alumnos/getInformacionPersonal':
+						getInformacionPersonal();
 					break;
-				case '/alumnos/getInformacionPersonal':
-					getInformacionPersonal();
-				break;
-		  	}	    
-			break;	
-		}
-
-		case 'POST': {
-			//Obtengo la URL Final para saber cual accion ejecutar.
-			switch ($requestMethod){
-				case '/alumnos/update':
-					updateAlumnoInformacionPersonal();
-				break;
-				case '/alumnos/eliminar':
-					eliminarAlumno();
-				break;
+					}	    
+				break;	
 			}
-			break;    	
-		  }  
-	  }
+	
+			case 'POST': {
+				//Obtengo la URL Final para saber cual accion ejecutar.
+				switch ($requestMethod){
+					case '/alumnos/update':
+						updateAlumnoInformacionPersonal();
+					break;
+					case '/alumnos/eliminar':
+						eliminarAlumno();
+					break;
+				}
+				break;    	
+			}  
+		}
+	} else {
+		if ($allowedAccessResult == "expired") {
+			header("HTTP/1.1 401 Token Expired");
+			exit;
+		} else {
+			header("HTTP/1.1 401 Unauthorized");
+			exit;
+		}
+	}
+	
 ?>

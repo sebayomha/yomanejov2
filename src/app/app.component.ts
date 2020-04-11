@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
 import { slideInAnimation } from './animations';
+import { AuthService } from '../app/services/auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,7 @@ import { slideInAnimation } from './animations';
 export class AppComponent {
   title = 'yoManejo';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit() {
     this.router.events.subscribe((evt) => {

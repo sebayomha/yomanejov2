@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 08, 2020 at 07:47 PM
+-- Generation Time: Apr 10, 2020 at 06:41 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -761,6 +761,26 @@ INSERT INTO `parametros` (`idParametro`, `maximoDiasTolerancia`, `diasTolerancia
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tokenusuario`
+--
+
+CREATE TABLE `tokenusuario` (
+  `idTokenUsuario` int(11) NOT NULL,
+  `idUsuario` int(11) NOT NULL,
+  `refreshToken` varchar(255) NOT NULL,
+  `expirationRefreshToken` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tokenusuario`
+--
+
+INSERT INTO `tokenusuario` (`idTokenUsuario`, `idUsuario`, `refreshToken`, `expirationRefreshToken`) VALUES
+(19, 1, '15e9096a277c149.70377971', '1589126050');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `usuario`
 --
 
@@ -769,8 +789,16 @@ CREATE TABLE `usuario` (
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `firstPasswordChange` varchar(5) NOT NULL,
-  `nombre` varchar(255) NOT NULL
+  `nombre` varchar(255) NOT NULL,
+  `role` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `usuario`
+--
+
+INSERT INTO `usuario` (`idUsuario`, `email`, `password`, `firstPasswordChange`, `nombre`, `role`) VALUES
+(1, 'sebastian_yomha@hotmail.com', '$2y$10$Od0EVxoA5guZHboBPTkJ8OYjpvij1Efjq8J9umbpIYq3o0GXj8.Z2', 'true', 'Sebastian Yomha', 'Admin');
 
 -- --------------------------------------------------------
 
@@ -1082,6 +1110,12 @@ ALTER TABLE `parametros`
   ADD PRIMARY KEY (`idParametro`);
 
 --
+-- Indexes for table `tokenusuario`
+--
+ALTER TABLE `tokenusuario`
+  ADD PRIMARY KEY (`idTokenUsuario`);
+
+--
 -- Indexes for table `usuario`
 --
 ALTER TABLE `usuario`
@@ -1182,10 +1216,16 @@ ALTER TABLE `parametros`
   MODIFY `idParametro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `tokenusuario`
+--
+ALTER TABLE `tokenusuario`
+  MODIFY `idTokenUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
+--
 -- AUTO_INCREMENT for table `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `zona`
