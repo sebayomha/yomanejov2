@@ -53,7 +53,8 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['busqueda'])
       } else{
         switch(data.code) {
-          case 1: {
+          case 1:
+          case 3: {
             this.snackbar.openFromComponent(SnackbarComponent, {
               duration: this.durationInSeconds * 1100,
               data: data
