@@ -18,8 +18,15 @@ export class CarsComponent implements OnInit {
   dataToConfirm;
   displayedColumns: string[] = ['Id', 'patente', 'color', 'zona'];
   agregar_auto_modal:boolean = false;
+  buttonAgregar:boolean = false;
   operation: string;
   durationInSeconds: number = 1;
+  agregar = 'agregar_auto';
+  modificar = 'modificar_auto';
+  bajar = 'bajar_auto';
+
+  idAuto;
+
 
   constructor(private _snackBar: MatSnackBar, private autosService: AutosService) { }
 
@@ -36,31 +43,72 @@ export class CarsComponent implements OnInit {
     this.customModal.onClose();
   }
 
-  agregarAuto() {
+  operacionesAuto(operacion,auto) {
     this.autosService.obtenerZonas().subscribe( (response: Response)=>{
       this.zonas = response.data;
       console.log(this.zonas);
 
-      this.dataToConfirm = {
-        'zonas': this.zonas
-      };
-
+      if (operacion == 'agregar_auto') {
+        this.dataToConfirm = {
+          'idDeAuto': '',
+          'zonas': this.zonas,
+          'dispoDeAuto':'A',
+          'descripDeAuto':'',
+          'modeloDeAuto' : '',
+          'zonaDeAuto' : '',
+          'patenteDeAuto' : '',
+          'colorDeAuto' : ''
+        };
+      } else {
+        this.dataToConfirm = {
+          'idDeAuto': auto.idAuto ? auto.idAuto : '',
+          'zonas': this.zonas,
+          'dispoDeAuto':'A',
+          'descripDeAuto':'',
+          'modeloDeAuto' : auto.modelo,
+          'zonaDeAuto' : auto.zonaMaster,
+          'patenteDeAuto' : auto.patente,
+          'colorDeAuto' : auto.color
+        };
+      }
     });
 
-    this.operation = 'agregar_auto';
+    this.operation = operacion;
     this.customModal.open();
   }
 
   confirmModal() {
     console.log(this.dataToConfirm);
-
-    this.autosService.crearAuto(this.dataToConfirm).subscribe( (response: Response) => {
-      this.customModal.onClose();
-      this._snackBar.openFromComponent(SnackbarComponent, {
-        duration: this.durationInSeconds * 1100,
-        data: response
-      });
-    });
+    switch (this.operation) {
+      case 'agregar_auto':
+        this.autosService.crearAuto(this.dataToConfirm).subscribe( (response: Response) => {
+          this.customModal.onClose();
+          this._snackBar.openFromComponent(SnackbarComponent, {
+            duration: this.durationInSeconds * 1100,
+            data: response
+          });
+        });
+        break;
+      case 'modificar_auto':
+        this.autosService.modificarAuto(this.dataToConfirm).subscribe( (response: Response) => {
+          this.customModal.onClose();
+          this._snackBar.openFromComponent(SnackbarComponent, {
+            duration: this.durationInSeconds * 1100,
+            data: response
+          });
+        });
+        break;
+      case 'bajar_auto':
+        this.autosService.bajarAuto(this.dataToConfirm).subscribe( (response: Response) => {
+          this.customModal.onClose();
+          this._snackBar.openFromComponent(SnackbarComponent, {
+            duration: this.durationInSeconds * 1100,
+            data: response
+          });
+        });
+        break;
+    }
+    this.ngOnInit();
   }
 
 }

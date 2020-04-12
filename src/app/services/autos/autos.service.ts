@@ -18,7 +18,14 @@ export class AutosService {
 
   crearAuto(data){
     return this.http.post('api/autos/crear', data); 
+  }
 
+  modificarAuto(data){
+    return this.http.post('api/autos/modificar', data); 
+  }
+
+  bajarAuto(data) {
+    return this.http.post('api/autos/bajar', data); 
   }
 
 }

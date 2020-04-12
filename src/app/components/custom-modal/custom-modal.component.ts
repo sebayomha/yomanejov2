@@ -33,10 +33,6 @@ export class CustomModalComponent {
   buttonDisabled;
   motivoDeBaja: string = '';
   math = Math;
-  modeloDeAuto;
-  zonaDeAuto;
-  patenteDeAuto;
-  colorDeAuto;
   
   constructor(private breakpointObserver: BreakpointObserver, private cd: ChangeDetectorRef) { }
 
@@ -100,14 +96,6 @@ export class CustomModalComponent {
           } else {
             if (this.component == 'cars') {
               if (this.agregarAutoForm.form.valid) {
-                this.data.modeloDeAuto = this.modeloDeAuto;
-                this.data.zonaDeAuto = this.zonaDeAuto;
-                this.data.patenteDeAuto = this.patenteDeAuto;
-                this.data.colorDeAuto = this.colorDeAuto;
-                this.modeloDeAuto = '';
-                this.zonaDeAuto = '';
-                this.patenteDeAuto = '';
-                this.colorDeAuto = '';
                 this.agregarAutoForm.form.get("modeloAuto").markAsUntouched();
                 this.agregarAutoForm.form.get("modeloAuto").markAsPristine();
                 this.agregarAutoForm.form.get("zonaAuto").markAsUntouched();

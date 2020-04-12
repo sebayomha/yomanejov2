@@ -256,19 +256,19 @@
         <div class="col-12">
           <form #agregarAutoForm="ngForm">
             <div class="row">
-              <mat-form-field class="col-12 col-md-6" style="display: block; margin-bottom: 5px;" *ngIf="operation == 'agregar_auto'">
+              <mat-form-field class="col-12 col-md-6" style="display: block; margin-bottom: 5px;" *ngIf="operation == 'agregar_auto' || operation == 'modificar_auto'">
                 <input matInput placeholder="Modelo del auto" name="modeloAuto"
-                [(ngModel)]="modeloDeAuto" #modeloAuto="ngModel" required>
+                [(ngModel)]="data.modeloDeAuto" #modeloAuto="ngModel" required>
   
                 <mat-error *ngIf="modeloAuto.errors?.required && modeloAuto.touched" style="font-size: 12px;">
                   Debe ingresar un modelo para continuar
                 </mat-error>
   
               </mat-form-field>
-              <mat-form-field class="col-12 col-md-6">
+              <mat-form-field class="col-12 col-md-6" *ngIf="operation == 'agregar_auto' || operation == 'modificar_auto'">
                 <mat-label>Zona</mat-label>
                 <mat-select
-                    [(ngModel)]="zonaDeAuto" name="zonaAuto" required>
+                    [(ngModel)]="data.zonaDeAuto" name="zonaAuto" required>
                     <mat-option
                         *ngFor="let zona of data.zonas"
                         [value]="zona.idZonaMaster">
@@ -279,18 +279,18 @@
             </div>
 
             <div class="row">
-              <mat-form-field class="col-12 col-md-6" style="display: block; margin-bottom: 5px;" *ngIf="operation == 'agregar_auto'">
+              <mat-form-field class="col-12 col-md-6" style="display: block; margin-bottom: 5px;" *ngIf="operation == 'agregar_auto' || operation == 'modificar_auto'">
                 <input matInput placeholder="Patente" name="patenteAuto"
-                [(ngModel)]="patenteDeAuto" #patenteAuto="ngModel" required>
+                [(ngModel)]="data.patenteDeAuto" #patenteAuto="ngModel" required>
   
                 <mat-error *ngIf="patenteAuto.errors?.required && patenteAuto.touched" style="font-size: 12px;">
                   Debe ingresar una patente para continuar
                 </mat-error>
   
               </mat-form-field>
-              <mat-form-field class="col-12 col-md-6" style="display: block; margin-bottom: 5px;" *ngIf="operation == 'agregar_auto'">
+              <mat-form-field class="col-12 col-md-6" style="display: block; margin-bottom: 5px;" *ngIf="operation == 'agregar_auto' || operation == 'modificar_auto'">
                 <input matInput placeholder="Color" name="colorAuto"
-                [(ngModel)]="colorDeAuto" #colorAuto="ngModel">
+                [(ngModel)]="data.colorDeAuto" #colorAuto="ngModel">
               </mat-form-field>
             </div>
 
