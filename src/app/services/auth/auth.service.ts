@@ -38,7 +38,6 @@ export class AuthService {
   }
 
   refreshJWT(data) {
-    console.log("refresh", data);
     localStorage.setItem('uniqueid', data.jwt);
   }
 
