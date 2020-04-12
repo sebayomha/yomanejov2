@@ -49,12 +49,32 @@
             return $zonas;
         }
 
-        function crearAuto($zonaAuto, $patenteAuto, $modeloAuto, $colorAuto) {
-            $state = $this->conn->prepare('INSERT INTO auto (patente, color, zonaMaster, modelo) VALUES (?,?,?,?)');
-            $state->bind_param('ssss', $patenteAuto, $colorAuto, $zonaAuto, $modeloAuto);
-            if ($state->execute()) { 
-                //el insert del auto fue exitoso
-                $idAuto = $this->conn->insert_id;
+        function crearAuto($zonaAuto, $patenteAuto, $dispoAuto, $descripAuto, $modeloAuto, $colorAuto) {
+            $state = $this->conn->prepare('INSERT INTO auto (patente, color, disponibilidad, descripcion, zonaMaster, modelo) VALUES (?,?,?,?,?,?)');
+            $state->bind_param('ssssis', $patenteAuto, $colorAuto, $dispoAuto, $descripAuto, $zonaAuto, $modeloAuto);
+            $state->execute();
+            $result = $state->get_result();
+            
+            echo mysqli_error($this->conn);
+
+            if ($result) { 
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        function modificarAuto($idAuto, $zonaAuto, $patenteAuto, $dispoAuto, $descripAuto, $modeloAuto, $colorAuto) {
+            
+            $state = $this->conn->prepare('UPDATE auto SET patente = ?, color = ?, disponibilidad = ?, descripcion = ?, zonaMaster = ?, modelo = ? WHERE auto.idAuto = ?');
+            $state->bind_param('ssssisi', $patenteAuto, $colorAuto, $dispoAuto, $descripAuto, $zonaAuto, $modeloAuto, $idAuto);
+            $state->execute();
+            $result = $state->get_result();
+            
+            echo mysqli_error($this->conn);
+
+            if ($result) { 
+                return true;
             } else {
                 return false;
             }

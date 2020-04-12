@@ -28,14 +28,38 @@
 	function crearAuto() {
 
 		$post = json_decode(file_get_contents('php://input'));
-		$zonaAuto = $post->zonaAuto;
-		$patenteAuto = $post->patenteAuto;
-		$modeloAuto = $post->modeloAuto;
-		$colorAuto = $post->colorAuto;
+		$zonaAuto = $post->zonaDeAuto;
+		$patenteAuto = $post->patenteDeAuto;
+		$modeloAuto = $post->modeloDeAuto;
+		$colorAuto = $post->colorDeAuto;
+		$dispoAuto = $post->dispoDeAuto;
+		$descripAuto = $post->descripDeAuto;
 
 		$auto = new Auto();
-		$resultCrearAuto = $auto->crearAuto($zonaAuto, $patenteAuto, $modeloAuto, $colorAuto);
-		if ($resultCrearAuto == 0) {
+		$resultCrearAuto = $auto->crearAuto($zonaAuto, $patenteAuto, $dispoAuto, $descripAuto, $modeloAuto, $colorAuto);
+		if ($resultCrearAuto == true) {
+			echo json_encode($GLOBALS['utils']->getResponse(0, 'Auto creado correctamente'));	
+		} else {
+			echo json_encode($GLOBALS['utils']->getResponse(1, 'Lo lamentamos, ha ocurrido un error'));
+		}
+
+	}
+
+	function modificarAuto() {
+
+		$post = json_decode(file_get_contents('php://input'));
+
+		$idAuto = $post->idDeAuto;
+		$zonaAuto = $post->zonaDeAuto;
+		$patenteAuto = $post->patenteDeAuto;
+		$modeloAuto = $post->modeloDeAuto;
+		$colorAuto = $post->colorDeAuto;
+		$dispoAuto = $post->dispoDeAuto;
+		$descripAuto = $post->descripDeAuto;
+
+		$auto = new Auto();
+		$resultCrearAuto = $auto->modificarAuto($idAuto, $zonaAuto, $patenteAuto, $dispoAuto, $descripAuto, $modeloAuto, $colorAuto);
+		if ($resultCrearAuto == true) {
 			echo json_encode($GLOBALS['utils']->getResponse(0, 'Auto creado correctamente'));	
 		} else {
 			echo json_encode($GLOBALS['utils']->getResponse(1, 'Lo lamentamos, ha ocurrido un error'));
@@ -59,8 +83,14 @@
 		case 'POST': {
 			//Obtengo la URL Final para saber cual accion ejecutar.
 			switch ($requestMethod){
-				case '/crear':
+				case '/autos/crear':
 					crearAuto();
+					break;
+				case '/autos/modificar':
+					modificarAuto();
+					break;
+				case '/autos/bajar':
+					bajarAuto();
 					break;
 			}
 			break;    	
