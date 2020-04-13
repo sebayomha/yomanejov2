@@ -90,6 +90,60 @@ class Auth{
         }
     }
 
+    function firstPasswordChange($user) {
+        $conn = $this->db->getConnection();
+
+        $state = $this->conn->prepare('SELECT usuario.firstPasswordChange, usuario.idUsuario, usuario.password, usuario.role, usuario.nombre FROM usuario WHERE usuario.email = ?');
+        $state->bind_param('s', $user['email']);
+        $state->execute();
+        
+        $ress = $state->get_result();
+
+        //$data va a ser la respuesta
+        $data;
+
+        if($ress->num_rows > 0){
+            $result = array();
+            while($row = $ress->fetch_assoc()){
+                $result[] = $row;
+            }
+            if (password_verify($user['password'], $result[0]['password'])) { //no modifico la pw
+                $data = (object) [
+                    'code' => 1,
+                    'data' => 'La nueva contraseña tiene que ser distinta a la default'
+                ];
+                mysqli_close($this->conn);
+                return $data;
+            } else { //la nueva pw es distinta a la actual, caso exitoso
+                $firstPasswordChange = 'true';
+                $hashedPassword = password_hash($user['password'], PASSWORD_DEFAULT);
+                
+
+                $state = $this->conn->prepare('UPDATE usuario SET password = ?, firstPasswordChange = ? WHERE usuario.email = ?');
+                $state->bind_param('sss',$hashedPassword, $firstPasswordChange, $user['email']);
+                if ($state->execute()) {
+                    return $this->login($user);
+                } else {
+                    $data = (object) [
+                        'code' => 1,
+                        'data' => 'Ocurrio un error al actualizar la contraseña'
+                    ];
+                    mysqli_close($this->conn);
+                    return $data;
+                }
+                mysqli_close($this->conn);
+                return $data;
+            }
+        } else {
+            $data = (object) [
+                'code' => 3,
+                'data' => 'Usuario o contraseña incorrecto'
+            ];
+            mysqli_close($this->conn);
+            return $data;
+        }
+    }
+
     function getPasswordById($idUsuario) {
         $conn = $this->db->getConnection();
 

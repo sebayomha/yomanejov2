@@ -53,6 +53,25 @@
 		}
 	}
 
+	function firstPasswordChange() {
+		$params = json_decode(file_get_contents('php://input'),true);
+		$auth = new Auth();
+
+		$email = htmlspecialchars($params['email']);
+		$password = htmlspecialchars($params['password']);
+
+		if(isset($params) && !empty($params['email'] && !empty($params['password']))){
+			$authResult = $auth->firstPasswordChange($params);
+			if ($authResult->code == 0) {
+				echo json_encode($GLOBALS['utils']->getResponse(0, $authResult));	
+			} else {
+				echo json_encode($authResult);	
+			}
+		}else{
+			echo json_encode($authResult);
+		}
+	}
+
 	function logout(){
 		$params = json_decode(file_get_contents('php://input'),true);
 		$auth = new Auth();
@@ -89,6 +108,9 @@
 				break;
 				case '/auth/refresh':
 	    			validateRefreshToken();
+				break;
+				case '/auth/firstPasswordChange':
+	    			firstPasswordChange();
 				break;
 				case '/auth/logout':
 	    			logout();
