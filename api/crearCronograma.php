@@ -197,12 +197,16 @@
 		$idExcepciones = $post[11]->idExcepciones;
 		$excepciones = $post[12]->excepciones;
 
-		$cronograma = new Cronograma();
-		$resultActualizarCronogramaPendiente = $cronograma->actualizarCronogramaPendiente($idCronograma, $selectedOptions, $idAlumno, $studentName, $student_phone, $idDireccionPrincipal, $address, $idDireccionAlternativa, $address_alt, $idDisponibilidad, $disponibilidad, $idExcepciones, $excepciones);
-		if ($resultActualizarCronogramaPendiente != false) {
-			echo json_encode($GLOBALS['utils']->getResponse(0, $resultActualizarCronogramaPendiente));
+		if (!$post[13]->idClasesModificadas) {
+			echo json_encode($GLOBALS['utils']->getResponse(1, "Para editar debe modificar alguna de las clases."));
 		} else {
-			echo json_encode($GLOBALS['utils']->getResponse(1, "Ocurrió un error al actualizar algún registro, vuelva a intentar más tarde."));
+			$cronograma = new Cronograma();
+			$resultActualizarCronogramaPendiente = $cronograma->actualizarCronogramaPendiente($idCronograma, $selectedOptions, $idAlumno, $studentName, $student_phone, $idDireccionPrincipal, $address, $idDireccionAlternativa, $address_alt, $idDisponibilidad, $disponibilidad, $idExcepciones, $excepciones);
+			if ($resultActualizarCronogramaPendiente != false) {
+				echo json_encode($GLOBALS['utils']->getResponse(0, $resultActualizarCronogramaPendiente));
+			} else {
+				echo json_encode($GLOBALS['utils']->getResponse(1, "Ocurrió un error al actualizar algún registro, vuelva a intentar más tarde."));
+			}
 		}	
 	}
 
@@ -221,7 +225,7 @@
 		$idExcepciones = $post[11]->idExcepciones;
 		$excepciones = $post[12]->excepciones;
 
-		if (!$post[13]) {
+		if (!$post[13]->idClasesModificadas) {
 			echo json_encode($GLOBALS['utils']->getResponse(1, "Para editar debe modificar alguna de las clases."));
 		} else {
 			$idClasesModificadas = $post[13]->idClasesModificadas;
