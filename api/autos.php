@@ -26,7 +26,6 @@
 	}
 
 	function crearAuto() {
-
 		$post = json_decode(file_get_contents('php://input'));
 		$zonaAuto = $post->zonaDeAuto;
 		$patenteAuto = $post->patenteDeAuto;
@@ -37,7 +36,7 @@
 
 		$auto = new Auto();
 		$resultCrearAuto = $auto->crearAuto($zonaAuto, $patenteAuto, $dispoAuto, $descripAuto, $modeloAuto, $colorAuto);
-		if ($resultCrearAuto == true) {
+		if ($resultCrearAuto) {
 			echo json_encode($GLOBALS['utils']->getResponse(0, 'Auto creado correctamente'));	
 		} else {
 			echo json_encode($GLOBALS['utils']->getResponse(1, 'Lo lamentamos, ha ocurrido un error'));
