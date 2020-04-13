@@ -361,15 +361,12 @@
                     <div class="col-12" style="text-align: center; margin-top: 25px; margin-bottom: 15px;">
                         <button mat-button type="button" class="confirmButton" (click)="setSchedule(generalSchedule);" >APLICAR EN HORARIO SEMANAL<span style="font-size: 20px; margin-left: 10px;"><i class="fas fa-arrow-alt-circle-down"></i></span></button>
                     </div>
-                </div>
-                
-                
-
-                
-                <mat-error *ngIf="generalFormHasError" style="margin-top: 15px;">
-                    Debe seleccionar al menos un día y completar los horarios para poder aplicar los cambios.
-                </mat-error>
+                    <mat-error *ngIf="generalFormHasError" style="text-align: center;margin-top: 15px;margin-bottom: 15px;">
+                        Debe seleccionar al menos un día y completar los horarios para poder aplicar los cambios.
+                    </mat-error>
+                </div>                
                 <!-- FIN Seleccion Rapida -->
+                
                 <br>
                 <!-- Horario semanal -->
                 <mat-expansion-panel (opened)="panelHorarioSemanal = true"

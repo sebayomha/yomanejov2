@@ -100,6 +100,8 @@
             <span style="color: rgba(0, 0, 0, 0.57);">
               Se ha editado el cronograma <span style="color: #43c89d; font-weight: 500;">{{idCronogramaGuardado}}</span>. Puede encontrarlo en la pantalla de <span style="color: #43c89d; font-weight: 500;">Cronogramas</span> en la pestaña de Activos.
             </span>
+            <div *ngIf="data[14].direccionFormateada" style="margin-top: 5px; color: rgba(0, 0, 0, 0.57);">Dirección principal: {{data[14].direccionFormateada}}</div>
+            <div *ngIf="data[15].direccionAltFormateada" style="color: rgba(0, 0, 0, 0.57);">Dirección alternativa: {{data[15].direccionAltFormateada}}</div>
           </div>
           <div id="horariosContainer" class="row">
             <div id="leftSide" class="col-12 col-lg-6">
