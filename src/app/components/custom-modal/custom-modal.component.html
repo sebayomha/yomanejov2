@@ -56,6 +56,8 @@
             <span style="color: rgba(0, 0, 0, 0.57);">
               Se ha {{(operation == 'EditarCronograma' ? 'editado':'generado')}} el cronograma <span style="color: #43c89d; font-weight: 500;">{{idCronogramaGuardado}}</span>. Recuerde que el cronograma quedará pendiente de confirmación. Puede encontrarlo en la pantalla de <span style="color: #43c89d; font-weight: 500;">Cronogramas</span>.
             </span>
+            <div style="margin-top: 5px; color: rgba(0, 0, 0, 0.57);">Dirección principal: {{data[14].direccionFormateada}}</div>
+            <div style="color: rgba(0, 0, 0, 0.57);">Dirección alternativa: {{data[15].direccionAltFormateada}}</div>
           </div>
           <div id="horariosContainer" class="row">
             <div id="leftSide" class="col-12 col-lg-6">
