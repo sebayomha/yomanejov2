@@ -129,6 +129,8 @@ export class AvailableSchedulesComponent {
       this.edit_cronograma.clases.forEach(clase => {
         index_class += 1;
         let fecha_clase = clase.fecha;
+        let fecha_clase_format = clase.fecha.split("-")[2]+'/'+clase.fecha.split("-")[1]+'/'+clase.fecha.split("-")[0]
+        
         let hora_inicio = clase.horaInicio;
         let auto = clase.auto;
         let index_opt = 0;
@@ -172,7 +174,7 @@ export class AvailableSchedulesComponent {
             if(this.fecha_no_disponible == true) {
 
               //Armo array del banner
-              this.not_available_classes.push('La clase número '+index_class+' del día '+fecha_clase+' a las '+hora_inicio+' hs ya no se encuentra disponible o ya pasó.');
+              this.not_available_classes.push('La clase número '+index_class+' del día '+fecha_clase_format+' a las '+hora_inicio+' hs ya no se encuentra disponible o ya pasó.');
               this.show_info_banner = true;
               this.fecha_no_disponible = false;
               this.classes_actives_changes.push(clase.idClase);
@@ -186,7 +188,7 @@ export class AvailableSchedulesComponent {
         if(this.fecha_no_disponible == true) {
 
           //Armo array del banner
-          this.not_available_classes.push('La clase número '+index_class+' del día '+fecha_clase+' a las '+hora_inicio+' hs ya no se encuentra disponible o ya pasó.');
+          this.not_available_classes.push('La clase número '+index_class+' del día '+fecha_clase_format+' a las '+hora_inicio+' hs ya no se encuentra disponible o ya pasó.');
           this.show_info_banner = true;
           this.classes_actives_changes.push(clase.idClase);
           
