@@ -66,6 +66,6 @@
     }
 }
 
-::ng-deep .cdk-global-overlay-wrapper, ::ng-deep .cdk-overlay-container {
+::ng-deep #carsBody .cdk-global-overlay-wrapper, ::ng-deep #carsBody .cdk-overlay-container {
     z-index: 99999 !important;
  }
