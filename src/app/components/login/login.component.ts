@@ -94,6 +94,44 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  submitFirstPassword() {
+    if (!this.notMatchedPasswords) {
+      let usuario = new LoginUser(this.userData.email, this.newPassword);
+      this.auth.firstPasswordChange(usuario).subscribe( (data: any) => {
+        if (data.code == 0) { //login exitoso
+          localStorage.setItem('uniqueid', data.data.jwt);
+          localStorage.setItem('uniquert', data.data.rt);
+          AppSettings.refreshRole();
+          this.router.navigate(['busqueda']);
+        } else{
+          switch(data.code) {
+            case 1:
+            case 3: {
+              this.snackbar.openFromComponent(SnackbarComponent, {
+                duration: this.durationInSeconds * 1100,
+                data: data
+              });
+            }
+            break;
+            case 2: { //la contraseña del usuario es igual a la default (no la cambio)
+              this.errorMsg = "";
+              this.showPass = false; 
+              this.submitted = false;
+              this.userData = {
+                'email': this.user.email,
+                'name': data.name,
+                'iduser': data.iduser
+              }
+              this.showNewPasswordBox = true;
+            }
+            break;
+          }
+          this.errorLogin = true; //login fallido
+        }   
+      });
+    } 
+  }
+
   checkRepeatedPasswords() {
     if (this.newPassword != '' && this.newPasswordRepeat != '') {
       if (this.newPassword === this.newPasswordRepeat) {

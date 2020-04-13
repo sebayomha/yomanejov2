@@ -13,6 +13,10 @@ export class AuthService {
     return this.http.post('/api/auth/login', user);
   }
 
+  firstPasswordChange(user) {
+    return this.http.post('/api/auth/firstPasswordChange', user);
+  }
+
   logout(user) {
     return this.http.post<any>('/api/auth/logout', user).pipe(
       tap((data:any) => {

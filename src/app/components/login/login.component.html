@@ -74,7 +74,7 @@
               <span>&nbsp;&nbsp;&nbsp;Bienvenido {{userData.name | capitalize}}!</span>
             </h4>
               <h6 class="subtitle">Por ser tu primer ingreso en YoManejo es necesario que cambies tu contraseña.</h6>
-            <form #formNewPassword="ngForm" id="formNewPassword">
+            <form #formNewPassword="ngForm" id="formNewPassword" (submit)="formNewPassword.valid && submitFirstPassword()">
               <mat-form-field hideRequiredMarker style="width: 100%; margin-top: 15px;">
                 <input (input)="checkRepeatedPasswords()" matInput #newPasswordModel="ngModel" minlength="8" maxlength="16" [type]="showPass ? 'text':'password'" [(ngModel)]="newPassword" style="border-bottom:none; height: 18px;" name="newPassword" id="newPassword" placeholder="Contraseña" required>
                 <button type="button" mat-button (click)="showPassword()" matSuffix mat-icon-button style="cursor: pointer; font-size: 22px; color: #43c89d;">
