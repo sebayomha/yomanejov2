@@ -346,29 +346,31 @@ export class AvailableSchedulesComponent {
 
     armarDirFormateada() {
       let direccionFormateada;
-      if(this.dataToConfirm[6].address[0].diag) {
-        direccionFormateada = 'Diagonal ' + this.dataToConfirm[6].address[0].street;
-      } else {
-        direccionFormateada = 'Calle ' + this.dataToConfirm[6].address[0].street;
-      }
-      if (this.dataToConfirm[6].address[3].altitud) {
-        direccionFormateada =  direccionFormateada +' N° ' + this.dataToConfirm[6].address[3].altitud;
-      }
-      this.dataToConfirm[6].address[5].floor ? direccionFormateada = direccionFormateada +' Piso: ' + this.dataToConfirm[6].address[5].floor : direccionFormateada +'';
-      this.dataToConfirm[6].address[5].floor ? direccionFormateada = direccionFormateada +' Depto: ' + this.dataToConfirm[6].address[6].department : direccionFormateada +'';
-
-      if ( this.dataToConfirm[6].address[1].street_a && this.dataToConfirm[6].address[2].street_b ) {
-
-        this.dataToConfirm[6].address[1].diag ? direccionFormateada = direccionFormateada +' Entre diagonal ' + this.dataToConfirm[6].address[1].street_a : direccionFormateada = direccionFormateada +' Entre calle ' + this.dataToConfirm[6].address[1].street_a;
-        
-        this.dataToConfirm[6].address[2].diag ? direccionFormateada = direccionFormateada +' y diagonal ' + this.dataToConfirm[6].address[2].street_b : direccionFormateada = direccionFormateada +' y calle ' + this.dataToConfirm[6].address[2].street_b;
-      
-      } else {
-        if (this.dataToConfirm[6].address[1].street_a) {
-          this.dataToConfirm[6].address[1].diag ? direccionFormateada = direccionFormateada +' Esq diagonal ' + this.dataToConfirm[6].address[1].street_a : direccionFormateada = direccionFormateada +' Esq calle ' + this.dataToConfirm[6].address[1].street_a;
+      if (this.dataToConfirm[6].address[0].street) {
+        if(this.dataToConfirm[6].address[0].diag) {
+          direccionFormateada = 'Diagonal ' + this.dataToConfirm[6].address[0].street;
+        } else {
+          direccionFormateada = 'Calle ' + this.dataToConfirm[6].address[0].street;
         }
-        if (this.dataToConfirm[6].address[2].street_b) {
-          this.dataToConfirm[6].address[1].diag ? direccionFormateada = direccionFormateada +' Esq diagonal ' + this.dataToConfirm[6].address[2].street_b : direccionFormateada = direccionFormateada +' Esq calle ' + this.dataToConfirm[6].address[2].street_b;
+        if (this.dataToConfirm[6].address[3].altitud) {
+          direccionFormateada =  direccionFormateada +' N° ' + this.dataToConfirm[6].address[3].altitud;
+        }
+        this.dataToConfirm[6].address[5].floor ? direccionFormateada = direccionFormateada +' Piso: ' + this.dataToConfirm[6].address[5].floor : direccionFormateada +'';
+        this.dataToConfirm[6].address[5].floor ? direccionFormateada = direccionFormateada +' Depto: ' + this.dataToConfirm[6].address[6].department : direccionFormateada +'';
+  
+        if ( this.dataToConfirm[6].address[1].street_a && this.dataToConfirm[6].address[2].street_b ) {
+  
+          this.dataToConfirm[6].address[1].diag ? direccionFormateada = direccionFormateada +' Entre diagonal ' + this.dataToConfirm[6].address[1].street_a : direccionFormateada = direccionFormateada +' Entre calle ' + this.dataToConfirm[6].address[1].street_a;
+          
+          this.dataToConfirm[6].address[2].diag ? direccionFormateada = direccionFormateada +' y diagonal ' + this.dataToConfirm[6].address[2].street_b : direccionFormateada = direccionFormateada +' y calle ' + this.dataToConfirm[6].address[2].street_b;
+        
+        } else {
+          if (this.dataToConfirm[6].address[1].street_a) {
+            this.dataToConfirm[6].address[1].diag ? direccionFormateada = direccionFormateada +' Esq diagonal ' + this.dataToConfirm[6].address[1].street_a : direccionFormateada = direccionFormateada +' Esq calle ' + this.dataToConfirm[6].address[1].street_a;
+          }
+          if (this.dataToConfirm[6].address[2].street_b) {
+            this.dataToConfirm[6].address[1].diag ? direccionFormateada = direccionFormateada +' Esq diagonal ' + this.dataToConfirm[6].address[2].street_b : direccionFormateada = direccionFormateada +' Esq calle ' + this.dataToConfirm[6].address[2].street_b;
+          }
         }
       }
       return direccionFormateada;
@@ -376,31 +378,33 @@ export class AvailableSchedulesComponent {
 
     armarDirAltFormateada() {
       let direccionFormateada;
-      if(this.dataToConfirm[8].address_alternative[0].diag) {
-        direccionFormateada = 'Diagonal ' + this.dataToConfirm[8].address_alternative[0].street;
-      } else {
-        direccionFormateada = 'Calle ' + this.dataToConfirm[8].address_alternative[0].street;
-      }
-      if (this.dataToConfirm[8].address_alternative[3].altitud) {
-        direccionFormateada =  direccionFormateada +' N° ' + this.dataToConfirm[8].address_alternative[3].altitud;
-      }
-      this.dataToConfirm[8].address_alternative[5].floor ? direccionFormateada = direccionFormateada +' Piso: ' + this.dataToConfirm[8].address_alternative[5].floor : direccionFormateada +'';
-      this.dataToConfirm[8].address_alternative[5].floor ? direccionFormateada = direccionFormateada +' Depto: ' + this.dataToConfirm[8].address_alternative[6].department : direccionFormateada +'';
-
-      if ( this.dataToConfirm[8].address_alternative[1].street_a && this.dataToConfirm[8].address_alternative[2].street_b ) {
-
-        this.dataToConfirm[8].address_alternative[1].diag ? direccionFormateada = direccionFormateada +' Entre diagonal ' + this.dataToConfirm[8].address_alternative[1].street_a : direccionFormateada = direccionFormateada +' Entre calle ' + this.dataToConfirm[8].address_alternative[1].street_a;
+      if (this.dataToConfirm[8].address_alternative[0].street) {
+        if(this.dataToConfirm[8].address_alternative[0].diag) {
+          direccionFormateada = 'Diagonal ' + this.dataToConfirm[8].address_alternative[0].street;
+        } else {
+          direccionFormateada = 'Calle ' + this.dataToConfirm[8].address_alternative[0].street;
+        }
+        if (this.dataToConfirm[8].address_alternative[3].altitud) {
+          direccionFormateada =  direccionFormateada +' N° ' + this.dataToConfirm[8].address_alternative[3].altitud;
+        }
+        this.dataToConfirm[8].address_alternative[5].floor ? direccionFormateada = direccionFormateada +' Piso: ' + this.dataToConfirm[8].address_alternative[5].floor : direccionFormateada +'';
+        this.dataToConfirm[8].address_alternative[5].floor ? direccionFormateada = direccionFormateada +' Depto: ' + this.dataToConfirm[8].address_alternative[6].department : direccionFormateada +'';
+  
+        if ( this.dataToConfirm[8].address_alternative[1].street_a && this.dataToConfirm[8].address_alternative[2].street_b ) {
+  
+          this.dataToConfirm[8].address_alternative[1].diag ? direccionFormateada = direccionFormateada +' Entre diagonal ' + this.dataToConfirm[8].address_alternative[1].street_a : direccionFormateada = direccionFormateada +' Entre calle ' + this.dataToConfirm[8].address_alternative[1].street_a;
+          
+          this.dataToConfirm[8].address_alternative[2].diag ? direccionFormateada = direccionFormateada +' y diagonal ' + this.dataToConfirm[8].address_alternative[2].street_b : direccionFormateada = direccionFormateada +' y calle ' + this.dataToConfirm[8].address_alternative[2].street_b;
         
-        this.dataToConfirm[8].address_alternative[2].diag ? direccionFormateada = direccionFormateada +' y diagonal ' + this.dataToConfirm[8].address_alternative[2].street_b : direccionFormateada = direccionFormateada +' y calle ' + this.dataToConfirm[8].address_alternative[2].street_b;
-      
-      } else {
-        if (this.dataToConfirm[8].address_alternative[1].street_a) {
-          this.dataToConfirm[8].address_alternative[1].diag ? direccionFormateada = direccionFormateada +' Esq diagonal ' + this.dataToConfirm[8].address_alternative[1].street_a : direccionFormateada = direccionFormateada +' Esq calle ' + this.dataToConfirm[8].address_alternative[1].street_a;
+        } else {
+          if (this.dataToConfirm[8].address_alternative[1].street_a) {
+            this.dataToConfirm[8].address_alternative[1].diag ? direccionFormateada = direccionFormateada +' Esq diagonal ' + this.dataToConfirm[8].address_alternative[1].street_a : direccionFormateada = direccionFormateada +' Esq calle ' + this.dataToConfirm[8].address_alternative[1].street_a;
+          }
+          if (this.dataToConfirm[8].address_alternative[2].street_b) {
+            this.dataToConfirm[8].address_alternative[1].diag ? direccionFormateada = direccionFormateada +' Esq diagonal ' + this.dataToConfirm[8].address_alternative[2].street_b : direccionFormateada = direccionFormateada +' Esq calle ' + this.dataToConfirm[8].address_alternative[2].street_b;
+          }
         }
-        if (this.dataToConfirm[8].address_alternative[2].street_b) {
-          this.dataToConfirm[8].address_alternative[1].diag ? direccionFormateada = direccionFormateada +' Esq diagonal ' + this.dataToConfirm[8].address_alternative[2].street_b : direccionFormateada = direccionFormateada +' Esq calle ' + this.dataToConfirm[8].address_alternative[2].street_b;
-        }
-      }
+      } 
       return direccionFormateada;
     }
 
