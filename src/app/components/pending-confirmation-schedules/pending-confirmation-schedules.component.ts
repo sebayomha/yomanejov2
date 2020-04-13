@@ -480,13 +480,15 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
 
   removeAllNombres() {
     if (this.currentTabIndex == 1) {
-      this.selectedNombresChips.get(this.currentTabIndex).forEach( (cronograma) => {
-        let index = this.filteredArrayCronogramas.findIndex( (c) => {
-          if (c.idCronograma == cronograma.idCronograma) 
-            return true;
-          return false;
-        });
-        this.filteredArrayCronogramas.splice(index, 1);
+      var indices = [];
+      this.selectedNombresChips.get(this.currentTabIndex).forEach( (nombreAlumno) => {
+        for(var i=0; i<this.filteredArrayCronogramas.length;i++) {
+          if (this.filteredArrayCronogramas[i].nombreAlumno.toLowerCase() === nombreAlumno.toLowerCase()) indices.push(i);
+        }
+        
+        this.filteredArrayCronogramas = this.filteredArrayCronogramas.filter(function(value, index) {
+          return indices.indexOf(index) == -1;
+        })
       })
   
       this.selectedNombresChips.get(this.currentTabIndex).length = 0;
@@ -498,13 +500,15 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
     }
 
     if (this.currentTabIndex == 2) {
-      this.selectedNombresChips.get(this.currentTabIndex).forEach( (cronograma) => {
-        let index = this.filteredArrayFinalizadosCronogramas.findIndex( (c) => {
-          if (c.idCronograma == cronograma.idCronograma) 
-            return true;
-          return false;
-        });
-        this.filteredArrayFinalizadosCronogramas.splice(index, 1);
+      var indices = [];
+      this.selectedNombresChips.get(this.currentTabIndex).forEach( (nombreAlumno) => {
+        for(var i=0; i<this.filteredArrayFinalizadosCronogramas.length;i++) {
+          if (this.filteredArrayFinalizadosCronogramas[i].nombreAlumno.toLowerCase() === nombreAlumno.toLowerCase()) indices.push(i);
+        }
+        
+        this.filteredArrayFinalizadosCronogramas = this.filteredArrayFinalizadosCronogramas.filter(function(value, index) {
+          return indices.indexOf(index) == -1;
+        })
       })
   
       this.selectedNombresChips.get(this.currentTabIndex).length = 0;
@@ -516,13 +520,15 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
     }
 
     if (this.currentTabIndex == 3) {
-      this.selectedNombresChips.get(this.currentTabIndex).forEach( (cronograma) => {
-        let index = this.filteredArrayCanceladosCronogramas.findIndex( (c) => {
-          if (c.idCronograma == cronograma.idCronograma) 
-            return true;
-          return false;
-        });
-        this.filteredArrayCanceladosCronogramas.splice(index, 1);
+      var indices = [];
+      this.selectedNombresChips.get(this.currentTabIndex).forEach( (nombreAlumno) => {
+        for(var i=0; i<this.filteredArrayCanceladosCronogramas.length;i++) {
+          if (this.filteredArrayCanceladosCronogramas[i].nombreAlumno.toLowerCase() === nombreAlumno.toLowerCase()) indices.push(i);
+        }
+        
+        this.filteredArrayCanceladosCronogramas = this.filteredArrayCanceladosCronogramas.filter(function(value, index) {
+          return indices.indexOf(index) == -1;
+        })
       })
   
       this.selectedNombresChips.get(this.currentTabIndex).length = 0;
