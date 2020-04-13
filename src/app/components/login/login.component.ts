@@ -6,15 +6,23 @@ import { MatSnackBar } from '@angular/material';
 import { Response } from 'src/app/models/response';
 import { SnackbarComponent } from '../snackbar/snackbar/snackbar.component';
 import { AppSettings } from '../../appConstants';
+import { flipAnimation } from '../../animations';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
+  animations: [
+    flipAnimation
+    // animation triggers go here
+  ]
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private auth: AuthService, private router: Router, private snackbar: MatSnackBar) {  }
+  constructor(private auth: AuthService, private router: Router, private snackbar: MatSnackBar, private breakpointObserver: BreakpointObserver) {  }
+
+  flip: string = 'inactive';
 
   user = {
     password: '',
@@ -29,6 +37,7 @@ export class LoginComponent implements OnInit {
   bannerDismiss: boolean;
 
   showPass:boolean;
+  showRepeatPass: boolean;
   dontRememberPass:boolean;
   submitted;
 
@@ -37,20 +46,25 @@ export class LoginComponent implements OnInit {
   userData;
   durationInSeconds: number = 3;
 
+  newPassword: string = '';
+  newPasswordRepeat: string = '';
+  notMatchedPasswords: boolean = false;
+
   ngOnInit() { 
     this.showPass = false;
+    this.showRepeatPass = false;
     this.dontRememberPass = false;
     this.showNewPasswordBox = false;
   }
 
   onSubmit(){
     let usuario = new LoginUser(this.user.email, this.user.password);
-    this.auth.login(usuario).subscribe( (data: Response) => {
+    this.auth.login(usuario).subscribe( (data: any) => {
       if (data.code == 0) { //login exitoso
         localStorage.setItem('uniqueid', data.data.jwt);
         localStorage.setItem('uniquert', data.data.rt);
         AppSettings.refreshRole();
-        this.router.navigate(['busqueda'])
+        this.router.navigate(['busqueda']);
       } else{
         switch(data.code) {
           case 1:
@@ -63,13 +77,15 @@ export class LoginComponent implements OnInit {
           break;
           case 2: { //la contraseña del usuario es la default
             this.errorMsg = "";
+            this.showPass = false; 
+            this.submitted = false;
             this.userData = {
               'email': this.user.email,
-              'name': data.data.name,
-              'surname':data.data.surname,
-              'iduser': data.data.iduser
+              'name': data.name,
+              'iduser': data.iduser
             }
             this.showNewPasswordBox = true;
+            this.toggleFlip();
           }
           break;
         }
@@ -78,8 +94,28 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  checkRepeatedPasswords() {
+    if (this.newPassword != '' && this.newPasswordRepeat != '') {
+      if (this.newPassword === this.newPasswordRepeat) {
+        this.notMatchedPasswords = false;
+      } else {
+        this.notMatchedPasswords = true;
+      }
+    } else {
+      if (this.newPassword != '' && this.newPasswordRepeat == '') {
+        this.notMatchedPasswords = false;
+      } else {
+        this.notMatchedPasswords = true;
+      }
+    }
+  }
+
   showPassword(){
     this.showPass = !this.showPass;
+  }
+
+  showRepeatPassword(){
+    this.showRepeatPass = !this.showRepeatPass;
   }
 
   dontRememberPassword(){
@@ -88,5 +124,14 @@ export class LoginComponent implements OnInit {
   
   showNewPassBox(){
     this.showNewPasswordBox = !this.showNewPasswordBox;
+    this.toggleFlip();
+  }
+
+  toggleFlip() {
+    this.flip = (this.flip == 'inactive') ? 'active' : 'inactive';
+  }
+
+  isMobile() {
+    return this.breakpointObserver.isMatched('(max-width: 767px)');
   }
 }

@@ -7,6 +7,6 @@ export class AppSettings {
     public static USER_ROLE = AppSettings.isLoggedIn ? new AuthService(AppSettings.http).decodePayload().role: null;
 
     public static refreshRole() {
-        AppSettings.USER_ROLE =  AppSettings.isLoggedIn ? new AuthService(AppSettings.http).decodePayload().role: null;
+        AppSettings.USER_ROLE = new AuthService(AppSettings.http).decodePayload().role;
     }
 }

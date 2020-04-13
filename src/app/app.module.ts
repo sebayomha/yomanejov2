@@ -62,6 +62,8 @@ import { DocumentoEditPipe } from './pipes/documentoEdit.pipe';
 registerLocaleData(localeEsAr);
 
 // import { BarRatingModule } from "ngx-bar-rating";
+import { PasswordStrengthMeterModule } from 'angular-password-strength-meter';
+
 import { HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
 import { StudentsComponent } from './components/students/students.component';
 import { StudentsDetailsComponent } from './components/students-details/students-details.component';
@@ -114,6 +116,7 @@ export class MyHammerConfig extends HammerGestureConfig {
     MatTooltipModule,
     ReactiveFormsModule,
     FormsModule,
+    PasswordStrengthMeterModule,
     MatSidenavModule,
     MatTabsModule,
     MatDatepickerModule,

@@ -40,11 +40,13 @@ body { margin: 0; overflow-x:hidden; font-family: 'Roboto', sans-serif; }
     color: #43c89d !important;
 }
 
-.mat-form-field-ripple {
-    /*change color of underline when focused*/
-    background-color: #43c89d !important;;
+.mat-form-field.mat-focused:not(.ng-invalid) .mat-form-field-ripple {
+    background-color: #43c89d !important;
 }
 
+.mat-form-field.mat-focused.ng-untouched .mat-form-field-ripple {
+    background-color: #43c89d !important;
+}
 
 @media (max-width: 1024px) {
     .showMobile {
