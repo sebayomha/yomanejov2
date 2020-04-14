@@ -845,6 +845,7 @@ export class FreeClassFinderComponent {
   
   setSchedule(generalSchedule) {
     if(this.checkedGeneralDays.length && this.isGeneralInformationFilled()) {
+      this.schedule_send_null = false;
       this.panelHorarioSemanal = true;
       this.generalFormHasError = false;
       this.sr_all_day = false;
@@ -873,6 +874,7 @@ export class FreeClassFinderComponent {
       this.resetGeneralForm();
     } else {
       this.generalFormHasError = true;
+      this.schedule_send_null = true;
     }
   }
 
