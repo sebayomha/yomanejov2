@@ -12,7 +12,7 @@ import { AppSettings } from '../../appConstants';
 export class NavbarComponent {
 
   USER_ROLE;
-  constructor(private authService: AuthService, private router: Router,) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() { 
     this.USER_ROLE = AppSettings.USER_ROLE;
@@ -26,4 +26,35 @@ export class NavbarComponent {
       }
     });
   }
+
+  getUserProfileName() {
+    let nombre = this.authService.decodePayload().nombre || null;
+    if (nombre) {
+      const nombreArray = nombre.split(' ');
+      if (nombreArray.length == 2) {
+        var inicialApellido = nombreArray[1];
+        var nombrePerfil = nombreArray[0].substring(0,1) + '.';
+        return inicialApellido + ' ' + nombrePerfil;
+      } else { //tiene 3 nombres
+        var inicialApellido = nombreArray[2];
+        var nombrePerfil1 = nombreArray[0];
+        var nombrePerfil2 = nombreArray[0].substring(0,1) + '.';
+        return inicialApellido + ' ' + nombrePerfil1 + ' ' + nombrePerfil2;
+      }
+    } else {
+      return '';
+    }
+  }
+
+  getProfileImagesrc() {
+    let id = this.authService.decodePayload().idUsuario || null;
+    switch(id) {
+      case 1: 
+        return '../../../assets/img/profile/YomhaS.png';
+      default:
+        return '../../../assets/img/logo.png';
+    }
+   
+  }
+
 }

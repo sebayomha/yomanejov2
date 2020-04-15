@@ -238,6 +238,54 @@ class Auth{
         }
         return false;
     }
+
+    function changePassword($idUsuario, $oldPassword, $newPassword) {
+        if ($oldPassword == $newPassword) { //la nueva contraseña es igual a la anterior
+            return false;
+        }
+
+        $conn = $this->db->getConnection();
+        $state = $this->conn->prepare('SELECT usuario.idUsuario, usuario.email, usuario.password, usuario.role, usuario.nombre FROM usuario WHERE usuario.idUsuario = ?');
+        $state->bind_param('i', $idUsuario);
+        $state->execute();
+        $ress = $state->get_result();
+
+        if($ress->num_rows > 0){
+            $result = array();
+            while($row = $ress->fetch_assoc()){
+                $result[] = $row;
+            }
+
+            if (password_verify($newPassword, $result[0]['password'])) { //la nueva contraseña es igual a la anterior
+                return false;
+            }
+
+            if (!password_verify($oldPassword, $result[0]['password'])) { //la antigua contraseña no es igual a la actual
+                return false;
+            }
+
+            $hashedNewPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+            $now = date('Y-m-d h:i:s a', time());
+            $state = $this->conn->prepare('UPDATE usuario SET password = ?, changePasswordTime = ? WHERE usuario.idUsuario = ?');
+            $state->bind_param('ssi', $hashedNewPassword, $now, $idUsuario);
+            if ($state->execute()) { //password actualizada correctamente
+                $token = new Token();
+                $result['iat'] = time();
+                $result['exp'] = strtotime(date('Y-m-d H:i:s', strtotime("+10 min")));
+                $result['idUsuario'] = $result[0]['idUsuario'];
+                $result['role'] = $result[0]['role'];
+                $result['nombre'] = $result[0]['nombre'];
+                unset($result[0]);  //Unset
+                $jwt = $token->generateToken($result, $hashedNewPassword); //genero un nuevo token porque los voy firmando con la contraseña
+                $data = (object) [
+                    'code'=> 0,
+                    'data'=> "Contraseña actualizada correctamente",
+                    'jwt'=>$jwt
+                ];
+                return $data;
+            }
+        }
+    }
 }
 
 

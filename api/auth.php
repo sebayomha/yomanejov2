@@ -4,6 +4,7 @@
 	require_once('authDB.php');
 	require_once('utils.php');
 	require_once('token.php');
+	require_once('authGuard.php');
 
 	//Obtengo la URL que se desea procesar.
 	$utils = new Utils();
@@ -73,20 +74,32 @@
 	}
 
 	function logout(){
-		$params = json_decode(file_get_contents('php://input'),true);
-		$auth = new Auth();
-
-		$idUsuario = htmlspecialchars($params);
-
-		if(isset($idUsuario) && !empty($params)){
-			$logoutResult = $auth->logout($idUsuario);
-			if ($logoutResult) {
-				echo json_encode($GLOBALS['utils']->getResponse(0, $logoutResult));	
-			} else {
-				echo json_encode($GLOBALS['utils']->getResponse(1, $logoutResult));	
+		$authGuard = new AuthGuard();
+		$allowedAccessResult = $authGuard->allowedAccess();
+		if ($allowedAccessResult != false && $allowedAccessResult != "expired") {
+			$params = json_decode(file_get_contents('php://input'),true);
+			$auth = new Auth();
+	
+			$idUsuario = htmlspecialchars($params);
+	
+			if(isset($idUsuario) && !empty($idUsuario)){
+				$logoutResult = $auth->logout($idUsuario);
+				if ($logoutResult) {
+					echo json_encode($GLOBALS['utils']->getResponse(0, $logoutResult));	
+				} else {
+					echo json_encode($GLOBALS['utils']->getResponse(1, $logoutResult));	
+				}
+			}else{
+				echo json_encode($GLOBALS['utils']->getResponse(2, 'Ingrese los campos'));	
 			}
-		}else{
-			echo json_encode($GLOBALS['utils']->getResponse(2, 'Ingrese los campos'));	
+		} else {
+			if ($allowedAccessResult == "expired") {
+				header("HTTP/1.1 401 Token Expired");
+				exit;
+			} else {
+				header("HTTP/1.1 401 Unauthorized");
+				exit;
+			}
 		}
 	}
 
@@ -94,6 +107,38 @@
 		$idUsuario = htmlspecialchars($idUsuario);
 		$auth = new Auth();
 		return $auth->getPasswordById($idUsuario);
+	}
+
+	function changePassword() {
+		$authGuard = new AuthGuard();
+		$allowedAccessResult = $authGuard->allowedAccess();
+		if ($allowedAccessResult != false && $allowedAccessResult != "expired") {
+			$params = json_decode(file_get_contents('php://input'),true);
+			$auth = new Auth();
+	
+			$idUsuario = htmlspecialchars($params['idUsuario']);
+			$oldPassword = htmlspecialchars($params['oldPassword']);
+			$newPassword = htmlspecialchars($params['newPassword']);
+	
+			if(isset($idUsuario) && !empty($idUsuario) && isset($oldPassword) && isset($newPassword)){
+				$changePasswordResult = $auth->changePassword($idUsuario, $oldPassword, $newPassword);
+				if (is_object($changePasswordResult)) {
+					echo json_encode($GLOBALS['utils']->getResponse(0, $changePasswordResult));	
+				} else {
+					echo json_encode($GLOBALS['utils']->getResponse(1, 'La nueva contraseña no puede ser igual a la anterior'));	
+				}
+			} else {
+				echo json_encode($GLOBALS['utils']->getResponse(2, 'Ingrese los campos'));	
+			}
+		} else {
+			if ($allowedAccessResult == "expired") {
+				header("HTTP/1.1 401 Token Expired");
+				exit;
+			} else {
+				header("HTTP/1.1 401 Unauthorized");
+				exit;
+			}
+		}
 	}
 
 	switch ($method) {
@@ -114,7 +159,10 @@
 				break;
 				case '/auth/logout':
 	    			logout();
-	    		break;
+				break;
+				case '/auth/changePassword':
+					changePassword();
+				break;
 	    		default:
 	    		break;
 	    	}

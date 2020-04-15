@@ -17,7 +17,7 @@
 }
 
 ::ng-deep .mat-progress-spinner {
-  background-color: hsla(0,0%,100%,.9);
+  background-color: transparent;
 }
 
 ::ng-deep .mat-progress-spinner circle, .mat-spinner circle {

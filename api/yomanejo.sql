@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 4.9.2
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 12-04-2020 a las 21:34:17
--- Versión del servidor: 10.4.11-MariaDB
--- Versión de PHP: 7.4.4
+-- Host: 127.0.0.1
+-- Generation Time: Apr 15, 2020 at 04:39 AM
+-- Server version: 10.4.11-MariaDB
+-- PHP Version: 7.4.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -18,12 +19,12 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `yomanejo`
+-- Database: `yomanejo`
 --
 
 DELIMITER $$
 --
--- Procedimientos
+-- Procedures
 --
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removePendingSchedules` ()  NO SQL
 BEGIN
@@ -73,7 +74,7 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `alumno`
+-- Table structure for table `alumno`
 --
 
 CREATE TABLE `alumno` (
@@ -94,7 +95,7 @@ CREATE TABLE `alumno` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Volcado de datos para la tabla `alumno`
+-- Dumping data for table `alumno`
 --
 
 INSERT INTO `alumno` (`idAlumno`, `idDireccion`, `idDireccionAlt`, `fechaAlta`, `activo`, `nombre`, `telefono`, `confirmado`, `fechaConfirmacion`, `idDisponibilidad`, `idDireccionFisica`, `documento`, `motivoBaja`, `fechaBaja`) VALUES
@@ -157,7 +158,7 @@ INSERT INTO `alumno` (`idAlumno`, `idDireccion`, `idDireccionAlt`, `fechaAlta`, 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `alumnocronogramaclasestomadas`
+-- Table structure for table `alumnocronogramaclasestomadas`
 --
 
 CREATE TABLE `alumnocronogramaclasestomadas` (
@@ -169,7 +170,7 @@ CREATE TABLE `alumnocronogramaclasestomadas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Volcado de datos para la tabla `alumnocronogramaclasestomadas`
+-- Dumping data for table `alumnocronogramaclasestomadas`
 --
 
 INSERT INTO `alumnocronogramaclasestomadas` (`idAlumnoCronograma`, `idAlumno`, `idCronograma`, `cantClasesTomadas`, `cantClasesTotales`) VALUES
@@ -187,20 +188,20 @@ INSERT INTO `alumnocronogramaclasestomadas` (`idAlumnoCronograma`, `idAlumno`, `
 (12, 135, 128, 3, 3),
 (13, 136, 129, 104, 2),
 (14, 137, 130, 2, 2),
-(15, 138, 131, 1, 2),
+(15, 138, 131, 2, 2),
 (16, 139, 132, 4, 5),
-(17, 140, 133, 1, 3),
+(17, 140, 133, 2, 3),
 (18, 141, 134, 1, 3),
-(19, 142, 135, 2, 4),
+(19, 142, 135, 3, 4),
 (20, 127, 120, 3, 4),
-(21, 143, 136, 1, 3),
-(22, 144, 137, 1, 3),
-(23, 165, 158, 0, 4);
+(21, 143, 136, 2, 3),
+(22, 144, 137, 2, 3),
+(23, 165, 158, 1, 4);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `auto`
+-- Table structure for table `auto`
 --
 
 CREATE TABLE `auto` (
@@ -214,7 +215,7 @@ CREATE TABLE `auto` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Volcado de datos para la tabla `auto`
+-- Dumping data for table `auto`
 --
 
 INSERT INTO `auto` (`idAuto`, `patente`, `color`, `disponibilidad`, `descripcion`, `zonaMaster`, `modelo`) VALUES
@@ -226,7 +227,7 @@ INSERT INTO `auto` (`idAuto`, `patente`, `color`, `disponibilidad`, `descripcion
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `autoinactivo`
+-- Table structure for table `autoinactivo`
 --
 
 CREATE TABLE `autoinactivo` (
@@ -238,7 +239,7 @@ CREATE TABLE `autoinactivo` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `clase`
+-- Table structure for table `clase`
 --
 
 CREATE TABLE `clase` (
@@ -261,7 +262,7 @@ CREATE TABLE `clase` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Volcado de datos para la tabla `clase`
+-- Dumping data for table `clase`
 --
 
 INSERT INTO `clase` (`idClase`, `alumno`, `auto`, `fecha`, `horaInicio`, `idZona`, `idDireccion`, `idCronograma`, `status`, `sumada`, `nroClase`, `claseCancelada`, `motivoCancelacion`, `fechaClaseCancelada`, `fechaClaseReactivada`, `claseExtra`) VALUES
@@ -341,12 +342,12 @@ INSERT INTO `clase` (`idClase`, `alumno`, `auto`, `fecha`, `horaInicio`, `idZona
 (750, 139, 1, '2020-03-25', '14:30', 24, 208, 132, 'CONFIRMADO', 'true', 1, '', NULL, '', '', ''),
 (751, 139, 1, '2020-03-30', '10:00', 24, 208, 132, 'CONFIRMADO', 'true', 1, '', NULL, '', '', ''),
 (752, 138, 1, '2020-04-07', '08:00', 24, 207, 131, 'MODIFICADO', 'false', 1, '', NULL, '', '', ''),
-(753, 138, 1, '2020-04-14', '08:00', 24, 207, 131, 'CONFIRMADO', 'false', 1, '', NULL, '', '', ''),
+(753, 138, 1, '2020-04-14', '08:00', 24, 207, 131, 'CONFIRMADO', 'true', 1, '', NULL, '', '', ''),
 (754, 140, 1, '2020-03-30', '12:15', 24, 209, 133, 'MODIFICADO', 'false', 1, '', NULL, '', '', ''),
 (755, 140, 1, '2020-04-06', '09:00', 24, 209, 133, 'MODIFICADO', 'false', 1, '', NULL, '', '', ''),
 (756, 140, 1, '2020-04-13', '08:00', 24, 209, 133, 'MODIFICADO', 'false', 3, '', NULL, '', '', ''),
 (757, 140, 1, '2020-04-20', '16:30', 24, 209, 133, 'CONFIRMADO', 'false', 1, '', NULL, '', '', ''),
-(758, 140, 1, '2020-04-13', '08:00', 24, 209, 133, 'CONFIRMADO', 'false', 1, '', NULL, '', '', ''),
+(758, 140, 1, '2020-04-13', '08:00', 24, 209, 133, 'CONFIRMADO', 'true', 1, '', NULL, '', '', ''),
 (759, 140, 1, '2020-03-30', '12:15', 24, 209, 133, 'MODIFICADO', 'false', 1, '', NULL, '', '', ''),
 (760, 141, 1, '2020-03-30', '13:15', 24, 210, 134, 'MODIFICADO', 'false', 1, '', NULL, '', '', ''),
 (761, 141, 1, '2020-04-06', '09:00', 24, 210, 134, 'MODIFICADO', 'false', 1, '', NULL, '', '', ''),
@@ -362,7 +363,7 @@ INSERT INTO `clase` (`idClase`, `alumno`, `auto`, `fecha`, `horaInicio`, `idZona
 (771, 141, 1, '2020-03-30', '15:30', 24, 210, 134, 'MODIFICADO', 'false', 1, '', NULL, '', '', ''),
 (772, 141, 1, '2020-04-06', '09:00', 24, 210, 134, 'CONFIRMADO', 'true', 1, '', NULL, '', '', ''),
 (773, 142, 1, '2020-04-06', '10:00', 24, 211, 135, 'MODIFICADO', 'false', 1, '', NULL, '', '', ''),
-(774, 142, 1, '2020-04-13', '09:00', 24, 211, 135, 'CONFIRMADO', 'false', 1, '', NULL, '', '', ''),
+(774, 142, 1, '2020-04-13', '09:00', 24, 211, 135, 'CONFIRMADO', 'true', 1, '', NULL, '', '', ''),
 (775, 142, 1, '2020-03-30', '18:45', 24, 211, 135, 'MODIFICADO', 'true', 1, '', NULL, '', '', ''),
 (776, 127, 1, '2020-03-30', '19:45', 24, 192, 120, 'CONFIRMADO', 'true', 1, '', NULL, '', '', ''),
 (777, 127, 3, '2020-04-01', '13:15', 37, 197, 120, 'CONFIRMADO', 'true', 2, '', NULL, '', '', ''),
@@ -374,20 +375,20 @@ INSERT INTO `clase` (`idClase`, `alumno`, `auto`, `fecha`, `horaInicio`, `idZona
 (783, 142, 1, '2020-04-06', '12:15', 24, 211, 135, 'CONFIRMADO', 'true', 1, '', NULL, '', '', 'true'),
 (784, 142, 1, '2020-04-27', '12:15', 24, 211, 135, 'CONFIRMADO', 'false', 1, '', NULL, '', '', 'true'),
 (785, 143, 1, '2020-04-05', '08:00', 24, 212, 136, 'CONFIRMADO', 'true', 1, '', NULL, '', '', ''),
-(786, 143, 1, '2020-04-12', '08:00', 24, 212, 136, 'CONFIRMADO', 'false', 2, '', NULL, '', '', ''),
+(786, 143, 1, '2020-04-12', '08:00', 24, 212, 136, 'CONFIRMADO', 'true', 2, '', NULL, '', '', ''),
 (787, 143, 1, '2020-04-19', '08:00', 24, 212, 136, 'CONFIRMADO', 'false', 3, '', NULL, '', '', ''),
 (791, 144, 1, '2020-04-05', '09:00', 24, 213, 137, 'CONFIRMADO', 'true', 1, '', NULL, '', '', ''),
-(792, 144, 1, '2020-04-12', '09:00', 24, 213, 137, 'CONFIRMADO', 'false', 2, '', NULL, '', '', ''),
+(792, 144, 1, '2020-04-12', '09:00', 24, 213, 137, 'CONFIRMADO', 'true', 2, '', NULL, '', '', ''),
 (793, 144, 1, '2020-04-19', '09:00', 24, 213, 137, 'CONFIRMADO', 'false', 3, '', NULL, '', '', ''),
-(872, 165, 1, '2020-04-13', '10:00', 24, 234, 158, 'CONFIRMADO', 'false', 1, '', NULL, '', '', ''),
-(873, 165, 1, '2020-04-20', '19:45', 24, 234, 158, 'CONFIRMADO', 'false', 2, '', NULL, '', '', ''),
-(874, 165, 1, '2020-04-27', '09:00', 24, 234, 158, 'CONFIRMADO', 'false', 3, '', NULL, '', '', ''),
-(875, 165, 1, '2020-05-04', '08:00', 24, 234, 158, 'CONFIRMADO', 'false', 4, '', NULL, '', '', '');
+(872, 165, 1, '2020-04-13', '10:00', 24, 234, 158, 'MODIFICADO', 'true', 1, '', NULL, '', '', ''),
+(873, 165, 1, '2020-04-20', '19:45', 24, 234, 158, 'CONFIRMADO', 'false', 1, '', NULL, '', '', ''),
+(874, 165, 1, '2020-04-27', '09:00', 24, 234, 158, 'CONFIRMADO', 'false', 1, '', NULL, '', '', ''),
+(875, 165, 1, '2020-05-04', '08:00', 24, 234, 158, 'CONFIRMADO', 'false', 1, '', NULL, '', '', '');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `clasemodificadaregistro`
+-- Table structure for table `clasemodificadaregistro`
 --
 
 CREATE TABLE `clasemodificadaregistro` (
@@ -397,7 +398,7 @@ CREATE TABLE `clasemodificadaregistro` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Volcado de datos para la tabla `clasemodificadaregistro`
+-- Dumping data for table `clasemodificadaregistro`
 --
 
 INSERT INTO `clasemodificadaregistro` (`idClaseModificadaRegistro`, `idClaseAnterior`, `idClaseNueva`) VALUES
@@ -421,7 +422,7 @@ INSERT INTO `clasemodificadaregistro` (`idClaseModificadaRegistro`, `idClaseAnte
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `cronograma`
+-- Table structure for table `cronograma`
 --
 
 CREATE TABLE `cronograma` (
@@ -437,7 +438,7 @@ CREATE TABLE `cronograma` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Volcado de datos para la tabla `cronograma`
+-- Dumping data for table `cronograma`
 --
 
 INSERT INTO `cronograma` (`idCronograma`, `status`, `idAlumno`, `timestampGuardado`, `timestampActivo`, `timestampCancelado`, `timestampFinalizado`, `timestampModificado`, `motivoBaja`) VALUES
@@ -460,19 +461,19 @@ INSERT INTO `cronograma` (`idCronograma`, `status`, `idAlumno`, `timestampGuarda
 (128, 'FINALIZADO', 135, '03/20/2020 06:26:01 pm', '2020-03-20 06:30:44 pm', '', '2020-03-25 16:15:02', '03/23/2020 03:13:56 pm', ''),
 (129, 'FINALIZADO', 136, '03/23/2020 03:54:41 pm', '2020-03-23 03:54:49 pm', '', '2020-03-24 20:01:38', '', ''),
 (130, 'FINALIZADO', 137, '03/24/2020 06:08:04 pm', '2020-03-24 06:08:14 pm', '', '2020-04-01 18:08:33', '', ''),
-(131, 'CONFIRMADO', 138, '03/24/2020 06:08:41 pm', '2020-03-24 06:08:49 pm', '', '', '03/28/2020 02:34:50 pm', ''),
+(131, 'FINALIZADO', 138, '03/24/2020 06:08:41 pm', '2020-03-24 06:08:49 pm', '', '2020-04-14 08:10:59', '03/28/2020 02:34:50 pm', ''),
 (132, 'CONFIRMADO', 139, '03/25/2020 12:55:54 pm', '2020-03-25 12:56:08 pm', '', '', '04/01/2020 03:00:40 pm', ''),
 (133, 'CONFIRMADO', 140, '03/28/2020 03:05:42 pm', '2020-03-28 03:05:53 pm', '', '', '03/28/2020 04:44:46 pm', ''),
 (134, 'CONFIRMADO', 141, '03/28/2020 04:36:08 pm', '2020-03-28 04:36:18 pm', '', '', '03/30/2020 02:35:11 pm', ''),
 (135, 'CONFIRMADO', 142, '03/30/2020 06:11:52 pm', '2020-03-30 06:12:06 pm', '', '', '04/01/2020 08:53:51 pm', ''),
 (136, 'CONFIRMADO', 143, '04/01/2020 09:18:39 pm', '2020-04-01 09:19:20 pm', '', '', '', ''),
 (137, 'CONFIRMADO', 144, '04/01/2020 09:22:03 pm', '2020-04-01 09:22:20 pm', '', '', '', ''),
-(158, 'CONFIRMADO', 165, '04/06/2020 01:12:48 pm', '2020-04-06 01:23:34 pm', '', '', '', '');
+(158, 'CONFIRMADO', 165, '04/06/2020 01:12:48 pm', '2020-04-06 01:23:34 pm', '', '', '04/13/2020 08:42:30 pm', '');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `direccion`
+-- Table structure for table `direccion`
 --
 
 CREATE TABLE `direccion` (
@@ -491,7 +492,7 @@ CREATE TABLE `direccion` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Volcado de datos para la tabla `direccion`
+-- Dumping data for table `direccion`
 --
 
 INSERT INTO `direccion` (`idDireccion`, `calle`, `calle_diag`, `calle_a`, `calle_a_diag`, `calle_b`, `calle_b_diag`, `numero`, `ciudad`, `departamento`, `floor_`, `observaciones`) VALUES
@@ -576,7 +577,7 @@ INSERT INTO `direccion` (`idDireccion`, `calle`, `calle_diag`, `calle_a`, `calle
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `disponibilidad`
+-- Table structure for table `disponibilidad`
 --
 
 CREATE TABLE `disponibilidad` (
@@ -591,7 +592,7 @@ CREATE TABLE `disponibilidad` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Volcado de datos para la tabla `disponibilidad`
+-- Dumping data for table `disponibilidad`
 --
 
 INSERT INTO `disponibilidad` (`idDisponibilidad`, `Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday`, `Saturday`, `Sunday`) VALUES
@@ -654,7 +655,7 @@ INSERT INTO `disponibilidad` (`idDisponibilidad`, `Monday`, `Tuesday`, `Wednesda
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `excepcion`
+-- Table structure for table `excepcion`
 --
 
 CREATE TABLE `excepcion` (
@@ -665,7 +666,7 @@ CREATE TABLE `excepcion` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Volcado de datos para la tabla `excepcion`
+-- Dumping data for table `excepcion`
 --
 
 INSERT INTO `excepcion` (`idExcepcion`, `fecha`, `no_puede`, `idAlumno`) VALUES
@@ -686,7 +687,7 @@ INSERT INTO `excepcion` (`idExcepcion`, `fecha`, `no_puede`, `idAlumno`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `excepcionhorarios`
+-- Table structure for table `excepcionhorarios`
 --
 
 CREATE TABLE `excepcionhorarios` (
@@ -697,7 +698,7 @@ CREATE TABLE `excepcionhorarios` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Volcado de datos para la tabla `excepcionhorarios`
+-- Dumping data for table `excepcionhorarios`
 --
 
 INSERT INTO `excepcionhorarios` (`idExcepcionHorario`, `dir_alt`, `horarios`, `idExcepcion`) VALUES
@@ -722,7 +723,7 @@ INSERT INTO `excepcionhorarios` (`idExcepcionHorario`, `dir_alt`, `horarios`, `i
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `instructor`
+-- Table structure for table `instructor`
 --
 
 CREATE TABLE `instructor` (
@@ -732,7 +733,7 @@ CREATE TABLE `instructor` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Volcado de datos para la tabla `instructor`
+-- Dumping data for table `instructor`
 --
 
 INSERT INTO `instructor` (`idInstructor`, `nombre`, `apellido`) VALUES
@@ -741,7 +742,7 @@ INSERT INTO `instructor` (`idInstructor`, `nombre`, `apellido`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `parametros`
+-- Table structure for table `parametros`
 --
 
 CREATE TABLE `parametros` (
@@ -751,7 +752,7 @@ CREATE TABLE `parametros` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Volcado de datos para la tabla `parametros`
+-- Dumping data for table `parametros`
 --
 
 INSERT INTO `parametros` (`idParametro`, `maximoDiasTolerancia`, `diasToleranciaBajo`) VALUES
@@ -760,7 +761,7 @@ INSERT INTO `parametros` (`idParametro`, `maximoDiasTolerancia`, `diasTolerancia
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `tokenusuario`
+-- Table structure for table `tokenusuario`
 --
 
 CREATE TABLE `tokenusuario` (
@@ -771,16 +772,16 @@ CREATE TABLE `tokenusuario` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Volcado de datos para la tabla `tokenusuario`
+-- Dumping data for table `tokenusuario`
 --
 
 INSERT INTO `tokenusuario` (`idTokenUsuario`, `idUsuario`, `refreshToken`, `expirationRefreshToken`) VALUES
-(19, 1, '15e9096a277c149.70377971', '1589126050');
+(31, 1, '15e966f88d75388.60154892', '1589509256');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `usuario`
+-- Table structure for table `usuario`
 --
 
 CREATE TABLE `usuario` (
@@ -789,20 +790,21 @@ CREATE TABLE `usuario` (
   `password` varchar(255) NOT NULL,
   `firstPasswordChange` varchar(5) NOT NULL,
   `nombre` varchar(255) NOT NULL,
-  `role` varchar(255) NOT NULL
+  `role` varchar(255) NOT NULL,
+  `changePasswordTime` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Volcado de datos para la tabla `usuario`
+-- Dumping data for table `usuario`
 --
 
-INSERT INTO `usuario` (`idUsuario`, `email`, `password`, `firstPasswordChange`, `nombre`, `role`) VALUES
-(1, 'sebastian_yomha@hotmail.com', '$2y$10$Od0EVxoA5guZHboBPTkJ8OYjpvij1Efjq8J9umbpIYq3o0GXj8.Z2', 'true', 'Sebastian Yomha', 'Admin');
+INSERT INTO `usuario` (`idUsuario`, `email`, `password`, `firstPasswordChange`, `nombre`, `role`, `changePasswordTime`) VALUES
+(1, 'sebastian_yomha@hotmail.com', '$2y$10$zk9EuzNbDox7jNxr.jlvveSCm.6Mu5eGLKlgmUUENVuoZjGsuZx8C', 'true', 'Sebastian Yomha', 'ADMIN', '2020-04-14 11:05:18 pm');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `zona`
+-- Table structure for table `zona`
 --
 
 CREATE TABLE `zona` (
@@ -816,7 +818,7 @@ CREATE TABLE `zona` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Volcado de datos para la tabla `zona`
+-- Dumping data for table `zona`
 --
 
 INSERT INTO `zona` (`idZona`, `nombreZona`, `puntoSuperiorIzquierdo`, `puntoSuperiorDerecho`, `puntoInferiorIzquierdo`, `puntoInferiorDerecho`, `zonaMaster`) VALUES
@@ -861,7 +863,7 @@ INSERT INTO `zona` (`idZona`, `nombreZona`, `puntoSuperiorIzquierdo`, `puntoSupe
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `zonamaster`
+-- Table structure for table `zonamaster`
 --
 
 CREATE TABLE `zonamaster` (
@@ -869,7 +871,7 @@ CREATE TABLE `zonamaster` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Volcado de datos para la tabla `zonamaster`
+-- Dumping data for table `zonamaster`
 --
 
 INSERT INTO `zonamaster` (`idZonaMaster`) VALUES
@@ -880,7 +882,7 @@ INSERT INTO `zonamaster` (`idZonaMaster`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `zonasvecinas`
+-- Table structure for table `zonasvecinas`
 --
 
 CREATE TABLE `zonasvecinas` (
@@ -890,7 +892,7 @@ CREATE TABLE `zonasvecinas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Volcado de datos para la tabla `zonasvecinas`
+-- Dumping data for table `zonasvecinas`
 --
 
 INSERT INTO `zonasvecinas` (`idZona`, `idZonaVecina`, `id`) VALUES
@@ -1033,220 +1035,220 @@ INSERT INTO `zonasvecinas` (`idZona`, `idZonaVecina`, `id`) VALUES
 (42, 41, 137);
 
 --
--- Índices para tablas volcadas
+-- Indexes for dumped tables
 --
 
 --
--- Indices de la tabla `alumno`
+-- Indexes for table `alumno`
 --
 ALTER TABLE `alumno`
   ADD PRIMARY KEY (`idAlumno`);
 
 --
--- Indices de la tabla `alumnocronogramaclasestomadas`
+-- Indexes for table `alumnocronogramaclasestomadas`
 --
 ALTER TABLE `alumnocronogramaclasestomadas`
   ADD PRIMARY KEY (`idAlumnoCronograma`);
 
 --
--- Indices de la tabla `auto`
+-- Indexes for table `auto`
 --
 ALTER TABLE `auto`
   ADD PRIMARY KEY (`idAuto`);
 
 --
--- Indices de la tabla `clase`
+-- Indexes for table `clase`
 --
 ALTER TABLE `clase`
   ADD PRIMARY KEY (`idClase`);
 
 --
--- Indices de la tabla `clasemodificadaregistro`
+-- Indexes for table `clasemodificadaregistro`
 --
 ALTER TABLE `clasemodificadaregistro`
   ADD PRIMARY KEY (`idClaseModificadaRegistro`);
 
 --
--- Indices de la tabla `cronograma`
+-- Indexes for table `cronograma`
 --
 ALTER TABLE `cronograma`
   ADD PRIMARY KEY (`idCronograma`);
 
 --
--- Indices de la tabla `direccion`
+-- Indexes for table `direccion`
 --
 ALTER TABLE `direccion`
   ADD PRIMARY KEY (`idDireccion`);
 
 --
--- Indices de la tabla `disponibilidad`
+-- Indexes for table `disponibilidad`
 --
 ALTER TABLE `disponibilidad`
   ADD PRIMARY KEY (`idDisponibilidad`);
 
 --
--- Indices de la tabla `excepcion`
+-- Indexes for table `excepcion`
 --
 ALTER TABLE `excepcion`
   ADD PRIMARY KEY (`idExcepcion`);
 
 --
--- Indices de la tabla `excepcionhorarios`
+-- Indexes for table `excepcionhorarios`
 --
 ALTER TABLE `excepcionhorarios`
   ADD PRIMARY KEY (`idExcepcionHorario`);
 
 --
--- Indices de la tabla `instructor`
+-- Indexes for table `instructor`
 --
 ALTER TABLE `instructor`
   ADD PRIMARY KEY (`idInstructor`);
 
 --
--- Indices de la tabla `parametros`
+-- Indexes for table `parametros`
 --
 ALTER TABLE `parametros`
   ADD PRIMARY KEY (`idParametro`);
 
 --
--- Indices de la tabla `tokenusuario`
+-- Indexes for table `tokenusuario`
 --
 ALTER TABLE `tokenusuario`
   ADD PRIMARY KEY (`idTokenUsuario`);
 
 --
--- Indices de la tabla `usuario`
+-- Indexes for table `usuario`
 --
 ALTER TABLE `usuario`
   ADD PRIMARY KEY (`idUsuario`);
 
 --
--- Indices de la tabla `zona`
+-- Indexes for table `zona`
 --
 ALTER TABLE `zona`
   ADD PRIMARY KEY (`idZona`);
 
 --
--- Indices de la tabla `zonamaster`
+-- Indexes for table `zonamaster`
 --
 ALTER TABLE `zonamaster`
   ADD PRIMARY KEY (`idZonaMaster`);
 
 --
--- Indices de la tabla `zonasvecinas`
+-- Indexes for table `zonasvecinas`
 --
 ALTER TABLE `zonasvecinas`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT de las tablas volcadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de la tabla `alumno`
+-- AUTO_INCREMENT for table `alumno`
 --
 ALTER TABLE `alumno`
   MODIFY `idAlumno` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=167;
 
 --
--- AUTO_INCREMENT de la tabla `alumnocronogramaclasestomadas`
+-- AUTO_INCREMENT for table `alumnocronogramaclasestomadas`
 --
 ALTER TABLE `alumnocronogramaclasestomadas`
   MODIFY `idAlumnoCronograma` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
--- AUTO_INCREMENT de la tabla `auto`
+-- AUTO_INCREMENT for table `auto`
 --
 ALTER TABLE `auto`
   MODIFY `idAuto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1214218;
 
 --
--- AUTO_INCREMENT de la tabla `clase`
+-- AUTO_INCREMENT for table `clase`
 --
 ALTER TABLE `clase`
   MODIFY `idClase` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=884;
 
 --
--- AUTO_INCREMENT de la tabla `clasemodificadaregistro`
+-- AUTO_INCREMENT for table `clasemodificadaregistro`
 --
 ALTER TABLE `clasemodificadaregistro`
   MODIFY `idClaseModificadaRegistro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
--- AUTO_INCREMENT de la tabla `cronograma`
+-- AUTO_INCREMENT for table `cronograma`
 --
 ALTER TABLE `cronograma`
   MODIFY `idCronograma` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=160;
 
 --
--- AUTO_INCREMENT de la tabla `direccion`
+-- AUTO_INCREMENT for table `direccion`
 --
 ALTER TABLE `direccion`
   MODIFY `idDireccion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=236;
 
 --
--- AUTO_INCREMENT de la tabla `disponibilidad`
+-- AUTO_INCREMENT for table `disponibilidad`
 --
 ALTER TABLE `disponibilidad`
   MODIFY `idDisponibilidad` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=177;
 
 --
--- AUTO_INCREMENT de la tabla `excepcion`
+-- AUTO_INCREMENT for table `excepcion`
 --
 ALTER TABLE `excepcion`
   MODIFY `idExcepcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
--- AUTO_INCREMENT de la tabla `excepcionhorarios`
+-- AUTO_INCREMENT for table `excepcionhorarios`
 --
 ALTER TABLE `excepcionhorarios`
   MODIFY `idExcepcionHorario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
 
 --
--- AUTO_INCREMENT de la tabla `instructor`
+-- AUTO_INCREMENT for table `instructor`
 --
 ALTER TABLE `instructor`
   MODIFY `idInstructor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT de la tabla `parametros`
+-- AUTO_INCREMENT for table `parametros`
 --
 ALTER TABLE `parametros`
   MODIFY `idParametro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT de la tabla `tokenusuario`
+-- AUTO_INCREMENT for table `tokenusuario`
 --
 ALTER TABLE `tokenusuario`
-  MODIFY `idTokenUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `idTokenUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
--- AUTO_INCREMENT de la tabla `usuario`
+-- AUTO_INCREMENT for table `usuario`
 --
 ALTER TABLE `usuario`
   MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT de la tabla `zona`
+-- AUTO_INCREMENT for table `zona`
 --
 ALTER TABLE `zona`
   MODIFY `idZona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
--- AUTO_INCREMENT de la tabla `zonamaster`
+-- AUTO_INCREMENT for table `zonamaster`
 --
 ALTER TABLE `zonamaster`
   MODIFY `idZonaMaster` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT de la tabla `zonasvecinas`
+-- AUTO_INCREMENT for table `zonasvecinas`
 --
 ALTER TABLE `zonasvecinas`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=138;
 
 DELIMITER $$
 --
--- Eventos
+-- Events
 --
 CREATE DEFINER=`root`@`localhost` EVENT `setInactiveStudentsSchedule` ON SCHEDULE EVERY 1 SECOND STARTS '2020-03-13 00:00:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL setInactiveStudents()$$
 

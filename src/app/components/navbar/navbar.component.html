@@ -22,8 +22,14 @@
         <li *ngIf="USER_ROLE == 'ADMIN'" class="nav-item" [routerLinkActive]="['active']" data-toggle="collapse" data-target=".navbar-collapse.show">
           <a class="nav-link" routerLink="autos" >Autos</a>
         </li>
-        <li class="nav-item" style="cursor: pointer;" (click)="logout();" data-toggle="collapse" data-target=".navbar-collapse.show">
-          <a class="nav-link">Salir</a>
+        <li *ngIf="USER_ROLE == 'ADMIN'" class="nav-item imageProfileContainer" [routerLinkActive]="['active']" data-toggle="collapse" data-target=".navbar-collapse.show">
+          <div class="profileImageContainer">
+            <img class="profileImage" src="{{getProfileImagesrc()}}" alt="Profile image">
+          </div> 
+          <a class="nav-link" style="display: inline-block;" routerLink="perfil" >{{getUserProfileName() | capitalize}}</a>
+       </li>
+        <li class="nav-item" style="cursor: pointer; margin: 0;" (click)="logout();" data-toggle="collapse" data-target=".navbar-collapse.show">
+          <i style="font-size: 25px;" class="fas fa-sign-out-alt nav-link"></i>
         </li>
       </ul>
     </div>
