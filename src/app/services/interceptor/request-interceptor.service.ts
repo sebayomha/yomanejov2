@@ -42,8 +42,9 @@ export class RequestInterceptorService {
             if (error.statusText == "Token Expired") {
               return this.handle401ExpiredToken(request, next);
             } else {
-              this.authService.logout(this.authService.decodePayload().idUsuario);
-              this._router.navigate(['login']);
+              this.authService.logout(this.authService.decodePayload().idUsuario).subscribe( (res) => {
+                this._router.navigate(['login']);
+              });
             }
           }
           return throwError(error);

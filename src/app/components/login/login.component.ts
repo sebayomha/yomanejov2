@@ -50,6 +50,8 @@ export class LoginComponent implements OnInit {
   newPasswordRepeat: string = '';
   notMatchedPasswords: boolean = false;
 
+  forgotPasswordEmail: string = '';
+
   ngOnInit() { 
     this.showPass = false;
     this.showRepeatPass = false;
@@ -92,6 +94,10 @@ export class LoginComponent implements OnInit {
         this.errorLogin = true; //login fallido
       }   
     });
+  }
+
+  goToLogin() {
+    this.dontRememberPass = false;
   }
 
   submitFirstPassword() {

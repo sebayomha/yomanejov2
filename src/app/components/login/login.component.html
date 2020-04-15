@@ -127,12 +127,13 @@
           </div>
 
           <!-- OLVIDE MI CONTRASEÑA BOX -->
-          <div *ngIf="dontRememberPass" style="padding: 0px 20px;">
-            <form (ngSubmit)="onSubmit()">
-              <label for="email">Correo Electrónico</label>
-              <input name="email" [(ngModel)]="email" type="text" id="email" placeholder="Ingrese su correo electrónico" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
-              <input (click)="cancelar()" type="button" value="Cancelar">
-              <input type="submit" value="Aceptar">
+          <div id="dontRememberPassBox" *ngIf="dontRememberPass" style="padding: 50px 25px;">
+            <form #dontRememberPassForm="ngForm" (submit)="dontRememberPassForm.valid && onSubmit()">
+              <mat-form-field hideRequiredMarker style="width: 100%;">      
+                <input matInput #forgotPasswordEmailModel="ngModel" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}$" style="background: transparent;" type="email" [(ngModel)]="forgotPasswordEmail" name="email" id="email" aria-describedby="emailHelp" placeholder="Email" required>
+              </mat-form-field>
+              <button mat-button (click)="goToLogin()" type="button">CANCELAR</button>
+              <button mat-button type="submit" class="loginSubmit">CONFIRMAR</button>
             </form>
           </div>
       </div>

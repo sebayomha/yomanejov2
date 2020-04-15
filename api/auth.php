@@ -74,32 +74,20 @@
 	}
 
 	function logout(){
-		$authGuard = new AuthGuard();
-		$allowedAccessResult = $authGuard->allowedAccess();
-		if ($allowedAccessResult != false && $allowedAccessResult != "expired") {
-			$params = json_decode(file_get_contents('php://input'),true);
-			$auth = new Auth();
-	
-			$idUsuario = htmlspecialchars($params);
-	
-			if(isset($idUsuario) && !empty($idUsuario)){
-				$logoutResult = $auth->logout($idUsuario);
-				if ($logoutResult) {
-					echo json_encode($GLOBALS['utils']->getResponse(0, $logoutResult));	
-				} else {
-					echo json_encode($GLOBALS['utils']->getResponse(1, $logoutResult));	
-				}
-			}else{
-				echo json_encode($GLOBALS['utils']->getResponse(2, 'Ingrese los campos'));	
-			}
-		} else {
-			if ($allowedAccessResult == "expired") {
-				header("HTTP/1.1 401 Token Expired");
-				exit;
+		$params = json_decode(file_get_contents('php://input'),true);
+		$auth = new Auth();
+
+		$idUsuario = htmlspecialchars($params);
+
+		if(isset($idUsuario) && !empty($idUsuario)){
+			$logoutResult = $auth->logout($idUsuario);
+			if ($logoutResult) {
+				echo json_encode($GLOBALS['utils']->getResponse(0, $logoutResult));	
 			} else {
-				header("HTTP/1.1 401 Unauthorized");
-				exit;
+				echo json_encode($GLOBALS['utils']->getResponse(1, $logoutResult));	
 			}
+		}else{
+			echo json_encode($GLOBALS['utils']->getResponse(2, 'Ingrese los campos'));	
 		}
 	}
 
