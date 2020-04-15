@@ -22,7 +22,8 @@
         <li *ngIf="USER_ROLE == 'ADMIN'" class="nav-item" [routerLinkActive]="['active']" data-toggle="collapse" data-target=".navbar-collapse.show">
           <a class="nav-link" routerLink="autos" >Autos</a>
         </li>
-        <li *ngIf="USER_ROLE == 'ADMIN'" class="nav-item imageProfileContainer" [routerLinkActive]="['active']" data-toggle="collapse" data-target=".navbar-collapse.show">
+        <mat-divider [vertical]="true" style="margin-right: 20px;"></mat-divider>
+        <li class="nav-item imageProfileContainer" [routerLinkActive]="['active']" data-toggle="collapse" data-target=".navbar-collapse.show">
           <div class="profileImageContainer">
             <img class="profileImage" src="{{getProfileImagesrc()}}" alt="Profile image">
           </div> 
