@@ -15,6 +15,10 @@
 
           <!-- LOGIN BOX -->
           <div class="tp-box__front" id="FormLoginBox" *ngIf="!showNewPasswordBox && !dontRememberPass">
+            <div id="passwordImageContainer">
+              <img src="../../../assets/img/logo.png" style="width: 150px; height: 150px;">
+            </div>
+            
             <form id="loginForm" #loginForm="ngForm" (submit)="loginForm.form.valid && onSubmit()">
               <mat-form-field hideRequiredMarker style="width: 100%;">      
                 <input matInput (input)="errorMsg = ''" #email="ngModel" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}$" style="background: transparent;" type="email" [(ngModel)]="user.email" name="email" id="email" aria-describedby="emailHelp" placeholder="Email" required>
@@ -67,13 +71,13 @@
         
           <!-- PRIMER CAMBIO DE CONTRASEÑA BOX -->
           <div class="tp-box__back" id="FormNewPasswordBox" *ngIf="showNewPasswordBox">
-            <h4 class="title">
-              <span class="returnArrow" (click)="showPass = false; showNewPassBox()">
-                <i matTooltip="Volver" class="fas fa-arrow-left" style="cursor: pointer;"></i>
-              </span>
-              <span>&nbsp;&nbsp;&nbsp;Bienvenido {{userData.name | capitalize}}!</span>
+            <div id="passwordImageContainer">
+              <img src="../../../assets/img/firstPasswordChange.png" style="width: 150px; height: 150px;">
+            </div>
+            <h4 class="title" style="text-align: center;">
+              <p>Bienvenido {{userData.name | capitalize}}!</p>
             </h4>
-              <h6 class="subtitle">Por ser tu primer ingreso en YoManejo es necesario que cambies tu contraseña.</h6>
+              <p class="forgotPassworHelp">Por ser tu primer ingreso en YoManejo es necesario que cambies tu contraseña.</p>
             <form #formNewPassword="ngForm" id="formNewPassword" (submit)="formNewPassword.valid && submitFirstPassword()">
               <mat-form-field hideRequiredMarker style="width: 100%; margin-top: 15px;">
                 <input (input)="checkRepeatedPasswords()" matInput #newPasswordModel="ngModel" minlength="8" maxlength="16" [type]="showPass ? 'text':'password'" [(ngModel)]="newPassword" style="border-bottom:none; height: 18px;" name="newPassword" id="newPassword" placeholder="Contraseña" required>
@@ -122,18 +126,26 @@
 
               <password-strength-meter [password]="newPasswordModel.value"></password-strength-meter>
 
-              <button mat-button type="submit" (click)="submitted = true" class="loginSubmit" style="margin-top: 20px; margin-bottom:5px; width: 100%;">CONFIRMAR</button>
+              <button mat-button style="width: 48%; margin-right: 2%; background: #e4dede;" (click)="showPass = false; showNewPassBox()" type="button">CANCELAR</button>
+              <button mat-button style="width: 48%; margin-left: 2%;" (click)="submitted = true" type="submit" class="loginSubmit">CONFIRMAR</button>
             </form>
           </div>
 
           <!-- OLVIDE MI CONTRASEÑA BOX -->
           <div id="dontRememberPassBox" *ngIf="dontRememberPass" style="padding: 50px 25px;">
-            <form #dontRememberPassForm="ngForm" (submit)="dontRememberPassForm.valid && onSubmit()">
-              <mat-form-field hideRequiredMarker style="width: 100%;">      
+            <div id="passwordImageContainer">
+              <img src="../../../assets/img/forgotPassword.png" style="width: 150px; height: 150px; margin-left: 30px;">
+            </div>
+            <h4 class="forgotPassworTitle">
+              <span>Olvidaste tu contraseña?</span>
+            </h4>
+            <p class="forgotPassworHelp">No te preocupes, ingresá tu Email y seguí los pasos !</p>
+            <form style="margin-top: 40px;" #dontRememberPassForm="ngForm" (submit)="dontRememberPassForm.valid && onSubmit()">
+              <mat-form-field hideRequiredMarker style="width: 100%; margin-bottom: 20px;">      
                 <input matInput #forgotPasswordEmailModel="ngModel" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}$" style="background: transparent;" type="email" [(ngModel)]="forgotPasswordEmail" name="email" id="email" aria-describedby="emailHelp" placeholder="Email" required>
               </mat-form-field>
-              <button mat-button (click)="goToLogin()" type="button">CANCELAR</button>
-              <button mat-button type="submit" class="loginSubmit">CONFIRMAR</button>
+              <button mat-button style="width: 48%; margin-right: 2%; background: #e4dede;" (click)="goToLogin()" type="button">CANCELAR</button>
+              <button mat-button style="width: 48%; margin-left: 2%;" type="submit" class="loginSubmit">ENVIAR EMAIL</button>
             </form>
           </div>
       </div>

@@ -6,10 +6,10 @@
 }
 
 .flip-card {
-    height: 500px; 
+    height: 600px; 
     width: 100%; 
     background-color: transparent;
-    margin-top: 100px;
+    margin-top: 30px;
     margin-left: auto; 
     margin-right: auto;
     padding: 0px;
@@ -33,14 +33,14 @@
 .tp-box__front {
     background:white;
     border-radius: 4px;
-    padding: 50px 25px;
+    padding: 40px 25px;
 }
 
 .tp-box__back {
     border-radius: 4px;
     transform: rotateY(179.9deg);
     background:white;
-    padding: 50px 25px;
+    padding: 40px 25px;
 }
 
 .avatar {
@@ -112,6 +112,22 @@
     border-radius: 50%;
     background: #b5acac4d;
     color: black;
+}
+
+#passwordImageContainer {
+    text-align: center;
+    margin-bottom: 45px;
+}
+
+.forgotPassworTitle {
+    text-align: center;
+}
+
+.forgotPassworHelp {
+    font-size: 14px;
+    text-align: center;
+    margin-top: 15px;
+    font-weight: normal;
 }
 
 @media (max-height: 630px) {  
