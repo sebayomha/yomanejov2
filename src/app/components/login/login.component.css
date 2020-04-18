@@ -153,11 +153,11 @@ input:-webkit-autofill {
     -webkit-animation-fill-mode: both;
 }
 
-::ng-deep #loginForm .mat-form-field.mat-focused.ng-dirty.ng-invalid .mat-form-field-underline .mat-form-field-ripple, #formNewPassword .mat-form-field.mat-focused.ng-dirty.ng-invalid .mat-form-field-underline .mat-form-field-ripple {
+::ng-deep #loginForm .mat-form-field.mat-focused.ng-dirty.ng-invalid .mat-form-field-underline .mat-form-field-ripple, #formNewPassword .mat-form-field.mat-focused.ng-dirty.ng-invalid .mat-form-field-underline .mat-form-field-ripple, #formForgotPassword .mat-form-field.mat-focused.ng-dirty.ng-invalid .mat-form-field-underline .mat-form-field-ripple {
     background-color: #f44336 !important;
     color: #f44336 !important;
 }
 
-::ng-deep #loginForm .mat-form-field.mat-focused.ng-dirty.ng-invalid .mat-form-field-label, #formNewPassword .mat-form-field.mat-focused.ng-dirty.ng-invalid .mat-form-field-label {
+::ng-deep #loginForm .mat-form-field.mat-focused.ng-dirty.ng-invalid .mat-form-field-label, #formNewPassword .mat-form-field.mat-focused.ng-dirty.ng-invalid .mat-form-field-label, #formForgotPassword .mat-form-field.mat-focused.ng-dirty.ng-invalid .mat-form-field-label {
     color: #f44336 !important;
 }

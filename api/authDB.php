@@ -9,6 +9,11 @@
     require __DIR__ . '../../../vendor/autoload.php';
     use \Firebase\JWT\JWT;
 
+    use PHPMailer\PHPMailer\PHPMailer;
+	use PHPMailer\PHPMailer\SMTP;
+	use PHPMailer\PHPMailer\Exception;
+
+
 class Auth{
 
     private $utils;
@@ -179,9 +184,10 @@ class Auth{
             }
             return $result['refreshToken'];
         } else {
+            $loginTime = time();
             $expirationRefreshToken = strtotime(date('Y-m-d H:i:s', strtotime("+1 month")));
-            $state = $this->conn->prepare('INSERT INTO tokenusuario (idUsuario, refreshToken, expirationRefreshToken) VALUES (?,?,?)');
-            $state->bind_param('iss', $idUsuario, $rt, $expirationRefreshToken);
+            $state = $this->conn->prepare('INSERT INTO tokenusuario (idUsuario, refreshToken, expirationRefreshToken, loginTime) VALUES (?,?,?,?)');
+            $state->bind_param('isss', $idUsuario, $rt, $expirationRefreshToken, $loginTime);
             $state->execute();
             return $rt;
         }
@@ -285,6 +291,114 @@ class Auth{
                 return $data;
             }
         }
+    }
+
+    function changeForgottenPassword($idUsuario, $newPassword, $token) {
+        $hashedNewPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+        $now = date('Y-m-d h:i:s a', time());
+        $state = $this->conn->prepare('UPDATE usuario SET password = ?, changePasswordTime = ? WHERE usuario.idUsuario = ?');
+        $state->bind_param('ssi', $hashedNewPassword, $now, $idUsuario);
+        if ($state->execute()) { //password actualizada correctamente
+            $user = (array) [
+              'email' => $token->email,
+              'password' => $newPassword 
+            ];
+            return $this->login($user);
+        } else {
+            return false;
+        }
+    }
+
+    function forgotPasswordEmail($email) {
+        $conn = $this->db->getConnection();
+        $state = $this->conn->prepare('SELECT usuario.idUsuario, usuario.email, usuario.password, usuario.role, usuario.nombre FROM usuario WHERE usuario.email = ?');
+        $state->bind_param('s', $email);
+        $state->execute();
+        $ress = $state->get_result();
+
+        if($ress->num_rows > 0){
+            $result = array();
+            while($row = $ress->fetch_assoc()){
+                $result[] = $row;
+            }
+
+            $token = new Token();
+            $result['iat']          = time();
+            $result['exp']          = strtotime(date('Y-m-d H:i:s', strtotime("+1 hour")));
+            $result['idUsuario']    = $result[0]['idUsuario'];
+            $result['role']         = $result[0]['role'];
+            $result['nombre']       = $result[0]['nombre'];
+            $result['email']        = $result[0]['email'];
+            $hashedPassword         = $result[0]['password'];
+            unset($result[0]);  //Unset
+            $jwt = $token->generateToken($result, $hashedPassword); //genero el token para recuperar la pw
+            $host = getenv('HOST');
+            
+            $url = 'http://'.$host.'/cambiarContraseña/'.$jwt;
+            $mailContent = $this->getMailMessage($result['nombre'], $url);
+            
+            try {
+                
+                $mail = new PHPMailer(true); //Server settings
+                        
+                $mail->isSMTP();                                            // Send using SMTP
+                $mail->Host       = 'smtp.gmail.com';                    // Set the SMTP server to send through
+                $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
+                $mail->Username   = 'yomanejoserver@gmail.com';                     // SMTP username
+                $mail->Password   = 'hpyqykxjvhqcnkwy';                               // SMTP password
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
+                $mail->Port       = 587;                                    // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
+
+                $mail->CharSet = 'UTF-8';
+                //Recipients
+                $mail->setFrom('yomanejoserver@gmail.com', 'YoManejo');
+                $mail->Sender = 'yomanejoserver@gmail.com';
+                $mail->From = 'yomanejoserver@gmail.com';
+                $mail->AddAddress($email);
+
+
+                // MS Outlook custom header
+                // May set to "Urgent" or "Highest" rather than "High"
+                $mail->AddCustomHeader("X-MSMail-Priority: High");
+                // Not sure if Priority will also set the Importance header:
+                $mail->addCustomHeader("X-Message-Flag: High"); 
+                $mail->AddCustomHeader('X-Priority: 1');
+                $mail->AddCustomHeader('X-Mailer: PHP/' . phpversion());
+
+                $mail->isHTML(true);                                  // Set email format to HTML
+                $mail->Subject = 'Reestablecer contraseña';
+                $mail->Body = $mailContent;
+                $mail->send();
+                return true;
+            }   catch (Exception $e) {
+                return false;
+            }
+        } else {
+            return true; //aunque no exista el correo, es para evitar que se sepa que no existe el usuario
+        }
+    }
+
+    function getMailMessage($name, $url) {
+        $content = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	        <html xmlns="http://www.w3.org/1999/xhtml">
+	        <head>
+	            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	        </head>
+	        <body>
+
+	        <div>
+                <p style="font-weight: 500;"> Hola '.$name.' !</p>
+                <p>Por favor, haga click <a style="font-weight: 500" href ="'.$url.'">aquí</a> para reestablecer su contraseña.</p>
+                <p>Este link expirará en 1h.</p>
+            </div>
+            
+            <div>
+                <p>Muchas gracias</p>
+                <p>La administración de YoManejo</p>
+            </div>
+	        </body>
+	        </html>';
+	        return $content;
     }
 }
 

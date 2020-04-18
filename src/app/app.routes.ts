@@ -8,6 +8,7 @@ import { AddClassSchedulesComponent } from './components/add-class-schedules/add
 import { CarsComponent } from './components/cars/cars.component';
 import { LoginComponent } from './components/login/login.component';
 import { AuthGuardService } from './services/authGuard/auth-guard.service';
+import { ChangePasswordGuardService } from './services/forgotPasswordGuard/change-password-guard.service';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 
@@ -19,6 +20,7 @@ const app_routes: Routes = [
   { path: 'clases', component: LessonsComponent, canActivate:[AuthGuardService]},
   { path: 'perfil', component: ProfileComponent, data: {animation: 'StudentsPage'}, canActivate:[AuthGuardService]},
   { path: 'perfil/cambiarContraseña', component: ChangePasswordComponent, data: {animation: 'EditingStudentPage'}, canActivate:[AuthGuardService]},
+  { path: 'cambiarContraseña/:id', component: ChangePasswordComponent, canActivate:[ChangePasswordGuardService]},
   { path: 'autos', component: CarsComponent, data: {authRole: 'ADMIN'}, canActivate:[AuthGuardService]},
   { path: 'alumnos', component: StudentsComponent, data: {animation: 'StudentsPage', authRole: 'ADMIN'}, canActivate:[AuthGuardService]},
   { path: 'alumnos/editar/:id', component: EditarAlumnoComponent, data: {animation: 'EditingStudentPage', authRole: 'ADMIN'}, canActivate:[AuthGuardService]},

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 15, 2020 at 04:39 AM
+-- Generation Time: Apr 18, 2020 at 06:24 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -152,7 +152,7 @@ INSERT INTO `alumno` (`idAlumno`, `idDireccion`, `idDireccionAlt`, `fechaAlta`, 
 (162, 231, NULL, '2020-04-06', 'false', 'gfds', '2216754337', 'false', '0000-00-00', 172, NULL, NULL, '', ''),
 (163, 232, NULL, '2020-04-06', 'false', 'SFASFF', '2216754337', 'false', '0000-00-00', 173, NULL, NULL, '', ''),
 (164, 233, NULL, '2020-04-06', 'false', 'Sebastian Yomha', '2216754337', 'false', '0000-00-00', 174, NULL, NULL, '', ''),
-(165, 234, NULL, '2020-04-06', 'true', 'Sebastian Yomha', '2216754337', 'true', '2020-04-06', 175, NULL, NULL, '', ''),
+(165, 234, NULL, '2020-04-06', 'false', 'Sebastian Yomha', '2216754337', 'true', '2020-04-06', 175, NULL, NULL, 'El alumno dejo de pagar', '2020-04-15 12:25:12 pm'),
 (166, 235, NULL, '2020-04-06', 'false', 'Hernan feler', '2216754337', 'false', '0000-00-00', 176, NULL, NULL, '', '');
 
 -- --------------------------------------------------------
@@ -374,16 +374,16 @@ INSERT INTO `clase` (`idClase`, `alumno`, `auto`, `fecha`, `horaInicio`, `idZona
 (782, 139, 1, '2020-04-01', '16:30', 24, 208, 132, 'CONFIRMADO', 'true', 1, '', NULL, '', '', 'true'),
 (783, 142, 1, '2020-04-06', '12:15', 24, 211, 135, 'CONFIRMADO', 'true', 1, '', NULL, '', '', 'true'),
 (784, 142, 1, '2020-04-27', '12:15', 24, 211, 135, 'CONFIRMADO', 'false', 1, '', NULL, '', '', 'true'),
-(785, 143, 1, '2020-04-05', '08:00', 24, 212, 136, 'CONFIRMADO', 'true', 1, '', NULL, '', '', ''),
-(786, 143, 1, '2020-04-12', '08:00', 24, 212, 136, 'CONFIRMADO', 'true', 2, '', NULL, '', '', ''),
-(787, 143, 1, '2020-04-19', '08:00', 24, 212, 136, 'CONFIRMADO', 'false', 3, '', NULL, '', '', ''),
+(785, 143, 1, '2020-04-05', '08:00', 24, 212, 136, 'MODIFICADO', 'true', 1, '', NULL, '', '', ''),
+(786, 143, 1, '2020-04-12', '08:00', 24, 212, 136, 'MODIFICADO', 'true', 2, '', NULL, '', '', ''),
+(787, 143, 1, '2020-04-19', '08:00', 24, 212, 136, 'CONFIRMADO', 'false', 1, '', NULL, '', '', ''),
 (791, 144, 1, '2020-04-05', '09:00', 24, 213, 137, 'CONFIRMADO', 'true', 1, '', NULL, '', '', ''),
 (792, 144, 1, '2020-04-12', '09:00', 24, 213, 137, 'CONFIRMADO', 'true', 2, '', NULL, '', '', ''),
 (793, 144, 1, '2020-04-19', '09:00', 24, 213, 137, 'CONFIRMADO', 'false', 3, '', NULL, '', '', ''),
-(872, 165, 1, '2020-04-13', '10:00', 24, 234, 158, 'MODIFICADO', 'true', 1, '', NULL, '', '', ''),
-(873, 165, 1, '2020-04-20', '19:45', 24, 234, 158, 'CONFIRMADO', 'false', 1, '', NULL, '', '', ''),
-(874, 165, 1, '2020-04-27', '09:00', 24, 234, 158, 'CONFIRMADO', 'false', 1, '', NULL, '', '', ''),
-(875, 165, 1, '2020-05-04', '08:00', 24, 234, 158, 'CONFIRMADO', 'false', 1, '', NULL, '', '', '');
+(872, 165, 1, '2020-04-13', '10:00', 24, 234, 158, 'CANCELADO', 'true', 1, '', NULL, '', '', ''),
+(873, 165, 1, '2020-04-20', '19:45', 24, 234, 158, 'CANCELADO', 'false', 1, '', NULL, '', '', ''),
+(874, 165, 1, '2020-04-27', '09:00', 24, 234, 158, 'CANCELADO', 'false', 1, '', NULL, '', '', ''),
+(875, 165, 1, '2020-05-04', '08:00', 24, 234, 158, 'CANCELADO', 'false', 1, '', NULL, '', '', '');
 
 -- --------------------------------------------------------
 
@@ -466,9 +466,9 @@ INSERT INTO `cronograma` (`idCronograma`, `status`, `idAlumno`, `timestampGuarda
 (133, 'CONFIRMADO', 140, '03/28/2020 03:05:42 pm', '2020-03-28 03:05:53 pm', '', '', '03/28/2020 04:44:46 pm', ''),
 (134, 'CONFIRMADO', 141, '03/28/2020 04:36:08 pm', '2020-03-28 04:36:18 pm', '', '', '03/30/2020 02:35:11 pm', ''),
 (135, 'CONFIRMADO', 142, '03/30/2020 06:11:52 pm', '2020-03-30 06:12:06 pm', '', '', '04/01/2020 08:53:51 pm', ''),
-(136, 'CONFIRMADO', 143, '04/01/2020 09:18:39 pm', '2020-04-01 09:19:20 pm', '', '', '', ''),
+(136, 'CONFIRMADO', 143, '04/01/2020 09:18:39 pm', '2020-04-01 09:19:20 pm', '', '', '04/15/2020 12:26:06 pm', ''),
 (137, 'CONFIRMADO', 144, '04/01/2020 09:22:03 pm', '2020-04-01 09:22:20 pm', '', '', '', ''),
-(158, 'CONFIRMADO', 165, '04/06/2020 01:12:48 pm', '2020-04-06 01:23:34 pm', '', '', '04/13/2020 08:42:30 pm', '');
+(158, 'CANCELADO', 165, '04/06/2020 01:12:48 pm', '2020-04-06 01:23:34 pm', '2020-04-15 12:25:12 pm', '', '04/13/2020 08:42:30 pm', 'El alumno dejo de pagar');
 
 -- --------------------------------------------------------
 
@@ -768,15 +768,16 @@ CREATE TABLE `tokenusuario` (
   `idTokenUsuario` int(11) NOT NULL,
   `idUsuario` int(11) NOT NULL,
   `refreshToken` varchar(255) NOT NULL,
-  `expirationRefreshToken` varchar(255) NOT NULL
+  `expirationRefreshToken` varchar(255) NOT NULL,
+  `loginTime` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `tokenusuario`
 --
 
-INSERT INTO `tokenusuario` (`idTokenUsuario`, `idUsuario`, `refreshToken`, `expirationRefreshToken`) VALUES
-(31, 1, '15e966f88d75388.60154892', '1589509256');
+INSERT INTO `tokenusuario` (`idTokenUsuario`, `idUsuario`, `refreshToken`, `expirationRefreshToken`, `loginTime`) VALUES
+(56, 1, '15e9b1fee55c5b5.47648739', '1589816558', '1587224558');
 
 -- --------------------------------------------------------
 
@@ -799,7 +800,7 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`idUsuario`, `email`, `password`, `firstPasswordChange`, `nombre`, `role`, `changePasswordTime`) VALUES
-(1, 'sebastian_yomha@hotmail.com', '$2y$10$zk9EuzNbDox7jNxr.jlvveSCm.6Mu5eGLKlgmUUENVuoZjGsuZx8C', 'true', 'Sebastian Yomha', 'ADMIN', '2020-04-14 11:05:18 pm');
+(1, 'sebastian_yomha@hotmail.com', '$2y$10$R8/AVyzJs.3.tCb5Uyjfy.dDP0oeV.NqKSDuWo9Fpl3wcMaE5ij1i', 'true', 'Sebastian Yomha', 'ADMIN', '2020-04-18 11:57:09 am');
 
 -- --------------------------------------------------------
 
@@ -1220,7 +1221,7 @@ ALTER TABLE `parametros`
 -- AUTO_INCREMENT for table `tokenusuario`
 --
 ALTER TABLE `tokenusuario`
-  MODIFY `idTokenUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `idTokenUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT for table `usuario`
