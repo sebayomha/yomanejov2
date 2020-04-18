@@ -2,11 +2,27 @@
     color: #43c89d;
 }
 
-.navbar-light .navbar-nav .active>.nav-link {
+.navbar-light .navbar-nav .active >.nav-link {
     color: #43c89d !important;
     border-bottom: 3px solid #43c89d !important;
  }
 
+.navbar-light .navbar-nav .active div>.nav-link {
+    color: #43c89d !important;
+    border-bottom: 3px solid #43c89d !important;
+ }
+
+.navbar-light .navbar-nav .active div>.estilo-icon {
+    color: #43c89d !important;
+    margin-top: 10px;
+    margin-right: 15px;
+}
+
+.estilo-icon-not-selected {
+    color: rgba(0,0,0,.5);
+    margin-top: 8px;
+    margin-right: 15px;
+}
  .navbar-nav a {
     padding-left: 0px;
     padding-right: 0px;
@@ -15,6 +31,9 @@
 
  .navbar-nav li {
     margin-right: 20px;
+    @media (max-width: 767px) {
+        margin-left: 20px;
+    }
  }
 
  .profileImage {
@@ -41,11 +60,10 @@
         padding-left: 15px;
         padding-right: 15px;
         padding-bottom: 15px;
-        width: 100%;
         transition: all 0.4s ease;
         display: block;
-        height: 800%;
-        background: grey;
+        background: #f8f9fa;
+        box-shadow: -6px 6px 8px rgba(0, 0, 0, 0.2), 0 6px 6px 0 rgba(0, 0, 0, 0.14), 0 2px 8px 0 rgba(0, 0, 0, 0.12);
     }
     .navbar-collapse.collapsing {
         height: auto !important;
@@ -57,3 +75,28 @@
         right: 0;
     }
 }
+
+.not-show-title {
+    @media (min-width:768px) and (max-width: 830px) {
+        display:none;
+    }
+}
+
+.not-show-mobile {
+    @media (max-width: 767px) {
+        display:none;
+    }
+}
+
+.only-show-mobile {
+    @media (min-width: 767px) {
+        display:none;
+    }
+}
+
+.text-align-right-mobile {
+    @media (max-width: 767px) {
+        text-align: right;
+    }
+}
+

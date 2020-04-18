@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top" style="background-color: white !important; height: 70px; border-bottom: 1px solid rgba(169, 161, 161, 0.42);">
 
-    <span><img src="assets/img/logo.png" alt="Smiley face" height="42" width="42"><a class="navbar-brand" href="#">&nbsp;&nbsp;YoManejo</a></span>
+    <span><img src="assets/img/logo.png" alt="Smiley face" height="42" width="42"><a class="navbar-brand" href="#"><span class="not-show-title">&nbsp;&nbsp;YoManejo</span></a></span>
     <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -8,28 +8,53 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item" [routerLinkActive]="['active']" data-toggle="collapse" data-target=".navbar-collapse.show">
-          <a class="nav-link" routerLink="busqueda" >Busqueda</a>
+          <a class="nav-link not-show-mobile" routerLink="busqueda" >Busqueda</a>
+          <div class="row only-show-mobile" style="margin-top: 20px;">
+            <span class="estilo-icon estilo-icon-not-selected"><i class="fas fa-search"></i></span><a class="nav-link" routerLink="busqueda" >Busqueda</a>
+          </div>
         </li>
         <li class="nav-item" [routerLinkActive]="['active']" data-toggle="collapse" data-target=".navbar-collapse.show">
-          <a class="nav-link" routerLink="pendientes" >Cronogramas</a>
+          <a class="nav-link not-show-mobile" routerLink="pendientes" >Cronogramas</a>
+          <div class="row only-show-mobile" style="margin-top: 5px;">
+            <span class="estilo-icon estilo-icon-not-selected " style="margin-right: 17px;"><i class="fas fa-calendar-alt"></i></span><a class="nav-link" routerLink="pendientes" >Cronogramas</a>
+          </div>
         </li>
         <li class="nav-item" [routerLinkActive]="['active']" data-toggle="collapse" data-target=".navbar-collapse.show">
-          <a class="nav-link" routerLink="clases" >Clases</a>
+          <a class="nav-link not-show-mobile" routerLink="clases" >Clases</a>
+          <div class="row only-show-mobile" style="margin-top: 5px;">
+            <span class="estilo-icon estilo-icon-not-selected" style="margin-right: 19px;"><i class="fas fa-clipboard-list"></i></span><a class="nav-link" routerLink="clases" >Clases</a>
+          </div>
         </li>
         <li *ngIf="USER_ROLE == 'ADMIN'" class="nav-item" [routerLinkActive]="['active']" data-toggle="collapse" data-target=".navbar-collapse.show">
-          <a class="nav-link" routerLink="alumnos" >Alumnos</a>
+          <a class="nav-link not-show-mobile" routerLink="alumnos" >Alumnos</a>
+          <div class="row only-show-mobile" style="margin-top: 5px;">
+            <span class="estilo-icon estilo-icon-not-selected" style="margin-right: 17px;"><i class="fas fa-user"></i></span><a class="nav-link" routerLink="alumnos" >Alumnos</a>
+          </div>
+          
         </li>
         <li *ngIf="USER_ROLE == 'ADMIN'" class="nav-item" [routerLinkActive]="['active']" data-toggle="collapse" data-target=".navbar-collapse.show">
-          <a class="nav-link" routerLink="autos" >Autos</a>
+          <a class="nav-link not-show-mobile" routerLink="autos" >Autos</a>
+          <div class="row only-show-mobile" style="margin-top: 5px;">
+            <span class="estilo-icon estilo-icon-not-selected"><i class="fas fa-car"></i></span><a class="nav-link" routerLink="autos" >Autos</a>
+          </div>       
         </li>
         <mat-divider [vertical]="true" style="margin-right: 20px;"></mat-divider>
-        <li class="nav-item imageProfileContainer" [routerLinkActive]="['active']" data-toggle="collapse" data-target=".navbar-collapse.show">
+        <li class="nav-item imageProfileContainer text-align-right-mobile not-show-mobile" [routerLinkActive]="['active']" data-toggle="collapse" data-target=".navbar-collapse.show">
           <div class="profileImageContainer">
             <img class="profileImage" src="{{getProfileImagesrc()}}" alt="Profile image">
           </div> 
           <a class="nav-link" style="display: inline-block;" routerLink="perfil" >{{getUserProfileName() | capitalize}}</a>
        </li>
-        <li class="nav-item" style="cursor: pointer; margin: 0;" (click)="logout();" data-toggle="collapse" data-target=".navbar-collapse.show">
+        <li class="nav-item text-align-right-mobile not-show-mobile" style="cursor: pointer; margin: 0;" (click)="logout();" data-toggle="collapse" data-target=".navbar-collapse.show">
+          <i style="font-size: 25px;" class="fas fa-sign-out-alt nav-link"></i>
+        </li>
+        <li class="nav-item imageProfileContainer only-show-mobile" style="margin-left:0px; margin-right: 0px; margin-top:30px;" [routerLinkActive]="['active']" data-toggle="collapse" data-target=".navbar-collapse.show">
+          <div class="profileImageContainer">
+            <img class="profileImage" style="width: 40px;height: 40px;" src="{{getProfileImagesrc()}}" alt="Profile image">
+          </div> 
+          <a class="nav-link" style="display: inline-block;margin-left: 15px;" routerLink="perfil" >{{getUserProfileName() | capitalize}}</a>
+        </li>
+        <li class="nav-item text-align-right-mobile only-show-mobile" style="cursor: pointer; margin: 0; margin-top:10px;" (click)="logout();" data-toggle="collapse" data-target=".navbar-collapse.show">
           <i style="font-size: 25px;" class="fas fa-sign-out-alt nav-link"></i>
         </li>
       </ul>
