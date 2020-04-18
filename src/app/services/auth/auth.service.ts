@@ -17,8 +17,20 @@ export class AuthService {
     return this.http.post('/api/auth/firstPasswordChange', user);
   }
 
+  changeForgottenPassword(user) {
+    return this.http.post('/api/auth/changeForgottenPassword', user);
+  }
+
   changePassword(user) {
     return this.http.post('/api/auth/changePassword', user);
+  }
+
+  forgotPasswordEmail(email) {
+    return this.http.post('/api/auth/forgotPasswordEmail', email);
+  }
+
+  validForgotPasswordToken(token) {
+    return this.http.post('/api/auth/validForgotPasswordToken', token);
   }
 
   logout(user) {
@@ -47,6 +59,10 @@ export class AuthService {
 
   refreshJWT(data) {
     localStorage.setItem('uniqueid', data.jwt);
+  }
+
+  refreshRT(data) {
+    localStorage.setItem('uniquert', data.rt);
   }
 
   isLoggedIn() {

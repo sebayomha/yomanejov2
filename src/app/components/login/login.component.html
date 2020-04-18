@@ -36,14 +36,13 @@
               </div>
 
               <mat-form-field hideRequiredMarker style="width: 100%; margin-top: 15px;">
-                <input (input)="errorMsg = ''" matInput #password="ngModel" minlength="8" maxlength="16" [type]="showPass ? 'text':'password'" [(ngModel)]="user.password" style="border-bottom:none; height: 18px;" name="password" id="password" placeholder="Contraseña" required>
-                <button type="button" mat-button (click)="showPassword()" matSuffix mat-icon-button style="cursor: pointer; font-size: 22px; color: #43c89d;">
+                <input autocomplete="on" (input)="errorMsg = ''" matInput #password="ngModel" minlength="8" maxlength="16" [type]="showPass ? 'text':'password'" [(ngModel)]="user.password" style="border-bottom:none; height: 18px;" name="password" id="password" placeholder="Contraseña" required>
+                <button tabIndex="-1" type="button" mat-button (click)="showPassword()" matSuffix mat-icon-button style="cursor: pointer; font-size: 22px; color: #43c89d;">
                   <mat-icon *ngIf="!showPass">visibility</mat-icon>
                   <mat-icon *ngIf="showPass">visibility_off</mat-icon>
                 </button>
               </mat-form-field>
 
-              <!-- <label id="emailHelp" class="form-text text-muted">Recuerde que debe tener mínimo 8 caracteres.</label> -->
               <div *ngIf="(password.errors && password.touched && !password.pristine) || submitted ">
                 <div class="help-text text-danger" *ngIf="password.errors?.required" style="font-size: 13px; font-weight:500; margin-top: -15px; margin-bottom: 25px;">
                   Por favor, ingrese una contraseña
@@ -81,7 +80,7 @@
             <form #formNewPassword="ngForm" id="formNewPassword" (submit)="formNewPassword.valid && submitFirstPassword()">
               <mat-form-field hideRequiredMarker style="width: 100%; margin-top: 15px;">
                 <input (input)="checkRepeatedPasswords()" matInput #newPasswordModel="ngModel" minlength="8" maxlength="16" [type]="showPass ? 'text':'password'" [(ngModel)]="newPassword" style="border-bottom:none; height: 18px;" name="newPassword" id="newPassword" placeholder="Contraseña" required>
-                <button type="button" mat-button (click)="showPassword()" matSuffix mat-icon-button style="cursor: pointer; font-size: 22px; color: #43c89d;">
+                <button tabIndex="-1" type="button" mat-button (click)="showPassword()" matSuffix mat-icon-button style="cursor: pointer; font-size: 22px; color: #43c89d;">
                   <mat-icon *ngIf="!showPass">visibility</mat-icon>
                   <mat-icon *ngIf="showPass">visibility_off</mat-icon>
                 </button>
@@ -103,7 +102,7 @@
 
               <mat-form-field hideRequiredMarker style="width: 100%; margin-top: 15px;">
                 <input (input)="checkRepeatedPasswords()" matInput #newPasswordRepeatModel="ngModel" minlength="8" maxlength="16" [type]="showRepeatPass ? 'text':'password'" [(ngModel)]="newPasswordRepeat" style="border-bottom:none; height: 18px;" name="newPasswordRepeat" id="newPasswordRepeat" placeholder="Repetir contraseña" required>
-                <button type="button" mat-button (click)="showRepeatPassword()" matSuffix mat-icon-button style="cursor: pointer; font-size: 22px; color: #43c89d;">
+                <button tabIndex="-1" type="button" mat-button (click)="showRepeatPassword()" matSuffix mat-icon-button style="cursor: pointer; font-size: 22px; color: #43c89d;">
                   <mat-icon *ngIf="!showRepeatPass">visibility</mat-icon>
                   <mat-icon *ngIf="showRepeatPass">visibility_off</mat-icon>
                 </button>
@@ -139,13 +138,25 @@
             <h4 class="forgotPassworTitle">
               <span>Olvidaste tu contraseña?</span>
             </h4>
-            <p class="forgotPassworHelp">No te preocupes, ingresá tu Email y seguí los pasos !</p>
-            <form style="margin-top: 40px;" #dontRememberPassForm="ngForm" (submit)="dontRememberPassForm.valid && onSubmit()">
-              <mat-form-field hideRequiredMarker style="width: 100%; margin-bottom: 20px;">      
+            <p class="forgotPassworHelp">No te preocupes, ingresá tu Email y te enviaremos un link para recuperar tu contraseña !</p>
+            <form style="margin-top: 40px;" id="formForgotPassword" #dontRememberPassForm="ngForm" (submit)="dontRememberPassForm.valid && forgotPasswordSubmit()">
+              <mat-form-field hideRequiredMarker style="width: 100%;">      
                 <input matInput #forgotPasswordEmailModel="ngModel" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}$" style="background: transparent;" type="email" [(ngModel)]="forgotPasswordEmail" name="email" id="email" aria-describedby="emailHelp" placeholder="Email" required>
               </mat-form-field>
+              <div *ngIf="(forgotPasswordEmailModel.errors && forgotPasswordEmailModel.touched && !forgotPasswordEmailModel.pristine) || submittedForgotPassword">
+                <div class="help-text text-danger" *ngIf="forgotPasswordEmailModel.errors?.required" style="font-size: 13px; font-weight:500; margin-top: -15px; margin-bottom: 25px;">
+                  Por favor, ingrese un correo electrónico
+                </div>
+                <div class="help-text text-danger" *ngIf="forgotPasswordEmailModel.errors?.pattern" style="font-size: 13px; font-weight:500; margin-top: -15px; margin-bottom: 25px;">
+                  Por favor, ingrese un correo electrónico valido
+                </div>
+                <div class="help-text text-danger" *ngIf="forgotPasswordEmailModel.errors?.maxlength" style="font-size: 13px; font-weight:500; margin-top: -15px; margin-bottom: 25px;">
+                    Por favor, ingrese como máximo {{forgotPasswordEmailModel.errors.maxlength.requiredLength}} caracteres
+                  </div>
+              </div>
+
               <button mat-button style="width: 48%; margin-right: 2%; background: #e4dede;" (click)="goToLogin()" type="button">CANCELAR</button>
-              <button mat-button style="width: 48%; margin-left: 2%;" type="submit" class="loginSubmit">ENVIAR EMAIL</button>
+              <button mat-button style="width: 48%; margin-left: 2%;" type="submit" (click)="submittedForgotPassword = true;" class="loginSubmit">ENVIAR EMAIL</button>
             </form>
           </div>
       </div>

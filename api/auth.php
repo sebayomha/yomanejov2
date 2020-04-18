@@ -97,6 +97,24 @@
 		return $auth->getPasswordById($idUsuario);
 	}
 
+	function forgotPasswordEmail() {
+		$params = file_get_contents('php://input');
+		$auth = new Auth();
+
+		$email = htmlspecialchars($params);
+
+		if(isset($email) && !empty($email)){
+			$emailSendResult = $auth->forgotPasswordEmail($email);
+			if ($emailSendResult) {
+				echo json_encode($GLOBALS['utils']->getResponse(0, 'Email enviado exitosamente a '.$email));	
+			} else {
+				echo json_encode($GLOBALS['utils']->getResponse(1, 'Lo sentimos, ha ocurrido un error'));	
+			}
+		} else {
+			echo json_encode($GLOBALS['utils']->getResponse(2, 'Ingrese los campos'));	
+		}
+	}
+
 	function changePassword() {
 		$authGuard = new AuthGuard();
 		$allowedAccessResult = $authGuard->allowedAccess();
@@ -129,6 +147,54 @@
 		}
 	}
 
+	function changeForgottenPassword() {
+		$params = json_decode(file_get_contents('php://input'),true);
+		$token = $params['token'];
+		$authGuard = new AuthGuard();
+		$allowedAccessResult = $authGuard->allowedAccessByToken(htmlspecialchars($token));
+
+		if ($allowedAccessResult != false && $allowedAccessResult != "expired") {
+			$auth = new Auth();
+			$idUsuario = $allowedAccessResult->idUsuario;
+			$newPassword = htmlspecialchars($params['newPassword']);
+			if(isset($idUsuario) && !empty($idUsuario) && isset($newPassword) && isset($newPassword)){
+				$changePasswordResult = $auth->changeForgottenPassword($idUsuario, $newPassword, $allowedAccessResult);
+				if($changePasswordResult) {
+					$changePasswordResult->data = "Contraseña actualizada exitosamente";
+					echo json_encode($GLOBALS['utils']->getResponse(0, $changePasswordResult));	
+				} else {
+					echo json_encode($GLOBALS['utils']->getResponse(1, 'Lo lamentamos, ha ocurrido un error'));
+				}
+			} else {
+				echo json_encode($GLOBALS['utils']->getResponse(2, 'Ingrese los campos'));
+			}
+		} else {
+			header("HTTP/1.1 401 Forgot Password Token Expired/Invalid");
+			exit;
+		}
+	}
+
+	function validForgotPasswordToken() {
+		$params = file_get_contents('php://input');
+		$token = htmlspecialchars($params);
+		
+		if ($token) {
+			$authGuard = new AuthGuard();
+			$allowedAccessResult = $authGuard->allowedAccessByToken(htmlspecialchars($token));
+	
+			if ($allowedAccessResult != false && $allowedAccessResult != "expired") {
+				$data = (object) ['code' => 0];
+				echo json_encode($data);
+			} else {
+				header("HTTP/1.1 401 Forgot Password Token Expired/Invalid");
+				exit;
+			}
+		} else {
+			header("HTTP/1.1 401 Forgot Password Token Expired/Invalid");
+			exit;
+		}
+	}
+
 	switch ($method) {
 		case 'POST':
 	  	{
@@ -151,6 +217,14 @@
 				case '/auth/changePassword':
 					changePassword();
 				break;
+				case '/auth/forgotPasswordEmail':
+					forgotPasswordEmail();
+				break;
+				case '/auth/changeForgottenPassword':
+					changeForgottenPassword();
+				break;
+				case '/auth/validForgotPasswordToken':
+					validForgotPasswordToken();
 	    		default:
 	    		break;
 	    	}

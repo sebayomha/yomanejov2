@@ -5,6 +5,8 @@ import { MatSnackBar } from '@angular/material';
 import { Response } from 'src/app/models/response';
 import { SnackbarComponent } from '../snackbar/snackbar/snackbar.component';
 import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { AppSettings } from '../../appConstants';
 
 @Component({
   selector: 'app-change-password',
@@ -27,13 +29,20 @@ export class ChangePasswordComponent implements OnInit {
   user = {
     'idUsuario': null,
     'oldPassword': '',
-    'newPassword': ''
+    'newPassword': '',
+    'token': ''
   }
 
-  constructor(private authService: AuthService, private router: Router, private sharedService: SharedService, private snackbar: MatSnackBar) { }
+  changePasswordFromLink: boolean = false;
+
+  constructor(private authService: AuthService, private activatedRoute: ActivatedRoute, private router: Router, private sharedService: SharedService, private snackbar: MatSnackBar) { }
 
   ngOnInit() {
-    this.user.idUsuario = this.sharedService.getData();
+    if (this.activatedRoute.snapshot.params.id) {
+      this.changePasswordFromLink = true;
+    } else {
+      this.user.idUsuario = this.sharedService.getData();
+    }
   }
 
   changePassword() {
@@ -49,6 +58,33 @@ export class ChangePasswordComponent implements OnInit {
           if (data.code == 0) {
             this.authService.refreshJWT(data.data);
             this.navigateToProfile();
+          }
+        });
+      } else {
+        this.snackbar.openFromComponent(SnackbarComponent, {
+          duration: this.durationInSeconds * 1100,
+          data: data
+        })
+      }
+    })
+  }
+
+  changeForgottenPassword() {
+    this.user.newPassword = this.newPassword;
+    this.user.token = this.activatedRoute.snapshot.params.id;
+
+    this.authService.changeForgottenPassword(this.user).subscribe( (data: Response) => {
+      if (data.code == 0) {
+        this.snackbar.openFromComponent(SnackbarComponent, {
+          duration: 0.5 * 1100,
+          data: data.data
+        }).afterDismissed().subscribe( afterDismiss => {
+          if (data.code == 0) {
+            console.log("DAATA AFT", data)
+            this.authService.refreshJWT(data.data);
+            this.authService.refreshRT(data.data);
+            AppSettings.refreshRole();
+            this.router.navigate(['busqueda']);
           }
         });
       } else {

@@ -10,3 +10,4 @@ RewriteRule ^auth auth.php [QSA,L]
 
 # Clave utilizada para encriptar las contrasenias de los usuarios.
 SetEnv KEY sdjbfhb1y1n12jwnyasdyadhisdyswnmsjdh7812763912unkdsklsñxasdhqwydgyb213h1slasdkasjdu
+SetEnv HOST localhost:4200

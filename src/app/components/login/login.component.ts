@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit {
   showRepeatPass: boolean;
   dontRememberPass:boolean;
   submitted;
-
+  submittedForgotPassword: boolean = false;
   showNewPasswordBox: boolean;
 
   userData;
@@ -97,6 +97,7 @@ export class LoginComponent implements OnInit {
   }
 
   goToLogin() {
+    this.submitted = false;
     this.dontRememberPass = false;
   }
 
@@ -138,6 +139,17 @@ export class LoginComponent implements OnInit {
     } 
   }
 
+  forgotPasswordSubmit() {
+    this.auth.forgotPasswordEmail(this.forgotPasswordEmail).subscribe( (res: Response) => {
+      this.snackbar.openFromComponent(SnackbarComponent, {
+        duration: this.durationInSeconds * 1100,
+        data: res
+      }).afterDismissed().subscribe( (res) => {
+        this.router.navigate(['login']);
+      });
+    })
+  }
+
   checkRepeatedPasswords() {
     if (this.newPassword != '' && this.newPasswordRepeat != '') {
       if (this.newPassword === this.newPasswordRepeat) {
@@ -163,6 +175,8 @@ export class LoginComponent implements OnInit {
   }
 
   dontRememberPassword(){
+    this.forgotPasswordEmail = '';
+    this.submittedForgotPassword = false;
     this.dontRememberPass = !this.dontRememberPass;
   }
   
