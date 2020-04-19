@@ -78,6 +78,10 @@ export class AddClassSchedulesComponent implements OnInit {
     option.showMoreHours = 4;
   }
 
+  onCustomModalClose($event) {
+    this.customModal.onClose();
+  }
+
   setStep(index: number) {
     this.step = index;
   }

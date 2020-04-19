@@ -745,7 +745,7 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
     }
   }
 
-  onCustomModalClose() {
+  onCustomModalClose($event) {
     this.customModal.onClose();
   }
 

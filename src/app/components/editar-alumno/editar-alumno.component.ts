@@ -227,6 +227,10 @@ export class EditarAlumnoComponent implements OnInit {
     this.alumnoInformationCopyPersistData = JSON.parse(JSON.stringify(this.alumnoInformation));
   }
 
+  onCustomModalClose($event) {
+    this.customModal.close();
+  }
+
   //validar los formularios
   continueEditing() {
     if (!this.modificoDatosPersonales()) {

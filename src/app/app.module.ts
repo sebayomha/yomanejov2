@@ -75,6 +75,8 @@ import { CarsComponent } from './components/cars/cars.component';
 import { LoginComponent } from './components/login/login.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 export class MyHammerConfig extends HammerGestureConfig {
     overrides = <any> {
@@ -139,7 +141,8 @@ export class MyHammerConfig extends HammerGestureConfig {
     MatListModule,
     MatTableModule,
     MatAutocompleteModule,
-    app_routing
+    app_routing,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
     // BarRatingModule
   ],
   providers:[DatePipe, {provide: LOCALE_ID, useValue: "es-AR"}, LoaderService, { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptorService, multi: true }, {

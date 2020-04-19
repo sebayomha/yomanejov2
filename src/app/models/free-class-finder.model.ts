@@ -3,7 +3,7 @@ import { Address } from "./address.model";
 
 export class Search {
 
-    student_name:string;
+    student_name: string;
     student_phone: number;
     lessons: number;
     date: Date;

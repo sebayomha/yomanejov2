@@ -16,7 +16,7 @@ import { AuthService } from '../app/services/auth/auth.service';
 export class AppComponent {
   title = 'yoManejo';
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(private router: Router, public authService: AuthService) {}
 
   ngOnInit() {
     this.router.events.subscribe((evt) => {

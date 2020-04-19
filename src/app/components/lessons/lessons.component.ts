@@ -182,7 +182,7 @@ export class  LessonsComponent {
     this.customModal.onClose();
   }
 
-  onCustomModalClose() {
+  onCustomModalClose($event) {
     this.customModal.onClose();
   }
 

@@ -27,6 +27,7 @@ export class CarsComponent implements OnInit {
 
   idAuto;
 
+  showSuccessBanner: boolean = false;
 
   constructor(private _snackBar: MatSnackBar, private autosService: AutosService) { }
 
@@ -39,7 +40,7 @@ export class CarsComponent implements OnInit {
 
   }
 
-  onCustomModalClose() {
+  onCustomModalClose($event) {
     this.customModal.onClose();
   }
 
@@ -77,7 +78,7 @@ export class CarsComponent implements OnInit {
     this.customModal.open();
   }
 
-  confirmModal() {
+  confirmModal($event) {
     console.log(this.dataToConfirm);
     switch (this.operation) {
       case 'agregar_auto':

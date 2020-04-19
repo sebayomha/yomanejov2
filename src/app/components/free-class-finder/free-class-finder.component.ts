@@ -45,7 +45,7 @@ export class FreeClassFinderComponent {
   durationInSeconds = 3;
   student_name = '';
   flag_address_alt:boolean = false;
-  numberOfClasses: Number = 0;
+  numberOfClasses: number = 0;
 
   edit_crono_dir_ppal:boolean = false;
   edit_crono_da_ppal:boolean = false;

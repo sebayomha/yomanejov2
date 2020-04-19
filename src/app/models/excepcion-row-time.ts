@@ -1,8 +1,8 @@
 export interface ExcepcionRowTIme {
-    hour_start: String;
-    hour_finish: String;
-    horariosDesde: Array<String>;
-    horariosHasta: Array<String>;
-    horariosTotales: Array<String>;
+    hour_start: string;
+    hour_finish: string;
+    horariosDesde: Array<string>;
+    horariosHasta: Array<string>;
+    horariosTotales: Array<string>;
     dir_alt: boolean;
 }

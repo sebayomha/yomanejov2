@@ -7,7 +7,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "prod": "ng build --prod"
   },
   "private": true,
   "dependencies": {
@@ -21,7 +22,9 @@
     "@angular/material": "^6.4.7",
     "@angular/platform-browser": "^6.1.0",
     "@angular/platform-browser-dynamic": "^6.1.0",
+    "@angular/pwa": "^0.8.9",
     "@angular/router": "^6.1.0",
+    "@angular/service-worker": "^6.1.0",
     "@fortawesome/fontawesome-free": "^5.12.1",
     "angular-password-strength-meter": "^1.0.2",
     "bootstrap": "^4.4.1",

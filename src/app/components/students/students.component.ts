@@ -136,4 +136,9 @@ export class StudentsComponent implements OnInit {
     this.router.navigate(['pendientes', idCronograma]);
   }
 
+  onCustomModalClose($event) {
+    this.customModal.onClose();
+  }
+
+
 }
