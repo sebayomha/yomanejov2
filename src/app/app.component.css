@@ -1,0 +1,34 @@
+.spacer {
+    flex: 1 1 auto;
+}
+
+.addToHomeScreenToolbar {
+    background: #323232 !important;
+    position: absolute;
+    bottom: 0px;
+    width: 50%;
+    margin-left: 25%;
+    margin-bottom: 10px;
+    color: #439f82;
+    padding: 10px;
+    border-radius: 3px;
+    font-size: 16px;
+    min-height: 34px;
+}
+
+.addToHomeScreenToolbar > mat-toolbar-row {
+    height: 34px;
+}
+
+.addToHomeScreenButton {
+    background-color: #439f82 !important;
+    color: white !important;
+}
+
+@media (max-width: 968px) {
+    .addToHomeScreenToolbar {
+        width: 100%;
+        margin-left: 15px;
+        margin-right: 15px;
+    }
+}

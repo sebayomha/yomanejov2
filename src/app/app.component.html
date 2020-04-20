@@ -1,8 +1,13 @@
 <app-loader></app-loader>
-<!-- <app-pending-confirmation-schedules></app-pending-confirmation-schedules> -->
-<!-- <free-class-finder></free-class-finder> -->
 <navbar *ngIf="authService.isLoggedIn()"></navbar>
 <div [@routeAnimations]="prepareRoute(outlet)" >
     <router-outlet #outlet="outlet"></router-outlet>
 </div>
-<!-- <lessons></lessons> -->
+
+<mat-toolbar *ngIf="appCanBeInstalled" class="addToHomeScreenToolbar">
+    <mat-toolbar-row>
+        <span>¿Te gustaría instalar YoManejo a tu pantalla principal?</span>
+        <span class="spacer"></span>
+        <button mat-raised-button class="addToHomeScreenButton" (click)="addToHomeScreen()">INSTALAR</button>
+    </mat-toolbar-row>
+</mat-toolbar>

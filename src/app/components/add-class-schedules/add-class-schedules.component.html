@@ -30,7 +30,6 @@
 
       <mat-selection-list #classChoser (selectionChange)="totalClassesSelected(i, $event, option.fecha);">
           <mat-list-option checkboxPosition="before" [value]="horario" style="margin: 0; height: auto !important; border-top: 1px solid rgba(0, 0, 0, 0.12); padding: 3px !important;" class="classChoser container NoPadding col-12" *ngFor="let horario of option.horarios | slice:0:option.showMoreHours let h = index" @fadeIn [selected]="horario.selected">
-            <!-- <bar-rating title="{{horario.ratingGeneral}}" [readOnly]="true" [(rate)]="horario.ratingGeneral" [max]="10"></bar-rating> -->
             <div class="row NoPadding">
               <div class="col-9 col-sm-10 col-lg-11 NoPadding infoContainer">
                 <div id="horaInicioContainer" class="col-12 col-sm-12 col-md-6 col-lg-3 NoPadding">

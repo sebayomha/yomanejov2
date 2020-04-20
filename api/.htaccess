@@ -1,4 +1,14 @@
-﻿RewriteEngine On
+﻿Header set Access-Control-Allow-Origin "*"
+Header set Access-Control-Allow-Credentials "false"
+Header set Access-Control-Allow-Methods "GET, POST, PATCH, PUT, DELETE, OPTIONS"
+Header set Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept, Authorization, UserId"
+
+RewriteEngine On
+RewriteRule .* - [e=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteEngine On
+RewriteRule .* - [e=HTTP_USERID:%{HTTP:UserId}]
+
+RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^calcularCronograma crearCronograma.php [QSA,L]
 RewriteCond %{REQUEST_FILENAME} !-f

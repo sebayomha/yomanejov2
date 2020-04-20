@@ -41,10 +41,6 @@
     background-color:#43c89d !important;
   }
   
-  ::ng-deep bar-rating > div {
-    display: inline !important;
-  }
-  
   ::ng-deep .br.br-default {
     display: inline !important;
   }

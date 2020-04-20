@@ -1,6 +1,6 @@
 <?php
 	header("Access-Control-Allow-Origin: *");
-	header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
+	header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization, UserId");
 	require_once('autosDB.php');
 	iconv_set_encoding("internal_encoding", "UTF-8");
     date_default_timezone_set('America/Argentina/Buenos_Aires');
@@ -26,6 +26,7 @@
 	}
 
 	function crearAuto() {
+
 		$post = json_decode(file_get_contents('php://input'));
 		$zonaAuto = $post->zonaDeAuto;
 		$patenteAuto = $post->patenteDeAuto;
@@ -36,7 +37,7 @@
 
 		$auto = new Auto();
 		$resultCrearAuto = $auto->crearAuto($zonaAuto, $patenteAuto, $dispoAuto, $descripAuto, $modeloAuto, $colorAuto);
-		if ($resultCrearAuto) {
+		if ($resultCrearAuto == true) {
 			echo json_encode($GLOBALS['utils']->getResponse(0, 'Auto creado correctamente'));	
 		} else {
 			echo json_encode($GLOBALS['utils']->getResponse(1, 'Lo lamentamos, ha ocurrido un error'));

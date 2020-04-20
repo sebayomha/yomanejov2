@@ -1,6 +1,6 @@
 <?php
 	header("Access-Control-Allow-Origin: *");
-	header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
+	header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization, UserId");
 	require_once('alumnosDB.php');
 	iconv_set_encoding("internal_encoding", "UTF-8");
     date_default_timezone_set('America/Argentina/Buenos_Aires');
@@ -16,7 +16,7 @@
 	function obtenerAlumnos() {
 		$alumno = new Alumno();
 		$resultAlumno = $alumno->obtenerAlumnos();
-		echo json_encode($GLOBALS['utils']->getResponse(0, $resultAlumno));	
+		echo json_encode($GLOBALS['utils']->getResponse(0, $resultAlumno));
 	}
 
 	function getInformacionPersonal() {
@@ -87,7 +87,7 @@
 					break;
 				}
 				break;    	
-			}  
+			}
 		}
 	} else {
 		if ($allowedAccessResult == "expired") {

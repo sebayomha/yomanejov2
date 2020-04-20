@@ -1,6 +1,6 @@
 <?php
 	header("Access-Control-Allow-Origin: *");
-	header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
+	header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization, UserId");
 	iconv_set_encoding("internal_encoding", "UTF-8");
 	date_default_timezone_set('America/Argentina/Buenos_Aires');
 	require_once('crearCronogramaDB.php');

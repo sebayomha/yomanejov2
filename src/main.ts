@@ -8,6 +8,8 @@ if (environment.production) {
   enableProdMode();
 }
 
+export const BASE_URL = (environment.production) ? 'http://localhost:80' : '';
+
 platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.error(err));
 

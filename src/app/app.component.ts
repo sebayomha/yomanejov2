@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
 import { slideInAnimation } from './animations';
 import { AuthService } from '../app/services/auth/auth.service';
@@ -16,6 +16,10 @@ import { AuthService } from '../app/services/auth/auth.service';
 export class AppComponent {
   title = 'yoManejo';
 
+  deferredPrompt: any;
+  showButton: boolean = false;
+
+  appCanBeInstalled: boolean = false;
   constructor(private router: Router, public authService: AuthService) {}
 
   ngOnInit() {
@@ -24,11 +28,39 @@ export class AppComponent {
           return;
       }
       window.scrollTo(0, 0)
-  });
+    });
   }
 
   prepareRoute(outlet: RouterOutlet) {
     return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];
+  }
+
+  @HostListener('window:beforeinstallprompt', ['$event'])
+    onbeforeinstallprompt(e) {
+      this.appCanBeInstalled = true;
+      console.log(e);
+      // Prevent Chrome 67 and earlier from automatically showing the prompt
+      e.preventDefault();
+      // Stash the event so it can be triggered later.
+      this.deferredPrompt = e;
+      this.showButton = true;
+    }
+    addToHomeScreen() {
+    // hide our user interface that shows our A2HS button
+    this.showButton = false;
+    // Show the prompt
+    this.deferredPrompt.prompt();
+    // Wait for the user to respond to the prompt
+    this.deferredPrompt.userChoice
+    .then((choiceResult) => {
+    if (choiceResult.outcome === 'accepted') {
+      console.log('User accepted the A2HS prompt');
+    } else {
+      console.log('User dismissed the A2HS prompt');
+    }
+    this.appCanBeInstalled = false;
+    this.deferredPrompt = null;
+  });
   }
 }
 

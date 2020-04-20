@@ -1,6 +1,6 @@
 <?php
 	header("Access-Control-Allow-Origin: *");
-	header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
+	header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization, UserId");
 	require_once('authDB.php');
 	require_once('utils.php');
 	require_once('token.php');

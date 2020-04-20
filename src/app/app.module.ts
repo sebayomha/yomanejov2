@@ -32,6 +32,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatDialogModule} from '@angular/material';
+import {MatToolbarModule} from '@angular/material/toolbar';
 
 /* Components */
 import { AppComponent } from './app.component';
@@ -61,7 +62,6 @@ import { DocumentoEditPipe } from './pipes/documentoEdit.pipe';
 
 registerLocaleData(localeEsAr);
 
-// import { BarRatingModule } from "ngx-bar-rating";
 import { PasswordStrengthMeterModule } from 'angular-password-strength-meter';
 
 import { HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
@@ -129,6 +129,7 @@ export class MyHammerConfig extends HammerGestureConfig {
     MatNativeDateModule,
     MatCheckboxModule,
     MatDialogModule,
+    MatToolbarModule,
     MatSelectModule,
     MatStepperModule,
     MatChipsModule,
@@ -143,7 +144,6 @@ export class MyHammerConfig extends HammerGestureConfig {
     MatAutocompleteModule,
     app_routing,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
-    // BarRatingModule
   ],
   providers:[DatePipe, {provide: LOCALE_ID, useValue: "es-AR"}, LoaderService, { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptorService, multi: true }, {
     provide: HAMMER_GESTURE_CONFIG,
