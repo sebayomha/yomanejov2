@@ -20,6 +20,8 @@ export class AppComponent {
   showButton: boolean = false;
 
   appCanBeInstalled: boolean = false;
+  masTardeSelected: boolean = false;
+
   constructor(private router: Router, public authService: AuthService) {}
 
   ngOnInit() {
@@ -29,10 +31,28 @@ export class AppComponent {
       }
       window.scrollTo(0, 0)
     });
+
+    const getMasTardeResult = this.getMasTarde();
+    if (getMasTardeResult) {
+      if (new Date().getTime() <= Number(getMasTardeResult)) {
+        this.masTardeSelected = true;
+      }
+    } 
   }
 
   prepareRoute(outlet: RouterOutlet) {
     return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];
+  }
+
+  getMasTarde() {
+    return localStorage.getItem('later');
+  }
+
+  setMasTarde() {
+    const now = new Date();
+    now.setDate(now.getDate() + 30);
+    localStorage.setItem('later', JSON.stringify(now.getTime()));
+    this.masTardeSelected = true;
   }
 
   @HostListener('window:beforeinstallprompt', ['$event'])

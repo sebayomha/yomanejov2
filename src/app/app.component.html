@@ -4,10 +4,11 @@
     <router-outlet #outlet="outlet"></router-outlet>
 </div>
 
-<mat-toolbar *ngIf="appCanBeInstalled" class="addToHomeScreenToolbar">
+<mat-toolbar *ngIf="appCanBeInstalled && !masTardeSelected" class="addToHomeScreenToolbar">
     <mat-toolbar-row>
-        <span>¿Te gustaría instalar YoManejo a tu pantalla principal?</span>
+        <span>¿Te gustaría instalar YoManejo en tu pantalla principal?</span>
         <span class="spacer"></span>
-        <button mat-raised-button class="addToHomeScreenButton" (click)="addToHomeScreen()">INSTALAR</button>
+        <button mat-button color="warn" class="masTardeButton" (click)="setMasTarde()">MÁS TARDE</button>
+        <button mat-button class="addToHomeScreenButton" (click)="addToHomeScreen()">INSTALAR</button>
     </mat-toolbar-row>
 </mat-toolbar>

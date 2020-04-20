@@ -25,6 +25,10 @@
     color: white !important;
 }
 
+.masTardeButton {
+    margin-right: 10px;
+}
+
 @media (max-width: 968px) {
     .addToHomeScreenToolbar {
         width: 100%;
