@@ -50,7 +50,7 @@ export class AppComponent {
 
   setMasTarde() {
     const now = new Date();
-    now.setDate(now.getDate() + 30);
+    now.setDate(now.getDate() + 7);
     localStorage.setItem('later', JSON.stringify(now.getTime()));
     this.masTardeSelected = true;
   }
