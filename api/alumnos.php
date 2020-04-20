@@ -1,6 +1,4 @@
 <?php
-	header("Access-Control-Allow-Origin: *");
-	header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization, UserId");
 	require_once('alumnosDB.php');
 	iconv_set_encoding("internal_encoding", "UTF-8");
     date_default_timezone_set('America/Argentina/Buenos_Aires');
@@ -90,12 +88,14 @@
 			}
 		}
 	} else {
-		if ($allowedAccessResult == "expired") {
-			header("HTTP/1.1 401 Token Expired");
-			exit;
-		} else {
-			header("HTTP/1.1 401 Unauthorized");
-			exit;
+		if ($method != "OPTIONS") {
+			if ($allowedAccessResult == "expired") {
+				header("HTTP/1.1 401 Token Expired");
+				exit;
+			} else {
+				header("HTTP/1.1 401 Unauthorized");
+				exit;
+			}
 		}
 	}
 	

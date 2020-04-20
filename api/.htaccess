@@ -1,7 +1,8 @@
 ﻿Header set Access-Control-Allow-Origin "*"
-Header set Access-Control-Allow-Credentials "false"
-Header set Access-Control-Allow-Methods "GET, POST, PATCH, PUT, DELETE, OPTIONS"
-Header set Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept, Authorization, UserId"
+Header add Access-Control-Allow-Credentials "false"
+Header add Access-Control-Allow-Methods "HEAD, GET, POST, PATCH, PUT, DELETE, OPTIONS"
+Header add Access-Control-Allow-Headers "X-Requested-With, Content-Type, Accept, Authorization, UserId"
+Header add Access-Control-Max-Age "86400"
 
 RewriteEngine On
 RewriteRule .* - [e=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
