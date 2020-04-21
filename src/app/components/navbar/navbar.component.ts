@@ -50,9 +50,9 @@ export class NavbarComponent {
     let id = this.authService.decodePayload().idUsuario || null;
     switch(id) {
       case 1: 
-        return '../../../assets/img/profile/YomhaS.png';
+        return 'assets/img/profile/YomhaS.png';
       default:
-        return '../../../assets/img/logo.png';
+        return 'assets/img/logo.png';
     }
    
   }

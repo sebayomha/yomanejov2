@@ -161,3 +161,23 @@ input:-webkit-autofill {
 ::ng-deep #loginForm .mat-form-field.mat-focused.ng-dirty.ng-invalid .mat-form-field-label, #formNewPassword .mat-form-field.mat-focused.ng-dirty.ng-invalid .mat-form-field-label, #formForgotPassword .mat-form-field.mat-focused.ng-dirty.ng-invalid .mat-form-field-label {
     color: #f44336 !important;
 }
+
+#copyRightFooter {
+/*     text-align: center;
+    width: 100%;
+    position: absolute;
+    bottom: 10px;
+    color: transparent;
+    background-clip: text;
+    background-image: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(68,209,91,1) 50%, rgba(15,121,5,1) 100%);
+    -webkit-background-clip: text; */
+
+    text-align: left;
+    width: 100%;
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    color: white;
+    font-weight: 100;
+    font-size: 14px;
+}

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
+import { BASE_URL } from '../../configVariables';
 
 @Injectable({
   providedIn: 'root'
@@ -10,31 +11,31 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   login(user) {
-    return this.http.post('/api/auth/login', user);
+    return this.http.post(`${BASE_URL}/api/auth/login`, user);
   }
 
   firstPasswordChange(user) {
-    return this.http.post('/api/auth/firstPasswordChange', user);
+    return this.http.post(`${BASE_URL}/api/auth/firstPasswordChange`, user);
   }
 
   changeForgottenPassword(user) {
-    return this.http.post('/api/auth/changeForgottenPassword', user);
+    return this.http.post(`${BASE_URL}/api/auth/changeForgottenPassword`, user);
   }
 
   changePassword(user) {
-    return this.http.post('/api/auth/changePassword', user);
+    return this.http.post(`${BASE_URL}/api/auth/changePassword`, user);
   }
 
   forgotPasswordEmail(email) {
-    return this.http.post('/api/auth/forgotPasswordEmail', email);
+    return this.http.post(`${BASE_URL}/api/auth/forgotPasswordEmail`, email);
   }
 
   validForgotPasswordToken(token) {
-    return this.http.post('/api/auth/validForgotPasswordToken', token);
+    return this.http.post(`${BASE_URL}/api/auth/validForgotPasswordToken`, token);
   }
 
   logout(user) {
-    return this.http.post<any>('/api/auth/logout', user).pipe(
+    return this.http.post<any>(`${BASE_URL}/api/auth/logout`, user).pipe(
       tap((data:any) => {
         localStorage.removeItem('uniqueid');
         localStorage.removeItem('uniquert');
@@ -50,7 +51,7 @@ export class AuthService {
       refreshToken: refreshToken
     }
 
-    return this.http.post('/api/auth/refresh', params).pipe(
+    return this.http.post(`${BASE_URL}/api/auth/refresh`, params).pipe(
       tap((data:any) => {
         this.refreshJWT(data);
       })

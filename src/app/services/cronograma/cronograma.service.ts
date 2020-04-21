@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Search } from 'src/app/models/free-class-finder.model';
 import { DatePipe } from '@angular/common';
 import { Excepcion } from 'src/app/models/excepcion';
+import { BASE_URL } from '../../configVariables';
 
 @Injectable({
   providedIn: 'root'
@@ -20,15 +21,8 @@ export class CronogramaService {
       direccion: JSON.stringify(searchParameters.address),
       direccion_alt: JSON.stringify(searchParameters.address_alternative),
       excepciones: JSON.stringify(excepciones)
-    }/* 
-    const params = new HttpParams()
-    .set('cantClases', searchParameters.lessons.toString())
-    .set('fechaInicio', this.datePipe.transform(searchParameters.date, 'yyyy-MM-dd'))
-    .set('disponibilidad', JSON.stringify(searchParameters.dates_times))
-    .set('direccion', JSON.stringify(searchParameters.address))
-    .set('direccion_alt', JSON.stringify(searchParameters.address_alternative))
-    .set('excepciones', JSON.stringify(excepciones)) */
-    return this.http.post('api/calcularCronograma/', {params: data});
+    }
+    return this.http.post(`${BASE_URL}/api/calcularCronograma/`, {params: data});
   }
 
   obtenerClasesActivasCronograma(idCronograma, searchParameters: Search, excepciones?: Array<Excepcion>) {
@@ -37,31 +31,24 @@ export class CronogramaService {
       fechaInicio: this.datePipe.transform(searchParameters.date, 'yyyy-MM-dd'),
       disponibilidad: JSON.stringify(searchParameters.dates_times),
       excepciones: JSON.stringify(excepciones)
-    }/* 
-    const params = new HttpParams()
-    .set('cantClases', searchParameters.lessons.toString())
-    .set('fechaInicio', this.datePipe.transform(searchParameters.date, 'yyyy-MM-dd'))
-    .set('disponibilidad', JSON.stringify(searchParameters.dates_times))
-    .set('direccion', JSON.stringify(searchParameters.address))
-    .set('direccion_alt', JSON.stringify(searchParameters.address_alternative))
-    .set('excepciones', JSON.stringify(excepciones)) */
-    return this.http.post('api/calcularCronograma/obtenerClasesActivasCronograma', {params: data});
+    }
+    return this.http.post(`${BASE_URL}/api/calcularCronograma/obtenerClasesActivasCronograma`, {params: data});
   }
 
   guardarCronograma(cronograma) {
-    return this.http.post('api/calcularCronograma/guardar', JSON.stringify(cronograma));
+    return this.http.post(`${BASE_URL}/api/calcularCronograma/guardar`, JSON.stringify(cronograma));
   }
 
   actualizarCronogramaPendiente(cronograma) {
-    return this.http.post('api/calcularCronograma/actualizarCronogramaPendiente', JSON.stringify(cronograma));
+    return this.http.post(`${BASE_URL}/api/calcularCronograma/actualizarCronogramaPendiente`, JSON.stringify(cronograma));
   }
 
   actualizarCronogramaActivo(cronograma) {
-    return this.http.post('api/calcularCronograma/actualizarCronogramaActivo', JSON.stringify(cronograma));
+    return this.http.post(`${BASE_URL}/api/calcularCronograma/actualizarCronogramaActivo`, JSON.stringify(cronograma));
   }
 
   obtenerCronogramasPendientesDeConfirmar() {
-    return this.http.get('api/calcularCronograma/cronogramasPendientes');
+    return this.http.get(`${BASE_URL}/api/calcularCronograma/cronogramasPendientes`);
   }
 
   confirmarCronogramaPendiente(idCronograma, idAlumno, direccionFisicaInformation, documento, clases) {
@@ -72,7 +59,7 @@ export class CronogramaService {
       documento: documento,
       clases: clases
     }
-    return this.http.post('api/calcularCronograma/confirmarCronograma', {params: data});
+    return this.http.post(`${BASE_URL}/api/calcularCronograma/confirmarCronograma`, {params: data});
   }
 
   cancelarCronogramaPendiente(idCronograma, idAlumno) {
@@ -80,7 +67,7 @@ export class CronogramaService {
       idCronograma: idCronograma,
       idAlumno: idAlumno
     }
-    return this.http.post('api/calcularCronograma/cancelarCronograma', {params: data});
+    return this.http.post(`${BASE_URL}/api/calcularCronograma/cancelarCronograma`, {params: data});
   }
 
   cancelarCronogramaActivo(idCronograma, idAlumno, motivoBaja) {
@@ -89,20 +76,20 @@ export class CronogramaService {
       idAlumno: idAlumno,
       motivoBaja: motivoBaja
     }
-    return this.http.post('api/calcularCronograma/cancelarCronogramaActivo', {params: data});
+    return this.http.post(`${BASE_URL}/api/calcularCronograma/cancelarCronogramaActivo`, {params: data});
   }
 
   obtenerClasesPorFecha(fecha: string) {
     const params = new HttpParams().set('fecha', fecha);
-    return this.http.get('api/calcularCronograma/obtenerClasesPorFecha', {params: params});
+    return this.http.get(`${BASE_URL}/api/calcularCronograma/obtenerClasesPorFecha`, {params: params});
   }
 
   obtenerClasesDisponiblesParaAlumno(idAlumno) {
-    return this.http.post('api/calcularCronograma/obtenerClasesDisponiblesParaAlumno', {params: idAlumno});
+    return this.http.post(`${BASE_URL}/api/calcularCronograma/obtenerClasesDisponiblesParaAlumno`, {params: idAlumno});
   }
 
   agregarClaseACronograma(data) {
-    return this.http.post('api/calcularCronograma/agregarClaseACronograma', JSON.stringify(data));
+    return this.http.post(`${BASE_URL}/api/calcularCronograma/agregarClaseACronograma`, JSON.stringify(data));
   }
 
   cancelarClase(idClase, motivoCancelacion) {
@@ -110,7 +97,7 @@ export class CronogramaService {
       idClase: idClase,
       motivoCancelacion: motivoCancelacion
     }
-    return this.http.post('api/calcularCronograma/cancelarClase', {params: data});
+    return this.http.post(`${BASE_URL}/api/calcularCronograma/cancelarClase`, {params: data});
   }
 
 }

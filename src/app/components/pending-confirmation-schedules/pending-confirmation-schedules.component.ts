@@ -625,7 +625,7 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
 
   filterNombres() {
     this.nombresFiltered = this.nombres.filter( (nombre) => {
-      if (nombre.toLowerCase().startsWith(this.selectedNombreFilter[this.currentTabIndex].toLowerCase())) {
+      if (nombre.toLowerCase().startsWith(this.selectedNombresChips[this.currentTabIndex].toLowerCase())) {
         return true;
       }
       return false;
