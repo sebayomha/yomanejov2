@@ -5,6 +5,7 @@ import { AuthService } from '../app/services/auth/auth.service';
 import { SwPush } from '@angular/service-worker'
 import { NotificationsService } from './services/notification/notificationService';
 import { Response } from './models/response';
+import { SharedService } from './services/sharedService/shared-service';
 
 @Component({
   selector: 'app-root',
@@ -31,7 +32,7 @@ export class AppComponent {
   suscripted: boolean;
   readonly VAPID_PUBLIC_KEY = "BGl7F8lkZqntl6jPBuFdMxk64eKKL4NZKGZg0sneZ6uoWo1S0FqdRL1bRQFrTd3df4v4a2GTEKnKgsSaMf44oc4";
 
-  constructor(private router: Router, public authService: AuthService, public swPush: SwPush, public notificationService: NotificationsService) {}
+  constructor(private sharedService: SharedService, private router: Router, public authService: AuthService, public swPush: SwPush, public notificationService: NotificationsService) {}
 
   ngOnInit() {
     this.router.events.subscribe((evt) => {
@@ -65,6 +66,13 @@ export class AppComponent {
         this.suscripted = true;
       } else {
         this.suscripted = false;
+      }
+    })
+
+    this.swPush.notificationClicks.subscribe( (notification) => {
+      if (this.authService.isLoggedIn()) {
+        this.sharedService.setActiveTab(1);
+        this.router.navigate(['pendientes']);
       }
     })
   }

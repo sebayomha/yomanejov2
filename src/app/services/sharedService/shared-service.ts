@@ -1,12 +1,23 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SharedService {
 
-  constructor(private http: HttpClient) { }
+  constructor() { }
+
+  setActiveTab(idTab) {
+    sessionStorage.setItem("activeTab", JSON.stringify(idTab));
+  }
+
+  getActiveTab() {
+    return JSON.parse(sessionStorage.getItem("activeTab"));
+  }
+
+  destroyActiveTab() {
+    sessionStorage.removeItem("activeTab");
+  }
 
   setData(data) {
     sessionStorage.setItem("student",JSON.stringify(data));

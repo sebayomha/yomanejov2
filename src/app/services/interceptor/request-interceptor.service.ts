@@ -24,14 +24,14 @@ export class RequestInterceptorService {
       if (idUser != null) {
         request = req.clone({
           setHeaders: {
-            Authorization: `Bearer ${this.authService.getToken()}`,
-            UserId: idUser
+            "Authorization": `Bearer ${this.authService.getToken()}`,
+            "UserId": idUser.toString()
           }
         });
       } else {
         request = req.clone({
           setHeaders: {
-            Authorization: `Bearer ${this.authService.getToken()}`
+            "Authorization": `Bearer ${this.authService.getToken()}`
           }
         });
       }
@@ -83,7 +83,7 @@ export class RequestInterceptorService {
   private addToken(request: HttpRequest<any>, token: string) {
     return request.clone({
       setHeaders: {
-        Authorization: `Bearer ${token}`
+        "Authorization": `Bearer ${token}`
       }
     });
   }

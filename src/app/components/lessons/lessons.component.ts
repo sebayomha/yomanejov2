@@ -4,7 +4,7 @@ import { CronogramaService } from 'src/app/services/cronograma/cronograma.servic
 import { Response } from '../../models/response';
 import { trigger,animate,transition,style } from '@angular/animations';
 import { SnackbarComponent } from '../snackbar/snackbar/snackbar.component';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AppSettings } from '../../appConstants';
 
 @Component({

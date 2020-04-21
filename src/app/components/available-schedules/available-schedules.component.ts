@@ -1,5 +1,5 @@
 import { Component, ChangeDetectorRef, Input, ViewChildren, QueryList, ViewChild, Output, EventEmitter, ɵConsole } from '@angular/core';
-import { MatSelectionList } from '@angular/material';
+import { MatSelectionList } from '@angular/material/list';
 import { trigger,animate,transition,style } from '@angular/animations';
 import { CronogramaService } from 'src/app/services/cronograma/cronograma.service';
 import { Response } from 'src/app/models/response';

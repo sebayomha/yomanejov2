@@ -8,7 +8,7 @@ import { ActivatedRoute,Router } from '@angular/router';
 import { AlumnosService } from 'src/app/services/alumnos/alumnos.service';
 import { trigger, transition, animate, style } from '@angular/animations';
 import { SharedService } from 'src/app/services/sharedService/shared-service';
-import { MatDialog} from '@angular/material';
+import { MatDialog} from '@angular/material/dialog';
 import { AppSettings } from '../../appConstants';
 
 @Component({
@@ -96,6 +96,8 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
   nombresFiltered: Array<any> = [];
   idsCronogramasFiltered: Array<any> = [];
 
+  activeTab: number = 0;
+
   ngOnInit() {
     this.cronogramaService.obtenerCronogramasPendientesDeConfirmar().subscribe( (response: Response) => {
       this.allCronogramas = response.data;
@@ -103,17 +105,18 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
       this.cronogramasConfirmados = response.data.cronogramasConfirmados;
       this.cronogramasFinalizados = response.data.cronogramasFinalizados;
       this.cronogramasCancelados = response.data.cronogramasCancelados;
-      console.log("cronogramasConfirmados", this.cronogramasConfirmados);
+      
       this.isLoaded = true;
-
       
       this.sub = this.route.params.subscribe(params => {
         this.idCronograma = +params['idCronograma'];
         this.detailedCronograma = this.getDetailedCronograma(this.idCronograma);
-        console.log("idCronograma::", this.idCronograma)
-        console.log("detailedCronograma:: ", this.detailedCronograma);
-        //ESTO VA A SER USADO PARA CUANDO SE PUEDAN FILTRAR LOS CRONOGRAMAS CON UN BUSCADOR ARRIBA
-    });
+      });
+
+      let activeTabNotification = this.sharedService.getActiveTab();
+      if (activeTabNotification) {
+        this.activeTab = activeTabNotification;
+      }
     })
   }
 
@@ -147,6 +150,7 @@ export class PendingConfirmationSchedulesComponent implements OnInit {
 
   ngOnDestroy() {
     if (this.sub) this.sub.unsubscribe();
+    this.sharedService.destroyActiveTab();
   }
 
   verTodosCronogramas() {

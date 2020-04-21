@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, Injectable } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { DatePipe, registerLocaleData } from '@angular/common';
 import { LOCALE_ID } from '@angular/core';
@@ -13,7 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material';
+import { MatNativeDateModule } from '@angular/material/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
@@ -31,7 +31,7 @@ import {MatStepperModule} from '@angular/material/stepper';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatChipsModule} from '@angular/material/chips';
-import {MatDialogModule} from '@angular/material';
+import {MatDialogModule} from '@angular/material/dialog';
 import {MatToolbarModule} from '@angular/material/toolbar';
 
 /* Components */
@@ -48,7 +48,7 @@ import { PendingConfirmationSchedulesComponent } from './components/pending-conf
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { DireccionFisicaComponent } from './components/direccion-fisica/direccion-fisica.component';
 import { EditPendingConfSchedulesComponent } from './components/edit-pending-conf-schedules/edit-pending-conf-schedules.component';
-
+import { RouterModule } from '@angular/router';
 
 /* Services */
 import { LoaderService } from './services/loader/loader-service.service';
@@ -78,6 +78,7 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
+@Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
     overrides = <any> {
         'pinch': { enabled: false },
@@ -119,6 +120,7 @@ export class MyHammerConfig extends HammerGestureConfig {
     MatCardModule,
     MatInputModule,    
     FormsModule,
+    RouterModule,
     MatTooltipModule,
     ReactiveFormsModule,
     FormsModule,
@@ -148,7 +150,7 @@ export class MyHammerConfig extends HammerGestureConfig {
   providers:[DatePipe, {provide: LOCALE_ID, useValue: "es-AR"}, LoaderService, { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptorService, multi: true }, {
     provide: HAMMER_GESTURE_CONFIG,
     useClass: MyHammerConfig
-}, SharedService],
+}, SharedService, MatDatepickerModule],
   bootstrap: [AppComponent],
   entryComponents: [
     SnackbarComponent

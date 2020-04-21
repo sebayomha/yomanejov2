@@ -2,7 +2,7 @@ import { Component, OnInit} from '@angular/core';
 import { LoginUser } from '../../models/LoginUser';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Response } from 'src/app/models/response';
 import { SnackbarComponent } from '../snackbar/snackbar/snackbar.component';
 import { AppSettings } from '../../appConstants';

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { SharedService } from 'src/app/services/sharedService/shared-service';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Response } from 'src/app/models/response';
 import { SnackbarComponent } from '../snackbar/snackbar/snackbar.component';
 import { Router } from '@angular/router';

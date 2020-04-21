@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChildren, QueryList, ViewChild } from '@angular/core';
 import { trigger,animate,transition,style } from '@angular/animations';
-import { MatSelectionList } from '@angular/material';
+import { MatSelectionList } from '@angular/material/list';
 import { CronogramaService } from 'src/app/services/cronograma/cronograma.service';
 import { Response } from 'src/app/models/response';
 import { MatSnackBar } from '@angular/material/snack-bar';
