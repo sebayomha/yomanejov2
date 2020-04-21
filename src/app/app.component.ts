@@ -2,6 +2,9 @@ import { Component, HostListener } from '@angular/core';
 import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
 import { slideInAnimation } from './animations';
 import { AuthService } from '../app/services/auth/auth.service';
+import { SwPush } from '@angular/service-worker'
+import { NotificationsService } from './services/notification/notificationService';
+import { Response } from './models/response';
 
 @Component({
   selector: 'app-root',
@@ -21,8 +24,14 @@ export class AppComponent {
 
   appCanBeInstalled: boolean = false;
   masTardeSelected: boolean = false;
+  masTardeNotificationSelected: boolean = false;
+  isEnabledSwa: boolean = false;
+  notificationPermission = (Notification as any).permission;
 
-  constructor(private router: Router, public authService: AuthService) {}
+  suscripted: boolean;
+  readonly VAPID_PUBLIC_KEY = "BGl7F8lkZqntl6jPBuFdMxk64eKKL4NZKGZg0sneZ6uoWo1S0FqdRL1bRQFrTd3df4v4a2GTEKnKgsSaMf44oc4";
+
+  constructor(private router: Router, public authService: AuthService, public swPush: SwPush, public notificationService: NotificationsService) {}
 
   ngOnInit() {
     this.router.events.subscribe((evt) => {
@@ -37,7 +46,40 @@ export class AppComponent {
       if (new Date().getTime() <= Number(getMasTardeResult)) {
         this.masTardeSelected = true;
       }
-    } 
+    }
+
+    const getMasTardeNotificationResult = this.getMasTardeNotification();
+    if (getMasTardeNotificationResult) {
+      if (new Date().getTime() <= Number(getMasTardeNotificationResult)) {
+        this.masTardeNotificationSelected = true;
+      }
+    }
+
+    if (this.swPush.isEnabled) {
+      this.isEnabledSwa = true;
+    }
+
+    this.suscripted = true;
+    this.swPush.subscription.subscribe( sub => {
+      if (sub) {
+        this.suscripted = true;
+      } else {
+        this.suscripted = false;
+      }
+    })
+  }
+
+  subscribeToNotifications() {
+    this.swPush.requestSubscription({
+        serverPublicKey: this.VAPID_PUBLIC_KEY
+    })
+    .then(sub => 
+      this.notificationService.addPushSubscriber(sub).subscribe( (res:Response) => {
+      console.log("res de suscrpcion ", res);
+      if (res.code == 0) this.suscripted = true 
+      else this.suscripted = false;
+    }))
+    .catch(err => console.error("Could not subscribe to notifications", err));
   }
 
   prepareRoute(outlet: RouterOutlet) {
@@ -48,11 +90,22 @@ export class AppComponent {
     return localStorage.getItem('later');
   }
 
+  getMasTardeNotification() {
+    return localStorage.getItem('laternotifications');
+  }
+
   setMasTarde() {
     const now = new Date();
     now.setDate(now.getDate() + 7);
     localStorage.setItem('later', JSON.stringify(now.getTime()));
     this.masTardeSelected = true;
+  }
+
+  setMasTardeNotifications() {
+    const now = new Date();
+    now.setDate(now.getDate() + 7);
+    localStorage.setItem('laternotifications', JSON.stringify(now.getTime()));
+    this.masTardeNotificationSelected = true;
   }
 
   @HostListener('window:beforeinstallprompt', ['$event'])

@@ -2,8 +2,6 @@
     iconv_set_encoding("internal_encoding", "UTF-8");
     date_default_timezone_set('America/Argentina/Buenos_Aires');
     require_once('connectDB.php');
-    //Va a ser utilizada cuando existan sesiones
-    //require_once('token.php');
 
     class Cronograma {
 

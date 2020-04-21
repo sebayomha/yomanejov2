@@ -1,7 +1,7 @@
 ﻿Header set Access-Control-Allow-Origin "*"
 Header add Access-Control-Allow-Credentials "false"
 Header add Access-Control-Allow-Methods "HEAD, GET, POST, PATCH, PUT, DELETE, OPTIONS"
-Header add Access-Control-Allow-Headers "X-Requested-With, Content-Type, Accept, Authorization, UserId"
+Header add Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept, Authorization, UserId"
 Header add Access-Control-Max-Age "86400"
 
 RewriteEngine On
@@ -18,7 +18,10 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^autos autos.php [QSA,L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^auth auth.php [QSA,L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^notifications notificationSuscription.php [QSA,L]
 
 # Clave utilizada para encriptar las contrasenias de los usuarios.
 SetEnv KEY sdjbfhb1y1n12jwnyasdyadhisdyswnmsjdh7812763912unkdsklsñxasdhqwydgyb213h1slasdkasjdu
+# Host:: se utiliza para el envio de emails en authDb
 SetEnv HOST localhost:4200

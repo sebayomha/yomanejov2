@@ -1,6 +1,4 @@
 <?php
-	iconv_set_encoding("internal_encoding", "UTF-8");
-	date_default_timezone_set('America/Argentina/Buenos_Aires');
 	require_once('crearCronogramaDB.php');
 	require_once('utils.php');
 	require_once('token.php');

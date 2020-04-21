@@ -1,7 +1,5 @@
 <?php
 	require_once('alumnosDB.php');
-	iconv_set_encoding("internal_encoding", "UTF-8");
-    date_default_timezone_set('America/Argentina/Buenos_Aires');
 	require_once('utils.php');
 	require_once('token.php');
 	require_once('authGuard.php');

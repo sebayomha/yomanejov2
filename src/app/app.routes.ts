@@ -11,7 +11,6 @@ import { AuthGuardService } from './services/authGuard/auth-guard.service';
 import { ChangePasswordGuardService } from './services/forgotPasswordGuard/change-password-guard.service';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
-import { environment } from '../environments/environment'
 
 const app_routes: Routes = [
   { path: 'busqueda', component: FreeClassFinderComponent, canActivate:[AuthGuardService]},
