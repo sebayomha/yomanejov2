@@ -16,6 +16,7 @@
         }
 
         function obtenerAutos() {
+            $now = date("Y-m-d");
             $state = $this->conn->prepare('SELECT * FROM auto');
             $state->execute();
             $result = $state->get_result();
@@ -27,6 +28,16 @@
                 }
             } else {
                 return [];
+            }
+            $state = $this->conn->prepare('SELECT clase.auto, COUNT(clase.idClase) AS cantidadDeClasesDia FROM clase WHERE clase.fecha = ? GROUP BY clase.auto');
+            $state->bind_param('s', $now);
+            $state->execute();
+            $result = $state->get_result();
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+
+                    array_push($autos, $row);
+                }
             }
             return $autos;
         }

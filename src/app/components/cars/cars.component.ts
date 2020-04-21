@@ -13,7 +13,7 @@ export class CarsComponent implements OnInit {
 
   @ViewChild('customModal') customModal;
 
-  autos;
+  autos = [];
   zonas;
   dataToConfirm;
   displayedColumns: string[] = ['Id', 'patente', 'color', 'zona'];
@@ -34,7 +34,16 @@ export class CarsComponent implements OnInit {
   ngOnInit() {
 
     this.autosService.obtenerAutos().subscribe( (response: Response)=>{
-      this.autos = response.data;
+
+      response.data.forEach(car => {
+        if (car.idAuto) {
+          car.cantidadDeClasesDia = 0;
+          this.autos.push(car);
+        } else if (car.auto) {
+          let index = response.data.findIndex(x => x.idAuto === car.auto) 
+          this.autos[index].cantidadDeClasesDia = car.cantidadDeClasesDia;
+        }
+      });
     });
     
 
