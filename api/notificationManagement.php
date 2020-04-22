@@ -1,6 +1,4 @@
 <?php
-	require_once('utils.php');
-	require_once('token.php');
 	require_once('connectDB.php');
 	use Minishlink\WebPush\WebPush;
 	use Minishlink\WebPush\Subscription;
