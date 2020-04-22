@@ -4,11 +4,6 @@
 	require_once('connectDB.php');
 	use Minishlink\WebPush\WebPush;
 	use Minishlink\WebPush\Subscription;
-
-/*	$utils = new Utils();
-	$requestMethod = $utils->getUri();
-
-	$method = $_SERVER['REQUEST_METHOD']; */
 	
 	function pushSubscriber($bodyMessage) {
 		$post = json_decode(file_get_contents('php://input'));
@@ -47,7 +42,7 @@
 	                  		'auth' => $auth
 	           		 	],
 			        ]),
-				    'payload' => '{ "notification": {"title": "Cronograma finalizado !", "body":"'.$bodyMessage.'", "icon":"assets/img/logo.PNG", "vibrate": "[100, 50, 100]" } }',
+				    'payload' => '{ "notification": {"title": "Cronograma finalizado !", "body":"'.$bodyMessage.'", "icon":"assets/img/logo.PNG",  "badge":"assets/img/logo.PNG", "vibrate": "[100, 50, 100]" } }',
 		    	];
 
 			    $webPush->sendNotification(
@@ -99,18 +94,6 @@
         }
        	mysqli_close($conn);
 	}
-
-/*	switch ($method) {
-		case 'POST': {
-			//Obtengo la URL Final para saber cual accion ejecutar.
-			switch ($requestMethod){
-				case '/notifications/pushSubscriber':
-					pushSubscriber();
-				break;
-			}
-			break;    	
-		}
-	}*/
 
 	checkIfScheduleIsCompleted();
 ?>
