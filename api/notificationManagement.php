@@ -1,5 +1,6 @@
 <?php
 	require_once('connectDB.php');
+	require __DIR__ . '../../../vendor/autoload.php';
 	use Minishlink\WebPush\WebPush;
 	use Minishlink\WebPush\Subscription;
 	
