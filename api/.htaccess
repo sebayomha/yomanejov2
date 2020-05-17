@@ -24,4 +24,4 @@ RewriteRule ^notifications notificationSuscription.php [QSA,L]
 # Clave utilizada para encriptar las contrasenias de los usuarios.
 SetEnv KEY sdjbfhb1y1n12jwnyasdyadhisdyswnmsjdh7812763912unkdsklsñxasdhqwydgyb213h1slasdkasjdu
 # Host:: se utiliza para el envio de emails en authDb
-SetEnv HOST localhost:4200
+SetEnv HOST localhost:8081
