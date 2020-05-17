@@ -51,6 +51,8 @@ export class NavbarComponent {
     switch(id) {
       case 1: 
         return 'assets/img/profile/YomhaS.png';
+      case 2: 
+        return 'assets/img/profile/user_1.png';
       default:
         return 'assets/img/logo.png';
     }

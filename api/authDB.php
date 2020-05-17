@@ -392,7 +392,7 @@ class Auth{
             
             <div>
                 <p>Muchas gracias</p>
-                <p>La administración de YoManejo</p>
+                <p>El equipo de YoManejo</p>
             </div>
 	        </body>
 	        </html>';
