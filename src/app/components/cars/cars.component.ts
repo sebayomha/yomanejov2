@@ -10,15 +10,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./cars.component.css', '../../global-styles.scss']
 })
 export class CarsComponent implements OnInit {
-
   @ViewChild('customModal') customModal;
 
   autos = [];
   zonas;
   dataToConfirm;
   displayedColumns: string[] = ['Id', 'patente', 'color', 'zona'];
-  agregar_auto_modal:boolean = false;
-  buttonAgregar:boolean = false;
+  agregar_auto_modal: boolean = false;
+  buttonAgregar: boolean = false;
   operation: string;
   durationInSeconds: number = 1;
   agregar = 'agregar_auto';
@@ -29,56 +28,52 @@ export class CarsComponent implements OnInit {
 
   showSuccessBanner: boolean = false;
 
-  constructor(private _snackBar: MatSnackBar, private autosService: AutosService) { }
+  constructor(private _snackBar: MatSnackBar, private autosService: AutosService) {}
 
   ngOnInit() {
-
-    this.autosService.obtenerAutos().subscribe( (response: Response)=>{
-
-      response.data.forEach(car => {
+    this.autosService.obtenerAutos().subscribe((response: Response) => {
+      response.data.forEach((car) => {
         if (car.idAuto) {
           car.cantidadDeClasesDia = 0;
           this.autos.push(car);
         } else if (car.auto) {
-          let index = response.data.findIndex(x => x.idAuto === car.auto) 
+          let index = response.data.findIndex((x) => x.idAuto === car.auto);
           this.autos[index].cantidadDeClasesDia = car.cantidadDeClasesDia;
         }
       });
     });
-    
-
   }
 
   onCustomModalClose($event) {
     this.customModal.onClose();
   }
 
-  operacionesAuto(operacion,auto) {
-    this.autosService.obtenerZonas().subscribe( (response: Response)=>{
+  operacionesAuto(operacion, auto) {
+    this.autosService.obtenerZonas().subscribe((response: Response) => {
       this.zonas = response.data;
-      console.log(this.zonas);
+      this.zonas;
 
       if (operacion == 'agregar_auto') {
         this.dataToConfirm = {
-          'idDeAuto': '',
-          'zonas': this.zonas,
-          'dispoDeAuto':'A',
-          'descripDeAuto':'',
-          'modeloDeAuto' : '',
-          'zonaDeAuto' : '',
-          'patenteDeAuto' : '',
-          'colorDeAuto' : ''
+          idDeAuto: '',
+          zonas: this.zonas,
+          dispoDeAuto: 'A',
+          descripDeAuto: '',
+          modeloDeAuto: '',
+          zonaDeAuto: '',
+          patenteDeAuto: '',
+          colorDeAuto: ''
         };
       } else {
         this.dataToConfirm = {
-          'idDeAuto': auto.idAuto ? auto.idAuto : '',
-          'zonas': this.zonas,
-          'dispoDeAuto':'A',
-          'descripDeAuto':'',
-          'modeloDeAuto' : auto.modelo,
-          'zonaDeAuto' : auto.zonaMaster,
-          'patenteDeAuto' : auto.patente,
-          'colorDeAuto' : auto.color
+          idDeAuto: auto.idAuto ? auto.idAuto : '',
+          zonas: this.zonas,
+          dispoDeAuto: 'A',
+          descripDeAuto: '',
+          modeloDeAuto: auto.modelo,
+          zonaDeAuto: auto.zonaMaster,
+          patenteDeAuto: auto.patente,
+          colorDeAuto: auto.color
         };
       }
     });
@@ -88,10 +83,10 @@ export class CarsComponent implements OnInit {
   }
 
   confirmModal($event) {
-    console.log(this.dataToConfirm);
+    this.dataToConfirm;
     switch (this.operation) {
       case 'agregar_auto':
-        this.autosService.crearAuto(this.dataToConfirm).subscribe( (response: Response) => {
+        this.autosService.crearAuto(this.dataToConfirm).subscribe((response: Response) => {
           this.customModal.onClose();
           this._snackBar.openFromComponent(SnackbarComponent, {
             duration: this.durationInSeconds * 1100,
@@ -100,7 +95,7 @@ export class CarsComponent implements OnInit {
         });
         break;
       case 'modificar_auto':
-        this.autosService.modificarAuto(this.dataToConfirm).subscribe( (response: Response) => {
+        this.autosService.modificarAuto(this.dataToConfirm).subscribe((response: Response) => {
           this.customModal.onClose();
           this._snackBar.openFromComponent(SnackbarComponent, {
             duration: this.durationInSeconds * 1100,
@@ -109,7 +104,7 @@ export class CarsComponent implements OnInit {
         });
         break;
       case 'bajar_auto':
-        this.autosService.bajarAuto(this.dataToConfirm).subscribe( (response: Response) => {
+        this.autosService.bajarAuto(this.dataToConfirm).subscribe((response: Response) => {
           this.customModal.onClose();
           this._snackBar.openFromComponent(SnackbarComponent, {
             duration: this.durationInSeconds * 1100,
@@ -120,5 +115,4 @@ export class CarsComponent implements OnInit {
     }
     this.ngOnInit();
   }
-
 }

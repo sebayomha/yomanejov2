@@ -77,6 +77,10 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { BalanceComponent } from './components/balance/balance.component';
+import { IngresoComponent } from './components/balance/ingreso/ingreso.component';
+import { EgresoComponent } from './components/balance/egreso/egreso.component';
+import { DashboardComponent } from './components/balance/dashboard/dashboard.component';
 
 @Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
@@ -111,7 +115,11 @@ export class MyHammerConfig extends HammerGestureConfig {
     CarsComponent,
     LoginComponent,
     ProfileComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    BalanceComponent,
+    IngresoComponent,
+    EgresoComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
-import {MatSidenav} from '@angular/material/sidenav';
+import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-students-details',
@@ -7,19 +7,15 @@ import {MatSidenav} from '@angular/material/sidenav';
   styleUrls: ['./students-details.component.css']
 })
 export class StudentsDetailsComponent implements OnInit {
-
   @ViewChild('sidenav') sidenav: MatSidenav;
   @Input('alumno') alumno;
   @Output() closed = new EventEmitter<string>();
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
-  ngOnChanges() {
-    console.log("alumno ", this.alumno)
-  }
+  ngOnChanges() {}
 
   close() {
     this.alumno = null;
@@ -28,8 +24,7 @@ export class StudentsDetailsComponent implements OnInit {
   }
 
   open() {
-    console.log("SDASD");
+    ('SDASD');
     this.sidenav.open();
   }
-
 }

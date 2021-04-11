@@ -14,7 +14,6 @@ import { AppSettings } from '../../appConstants';
   styleUrls: ['./change-password.component.css']
 })
 export class ChangePasswordComponent implements OnInit {
-
   newPassword: string = '';
   newPasswordRepeat: string = '';
   oldPassword: string = '';
@@ -25,17 +24,23 @@ export class ChangePasswordComponent implements OnInit {
 
   durationInSeconds: number = 1;
   idUsuario: number;
-  
+
   user = {
-    'idUsuario': null,
-    'oldPassword': '',
-    'newPassword': '',
-    'token': ''
-  }
+    idUsuario: null,
+    oldPassword: '',
+    newPassword: '',
+    token: ''
+  };
 
   changePasswordFromLink: boolean = false;
 
-  constructor(private authService: AuthService, private activatedRoute: ActivatedRoute, private router: Router, private sharedService: SharedService, private snackbar: MatSnackBar) { }
+  constructor(
+    private authService: AuthService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private sharedService: SharedService,
+    private snackbar: MatSnackBar
+  ) {}
 
   ngOnInit() {
     if (this.activatedRoute.snapshot.params.id) {
@@ -49,53 +54,58 @@ export class ChangePasswordComponent implements OnInit {
     this.user.oldPassword = this.oldPassword;
     this.user.newPassword = this.newPassword;
 
-    this.authService.changePassword(this.user).subscribe( (data: Response) => {
+    this.authService.changePassword(this.user).subscribe((data: Response) => {
       if (data.code == 0) {
-        this.snackbar.openFromComponent(SnackbarComponent, {
-          duration: this.durationInSeconds * 1100,
-          data: data.data
-        }).afterDismissed().subscribe( afterDismiss => {
-          if (data.code == 0) {
-            this.authService.refreshJWT(data.data);
-            this.navigateToProfile();
-          }
-        });
+        this.snackbar
+          .openFromComponent(SnackbarComponent, {
+            duration: this.durationInSeconds * 1100,
+            data: data.data
+          })
+          .afterDismissed()
+          .subscribe((afterDismiss) => {
+            if (data.code == 0) {
+              this.authService.refreshJWT(data.data);
+              this.navigateToProfile();
+            }
+          });
       } else {
         this.snackbar.openFromComponent(SnackbarComponent, {
           duration: this.durationInSeconds * 1100,
           data: data
-        })
+        });
       }
-    })
+    });
   }
 
   changeForgottenPassword() {
     this.user.newPassword = this.newPassword;
     this.user.token = this.activatedRoute.snapshot.params.id;
 
-    this.authService.changeForgottenPassword(this.user).subscribe( (data: Response) => {
+    this.authService.changeForgottenPassword(this.user).subscribe((data: Response) => {
       if (data.code == 0) {
-        this.snackbar.openFromComponent(SnackbarComponent, {
-          duration: 0.5 * 1100,
-          data: data.data
-        }).afterDismissed().subscribe( afterDismiss => {
-          if (data.code == 0) {
-            console.log("DAATA AFT", data)
-            this.authService.refreshJWT(data.data);
-            this.authService.refreshRT(data.data);
-            AppSettings.refreshRole();
-            this.router.navigate(['busqueda']);
-          }
-        });
+        this.snackbar
+          .openFromComponent(SnackbarComponent, {
+            duration: 0.5 * 1100,
+            data: data.data
+          })
+          .afterDismissed()
+          .subscribe((afterDismiss) => {
+            if (data.code == 0) {
+              this.authService.refreshJWT(data.data);
+              this.authService.refreshRT(data.data);
+              AppSettings.refreshRole();
+              this.router.navigate(['busqueda']);
+            }
+          });
       } else {
         this.snackbar.openFromComponent(SnackbarComponent, {
           duration: this.durationInSeconds * 1100,
           data: data
-        })
+        });
       }
-    })
+    });
   }
-  
+
   navigateToProfile() {
     this.sharedService.destroyData();
     this.router.navigate(['perfil']);
@@ -117,15 +127,15 @@ export class ChangePasswordComponent implements OnInit {
     }
   }
 
-  showPassword(){
+  showPassword() {
     this.showPass = !this.showPass;
   }
 
-  showRepeatPassword(){
+  showRepeatPassword() {
     this.showRepeatPass = !this.showRepeatPass;
   }
 
-  showOldPassword(){
+  showOldPassword() {
     this.showOldPass = !this.showOldPass;
   }
 }

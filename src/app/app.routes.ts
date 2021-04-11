@@ -11,22 +11,40 @@ import { AuthGuardService } from './services/authGuard/auth-guard.service';
 import { ChangePasswordGuardService } from './services/forgotPasswordGuard/change-password-guard.service';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
+import { BalanceComponent } from './components/balance/balance.component';
 
 const app_routes: Routes = [
-  { path: 'busqueda', component: FreeClassFinderComponent, canActivate:[AuthGuardService]},
+  /*{ path: 'busqueda', component: FreeClassFinderComponent, canActivate: [AuthGuardService] },
   { path: 'pendientes', component: PendingConfirmationSchedulesComponent,  data: {animation: 'StudentsPage'}, canActivate:[AuthGuardService]},
   { path: 'pendientes/:idCronograma', component: PendingConfirmationSchedulesComponent},
   { path: 'pendientes/agregarClase/:idCronograma', component: AddClassSchedulesComponent, data: {animation: 'EditingStudentPage'}, canActivate:[AuthGuardService]},
   { path: 'clases', component: LessonsComponent, canActivate:[AuthGuardService]},
-  { path: 'perfil', component: ProfileComponent, data: {animation: 'StudentsPage'}, canActivate:[AuthGuardService]},
-  { path: 'perfil/cambiarContraseña', component: ChangePasswordComponent, data: {animation: 'EditingStudentPage'}, canActivate:[AuthGuardService]},
-  { path: 'cambiarContraseña/:id', component: ChangePasswordComponent, canActivate:[ChangePasswordGuardService]},
-  { path: 'autos', component: CarsComponent, data: {authRole: 'ADMIN'}, canActivate:[AuthGuardService]},
-  { path: 'alumnos', component: StudentsComponent, data: {animation: 'StudentsPage', authRole: 'ADMIN'}, canActivate:[AuthGuardService]},
-  { path: 'alumnos/editar/:id', component: EditarAlumnoComponent, data: {animation: 'EditingStudentPage', authRole: 'ADMIN'}, canActivate:[AuthGuardService]},
-  { path: 'login', component: LoginComponent, data: {isLoginPage: true}, canActivate:[AuthGuardService]},
-  { path: '', pathMatch: 'full', redirectTo: 'busqueda'},
-  { path: '**', pathMatch: 'full', redirectTo: 'busqueda' }
+  */
+  {
+    path: 'balance',
+    component: BalanceComponent,
+    data: { animation: 'StudentsPage' },
+    canActivate: [AuthGuardService]
+  },
+  { path: 'perfil', component: ProfileComponent, data: { animation: 'StudentsPage' }, canActivate: [AuthGuardService] },
+  {
+    path: 'perfil/cambiarContraseña',
+    component: ChangePasswordComponent,
+    data: { animation: 'EditingStudentPage' },
+    canActivate: [AuthGuardService]
+  },
+  { path: 'cambiarContraseña/:id', component: ChangePasswordComponent, canActivate: [ChangePasswordGuardService] },
+  //{ path: 'autos', component: CarsComponent, data: {authRole: 'ADMIN'}, canActivate:[AuthGuardService]},
+  {
+    path: 'alumnos',
+    component: StudentsComponent,
+    data: { animation: 'StudentsPage', authRole: 'ADMIN' },
+    canActivate: [AuthGuardService]
+  },
+  //{ path: 'alumnos/editar/:id', component: EditarAlumnoComponent, data: {animation: 'EditingStudentPage', authRole: 'ADMIN'}, canActivate:[AuthGuardService]},
+  { path: 'login', component: LoginComponent, data: { isLoginPage: true }, canActivate: [AuthGuardService] },
+  { path: '', pathMatch: 'full', redirectTo: 'balance' },
+  { path: '**', pathMatch: 'full', redirectTo: 'balance' }
 ];
 
 export const app_routing = RouterModule.forRoot(app_routes);

@@ -1,0 +1,45 @@
+<form (ngSubmit)="calcular()" #formIngreso="ngForm" novalidate="" style="margin-top: 20px">
+  <div class="form-group">
+    <div class="col-sm-12 col-md-4">
+      <!-- Nombre -->
+      <mat-form-field style="width: 100%">
+        <input
+          #nombreAlumno="ngModel"
+          maxlength="60"
+          matInput
+          placeholder="Nombre del alumno"
+          name="nombreAlumno"
+          [(ngModel)]="alumno.nombreAlumno"
+          required
+          autofocus
+        />
+      </mat-form-field>
+      <div
+        *ngIf="nombreAlumno.errors?.required && nombreAlumno.touched"
+        style="color: #f44336; font-size: 12px; margin-bottom: 10px; margin-top: -10px"
+      >
+        Debe ingresar el nombre del alumno para continuar
+      </div>
+
+      <!-- Direccion -->
+      <mat-form-field style="width: 100%">
+        <input
+          #direccionAlumno="ngModel"
+          maxlength="100"
+          matInput
+          placeholder="Direccion del alumno"
+          name="direccionAlumno"
+          [(ngModel)]="alumno.direccionAlumno"
+          required
+          autofocus
+        />
+      </mat-form-field>
+      <div
+        *ngIf="direccionAlumno.errors?.required && direccionAlumno.touched"
+        style="color: #f44336; font-size: 12px; margin-bottom: 10px; margin-top: -10px"
+      >
+        Debe ingresar la dirección del alumno para continuar
+      </div>
+    </div>
+  </div>
+</form>

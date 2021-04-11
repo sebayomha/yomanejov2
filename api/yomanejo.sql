@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.2
+-- version 5.0.4
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: May 17, 2020 at 10:54 PM
--- Server version: 10.4.11-MariaDB
--- PHP Version: 7.4.1
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 12-04-2021 a las 01:33:32
+-- Versión del servidor: 10.4.17-MariaDB
+-- Versión de PHP: 7.2.34
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -19,12 +18,12 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `yomanejo`
+-- Base de datos: `yomanejo`
 --
 
 DELIMITER $$
 --
--- Procedures
+-- Procedimientos
 --
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removePendingSchedules` ()  NO SQL
 BEGIN
@@ -74,7 +73,48 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Table structure for table `alumno`
+-- Estructura de tabla para la tabla `adicional`
+--
+
+CREATE TABLE `adicional` (
+  `idAdicional` int(11) NOT NULL,
+  `descripcion` varchar(111) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `adicional`
+--
+
+INSERT INTO `adicional` (`idAdicional`, `descripcion`) VALUES
+(1, 'Clase individual'),
+(2, 'Clase técnica');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `adicionalfranquicia`
+--
+
+CREATE TABLE `adicionalfranquicia` (
+  `idAdicionalFranquicia` int(11) NOT NULL,
+  `idAdicional` int(11) NOT NULL,
+  `idFranquicia` int(11) NOT NULL,
+  `idMetodoPago` int(11) NOT NULL,
+  `precio` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `adicionalfranquicia`
+--
+
+INSERT INTO `adicionalfranquicia` (`idAdicionalFranquicia`, `idAdicional`, `idFranquicia`, `idMetodoPago`, `precio`) VALUES
+(1, 1, 1, 1, 200),
+(2, 2, 1, 2, 500);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `alumno`
 --
 
 CREATE TABLE `alumno` (
@@ -91,13 +131,14 @@ CREATE TABLE `alumno` (
   `idDireccionFisica` int(11) DEFAULT NULL,
   `documento` varchar(255) DEFAULT NULL,
   `motivoBaja` varchar(255) NOT NULL,
-  `fechaBaja` varchar(255) NOT NULL
+  `fechaBaja` varchar(255) NOT NULL,
+  `idFranquicia` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `alumnocronogramaclasestomadas`
+-- Estructura de tabla para la tabla `alumnocronogramaclasestomadas`
 --
 
 CREATE TABLE `alumnocronogramaclasestomadas` (
@@ -111,7 +152,7 @@ CREATE TABLE `alumnocronogramaclasestomadas` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `auto`
+-- Estructura de tabla para la tabla `auto`
 --
 
 CREATE TABLE `auto` (
@@ -125,7 +166,7 @@ CREATE TABLE `auto` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `auto`
+-- Volcado de datos para la tabla `auto`
 --
 
 INSERT INTO `auto` (`idAuto`, `patente`, `color`, `disponibilidad`, `descripcion`, `zonaMaster`, `modelo`) VALUES
@@ -137,7 +178,7 @@ INSERT INTO `auto` (`idAuto`, `patente`, `color`, `disponibilidad`, `descripcion
 -- --------------------------------------------------------
 
 --
--- Table structure for table `autoinactivo`
+-- Estructura de tabla para la tabla `autoinactivo`
 --
 
 CREATE TABLE `autoinactivo` (
@@ -149,7 +190,7 @@ CREATE TABLE `autoinactivo` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `clase`
+-- Estructura de tabla para la tabla `clase`
 --
 
 CREATE TABLE `clase` (
@@ -174,7 +215,7 @@ CREATE TABLE `clase` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `clasemodificadaregistro`
+-- Estructura de tabla para la tabla `clasemodificadaregistro`
 --
 
 CREATE TABLE `clasemodificadaregistro` (
@@ -186,7 +227,7 @@ CREATE TABLE `clasemodificadaregistro` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cronograma`
+-- Estructura de tabla para la tabla `cronograma`
 --
 
 CREATE TABLE `cronograma` (
@@ -202,7 +243,7 @@ CREATE TABLE `cronograma` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `cronograma`
+-- Volcado de datos para la tabla `cronograma`
 --
 
 INSERT INTO `cronograma` (`idCronograma`, `status`, `idAlumno`, `timestampGuardado`, `timestampActivo`, `timestampCancelado`, `timestampFinalizado`, `timestampModificado`, `motivoBaja`) VALUES
@@ -237,7 +278,7 @@ INSERT INTO `cronograma` (`idCronograma`, `status`, `idAlumno`, `timestampGuarda
 -- --------------------------------------------------------
 
 --
--- Table structure for table `direccion`
+-- Estructura de tabla para la tabla `direccion`
 --
 
 CREATE TABLE `direccion` (
@@ -258,7 +299,7 @@ CREATE TABLE `direccion` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `disponibilidad`
+-- Estructura de tabla para la tabla `disponibilidad`
 --
 
 CREATE TABLE `disponibilidad` (
@@ -275,7 +316,7 @@ CREATE TABLE `disponibilidad` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `excepcion`
+-- Estructura de tabla para la tabla `excepcion`
 --
 
 CREATE TABLE `excepcion` (
@@ -288,7 +329,7 @@ CREATE TABLE `excepcion` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `excepcionhorarios`
+-- Estructura de tabla para la tabla `excepcionhorarios`
 --
 
 CREATE TABLE `excepcionhorarios` (
@@ -301,7 +342,28 @@ CREATE TABLE `excepcionhorarios` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `instructor`
+-- Estructura de tabla para la tabla `franquicia`
+--
+
+CREATE TABLE `franquicia` (
+  `idFranquicia` int(11) NOT NULL,
+  `nombreFranquicia` varchar(111) NOT NULL,
+  `localidad` varchar(111) NOT NULL,
+  `gerente` varchar(111) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `franquicia`
+--
+
+INSERT INTO `franquicia` (`idFranquicia`, `nombreFranquicia`, `localidad`, `gerente`) VALUES
+(1, 'Franquicia Sebas', 'La Plata', 'Sebastian Yomha'),
+(2, 'Franquicia Lautaro', 'Quilmes', 'Lautaro Pastor');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `instructor`
 --
 
 CREATE TABLE `instructor` (
@@ -311,7 +373,7 @@ CREATE TABLE `instructor` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `instructor`
+-- Volcado de datos para la tabla `instructor`
 --
 
 INSERT INTO `instructor` (`idInstructor`, `nombre`, `apellido`) VALUES
@@ -320,7 +382,71 @@ INSERT INTO `instructor` (`idInstructor`, `nombre`, `apellido`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `parametros`
+-- Estructura de tabla para la tabla `metodospago`
+--
+
+CREATE TABLE `metodospago` (
+  `idMetodoPago` int(11) NOT NULL,
+  `descripcion` varchar(111) NOT NULL,
+  `cargaTributaria` varchar(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `metodospago`
+--
+
+INSERT INTO `metodospago` (`idMetodoPago`, `descripcion`, `cargaTributaria`) VALUES
+(1, 'Efectivo', '0'),
+(2, 'Tarjeta de débito', '10.1');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `paquete`
+--
+
+CREATE TABLE `paquete` (
+  `idPaquete` int(11) NOT NULL,
+  `cantClases` int(11) NOT NULL,
+  `descripcion` varchar(111) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `paquete`
+--
+
+INSERT INTO `paquete` (`idPaquete`, `cantClases`, `descripcion`) VALUES
+(1, 4, 'Paquete de 4 clases'),
+(2, 8, 'Paquete de 8 clases');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `paquetefranquicia`
+--
+
+CREATE TABLE `paquetefranquicia` (
+  `idPaqueteFranquicia` int(11) NOT NULL,
+  `idPaquete` int(11) NOT NULL,
+  `idFranquicia` int(11) NOT NULL,
+  `idMetodoPago` int(11) NOT NULL,
+  `precio` varchar(111) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `paquetefranquicia`
+--
+
+INSERT INTO `paquetefranquicia` (`idPaqueteFranquicia`, `idPaquete`, `idFranquicia`, `idMetodoPago`, `precio`) VALUES
+(1, 1, 1, 1, '2500'),
+(2, 2, 1, 2, '3000'),
+(3, 1, 1, 2, '1000'),
+(4, 2, 1, 1, '500');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `parametros`
 --
 
 CREATE TABLE `parametros` (
@@ -330,7 +456,7 @@ CREATE TABLE `parametros` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `parametros`
+-- Volcado de datos para la tabla `parametros`
 --
 
 INSERT INTO `parametros` (`idParametro`, `maximoDiasTolerancia`, `diasToleranciaBajo`) VALUES
@@ -339,7 +465,7 @@ INSERT INTO `parametros` (`idParametro`, `maximoDiasTolerancia`, `diasTolerancia
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tokenusuario`
+-- Estructura de tabla para la tabla `tokenusuario`
 --
 
 CREATE TABLE `tokenusuario` (
@@ -351,16 +477,16 @@ CREATE TABLE `tokenusuario` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `tokenusuario`
+-- Volcado de datos para la tabla `tokenusuario`
 --
 
 INSERT INTO `tokenusuario` (`idTokenUsuario`, `idUsuario`, `refreshToken`, `expirationRefreshToken`, `loginTime`) VALUES
-(119, 1, '15ea0b0da96b1e4.80578963', '1590181338', '1587589338');
+(120, 1, '160737ffd975213.76340874', '1620774141', '1618182141');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `usuario`
+-- Estructura de tabla para la tabla `usuario`
 --
 
 CREATE TABLE `usuario` (
@@ -370,21 +496,22 @@ CREATE TABLE `usuario` (
   `firstPasswordChange` varchar(5) NOT NULL,
   `nombre` varchar(255) NOT NULL,
   `role` varchar(255) NOT NULL,
-  `changePasswordTime` varchar(255) NOT NULL
+  `changePasswordTime` varchar(255) NOT NULL,
+  `idFranquicia` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `usuario`
+-- Volcado de datos para la tabla `usuario`
 --
 
-INSERT INTO `usuario` (`idUsuario`, `email`, `password`, `firstPasswordChange`, `nombre`, `role`, `changePasswordTime`) VALUES
-(1, 'sebastian_yomha@hotmail.com', '$2y$10$dJtypunXx91GTty70sPWBOIcO.FVxIee7w6fviJjEjSr930jKb3ZG', 'true', 'Sebastian Yomha', 'ADMIN', '2020-04-20 09:56:20 pm'),
-(2, 'mauriangelucci@gmail.com', '$1$UbbARLMr$AWPC5xuEFSYtEuaQl/1uK0', 'false', 'Mauricio Angelucci', 'ADMIN', '');
+INSERT INTO `usuario` (`idUsuario`, `email`, `password`, `firstPasswordChange`, `nombre`, `role`, `changePasswordTime`, `idFranquicia`) VALUES
+(1, 'sebastian_yomha@hotmail.com', '$2y$10$mzAXYxpB92WXuA3e7PX7zeZYMaAfUdgVfoiUALTa4dnMj62cOzoOe', 'true', 'Sebastian Yomha', 'ADMIN', '2020-04-20 09:56:20 pm', 0),
+(2, 'mauriangelucci@gmail.com', '$1$UbbARLMr$AWPC5xuEFSYtEuaQl/1uK0', 'false', 'Mauricio Angelucci', 'MASTER', '', 0);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `usuariosuscripcion`
+-- Estructura de tabla para la tabla `usuariosuscripcion`
 --
 
 CREATE TABLE `usuariosuscripcion` (
@@ -396,7 +523,7 @@ CREATE TABLE `usuariosuscripcion` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `usuariosuscripcion`
+-- Volcado de datos para la tabla `usuariosuscripcion`
 --
 
 INSERT INTO `usuariosuscripcion` (`idSuscripcion`, `idUsuario`, `endpoint`, `auth`, `p256dh`) VALUES
@@ -405,7 +532,7 @@ INSERT INTO `usuariosuscripcion` (`idSuscripcion`, `idUsuario`, `endpoint`, `aut
 -- --------------------------------------------------------
 
 --
--- Table structure for table `zona`
+-- Estructura de tabla para la tabla `zona`
 --
 
 CREATE TABLE `zona` (
@@ -419,7 +546,7 @@ CREATE TABLE `zona` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `zona`
+-- Volcado de datos para la tabla `zona`
 --
 
 INSERT INTO `zona` (`idZona`, `nombreZona`, `puntoSuperiorIzquierdo`, `puntoSuperiorDerecho`, `puntoInferiorIzquierdo`, `puntoInferiorDerecho`, `zonaMaster`) VALUES
@@ -464,7 +591,7 @@ INSERT INTO `zona` (`idZona`, `nombreZona`, `puntoSuperiorIzquierdo`, `puntoSupe
 -- --------------------------------------------------------
 
 --
--- Table structure for table `zonamaster`
+-- Estructura de tabla para la tabla `zonamaster`
 --
 
 CREATE TABLE `zonamaster` (
@@ -472,7 +599,7 @@ CREATE TABLE `zonamaster` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `zonamaster`
+-- Volcado de datos para la tabla `zonamaster`
 --
 
 INSERT INTO `zonamaster` (`idZonaMaster`) VALUES
@@ -483,7 +610,7 @@ INSERT INTO `zonamaster` (`idZonaMaster`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `zonasvecinas`
+-- Estructura de tabla para la tabla `zonasvecinas`
 --
 
 CREATE TABLE `zonasvecinas` (
@@ -493,7 +620,7 @@ CREATE TABLE `zonasvecinas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `zonasvecinas`
+-- Volcado de datos para la tabla `zonasvecinas`
 --
 
 INSERT INTO `zonasvecinas` (`idZona`, `idZonaVecina`, `id`) VALUES
@@ -636,232 +763,304 @@ INSERT INTO `zonasvecinas` (`idZona`, `idZonaVecina`, `id`) VALUES
 (42, 41, 137);
 
 --
--- Indexes for dumped tables
+-- Índices para tablas volcadas
 --
 
 --
--- Indexes for table `alumno`
+-- Indices de la tabla `adicional`
+--
+ALTER TABLE `adicional`
+  ADD PRIMARY KEY (`idAdicional`);
+
+--
+-- Indices de la tabla `adicionalfranquicia`
+--
+ALTER TABLE `adicionalfranquicia`
+  ADD PRIMARY KEY (`idAdicionalFranquicia`);
+
+--
+-- Indices de la tabla `alumno`
 --
 ALTER TABLE `alumno`
   ADD PRIMARY KEY (`idAlumno`);
 
 --
--- Indexes for table `alumnocronogramaclasestomadas`
+-- Indices de la tabla `alumnocronogramaclasestomadas`
 --
 ALTER TABLE `alumnocronogramaclasestomadas`
   ADD PRIMARY KEY (`idAlumnoCronograma`);
 
 --
--- Indexes for table `auto`
+-- Indices de la tabla `auto`
 --
 ALTER TABLE `auto`
   ADD PRIMARY KEY (`idAuto`);
 
 --
--- Indexes for table `clase`
+-- Indices de la tabla `clase`
 --
 ALTER TABLE `clase`
   ADD PRIMARY KEY (`idClase`);
 
 --
--- Indexes for table `clasemodificadaregistro`
+-- Indices de la tabla `clasemodificadaregistro`
 --
 ALTER TABLE `clasemodificadaregistro`
   ADD PRIMARY KEY (`idClaseModificadaRegistro`);
 
 --
--- Indexes for table `cronograma`
+-- Indices de la tabla `cronograma`
 --
 ALTER TABLE `cronograma`
   ADD PRIMARY KEY (`idCronograma`);
 
 --
--- Indexes for table `direccion`
+-- Indices de la tabla `direccion`
 --
 ALTER TABLE `direccion`
   ADD PRIMARY KEY (`idDireccion`);
 
 --
--- Indexes for table `disponibilidad`
+-- Indices de la tabla `disponibilidad`
 --
 ALTER TABLE `disponibilidad`
   ADD PRIMARY KEY (`idDisponibilidad`);
 
 --
--- Indexes for table `excepcion`
+-- Indices de la tabla `excepcion`
 --
 ALTER TABLE `excepcion`
   ADD PRIMARY KEY (`idExcepcion`);
 
 --
--- Indexes for table `excepcionhorarios`
+-- Indices de la tabla `excepcionhorarios`
 --
 ALTER TABLE `excepcionhorarios`
   ADD PRIMARY KEY (`idExcepcionHorario`);
 
 --
--- Indexes for table `instructor`
+-- Indices de la tabla `franquicia`
+--
+ALTER TABLE `franquicia`
+  ADD PRIMARY KEY (`idFranquicia`);
+
+--
+-- Indices de la tabla `instructor`
 --
 ALTER TABLE `instructor`
   ADD PRIMARY KEY (`idInstructor`);
 
 --
--- Indexes for table `parametros`
+-- Indices de la tabla `metodospago`
+--
+ALTER TABLE `metodospago`
+  ADD PRIMARY KEY (`idMetodoPago`);
+
+--
+-- Indices de la tabla `paquete`
+--
+ALTER TABLE `paquete`
+  ADD PRIMARY KEY (`idPaquete`);
+
+--
+-- Indices de la tabla `paquetefranquicia`
+--
+ALTER TABLE `paquetefranquicia`
+  ADD PRIMARY KEY (`idPaqueteFranquicia`);
+
+--
+-- Indices de la tabla `parametros`
 --
 ALTER TABLE `parametros`
   ADD PRIMARY KEY (`idParametro`);
 
 --
--- Indexes for table `tokenusuario`
+-- Indices de la tabla `tokenusuario`
 --
 ALTER TABLE `tokenusuario`
   ADD PRIMARY KEY (`idTokenUsuario`);
 
 --
--- Indexes for table `usuario`
+-- Indices de la tabla `usuario`
 --
 ALTER TABLE `usuario`
   ADD PRIMARY KEY (`idUsuario`);
 
 --
--- Indexes for table `usuariosuscripcion`
+-- Indices de la tabla `usuariosuscripcion`
 --
 ALTER TABLE `usuariosuscripcion`
   ADD PRIMARY KEY (`idSuscripcion`);
 
 --
--- Indexes for table `zona`
+-- Indices de la tabla `zona`
 --
 ALTER TABLE `zona`
   ADD PRIMARY KEY (`idZona`);
 
 --
--- Indexes for table `zonamaster`
+-- Indices de la tabla `zonamaster`
 --
 ALTER TABLE `zonamaster`
   ADD PRIMARY KEY (`idZonaMaster`);
 
 --
--- Indexes for table `zonasvecinas`
+-- Indices de la tabla `zonasvecinas`
 --
 ALTER TABLE `zonasvecinas`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT de las tablas volcadas
 --
 
 --
--- AUTO_INCREMENT for table `alumno`
+-- AUTO_INCREMENT de la tabla `adicional`
+--
+ALTER TABLE `adicional`
+  MODIFY `idAdicional` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `adicionalfranquicia`
+--
+ALTER TABLE `adicionalfranquicia`
+  MODIFY `idAdicionalFranquicia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `alumno`
 --
 ALTER TABLE `alumno`
   MODIFY `idAlumno` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=167;
 
 --
--- AUTO_INCREMENT for table `alumnocronogramaclasestomadas`
+-- AUTO_INCREMENT de la tabla `alumnocronogramaclasestomadas`
 --
 ALTER TABLE `alumnocronogramaclasestomadas`
   MODIFY `idAlumnoCronograma` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
--- AUTO_INCREMENT for table `auto`
+-- AUTO_INCREMENT de la tabla `auto`
 --
 ALTER TABLE `auto`
   MODIFY `idAuto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1214218;
 
 --
--- AUTO_INCREMENT for table `clase`
+-- AUTO_INCREMENT de la tabla `clase`
 --
 ALTER TABLE `clase`
   MODIFY `idClase` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=884;
 
 --
--- AUTO_INCREMENT for table `clasemodificadaregistro`
+-- AUTO_INCREMENT de la tabla `clasemodificadaregistro`
 --
 ALTER TABLE `clasemodificadaregistro`
   MODIFY `idClaseModificadaRegistro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
--- AUTO_INCREMENT for table `cronograma`
+-- AUTO_INCREMENT de la tabla `cronograma`
 --
 ALTER TABLE `cronograma`
   MODIFY `idCronograma` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=160;
 
 --
--- AUTO_INCREMENT for table `direccion`
+-- AUTO_INCREMENT de la tabla `direccion`
 --
 ALTER TABLE `direccion`
   MODIFY `idDireccion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=236;
 
 --
--- AUTO_INCREMENT for table `disponibilidad`
+-- AUTO_INCREMENT de la tabla `disponibilidad`
 --
 ALTER TABLE `disponibilidad`
   MODIFY `idDisponibilidad` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=177;
 
 --
--- AUTO_INCREMENT for table `excepcion`
+-- AUTO_INCREMENT de la tabla `excepcion`
 --
 ALTER TABLE `excepcion`
   MODIFY `idExcepcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
--- AUTO_INCREMENT for table `excepcionhorarios`
+-- AUTO_INCREMENT de la tabla `excepcionhorarios`
 --
 ALTER TABLE `excepcionhorarios`
   MODIFY `idExcepcionHorario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
 
 --
--- AUTO_INCREMENT for table `instructor`
+-- AUTO_INCREMENT de la tabla `franquicia`
+--
+ALTER TABLE `franquicia`
+  MODIFY `idFranquicia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `instructor`
 --
 ALTER TABLE `instructor`
   MODIFY `idInstructor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `parametros`
+-- AUTO_INCREMENT de la tabla `metodospago`
+--
+ALTER TABLE `metodospago`
+  MODIFY `idMetodoPago` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `paquete`
+--
+ALTER TABLE `paquete`
+  MODIFY `idPaquete` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT de la tabla `paquetefranquicia`
+--
+ALTER TABLE `paquetefranquicia`
+  MODIFY `idPaqueteFranquicia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT de la tabla `parametros`
 --
 ALTER TABLE `parametros`
   MODIFY `idParametro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `tokenusuario`
+-- AUTO_INCREMENT de la tabla `tokenusuario`
 --
 ALTER TABLE `tokenusuario`
-  MODIFY `idTokenUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=120;
+  MODIFY `idTokenUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
 
 --
--- AUTO_INCREMENT for table `usuario`
+-- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
   MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `usuariosuscripcion`
+-- AUTO_INCREMENT de la tabla `usuariosuscripcion`
 --
 ALTER TABLE `usuariosuscripcion`
   MODIFY `idSuscripcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
--- AUTO_INCREMENT for table `zona`
+-- AUTO_INCREMENT de la tabla `zona`
 --
 ALTER TABLE `zona`
   MODIFY `idZona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
--- AUTO_INCREMENT for table `zonamaster`
+-- AUTO_INCREMENT de la tabla `zonamaster`
 --
 ALTER TABLE `zonamaster`
   MODIFY `idZonaMaster` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `zonasvecinas`
+-- AUTO_INCREMENT de la tabla `zonasvecinas`
 --
 ALTER TABLE `zonasvecinas`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=138;
 
 DELIMITER $$
 --
--- Events
+-- Eventos
 --
 CREATE DEFINER=`root`@`localhost` EVENT `setInactiveStudentsSchedule` ON SCHEDULE EVERY 1 SECOND STARTS '2020-03-13 00:00:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL setInactiveStudents()$$
 
