@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-04-2021 a las 01:33:32
+-- Tiempo de generación: 12-04-2021 a las 01:40:34
 -- Versión del servidor: 10.4.17-MariaDB
 -- Versión de PHP: 7.2.34
 
@@ -316,6 +316,21 @@ CREATE TABLE `disponibilidad` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `egreso`
+--
+
+CREATE TABLE `egreso` (
+  `idEgreso` int(11) NOT NULL,
+  `descripcion` varchar(111) NOT NULL,
+  `monto` varchar(111) NOT NULL,
+  `idFranquicia` int(11) NOT NULL,
+  `idUsuario` int(11) NOT NULL,
+  `fecha` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `excepcion`
 --
 
@@ -359,6 +374,36 @@ CREATE TABLE `franquicia` (
 INSERT INTO `franquicia` (`idFranquicia`, `nombreFranquicia`, `localidad`, `gerente`) VALUES
 (1, 'Franquicia Sebas', 'La Plata', 'Sebastian Yomha'),
 (2, 'Franquicia Lautaro', 'Quilmes', 'Lautaro Pastor');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `ingreso`
+--
+
+CREATE TABLE `ingreso` (
+  `idIngreso` int(11) NOT NULL,
+  `idAlumno` int(11) NOT NULL,
+  `idUsuario` int(11) NOT NULL,
+  `idFranquicia` int(11) NOT NULL,
+  `idPaquete` int(11) NOT NULL,
+  `idMetodoPago` int(11) NOT NULL,
+  `idPromocion` int(11) NOT NULL,
+  `precio` varchar(111) NOT NULL,
+  `fecha` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `ingresoadicional`
+--
+
+CREATE TABLE `ingresoadicional` (
+  `idIngresoAdicional` int(11) NOT NULL,
+  `idAdicional` int(11) NOT NULL,
+  `idIngreso` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -827,6 +872,12 @@ ALTER TABLE `disponibilidad`
   ADD PRIMARY KEY (`idDisponibilidad`);
 
 --
+-- Indices de la tabla `egreso`
+--
+ALTER TABLE `egreso`
+  ADD PRIMARY KEY (`idEgreso`);
+
+--
 -- Indices de la tabla `excepcion`
 --
 ALTER TABLE `excepcion`
@@ -843,6 +894,18 @@ ALTER TABLE `excepcionhorarios`
 --
 ALTER TABLE `franquicia`
   ADD PRIMARY KEY (`idFranquicia`);
+
+--
+-- Indices de la tabla `ingreso`
+--
+ALTER TABLE `ingreso`
+  ADD PRIMARY KEY (`idIngreso`);
+
+--
+-- Indices de la tabla `ingresoadicional`
+--
+ALTER TABLE `ingresoadicional`
+  ADD PRIMARY KEY (`idIngresoAdicional`);
 
 --
 -- Indices de la tabla `instructor`
@@ -975,6 +1038,12 @@ ALTER TABLE `disponibilidad`
   MODIFY `idDisponibilidad` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=177;
 
 --
+-- AUTO_INCREMENT de la tabla `egreso`
+--
+ALTER TABLE `egreso`
+  MODIFY `idEgreso` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de la tabla `excepcion`
 --
 ALTER TABLE `excepcion`
@@ -991,6 +1060,18 @@ ALTER TABLE `excepcionhorarios`
 --
 ALTER TABLE `franquicia`
   MODIFY `idFranquicia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `ingreso`
+--
+ALTER TABLE `ingreso`
+  MODIFY `idIngreso` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `ingresoadicional`
+--
+ALTER TABLE `ingresoadicional`
+  MODIFY `idIngresoAdicional` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `instructor`
